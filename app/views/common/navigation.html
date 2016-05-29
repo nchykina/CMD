@@ -29,19 +29,39 @@
                 <a href=""><i class="fa fa-table"></i> <span class="nav-label">Perform data analysis</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('forms')}">
                     <li ui-sref-active="active"><a ui-sref="forms.wizard2.step_one2">DNA alignment</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.basic_form">Basic form</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.basic_form2">Basic form 2</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.advanced_plugins">Advanced Plugins</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.wizard.step_one">Wizard</a></li>
-                    
-                    <li ui-sref-active="active"><a ui-sref="forms.file_upload">File Upload</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.text_editor">Text Editor</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.markdown">Markdown</a></li>
+
+                </ul>
+            </li>
+            <li ng-class="{active: $state.includes('storage')}">
+                <a href=""><i class="fa fa-th-large"></i> <span class="nav-label">Manage my files</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('storage')}">
+                    <li ui-sref-active="active"><a ui-sref="forms.wizard2.step_one2">My input files</a></li>
+                    <li ui-sref-active="active"><a ui-sref="forms.wizard2.step_one2">My output files</a></li>
+                </ul>
+            </li>
+            <li ng-class="{active: $state.includes('commerce')}">
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Upgrade my account</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('commerce')}">
+                    <li ui-sref-active="active"><a ui-sref="commerce.products_grid">Products grid</a></li>
+                    <li ui-sref-active="active"><a ui-sref="commerce.payments">Upgrade my account</a></li>
+                    <li ui-sref-active="active"><a ui-sref="commerce.product_list">Products list</a></li>
+                    <li ui-sref-active="active"><a ui-sref="commerce.product_details">Product detail</a></li>
+                    <li ui-sref-active="active"><a ui-sref="commerce.cart">Cart</a></li>
+                    <li ui-sref-active="active"><a ui-sref="commerce.orders">Orders</a></li>
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('dashboards')}">
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">{{ 'DASHBOARD' | translate }}</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('dashboards')}">
+                    <li ui-sref-active="active"><a ui-sref="commerce.product">Product edit</a></li>
+                    <li ui-sref-active="active"><a ui-sref="forms.basic_form">Basic form</a></li>
+                    <li ui-sref-active="active"><a ui-sref="forms.basic_form2">Basic form 2</a></li>
+                    <li ui-sref-active="active"><a ui-sref="forms.advanced_plugins">Advanced Plugins</a></li>
+                    <li ui-sref-active="active"><a ui-sref="forms.wizard.step_one">Wizard</a></li>
+
+                    <li ui-sref-active="active"><a ui-sref="forms.file_upload">File Upload</a></li>
+                    <li ui-sref-active="active"><a ui-sref="forms.text_editor">Text Editor</a></li>
+                    <li ui-sref-active="active"><a ui-sref="forms.markdown">Markdown</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">{{ 'DASHBOARD' | translate }} v.1</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_2">{{ 'DASHBOARD' | translate }} v.2</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_3">{{ 'DASHBOARD' | translate }} v.3</a></li>
@@ -173,18 +193,7 @@
                     <li ui-sref-active="active"><a ui-sref="tables.nggrid">NG Grid</a></li>
                 </ul>
             </li>
-            <li ng-class="{active: $state.includes('commerce')}">
-                <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">{{ 'COMMERCE' | translate }}</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('commerce')}">
-                    <li ui-sref-active="active"><a ui-sref="commerce.products_grid">Products grid</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.product_list">Products list</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.product">Product edit</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.product_details">Product detail</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.cart">Cart</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.orders">Orders</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.payments">Credit Card form</a></li>
-                </ul>
-            </li>
+
             <li ng-class="{active: $state.includes('gallery')}">
                 <a href=""><i class="fa fa-picture-o"></i> <span class="nav-label">{{ 'GALLERY' | translate }}</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('gallery')}">
