@@ -1,0 +1,93 @@
+<fieldset>
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Data processing steps:</h2>  
+            <h5>Click on any step to find out what exactly it is doing
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox-content">
+                <ul class="todo-list m-t">
+
+                    <li>
+                        <input icheck type="checkbox" ng-model="check1">
+                        <span class="m-l-xs">FASTQC: checking the quality of the reads</span>
+                        <small class="label label-info"><i class="fa fa-clock-o"></i> 3 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check1">
+                        <span class="m-l-xs">BWA: aligning paired reads to the reference genome</span>
+                        <small class="label label-info"><i class="fa fa-clock-o"></i> 3 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check2">
+                        <span class="m-l-xs">SAMtools: converting .sam file to .bam format</span>
+                        <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check2">
+                        <span class="m-l-xs">SAMtools: sorting the .bam file</span>
+                        <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check3">
+                        <span class="m-l-xs">SAMtools: indexing the .bam file</span>
+                        <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check3">
+                        <span class="m-l-xs">Picard: marking the duplicates</span>
+                        <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check4">
+                        <span class="m-l-xs">GATK: performing local realignment</span>
+                        <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check5">
+                        <span class="m-l-xs">SAM tools: performing mpileup</span>
+                        <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check6">
+                        <span class="m-l-xs">BCF tools: creating vcf file from mpileup</span>
+                        <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                    <li>
+                        <input icheck type="checkbox" ng-model="check7">
+                        <span class="m-l-xs">Annovar: annotating vcf file</span>
+                        <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox-content">
+                <h3>BWA: creating .sai index of each .fasta file</h3>
+                <p> This step indexes each of your .fasta files to form a list of unique record IDs present
+                    in the file. The .sai files are needed on the next step to perform bwa samse or sampe procedure. </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="sk-spinner sk-spinner-wave">
+                <div class="sk-rect1"></div>
+                <div class="sk-rect2"></div>
+                <div class="sk-rect3"></div>
+                <div class="sk-rect4"></div>
+                <div class="sk-rect5"></div>
+            </div>
+        </div>
+    </div>
+
+    <a ui-sref="forms.wizard2.step_one2" class="btn btn-default">Cancel</a>
+    <a ui-sref="forms.wizard2.step_three2" class="btn btn-primary">Next</a>
+
+
+
+</fieldset>
