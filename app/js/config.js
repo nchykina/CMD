@@ -12,7 +12,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
-    $urlRouterProvider.otherwise("/forms/wizard2/step_one2");
+    $urlRouterProvider.otherwise("/storage/form_files");
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
@@ -394,6 +394,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     }
                 }
             })
+            
             .state('forms', {
                 abstract: true,
                 url: "/forms",
@@ -533,7 +534,6 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: 'views/wizard2/step_one2.html',
                 data: {pageTitle: 'Wizard form 2'}
             })
-
             .state('forms.wizard2.step_two2', {
                 url: '/step_two2',
                 templateUrl: 'views/wizard2/step_two2.html',
@@ -598,6 +598,26 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                             {
                                 serie: true,
                                 files: ['js/plugins/bootstrap-markdown/bootstrap-markdown.js', 'js/plugins/bootstrap-markdown/markdown.js', 'css/plugins/bootstrap-markdown/bootstrap-markdown.min.css']
+                            }
+                        ]);
+                    }
+                }
+            })
+            
+            .state('storage', {
+                abstract: true,
+                url: "/storage",
+                templateUrl: "views/common/content.html",
+            })
+            .state('storage.files', {
+                url: "/form_files",
+                templateUrl: "views/form_files.html",
+                data: {pageTitle: 'Manage my files'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
                             }
                         ]);
                     }

@@ -1,0 +1,111 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>My file storage</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a>Manage my files</a>
+            </li>
+            <li class="active">
+                <strong>My file storage</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Completed jobs </h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-5 m-b-xs"><select class="input-sm form-control input-s-sm inline">
+                                <option value="0">Delete selected jobs</option>
+                                <option value="1">Option 2</option>
+                                <option value="2">Option 3</option>
+                                <option value="3">Option 4</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+                            <div data-toggle="buttons" class="btn-group">
+                                <label class="btn btn-sm btn-white"> <input type="radio" id="option1" name="options"> All </label>
+                                <label class="btn btn-sm btn-white active"> <input type="radio" id="option2" name="options"> Completed </label>
+                                <label class="btn btn-sm btn-white"> <input type="radio" id="option3" name="options"> Running </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th></th>
+                                    <th>Date</th>
+                                    <th>Pipeline</th>
+                                    <th>Species</th>
+                                    <th>Completed</th>
+                                    <th>Input files</th>
+                                    <th>Output files</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input icheck type="checkbox" ng-model="main.checkOne"></td>
+                                    <td>Jul 14, 2013</td>
+                                    <td>DNA resequencing</td>
+                                    <td>Homo sapiens hg19
+                                    </td>
+                                    <td>Yes</td>
+                                    <td>20%</td>
+                                    <td>Actions</td>
+                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td><input icheck type="checkbox" ng-model="main.unCheck1"></td>
+                                    <td>Jul 16, 2013</td>
+                                    <td>DNA resequencing </td> <td>Mus musculus</td>
+                                    <td>Yes</td>
+                                    <td>40%</td>
+                                    <td>Actions</td>
+                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td><input icheck type="checkbox" ng-model="main.unCheck2"></td>
+                                    <td>Jul 18, 2013</td>
+                                    <td>DNA resequencing</td>
+                                    <td></td>
+                                    <td>Yes</td>
+                                    <td>75%</td>
+                                    <td>Actions</td>
+                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td><input icheck type="checkbox" ng-model="main.unCheck3"></td>
+                                    <td>Jul 22, 2013</td>
+                                    <td>DNA resequencing</td>
+                                    <td></td>
+                                    <td>Yes</td>
+                                    <td>18%</td>
+                                    <td>Actions</td>
+                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
