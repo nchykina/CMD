@@ -1,15 +1,15 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>My file storage</h2>
+        <h2>Manage files</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
             </li>
             <li>
-                <a>Manage my files</a>
+                <a>Manage files</a>
             </li>
             <li class="active">
-                <strong>My file storage</strong>
+                <strong>Completed jobs</strong>
             </li>
         </ol>
     </div>
@@ -30,9 +30,8 @@
                     <div class="row">
                         <div class="col-sm-5 m-b-xs"><select class="input-sm form-control input-s-sm inline">
                                 <option value="0">Delete selected jobs</option>
-                                <option value="1">Option 2</option>
-                                <option value="2">Option 3</option>
-                                <option value="3">Option 4</option>
+                                <option value="1">Sort jobs by file size</option>
+                                <option value="2">Sort jobs by date</option>
                             </select>
                         </div>
                         <div class="col-sm-4 m-b-xs">
@@ -55,7 +54,6 @@
                                     <th>Completed</th>
                                     <th>Input files</th>
                                     <th>Output files</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,40 +63,113 @@
                                     <td>DNA resequencing</td>
                                     <td>Homo sapiens hg19
                                     </td>
-                                    <td>Yes</td>
-                                    <td>20%</td>
-                                    <td>Actions</td>
-                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
+                                    <td align='center'><a href=""><i class="fa fa-check text-navy"></i></a></td>
+                                    <td>
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>File1_with_long_name_R1.fasta
+                                                        </td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td></tr>
+                                                <tr><td>File1_with_long_name_R2.fasta </td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+
+                                    <td>
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr><td>
+                                                        <p>File1_with_long_name_R1.bam </p></td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td>
+                                                </tr>                                     
+                                                <tr>
+                                                    <td> File1_with_long_name.vcf </td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Annotated table.xls</td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><input icheck type="checkbox" ng-model="main.unCheck1"></td>
                                     <td>Jul 16, 2013</td>
-                                    <td>DNA resequencing </td> <td>Mus musculus</td>
-                                    <td>Yes</td>
-                                    <td>40%</td>
-                                    <td>Actions</td>
-                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td><input icheck type="checkbox" ng-model="main.unCheck2"></td>
-                                    <td>Jul 18, 2013</td>
-                                    <td>DNA resequencing</td>
-                                    <td></td>
-                                    <td>Yes</td>
-                                    <td>75%</td>
-                                    <td>Actions</td>
-                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td><input icheck type="checkbox" ng-model="main.unCheck3"></td>
-                                    <td>Jul 22, 2013</td>
-                                    <td>DNA resequencing</td>
-                                    <td></td>
-                                    <td>Yes</td>
-                                    <td>18%</td>
-                                    <td>Actions</td>
-                                    <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
-                                </tr>
+                                    <td>DNA resequencing </td>
+                                    <td>Mus musculus</td>
+                                    <td align='center'><a href=""><i class="fa fa-cogs text-navy"></i></a></td>
+                                    <td>
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Sample data 1</td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-info btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td></tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+
+                                    <td>
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr><td>
+                                                        File1_with_long_name.bam </td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td>
+                                                </tr>                                     
+                                                <tr>
+                                                    <td> File1_with_long_name.vcf </td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Annotated table.xls</td>
+                                                    <td align='right'>
+                                                        <button type="button" class="btn btn-primary btn-xs">
+                                                            Download 
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>                              
                             </tbody>
                         </table>
                     </div>
@@ -106,6 +177,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

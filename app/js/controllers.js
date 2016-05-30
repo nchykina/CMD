@@ -744,6 +744,24 @@ function flotChartCtrl() {
     ];
 
     /**
+     * Bar Chart data
+     */
+    var chartData2 = [
+        {
+            label: "bar",
+            data: [
+                [1, 34],
+                [2, 25],
+                [3, 19],
+                [4, 34],
+                [5, 32],
+                [6, 44],
+                [7, 44]
+            ]
+        }
+    ];
+
+    /**
      * Pie Chart Data
      */
     var pieData = [
@@ -766,6 +784,19 @@ function flotChartCtrl() {
             label: "Sales 4",
             data: 52,
             color: "#1ab394"
+        }
+    ];
+    
+        var pieData2 = [
+        {
+            label: "Used",
+            data: 21,
+            color: "#1ab394"
+        },
+        {
+            label: "Available",
+            data: 3,
+            color: "#79d2c0"
         }
     ];
 
@@ -970,10 +1001,10 @@ function flotChartCtrl() {
      * Definition of variables
      * Flot chart
      */
-    this.flotChartData = chartData;
+    this.flotChartData = chartData2;
     this.flotBarOptions = barOptions;
     this.flotLineOptions = lineOptions;
-    this.flotPieData = pieData;
+    this.flotPieData = pieData2;
     this.flotPieOptions = pieOptions;
     this.flotLineAreaData = lineAreaData;
     this.flotLineAreaOptions = lineAreaOptions;

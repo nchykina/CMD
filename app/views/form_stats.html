@@ -1,0 +1,63 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Manage files</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a>Manage files</a>
+            </li>
+            <li class="active">
+                <strong>Usage statistics</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="flotChartCtrl as charts">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Completed jobs statistics for the last week by pipeline
+                        <small>By number of jobs and by file size</small>
+                    </h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="flot-chart">
+                        <div flot class="flot-chart-content" dataset="charts.flotChartData" options="charts.flotBarOptions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>File storage usage</h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="flot-chart">
+                        <div flot class="flot-chart-content" dataset="charts.flotPieData" options="charts.flotPieOptions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Data on current tariff plan, option to upgrade the tariff plan
+                </h5>
+            </div>
+            <div class="ibox-content">
+
+            </div>
+        </div>
+    </div>
+</div>

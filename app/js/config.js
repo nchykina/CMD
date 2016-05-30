@@ -394,7 +394,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     }
                 }
             })
-            
+
             .state('forms', {
                 abstract: true,
                 url: "/forms",
@@ -404,20 +404,6 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 url: "/basic_form",
                 templateUrl: "views/form_basic.html",
                 data: {pageTitle: 'Basic form'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('forms.basic_form2', {
-                url: "/basic_form2",
-                templateUrl: "views/form_basic2.html",
-                data: {pageTitle: 'Basic form 2'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -559,6 +545,23 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: 'views/wizard/step_three.html',
                 data: {pageTitle: 'Wizard form'}
             })
+            .state('forms.faq', {
+                url: "/faq",
+                templateUrl: "views/faq.html",
+                data: {pageTitle: 'FAQ'}
+            })
+
+            .state('user', {
+                abstract: true,
+                url: "/user",
+                templateUrl: "views/common/content.html",
+            })
+            .state('user.profile', {
+                url: "/profile",
+                templateUrl: "views/user_profile.html",
+                data: {pageTitle: 'User profile'}
+            })
+            
             .state('forms.file_upload', {
                 url: "/file_upload",
                 templateUrl: "views/form_file_upload.html",
@@ -603,7 +606,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     }
                 }
             })
-            
+
             .state('storage', {
                 abstract: true,
                 url: "/storage",
@@ -618,6 +621,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                         return $ocLazyLoad.load([
                             {
                                 files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('storage.stats', {
+                url: "/form_stats",
+                templateUrl: "views/form_stats.html",
+                data: {pageTitle: 'Statistics'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                serie: true,
+                                name: 'angular-flot',
+                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
                             }
                         ]);
                     }
@@ -690,11 +709,6 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                         ]);
                     }
                 }
-            })
-            .state('app.faq', {
-                url: "/faq",
-                templateUrl: "views/faq.html",
-                data: {pageTitle: 'FAQ'}
             })
             .state('app.timeline', {
                 url: "/timeline",
