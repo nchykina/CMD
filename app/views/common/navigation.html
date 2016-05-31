@@ -25,10 +25,10 @@
                     IN+
                 </div>
             </li>
-            <li ng-class="{active: $state.includes('forms')}">
+            <li ng-class="{active: $state.includes('pipelines')}">
                 <a href=""><i class="fa fa-table"></i> <span class="nav-label">Perform data analysis</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('forms')}">
-                    <li ui-sref-active="active"><a ui-sref="forms.wizard2.step_one2">DNA alignment</a></li>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('pipelines')}">
+                    <li ui-sref-active="active"><a ui-sref="pipelines.dna_resequencing">DNA resequencing</a></li>
 
                 </ul>
             </li>
@@ -128,14 +128,12 @@
                 <a href=""><i class="fa fa-files-o"></i> <span class="nav-label">{{ 'OTHERPAGES' | translate }}</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('pages')}">
                     <li ui-sref-active="active"><a ui-sref="pages.search_results">Search results</a></li>
-                    <li><a ui-sref="lockscreen">Lockscreen</a></li>
                     <li><a ui-sref="errorOne">404 Page</a></li>
                     <li><a ui-sref="errorTwo">500 Page</a></li>
                     <li><a ui-sref="login">Login</a></li>
-                    <li><a ui-sref="login_two_columns">Login v.2</a></li>
+                    <li><a ui-sref="login_page">Login v.2</a></li>
                     <li><a ui-sref="forgot_password">Forgot password</a></li>
                     <li><a ui-sref="register">Register</a></li>
-                    <li ui-sref-active="active"><a ui-sref="pages.empy_page">Empty page</a></li>
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('miscellaneous')}">
@@ -192,44 +190,7 @@
                     <li ui-sref-active="active"><a ui-sref="tables.nggrid">NG Grid</a></li>
                 </ul>
             </li>
-
-            <li ng-class="{active: $state.includes('gallery')}">
-                <a href=""><i class="fa fa-picture-o"></i> <span class="nav-label">{{ 'GALLERY' | translate }}</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('gallery')}">
-                    <li ui-sref-active="active"><a ui-sref="gallery.basic_gallery">Lightbox Gallery</a></li>
-                    <li ui-sref-active="active"><a ui-sref="gallery.slick_gallery">Slick Carousel</a></li>
-                    <li ui-sref-active="active"><a ui-sref="gallery.bootstrap_carousel">Bootstrap Carousel</a></li>
-
-                </ul>
-            </li>
-            <li>
-                <a href=""><i class="fa fa-sitemap"></i> <span class="nav-label">{{ 'MENULEVELS' | translate }}</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse">
-                    <li>
-                        <a href="">Third Level <span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level">
-                            <li>
-                                <a href="">Third Level Item</a>
-                            </li>
-                            <li>
-                                <a href="">Third Level Item</a>
-                            </li>
-                            <li>
-                                <a href="">Third Level Item</a>
-                            </li>
-
-                        </ul>
-                    </li>
-                    <li><a href="">Second Level Item</a></li>
-                    <li>
-                        <a href="">Second Level Item</a></li>
-                    <li>
-                        <a href="">Second Level Item</a></li>
-                </ul>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="css_animations"><i class="fa fa-magic"></i> <span class="nav-label">{{ 'ANIMATIONS' | translate }}</span><span class="label label-info pull-right">62</span></a>
-            </li>
+            
             <li class="landing_link">
                 <a ui-sref="landing"><i class="fa fa-star"></i> <span class="nav-label">{{ 'LANDING' | translate }}</span> <span class="label label-warning pull-right">NEW</span></a>
             </li>

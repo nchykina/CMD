@@ -12,7 +12,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
-    $urlRouterProvider.otherwise("/user/profile");
+    $urlRouterProvider.otherwise("/pipelines/dna_resequencing");
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
@@ -177,6 +177,18 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/layouts.html",
                 data: {pageTitle: 'Layouts'},
             })
+
+            .state('pipelines', {
+                abstract: true,
+                url: "/pipelines",
+                templateUrl: "views/common/content.html",
+            })
+            .state('pipelines.dna_resequencing', {
+                url: "/dna_resequencing",
+                templateUrl: "views/dna_resequencing.html",
+                data: {pageTitle: 'DNA resequencing'}
+            })
+            
             .state('charts', {
                 abstract: true,
                 url: "/charts",
@@ -561,7 +573,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/user_profile.html",
                 data: {pageTitle: 'User profile'}
             })
-            
+            .state('user.subscription', {
+                url: "/subscription",
+                templateUrl: "views/user_subscription.html",
+                data: {pageTitle: 'Manage my subscription'}
+            })
+
             .state('forms.file_upload', {
                 url: "/file_upload",
                 templateUrl: "views/form_file_upload.html",
@@ -780,10 +797,15 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/login.html",
                 data: {pageTitle: 'Login', specialClass: 'gray-bg'}
             })
-            .state('login_two_columns', {
-                url: "/login_two_columns",
-                templateUrl: "views/login_two_columns.html",
-                data: {pageTitle: 'Login two columns', specialClass: 'gray-bg'}
+            .state('login_page', {
+                url: "/login_page",
+                templateUrl: "views/login_page.html",
+                data: {pageTitle: 'Login page', specialClass: 'gray-bg'}
+            })
+                        .state('create_account', {
+                url: "/create_account",
+                templateUrl: "views/create_account.html",
+                data: {pageTitle: 'Create account', specialClass: 'gray-bg'}
             })
             .state('register', {
                 url: "/register",
