@@ -12,17 +12,15 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a class="page-scroll" page-scroll href="#page-top">Home</a></li>
+                    <li><a class="page-scroll" page-scroll href="#page-top">Home</a></li>
                     <li><a class="page-scroll" page-scroll href="#features">Our services</a></li>
-                    <li><a class="page-scroll" page-scroll href="#team">Team</a></li>
-                    <li><a class="page-scroll" page-scroll href="#pricing">Pricing</a></li>
                     <li><a class="page-scroll" page-scroll href="#contact">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </div>
-<div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel" ng-non-bindable>
+<div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel" >
     <ol class="carousel-indicators">
         <li data-target="inSlider" data-slide-to="0" class="active"></li>
         <li data-target="inSlider" data-slide-to="1"></li>
@@ -35,10 +33,10 @@
                         data processing<br/>
                         a seamless and easy process<br/>
                         for our clients</h1>
-                    <p>Upload your sample and get annotated variants in 5 minutes</p>
+                    <p>Upload your sample and get meaningful results in a few minutes</p>
                     <p>
-                        <a class="btn btn-lg btn-primary" href="#" role="button">FREE TRIAL</a>
-                        <a class="caption-link" href="#" role="button">Align your reads to a reference DNA</>
+                        <a ui-sref="create_account" class="btn btn-lg btn-primary"> FREE TRIAL </a>
+                        <a class="caption-link">Align your reads to a reference DNA</a>
                     </p>
                 </div>
                 <div class="carousel-image wow zoomIn">
@@ -51,10 +49,15 @@
         </div>
         <div class="item">
             <div class="container">
-                <div class="carousel-caption blank">
-                    <h1>Making sense of your raw data <br/> is no longer a challenge</h1>
-                    <p>We provide you with an easy way to do it</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+                <div class="carousel-caption">
+                    <h1>For professional <br/> bioinformaticians<br/> we offer a lot more
+                        <br/>flexibility</h1>
+                    <p>You can run your custom scripts in our cluster environment</p>
+                    <p><a class="btn btn-lg btn-primary" ui-sref="create_account" role="button">Learn more</a>
+                    </p>
+                </div>
+                <div class="carousel-image wow zoomIn">
+                    <img src="img/landing/laptop.png" alt="laptop"/>
                 </div>
             </div>
             <!-- Set background for slide in css -->
@@ -70,7 +73,9 @@
         <span class="sr-only">Next</span>
     </a>
 </div>
-<section id="features" class="container services">
+
+
+<section id="summary" class="container services">
     <div class="row">
         <div class="col-sm-3">
             <h2>Get your results quickly</h2>
@@ -78,20 +83,20 @@
                 We will allow you to focus on the interesting part of analyzing your results via a user-friendly 
                 interface of any application convenient for you. No more debugging of shell scripts and wading
                 through manuals. No need to configure a lengthy pipeline in a web application with buggy and crooked interface.
-                 </p>
+            </p>
             <p><a class="navy-link" href="#" role="button">Learn more &raquo;</a></p>
         </div>
         <div class="col-sm-3">
             <h2>Use cluster facilities</h2>
             <p>Bioinformatics is a data intensive area. With access to our cluster facilities you can process
                 gigabyte files on the fly without bothering about IT infrastructure. We run Apache Mesos and DC/OS
-            on an HPC-cluster to execute your computations efficiently.</p>
+                on an HPC-cluster to execute your computations efficiently.</p>
             <p><a class="navy-link" href="#" role="button">Learn more &raquo;</a></p>
         </div>
         <div class="col-sm-3">
             <h2>Store your data</h2>
             <p>Up to 2 GB of free storage available for your files at any time for free. Manage your input and
-            output files in a convenient way.</p>
+                output files in a convenient way.</p>
             <p><a class="navy-link" href="#" role="button">Learn more &raquo;</a></p>
         </div>
         <div class="col-sm-3">
@@ -107,7 +112,7 @@
 </section>
 
 
-<section class="features">
+<section id="features">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -130,184 +135,8 @@
                 <small>For professional users</small>
                 <h2>Your pipelines on our servers </h2>
                 <p>Use our facilities for data processing instead of setting up your own cluster environment in
-                your lab and wasting your time trying to maintain it.</p>
+                    your lab and wasting your time trying to maintain it.</p>
                 <a href="" class="btn btn-primary">Learn more</a>
-            </div>
-        </div>
-    </div>
-
-</section>
-
-<section id="team" class="gray-section team">
-    <div class="container">
-        <div class="row m-b-lg">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>Our Team</h1>
-                <p>We are a family business</p>
-            </div>
-        </div>
-        <div class="row">
-                        <div class="col-lg-6">
-                <div class="team-member wow zoomIn">
-                    <img src="img/landing/avatar1.jpg" class="img-responsive img-circle" alt="">
-                    <h4><span class="navy">John</span> Novak</h4>
-                    <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href="#"><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="team-member wow zoomIn">
-                    <img src="img/landing/avatar1.jpg" class="img-responsive img-circle" alt="">
-                    <h4><span class="navy">John</span> Novak</h4>
-                    <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href="#"><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section id="pricing" class="pricing">
-    <div class="container">
-        <div class="row m-b-lg">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>Pricing</h1>
-                <p>You can choose an appropriate pricing scheme 
-                    depending on your needs.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 wow zoomIn">
-                <ul class="pricing-plan list-unstyled">
-                    <li class="pricing-title">
-                        Basic
-                    </li>
-                    <li class="pricing-desc">
-                        For users who want to try the product or have just begun to learn bioinformatics.
-                    </li>
-                    <li class="pricing-price">
-                        <span>$10</span> / month
-                    </li>
-                    <li>
-                        Upload up to 100 Mb per file
-                    </li>
-                                        <li>
-                        Storage up to 2 Gb
-                    </li>
-                    <li>
-                        Reference genomes of 3 species
-                    </li>
-                    <li>
-                        Sample .FASTQ data
-                    </li>
-                    <li>
-                        FAQ on each step of the pipeline
-                    </li>
-                    <li>
-                        Help desk
-                    </li>
-                    <li>
-                        <a class="btn btn-primary btn-xs" href="#">Signup</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-lg-4 wow zoomIn">
-                <ul class="pricing-plan list-unstyled selected">
-                    <li class="pricing-title">
-                        Standard
-                    </li>
-                    <li class="pricing-desc">
-                        For users who want more flexibility with the standard functions.
-                    </li>
-                    <li class="pricing-price">
-                        <span>$30</span> / month
-                    </li>
-                    <li>
-                        Upload up to 500 Mb per file
-                    </li>
-                                        <li>
-                        Storage up to 10 Gb
-                    </li>
-                    <li>
-                        Reference genomes of 8 species
-                    </li>
-                    <li>
-                        Sample .FASTQ data
-                    </li>
-                    <li>
-                        FAQ on each step of the pipeline
-                    </li>
-                    <li>
-                        Help desk
-                    </li>
-                    <li class="plan-action">
-                        <a class="btn btn-primary btn-xs" href="#">Signup</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-lg-4 wow zoomIn">
-                <ul class="pricing-plan list-unstyled">
-                    <li class="pricing-title">
-                        Professional
-                    </li>
-                    <li class="pricing-desc">
-                        For professional users, includes extended customer support
-                        and ability to launch custom pipelines.
-                    </li>
-                    <li class="pricing-price">
-                        <span>$100</span> / month
-                    </li>
-                    <li>
-                        Unlimited upload file size
-                    </li>
-                    <li>
-                        Unlimited storage
-                    </li>
-                    <li>
-                        Custom reference genomes
-                    </li>
-                    <li>
-                        Fully custom pipelines
-                    </li>
-                    <li>
-                        Custom software stack to use
-                    </li>
-                    <li>
-                        Extended customer support
-                    </li>
-                    <li>
-                        <a class="btn btn-primary btn-xs" href="#">Signup</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="row m-t-lg">
-            <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg">
-                <p>*If you have special needs or any questions with regard to the pricing, please feel free to contact us. </p>
             </div>
         </div>
     </div>
@@ -341,38 +170,42 @@
 
 <script>
     $(document).ready(function () {
+
+        $('body').scrollspy({
+            target: '.navbar-fixed-top',
+            offset: 80
+        });
+
         // Page scrolling feature
-        $('a.page-scroll').bind('click', function(event) {
+        $('a.page-scroll').bind('click', function (event) {
             var link = $(this);
             $('html, body').stop().animate({
                 scrollTop: $(link.attr('href')).offset().top - 50
             }, 500);
             event.preventDefault();
-            if($('body').hasClass('body-small')) {
-                $('#navbar').collapse('toggle');
-            }
+            $("#navbar").collapse('hide');
+
         });
 
-        // Activate WOW.js plugin for animation on scrol
-        new WOW().init();
+
     });
 
-    var cbpAnimatedHeader = (function() {
+    var cbpAnimatedHeader = (function () {
         var docElem = document.documentElement,
-                header = document.querySelector( '.navbar-default' ),
+                header = document.querySelector('.navbar-default'),
                 didScroll = false,
                 changeHeaderOn = 200;
         function init() {
-            window.addEventListener( 'scroll', function( event ) {
-                if( !didScroll ) {
+            window.addEventListener('scroll', function (event) {
+                if (!didScroll) {
                     didScroll = true;
-                    setTimeout( scrollPage, 250 );
+                    setTimeout(scrollPage, 250);
                 }
-            }, false );
+            }, false);
         }
         function scrollPage() {
             var sy = scrollY();
-            if ( sy >= changeHeaderOn ) {
+            if (sy >= changeHeaderOn) {
                 $(header).addClass('navbar-scroll')
             }
             else {
@@ -386,4 +219,7 @@
         init();
 
     })();
+
+    // Activate WOW.js plugin for animation on scrol
+    new WOW().init();
 </script>

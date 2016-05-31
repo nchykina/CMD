@@ -802,7 +802,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/login_page.html",
                 data: {pageTitle: 'Login page', specialClass: 'gray-bg'}
             })
-                        .state('create_account', {
+            .state('create_account', {
                 url: "/create_account",
                 templateUrl: "views/create_account.html",
                 data: {pageTitle: 'Create account', specialClass: 'gray-bg'}
@@ -1452,7 +1452,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             .state('landing', {
                 url: "/landing",
                 templateUrl: "views/landing.html",
-                data: {pageTitle: 'Landing page', specialClass: 'landing-page'},
+                data: {pageTitle: 'Home', specialClass: 'landing-page'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
