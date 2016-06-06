@@ -2,38 +2,108 @@
     <h2>Set up your data analysis pipeline: </h2>
 
     <div class="row">
-        <div class="col-lg-6">
-            <div class="form-group"><label>Choose .FASTA dataset: <br/>
-                    <small class="text-navy">for selected species</small>
-                </label>
-                <div><label> <input icheck type="radio" name="radioTest"
-                                    ng-model="main.check2"> Sample one</label></div>
-                <div><label> <input icheck type="radio" name="radioTest"
-                                    ng-model="main.checkFour"> Sample two </label>
-                </div>
-                <div><label> <input icheck type="radio" name="radioTest"
-                                    ng-model="main.checkFive"> Upload a new dataset </label>
+        <div class="col-lg-12">
+            <div><label> <input icheck type="radio" name="radioTest"
+                                ng-model="main.check2"> Choose sample .FASTA dataset</label></div>
+            <div class="form-group">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-4 m-b-xs">
+                            <div class="contact-box">
+                                <div class="col-sm-4">
+                                    <div class="text-center">
+                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+
+                                        <div class="m-t-xs font-bold">Sample 1</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3><strong>Homo sapiens</strong></h3>
+                                    <p>European guy with blue eyes and white skin</p>
+                                    <address>
+                                        <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
+                                    </address>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div>
+                                    <label class="text-navy"><input icheck type="checkbox" ng-model="main.checkOne"></input>
+                                        Choose this sample dataset</label>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="col-sm-4 m-b-xs">
+                            <div class="contact-box">
+                                <div class="col-sm-4">
+                                    <div class="text-center">
+                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+
+                                        <div class="m-t-xs font-bold">Sample 2</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3><strong>Homo sapiens</strong></h3>
+                                    <p>Chinese woman with brown eyes</p>
+                                    <address>
+                                        <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
+                                    </address>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div>
+                                    <label class="text-navy"><input icheck type="checkbox" ng-model="main.checkOne"></input>
+                                        Choose this sample dataset</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+                            <div class="contact-box">
+                                <div class="col-sm-4">
+                                    <div class="text-center">
+                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+
+                                        <div class="m-t-xs font-bold">Sample 3</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3><strong>Homo sapiens</strong></h3>
+                                    <p>European guy with blue eyes and white skin</p>
+                                    <address>
+                                        <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
+                                    </address>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div>
+                                    <label class="text-navy"><input icheck type="checkbox" ng-model="main.checkOne"></input>
+                                        Choose this sample dataset</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
 
             <div class="form-group">
+                <div><label> <input icheck type="radio" name="radioTest"
+                                    ng-model="main.checkFive"> Upload a new dataset </label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
                 <div class="input-group"><input type="text" class="form-control"> <span
                         class="input-group-btn"> <button type="button" class="btn btn-success">
-                            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
+                            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload R1</span>
                         </button> </span></div>
+                <div class="input-group"><input type="text" class="form-control"> <span
+                        class="input-group-btn"> <button type="button" class="btn btn-success">
+                            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload R2</span>
+                        </button> </span></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="hr-line-dashed"></div>
-
-            <div class="form-group"><label>Email *</label>
-
-                <input type="text" class="form-control"> <span
-                    class="help-block m-b-none">We will send you a link to download your .vcf and .bam files to this email.</span>
-            </div>
-            <div class="form-group"><label>Password *</label>
-
-                <input type="password" class="form-control" name="password">
-            </div>
             <div class="hr-line-dashed"></div>
         </div>
         <div class="col-lg-4">
