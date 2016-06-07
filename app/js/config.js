@@ -1347,6 +1347,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     }
                 }
             })
+            
+            
+            //ecommerce
+            
             .state('commerce', {
                 abstract: true,
                 url: "/commerce",
@@ -1367,22 +1371,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             })
             .state('commerce.products_grid', {
                 url: "/products_grid",
-                templateUrl: "views/ecommerce_products_grid.html",
+                templateUrl: "views/ecommerce/ecommerce_products_grid.html",
                 data: {pageTitle: 'E-commerce grid'}
             })
             .state('commerce.product_list', {
                 url: "/product_list",
-                templateUrl: "views/ecommerce_product_list.html",
+                templateUrl: "views/ecommerce/ecommerce_product_list.html",
                 data: {pageTitle: 'E-commerce product list'}
             })
             .state('commerce.orders', {
                 url: "/orders",
-                templateUrl: "views/ecommerce_orders.html",
+                templateUrl: "views/ecommerce/ecommerce_orders.html",
                 data: {pageTitle: 'E-commerce orders'}
             })
             .state('commerce.product', {
                 url: "/product",
-                templateUrl: "views/ecommerce_product.html",
+                templateUrl: "views/ecommerce/ecommerce_product.html",
                 data: {pageTitle: 'Product edit'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1399,10 +1403,64 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
 
             })
-            .state('commerce.product_details', {
-                url: "/product_details",
-                templateUrl: "views/ecommerce_product_details.html",
-                data: {pageTitle: 'E-commerce Product detail'},
+            .state('commerce.product_details1', {
+                url: "/product_details1",
+                templateUrl: "views/ecommerce/ecommerce_product_details1.html",
+                data: {pageTitle: 'Purchase extra options > Additional content'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/slick/slick.css', 'css/plugins/slick/slick-theme.css', 'js/plugins/slick/slick.min.js']
+                            },
+                            {
+                                name: 'slick',
+                                files: ['js/plugins/slick/angular-slick.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+                        .state('commerce.product_details2', {
+                url: "/product_details2",
+                templateUrl: "views/ecommerce/ecommerce_product_details2.html",
+                data: {pageTitle: 'Purchase extra options > Extra upload/storage size'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/slick/slick.css', 'css/plugins/slick/slick-theme.css', 'js/plugins/slick/slick.min.js']
+                            },
+                            {
+                                name: 'slick',
+                                files: ['js/plugins/slick/angular-slick.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('commerce.product_details3', {
+                url: "/product_details3",
+                templateUrl: "views/ecommerce/ecommerce_product_details3.html",
+                data: {pageTitle: 'Purchase extra options > Processing capacity'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/slick/slick.css', 'css/plugins/slick/slick-theme.css', 'js/plugins/slick/slick.min.js']
+                            },
+                            {
+                                name: 'slick',
+                                files: ['js/plugins/slick/angular-slick.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('commerce.product_details4', {
+                url: "/product_details4",
+                templateUrl: "views/ecommerce/ecommerce_product_details4.html",
+                data: {pageTitle: 'Purchase extra options > Custom pipelines'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -1419,14 +1477,17 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             })
             .state('commerce.payments', {
                 url: "/payments",
-                templateUrl: "views/ecommerce_payments.html",
+                templateUrl: "views/ecommerce/ecommerce_payments.html",
                 data: {pageTitle: 'E-commerce payments'}
             })
             .state('commerce.cart', {
                 url: "/cart",
-                templateUrl: "views/ecommerce_cart.html",
+                templateUrl: "views/ecommerce/ecommerce_cart.html",
                 data: {pageTitle: 'Shopping cart'}
             })
+            
+            
+            
             .state('gallery', {
                 abstract: true,
                 url: "/gallery",
