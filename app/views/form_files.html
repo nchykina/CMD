@@ -28,11 +28,16 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-5 m-b-xs"><select class="input-sm form-control input-s-sm inline">
-                                <option value="0">Delete selected jobs</option>
-                                <option value="1">Sort jobs by file size</option>
-                                <option value="2">Sort jobs by date</option>
-                            </select>
+                        <div class="col-sm-1 m-b-xs">
+                            <div class="btn-group" uib-dropdown>
+                                <button type="button" class="btn btn-primary btn-sm" uib-dropdown-toggle>
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul role="menu" uib-dropdown-menu="">
+                                    <li><a href="">Delete selected pipeline run</a></li>
+                                    <li><a href="">Relaunch selected pipeline run</a></li>
+                                </ul>
+                            </div>   
                         </div>
                         <div class="col-sm-4 m-b-xs">
                             <div data-toggle="buttons" class="btn-group">

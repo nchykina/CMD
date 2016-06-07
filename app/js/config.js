@@ -188,7 +188,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/dna_resequencing.html",
                 data: {pageTitle: 'DNA resequencing'}
             })
-            
+
             .state('charts', {
                 abstract: true,
                 url: "/charts",
@@ -321,8 +321,50 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             })
             .state('mailbox.inbox', {
                 url: "/inbox",
-                templateUrl: "views/mailbox.html",
-                data: {pageTitle: 'Mail Inbox'},
+                templateUrl: "views/mail/mailbox.html",
+                data: {pageTitle: 'Inbox'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('mailbox.sent', {
+                url: "/sent",
+                templateUrl: "views/mail/sent.html",
+                data: {pageTitle: 'Sent'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('mailbox.drafts', {
+                url: "/drafts",
+                templateUrl: "views/mail/drafts.html",
+                data: {pageTitle: 'Drafts'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('mailbox.trash', {
+                url: "/trash",
+                templateUrl: "views/mail/trash.html",
+                data: {pageTitle: 'Trash'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -335,12 +377,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             })
             .state('mailbox.email_view', {
                 url: "/email_view",
-                templateUrl: "views/mail_detail.html",
+                templateUrl: "views/mail/mail_detail.html",
                 data: {pageTitle: 'Mail detail'}
             })
-            .state('mailbox.email_compose', {
-                url: "/email_compose",
-                templateUrl: "views/mail_compose.html",
+            .state('mailbox.mail_compose', {
+                url: "/mail_compose",
+                templateUrl: "views/mail/mail_compose.html",
                 data: {pageTitle: 'Mail compose'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -358,7 +400,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             })
             .state('mailbox.email_template', {
                 url: "/email_template",
-                templateUrl: "views/email_template.html",
+                templateUrl: "views/mail/email_template.html",
                 data: {pageTitle: 'Mail compose'}
             })
             .state('widgets', {
@@ -1472,7 +1514,28 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 url: "/off_canvas",
                 templateUrl: "views/off_canvas.html",
                 data: {pageTitle: 'Off canvas menu', specialClass: 'canvas-menu'}
-            });
+            })
+            .state('guides', {
+                abstract: true,
+                url: "/guides",
+                templateUrl: "views/common/content.html",
+            })
+            .state('guides.article1', {
+                url: "/article1",
+                templateUrl: "views/guides/article1.html",
+                data: {pageTitle: 'Article 1'}
+            })
+            .state('guides.article2', {
+                url: "/article2",
+                templateUrl: "views/guides/article2.html",
+                data: {pageTitle: 'Article 2'}
+            })
+            .state('guides.article3', {
+                url: "/article3",
+                templateUrl: "views/guides/article3.html",
+                data: {pageTitle: 'Article 3'}
+            })
+            ;
 
 }
 angular

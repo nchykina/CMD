@@ -4993,6 +4993,10 @@ dd.project-people {
 .message-input {
   height: 90px !important;
 }
+
+.message-input-mail {
+  height: 200px !important;
+}
 .chat-avatar {
   white: 36px;
   height: 36px;
