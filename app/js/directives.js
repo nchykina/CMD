@@ -565,6 +565,24 @@ function markdownEditor() {
 };
 
 /**
+ * markdownEditor - Directive for Bootstrap Markdown
+
+function markdownEditor() {
+    return {
+        restrict: "A",
+        link:     function (scope, element, attrs) {
+            $(element).bind('click',
+                function(){
+                
+                
+                
+            });
+        
+        }
+    }
+}; */
+
+/**
  *
  * Pass all functions into module
  */

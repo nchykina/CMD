@@ -6,13 +6,15 @@
  * Initial there are written state for all view in theme.
  *
  */
-function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
+function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
 
     // Configure Idle settings
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
     $urlRouterProvider.otherwise("/pipelines/dna_resequencing");
+    
+    $locationProvider.html5Mode(true);
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
@@ -837,21 +839,25 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             .state('login', {
                 url: "/login",
                 templateUrl: "views/login.html",
+                controller: 'loginController',
                 data: {pageTitle: 'Login', specialClass: 'gray-bg'}
             })
             .state('login_page', {
                 url: "/login_page",
                 templateUrl: "views/login_page.html",
+                controller: 'loginController',
                 data: {pageTitle: 'Login page', specialClass: 'gray-bg'}
             })
             .state('create_account', {
                 url: "/create_account",
                 templateUrl: "views/create_account.html",
+                controller: 'loginController',
                 data: {pageTitle: 'Create account', specialClass: 'gray-bg'}
             })
             .state('register', {
                 url: "/register",
                 templateUrl: "views/register.html",
+                controller: 'loginController',
                 data: {pageTitle: 'Register', specialClass: 'gray-bg'}
             })
             .state('lockscreen', {
@@ -862,6 +868,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             .state('forgot_password', {
                 url: "/forgot_password",
                 templateUrl: "views/forgot_password.html",
+                controller: 'loginController',
                 data: {pageTitle: 'Forgot password', specialClass: 'gray-bg'}
             })
             .state('errorOne', {
@@ -1601,7 +1608,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
 }
 angular
         .module('inspinia')
-        .config(config)
+        .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider',config])
         .run(function ($rootScope, $state) {
             $rootScope.$state = $state;
         });
