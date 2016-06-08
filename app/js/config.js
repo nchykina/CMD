@@ -451,7 +451,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
 
             .state('forms', {
                 abstract: true,
-                url: "/forms",
+                url: "/pipelines",
                 templateUrl: "views/common/content.html",
             })
             .state('forms.basic_form', {
@@ -539,26 +539,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     }
                 }
             })
-            .state('forms.wizard', {
-                url: "/wizard",
-                templateUrl: "views/form_wizard.html",
-                controller: wizardCtrl,
-                data: {pageTitle: 'Wizard form'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                files: ['css/plugins/steps/jquery.steps.css']
-                            }
-                        ]);
-                    }
-                }
-            })
             .state('forms.wizard2', {
-                url: "/wizard2",
+                url: "/dna_resequencing_pipeline",
                 templateUrl: "views/form_wizard2.html",
                 controller: wizardCtrl,
-                data: {pageTitle: 'Wizard form 2'},
+                data: {pageTitle: 'DNA resequencing'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -570,34 +555,19 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             })
             .state('forms.wizard2.step_one2', {
-                url: '/step_one2',
+                url: '/step1',
                 templateUrl: 'views/wizard2/step_one2.html',
-                data: {pageTitle: 'Wizard form 2'}
+                data: {pageTitle: 'DNA resequencing pipeline: Step 1'}
             })
             .state('forms.wizard2.step_two2', {
-                url: '/step_two2',
+                url: '/step2',
                 templateUrl: 'views/wizard2/step_two2.html',
-                data: {pageTitle: 'Wizard form 2'}
+                data: {pageTitle: 'DNA resequencing pipeline: Step 2'}
             })
             .state('forms.wizard2.step_three2', {
-                url: '/step_three2',
+                url: '/step3',
                 templateUrl: 'views/wizard2/step_three2.html',
-                data: {pageTitle: 'Wizard form 2'}
-            })
-            .state('forms.wizard.step_one', {
-                url: '/step_one',
-                templateUrl: 'views/wizard/step_one.html',
-                data: {pageTitle: 'Wizard form'}
-            })
-            .state('forms.wizard.step_two', {
-                url: '/step_two',
-                templateUrl: 'views/wizard/step_two.html',
-                data: {pageTitle: 'Wizard form'}
-            })
-            .state('forms.wizard.step_three', {
-                url: '/step_three',
-                templateUrl: 'views/wizard/step_three.html',
-                data: {pageTitle: 'Wizard form'}
+                data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
             })
             .state('forms.faq', {
                 url: "/faq",
@@ -1367,6 +1337,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             .state('commerce.invoice', {
                 url: "/invoice",
                 templateUrl: "views/ecommerce/invoice.html",
+                data: {pageTitle: 'Invoice'}
+            })
+            .state('invoice_print', {
+                url: "/invoice_print",
+                templateUrl: "views/ecommerce/invoice_print.html",
                 data: {pageTitle: 'Invoice'}
             })
             .state('commerce.confirmation', {

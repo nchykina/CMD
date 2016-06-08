@@ -129,6 +129,20 @@ function MainCtrl() {
     this.checkTwo = true;
     this.checkThree = true;
     this.checkFour = true;
+    
+    
+    /**
+     * Checkboxes
+     */
+    this.wizard1 = {
+        step1: { 
+            sample: 'sample1',
+            upload: 'sample'
+        }
+    };
+    
+    this.species = 'mouse';               
+     
 
     /**
      * knobs - Few variables for knob plugin used in Advanced Plugins view
