@@ -29,39 +29,40 @@
                     Compose a message
                 </h2>
             </div>
-            <div class="mail-box">
+            <div class="mail-box" ng-controller="mailboxController as vm">
+                <form class="form-horizontal" method="get" ng-submit="vm.submitMessage()">
+
+                    <div class="mail-body">
 
 
-                <div class="mail-body">
-
-                    <form class="form-horizontal" method="get">
                         <div class="form-group"><label class="col-sm-2 control-label">To:</label>
 
-                            <div class="col-sm-10"><input type="text" class="form-control" value="support@ngspipeline.com"></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="vm.message.to" value="support@ngspipeline.com"></div>
                         </div>
                         <div class="form-group"><label class="col-sm-2 control-label">Subject:</label>
 
-                            <div class="col-sm-10"><input type="text" class="form-control" value=""></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="vm.message.subject" value=""></div>
+                        </div>                      
+                    </div>
+
+                    <div class="mail-text h-200">
+
+                        <div class="form-group"><label class="col-sm-2 control-label">Message:</label>
+
+                            <div class="col-sm-10">
+                                <textarea class="form-control message-input-mail" name="message" 
+                                          placeholder="Enter message text" ng-model="vm.message.content"></textarea>
+                            </div>
                         </div>
-                    </form>
 
-                </div>
-
-                <div class="mail-text h-200">
-
-                                <div class="form-group">
-
-                                    <textarea class="form-control message-input-mail" name="message" 
-                                              placeholder="Enter message text"></textarea>
-                                </div>
-                    
-                    <div class="clearfix"></div>
-                </div>
-                <div class="mail-body text-right tooltip-demo">
-                    <a ui-sref="inbox" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> Send</a>
-                    <a ui-sref="inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Discard</a>
-                    <a ui-sref="inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to draft folder"><i class="fa fa-pencil"></i> Save as draft</a>
-                </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="mail-body text-right tooltip-demo">
+                        <button type="submit" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send" ><i class="fa fa-reply"></i> Send</button>
+                        <a ui-sref="inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Discard</a>
+                        <a ui-sref="inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to draft folder"><i class="fa fa-pencil"></i> Save as draft</a>
+                    </div>
+                </form>
                 <div class="clearfix"></div>
 
 
