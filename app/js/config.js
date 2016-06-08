@@ -1369,9 +1369,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/ecommerce/invoice.html",
                 data: {pageTitle: 'Invoice'}
             })
-                        .state('commerce.confirmation', {
+            .state('commerce.confirmation', {
                 url: "/confirmation",
                 templateUrl: "views/ecommerce/confirmation.html",
+                data: {pageTitle: 'Payment confirmation'}
+            })
+            .state('confirmation_print', {
+                url: "/confirmation_print",
+                templateUrl: "views/ecommerce/confirmation_print.html",
                 data: {pageTitle: 'Payment confirmation'}
             })
             .state('commerce.products_grid', {

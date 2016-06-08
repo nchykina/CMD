@@ -6,7 +6,7 @@
                 <a href="index.html">Home</a>
             </li>
             <li>
-                Other Pages
+                Upgrade account
             </li>
             <li class="active">
                 <strong>Invoice</strong>
@@ -15,9 +15,8 @@
     </div>
     <div class="col-lg-4">
         <div class="title-action">
-            <a href="" class="btn btn-white"><i class="fa fa-pencil"></i> Edit </a>
-            <a href="" class="btn btn-white"><i class="fa fa-check "></i> Save </a>
-            <a href="views/invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Print Invoice </a>
+            <a class="btn btn-default"><i class="fa fa-mail-forward"></i> Send to email </a>
+            <a ui-sref="invoice_print" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Print Invoice </a>
         </div>
     </div>
 </div>
@@ -29,26 +28,24 @@
                     <div class="col-sm-6">
                         <h5>From:</h5>
                         <address>
-                            <strong>Inspinia, Inc.</strong><br>
+                            <strong>NGS Pipeline, Inc.</strong><br>
                             106 Jorg Avenu, 600/10<br>
                             Chicago, VT 32456<br>
-                            <abbr title="Phone">P:</abbr> (123) 601-4590
+                            Phone: +7 (123) 601-4590
                         </address>
                     </div>
 
                     <div class="col-sm-6 text-right">
-                        <h4>Invoice No.</h4>
-                        <h4 class="text-navy">INV-000567F7-00</h4>
+                        <h4>Invoice №</h4>
+                        <h4 class="text-navy">INV-00001</h4>
                         <span>To:</span>
                         <address>
-                            <strong>Corporate, Inc.</strong><br>
-                            112 Street Avenu, 1080<br>
-                            Miami, CT 445611<br>
-                            <abbr title="Phone">P:</abbr> (120) 9000-4321
+                            <strong>John Smith</strong><br>
+                            Phone: +7 (120) 900-4321
                         </address>
                         <p>
-                            <span><strong>Invoice Date:</strong> Marh 18, 2014</span><br/>
-                            <span><strong>Due Date:</strong> March 24, 2014</span>
+                            <span><strong>Invoice date:</strong> March 18, 2016</span><br/>
+                            <span><strong>Due date:</strong> March 24, 2016</span>
                         </p>
                     </div>
                 </div>
@@ -57,47 +54,26 @@
                     <table class="table invoice-table">
                         <thead>
                         <tr>
-                            <th>Item List</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th>Tax</th>
-                            <th>Total Price</th>
+                            <th>List of purchased items</th>
+                            <th>Price</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>
-                                <div><strong>Admin Theme with psd project layouts</strong></div>
-                                <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
+                                <div><strong>Additional content: De novo assembly</strong></div>
+                                <small> Ability to run a pipeline that allows to assemble a genome de novo</small>
                             </td>
-                            <td>1</td>
-                            <td>$26.00</td>
-                            <td>$5.98</td>
-                            <td>$31,98</td>
+                            <td>$10.00</td>
                         </tr>
                         <tr>
                             <td>
-                                <div><strong>Wodpress Them customization</strong></div>
-                                <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                <div><strong>Additional content: RNA sequencing</strong></div>
+                                <small>test test test
                                 </small>
                             </td>
-                            <td>2</td>
-                            <td>$80.00</td>
-                            <td>$36.80</td>
-                            <td>$196.80</td>
+                            <td>$20.00</td>
                         </tr>
-                        <tr>
-                            <td>
-                                <div><strong>Angular JS & Node JS Application</strong></div>
-                                <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
-                            </td>
-                            <td>3</td>
-                            <td>$420.00</td>
-                            <td>$193.20</td>
-                            <td>$1033.20</td>
-                        </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -105,28 +81,12 @@
 
                 <table class="table invoice-total">
                     <tbody>
-                    <tr>
-                        <td><strong>Sub Total :</strong></td>
-                        <td>$1026.00</td>
-                    </tr>
-                    <tr>
-                        <td><strong>TAX :</strong></td>
-                        <td>$235.98</td>
-                    </tr>
-                    <tr>
-                        <td><strong>TOTAL :</strong></td>
-                        <td>$1261.98</td>
-                    </tr>
+                        <tr>
+                            <td><strong>Total :</strong></td>
+                            <td>$30.00</td>
+                        </tr>
                     </tbody>
                 </table>
-                <div class="text-right">
-                    <button class="btn btn-primary"><i class="fa fa-dollar"></i> Make A Payment</button>
-                </div>
-
-                <div class="well m-t"><strong>Comments</strong>
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                    more-or-less
-                </div>
             </div>
         </div>
     </div>
