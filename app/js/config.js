@@ -779,11 +779,6 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/pin_board.html",
                 data: {pageTitle: 'Pin board'}
             })
-            .state('app.invoice', {
-                url: "/invoice",
-                templateUrl: "views/invoice.html",
-                data: {pageTitle: 'Invoice'}
-            })
             .state('app.blog', {
                 url: "/blog",
                 templateUrl: "views/blog.html",
@@ -1347,10 +1342,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     }
                 }
             })
-            
-            
+
+
             //ecommerce
-            
+
             .state('commerce', {
                 abstract: true,
                 url: "/commerce",
@@ -1368,6 +1363,16 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                         ]);
                     }
                 }
+            })
+            .state('commerce.invoice', {
+                url: "/invoice",
+                templateUrl: "views/ecommerce/invoice.html",
+                data: {pageTitle: 'Invoice'}
+            })
+                        .state('commerce.confirmation', {
+                url: "/confirmation",
+                templateUrl: "views/ecommerce/confirmation.html",
+                data: {pageTitle: 'Payment confirmation'}
             })
             .state('commerce.products_grid', {
                 url: "/products_grid",
@@ -1421,7 +1426,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     }
                 }
             })
-                        .state('commerce.product_details2', {
+            .state('commerce.product_details2', {
                 url: "/product_details2",
                 templateUrl: "views/ecommerce/ecommerce_product_details2.html",
                 data: {pageTitle: 'Purchase extra options > Extra upload/storage size'},
@@ -1485,9 +1490,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 templateUrl: "views/ecommerce/ecommerce_cart.html",
                 data: {pageTitle: 'Shopping cart'}
             })
-            
-            
-            
+
+
+
             .state('gallery', {
                 abstract: true,
                 url: "/gallery",

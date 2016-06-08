@@ -43,10 +43,8 @@
                 <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Upgrade account</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('commerce')}">
                     <li ui-sref-active="active"><a ui-sref="commerce.products_grid">Purchase extra options</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.payments">Credit card form</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.product_list">Products list</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.cart">Cart</a></li>
-                    <li ui-sref-active="active"><a ui-sref="commerce.orders">My past orders</a></li>
+                    <li ui-sref-active="active"><a ui-sref="commerce.cart">Shopping cart</a></li>
+                    <li ui-sref-active="active"><a ui-sref="commerce.orders">My purchases</a></li>
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('mailbox')}">
@@ -128,7 +126,6 @@
                     <li ui-sref-active="active"><a ui-sref="app.article">Article</a></li>
                     <li ui-sref-active="active"><a ui-sref="app.timeline">Timeline</a></li>
                     <li ui-sref-active="active"><a ui-sref="app.pin_board">Pin board</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.invoice">Invoice</a></li>
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('miscellaneous')}">
