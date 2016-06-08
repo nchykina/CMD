@@ -3369,6 +3369,36 @@ function jstreeCtrl($scope) {
 }
 
 /**
+ * loginCtrl - login controller
+ * 
+ *
+ */
+function loginCtrl($scope,$http,$state) {    
+   this.user = {};
+   this.message = '';
+   this.testvar = 'test1';
+   $scope.testvar2 = 'test2';
+   
+   this.submitLogin = function() {
+       
+       $http({
+          method  : 'POST',
+          url     : 'api/login',
+          data    : this.user, //forms user object
+          //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+         })
+          .success(function(data) {
+            if (data.success) {
+                $state.go('pipelines.dna_resequencing');
+              
+            } else {
+              this.message = data.msg;
+            }
+          });
+   };
+}
+
+/**
  *
  * Pass all functions into module
  */
@@ -3411,5 +3441,6 @@ angular
     .controller('truncateCtrl', truncateCtrl)
     .controller('touchspinCtrl', touchspinCtrl)
     .controller('tourCtrl', tourCtrl)
-    .controller('jstreeCtrl', jstreeCtrl);
+    .controller('jstreeCtrl', jstreeCtrl)
+    .controller('loginController', ['$scope','$http','$state',loginCtrl]);
 
