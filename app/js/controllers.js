@@ -3388,25 +3388,46 @@ function jstreeCtrl($scope) {
  *
  */
 function loginCtrl($scope,$http,$state) {    
-   this.user = {};
-   this.message = '';
-   this.testvar = 'test1';
-   $scope.testvar2 = 'test2';
+   var vm = this;
+    
+   vm.user = {};
+   vm.loginMessage = '';
+   vm.registerMessage = '';
    
    this.submitLogin = function() {
        
        $http({
           method  : 'POST',
           url     : 'api/login',
-          data    : this.user, //forms user object
+          data    : vm.user, //forms user object
           //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
          })
           .success(function(data) {
             if (data.success) {
+                vm.loginMessage = data.msg;
                 $state.go('pipelines.dna_resequencing');
               
             } else {
-              this.message = data.msg;
+              vm.loginMessage = data.msg;
+            }
+          });
+   };
+   
+   this.submitRegister = function() {
+       
+       $http({
+          method  : 'POST',
+          url     : 'api/register',
+          data    : vm.user, //forms user object
+          //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+         })
+          .success(function(data) {
+            if (data.success) {
+                vm.registerMessage = data.msg;                
+                $state.go('pipelines.dna_resequencing');
+              
+            } else {               
+              vm.registerMessage = data.msg;          
             }
           });
    };

@@ -25,15 +25,15 @@
         <div class="col-md-6">
             <div class="ibox-content" ng-controller="loginController as vm">
                 <form class="m-t" role="form" ng-submit="vm.submitLogin()">
+                    {{vm.loginMessage}}
+                    
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Username" ng-model="vm.user.name" required="">
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" required="">
                     </div>
-                    <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-                    {{ vm.user.name }}
-                    {{ vm.user.password }}
+                    <button type="submit" class="btn btn-primary block full-width m-b">Login</button>                    
                     <a ui-sref="forgot_password">
                         <small>Forgot password?</small>
                     </a>
