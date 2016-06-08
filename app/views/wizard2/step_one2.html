@@ -4,17 +4,26 @@
     <div class="row">
         <div class="col-lg-12">
             <div><label> <input icheck type="radio" name="radioTest"
-                                ng-model="main.check2"> Choose sample .FASTA dataset</label></div>
+                                ng-model="main.wizard1.step1.upload" value="sample"> Choose sample .FASTA dataset</label></div>
             <div class="form-group">
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-4 m-b-xs">
                             <div class="contact-box">
                                 <div class="col-sm-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
-
-                                        <div class="m-t-xs font-bold">Sample 1</div>
+                                    <div class="text-center" ng-switch="main.species">
+                                        <div ng-switch-when="human">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="mouse">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a9.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="dog">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
@@ -26,8 +35,9 @@
                                 </div>
 
                                 <div class="clearfix"></div>
-                                <div>
-                                    <label class="text-navy"><input icheck type="checkbox" ng-model="main.checkOne"></input>
+                                <div class="iradio_square-green">
+                                    <label><input icheck type="radio" name="sample" ng-model="main.wizard1.step1.sample"
+                                                  value="sample1"></input>
                                         Choose this sample dataset</label>
                                 </div>
                             </div>
@@ -35,10 +45,19 @@
                         <div class="col-sm-4 m-b-xs">
                             <div class="contact-box">
                                 <div class="col-sm-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
-
-                                        <div class="m-t-xs font-bold">Sample 2</div>
+                                    <div class="text-center" ng-switch="main.species">
+                                        <div ng-switch-when="human">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="mouse">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a9.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="dog">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
@@ -50,19 +69,29 @@
                                 </div>
 
                                 <div class="clearfix"></div>
-                                <div>
-                                    <label class="text-navy"><input icheck type="checkbox" ng-model="main.checkOne"></input>
+                                <div class="iradio_square-green">
+                                    <label><input icheck type="radio" name="sample" ng-model="main.wizard1.step1.sample"
+                                                  value="sample2"></input>
                                         Choose this sample dataset</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4 m-b-xs">
+                        <div class="col-sm-4 m-b-xs" ng-switch="main.species">
                             <div class="contact-box">
                                 <div class="col-sm-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
-
-                                        <div class="m-t-xs font-bold">Sample 3</div>
+                                    <div class="text-center" >
+                                        <div ng-switch-when="human">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="mouse">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a9.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="dog">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
@@ -74,8 +103,9 @@
                                 </div>
 
                                 <div class="clearfix"></div>
-                                <div>
-                                    <label class="text-navy"><input icheck type="checkbox" ng-model="main.checkOne"></input>
+                                <div class="iradio_square-green">
+                                    <label><input icheck type="radio" name="sample" ng-model="main.wizard1.step1.sample"
+                                                  value="sample3"></input>
                                         Choose this sample dataset</label>
                                 </div>
                             </div>
@@ -88,7 +118,7 @@
 
             <div class="form-group">
                 <div><label> <input icheck type="radio" name="radioTest"
-                                    ng-model="main.checkFive"> Upload a new dataset </label>
+                                    ng-model="main.wizard1.step1.upload" value="upload"> Upload a new dataset </label>
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
@@ -112,13 +142,13 @@
                             two separate .fasta files: reads from the forward strand and from the reverse strand.
                             In this case, we can apply paired-ended alignment algorithm to your data.
                         </p>
-                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="hr-line-dashed"></div>
         </div>
+
+        <div class="hr-line-dashed"></div>
     </div>
-    <a ui-sref="forms.wizard2.step_two2" class="btn btn-primary">Align my reads to the genome</a>
+</div>
+<a ui-sref="forms.wizard2.step_two2" class="btn btn-primary">Align my reads to the genome</a>
 </fieldset>
