@@ -21,7 +21,12 @@ var MessageSchema = new Schema({
     type: {
         type: String, //inbox, draft, sent, trash
         required: true
-    }
+    },
+    sentTime:{
+        type: Date,
+        default: Date.now,
+        required: false
+    } 
 });
 
 

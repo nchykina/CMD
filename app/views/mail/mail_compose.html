@@ -22,14 +22,14 @@
         <div class="col-lg-9">
             <div class="mail-box-header">
                 <div class="pull-right tooltip-demo">
-                    <a ui-sref="inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to draft folder"><i class="fa fa-pencil"></i> Save as draft</a>
-                    <a ui-sref="inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Discard</a>
+                    <a ng-click="vm.saveAsDraft()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to draft folder"><i class="fa fa-pencil"></i> Save as draft</a>
+                    <a ui-sref="mailbox.inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Discard</a>
                 </div>
                 <h2>
                     Compose a message
                 </h2>
             </div>
-            <div class="mail-box" ng-controller="mailboxController as vm">
+            <div class="mail-box">
                 <form class="form-horizontal" method="get">
 
                     <div class="mail-body">

@@ -7,7 +7,8 @@ var createMessage = function (req, res) {
         to: req.body.to,
         subject: req.body.subject,
         content: req.body.content,
-        type: 'sent'
+        type: 'sent',
+        sentTime: new Date()
     });
     newMessage.save(function (err) {
         if (err) {
@@ -24,7 +25,8 @@ var saveAsDraft = function (req, res) {
         to: req.body.to,
         subject: req.body.subject,
         content: req.body.content,
-        type: 'draft'
+        type: 'draft',
+        sentTime: new Date()
     });
     newMessage.save(function (err) {
         if (err) {

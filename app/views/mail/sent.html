@@ -43,7 +43,7 @@
                             <td class="mail-ontact"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.to}}</a></td>
                             <td class="mail-subject"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
                             <td class=""></td>
-                            <td class="text-right mail-date">Jan 16</td>
+                            <td class="text-right mail-date">{{x.sentTime | date:'dd/MM/yyyy'}}</td>
                         </tr>
                         <tr class="read">
                             <td class="check-mail">

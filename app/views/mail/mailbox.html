@@ -42,7 +42,7 @@
                             </td>
                             <td class="mail-ontact"><a ng-click="vm.getMessageDetails(x._id)">support@ngspipeline.com</a></td>
                             <td class="mail-subject"><a ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
-                            <td class="text-right mail-date">6.10 AM</td>
+                            <td class="text-right mail-date">{{x.sentTime | date:'dd/MM/yyyy'}}</td>
                         </tr>
                         <tr class="unread">
                             <td class="check-mail">
