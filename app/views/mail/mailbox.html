@@ -29,7 +29,7 @@
 
                     <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
                     <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as read"><i class="fa fa-eye"></i></button>
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
+                    <button ng-click="vm.moveToTrash()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
 
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     <tbody>
                         <tr class="read" ng-repeat="x in vm.messages">
                             <td class="check-mail">
-                               <input icheck type="checkbox" ng-model="vm.defaultCheckbox">
+                                <input icheck type="checkbox" ng-model="x.selected" ng-click="x.selected = true">
                             </td>
                             <td class="mail-ontact"><a ng-click="vm.getMessageDetails(x._id)">support@ngspipeline.com</a></td>
                             <td class="mail-subject"><a ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>

@@ -3390,50 +3390,50 @@ function jstreeCtrl($scope) {
  * 
  *
  */
-function loginCtrl($scope,$http,$state) {    
-   var vm = this;
-    
-   vm.user = {};
-   vm.loginMessage = '';
-   vm.registerMessage = '';
-   
-   this.submitLogin = function() {
-       
-       $http({
-          method  : 'POST',
-          url     : 'api/login',
-          data    : vm.user, //forms user object
-          //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         })
-          .success(function(data) {
-            if (data.success) {
-                vm.loginMessage = data.msg;
-                $state.go('pipelines.dna_resequencing');
-              
-            } else {
-              vm.loginMessage = data.msg;
-            }
-          });
-   };
-   
-   this.submitRegister = function() {
-       
-       $http({
-          method  : 'POST',
-          url     : 'api/register',
-          data    : vm.user, //forms user object
-          //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         })
-          .success(function(data) {
-            if (data.success) {
-                vm.registerMessage = data.msg;                
-                $state.go('pipelines.dna_resequencing');
-              
-            } else {               
-              vm.registerMessage = data.msg;          
-            }
-          });
-   };
+function loginCtrl($scope, $http, $state) {
+    var vm = this;
+
+    vm.user = {};
+    vm.loginMessage = '';
+    vm.registerMessage = '';
+
+    this.submitLogin = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/login',
+            data: vm.user, //forms user object
+            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.loginMessage = data.msg;
+                        $state.go('pipelines.dna_resequencing');
+
+                    } else {
+                        vm.loginMessage = data.msg;
+                    }
+                });
+    };
+
+    this.submitRegister = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/register',
+            data: vm.user, //forms user object
+            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.registerMessage = data.msg;
+                        $state.go('pipelines.dna_resequencing');
+
+                    } else {
+                        vm.registerMessage = data.msg;
+                    }
+                });
+    };
 }
 
 
@@ -3445,7 +3445,7 @@ function loginCtrl($scope,$http,$state) {
 
 function mailboxCtrl($scope, $http, $state, messageService) {
     var vm = this;
-    this.defaultCheckbox = false;
+    vm.defaultCheckboxes = [];
 
 
     this.message = {};
@@ -3545,22 +3545,53 @@ function mailboxCtrl($scope, $http, $state, messageService) {
 
                 });
     };
-    
+
     vm.test = 'TEST';
     vm.currentMessage = messageService.message;
 
     this.getMessageDetails = function (messageId) {
-        
+
         $http({
             method: 'GET',
             url: 'api/get_message_details',
             params: {message_id: messageId}
-            
+
         })
                 .success(function (response) {
                     console.log(response);
                     messageService.message = response.message;
                     $state.go('mailbox.email_view');
+                });
+    };
+
+    this.moveToTrash = function () {
+        var req = [];
+        
+        for(var i in vm.messages){
+            var v = vm.messages[i];
+            
+            if(v.selected===true){
+                req.push(v._id);
+            }            
+        }
+               
+        $http({
+            method: 'POST',
+            url: 'api/move_to_trash',
+            data: req
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("SUCCESS");
+                        vm.messages = vm.messages.filter(function(el){
+                           return $.inArray(el._id,req);
+                        });
+                        
+                    } else {
+                        //this.messages = data.msg;
+                        console.log("FAIL");
+                    }
                 });
     };
 

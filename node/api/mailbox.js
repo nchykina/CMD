@@ -102,9 +102,51 @@ var getMessageDetails = function (req, res) {
     Message.findOne({'_id': req.query.message_id}, function (err, message) {
         if (err)
             return console.error(err);
-         //console.log(message);
+        //console.log(message);
         res.json({message: message});
     });
+};
+
+var moveToTrash = function (req, res) {
+    console.log("Moving items to trash");
+
+    var messages = req.body;
+    //console.log(messages);
+
+
+    for (var key in messages) {
+        if (req.body.hasOwnProperty(key)) {
+            messageId = req.body[key];
+            console.log(messageId);
+            //console.log(message.selected);
+            Message.findOne({'_id': messageId}, function (err, message) {
+                if (err)
+                    return console.error(err);
+                message.type = 'trash';
+                message.save(function (err) {
+                    if (err) {
+                        return res.json({success: false, msg: 'Error'});
+                    }
+                    res.json({success: true, msg: 'Moved to trash'});
+                });
+            });
+
+        }
+    }
+
+    /*
+     * 
+     *         if(message.selected == true){
+     console.log("selected");
+     //console.log(message.to);
+     
+     }
+     Message.update({selected: true}, {type: 'trash'}, function (err) {
+     if (err)
+     return res.json({success: false, msg: 'Error'});
+     //console.log(message);
+     res.json({success: true, msg: 'Items moved to trash'});
+     });       */
 };
 
 
@@ -118,6 +160,7 @@ var bindFunction = function (router) {
     router.get('/get_messages_for_trash', getMessagesForTrash);
     router.get('/get_number_of_messages', getNumberOfMessages);
     router.get('/get_message_details', getMessageDetails);
+    router.post('/move_to_trash', moveToTrash);
 };
 
 module.exports = {
