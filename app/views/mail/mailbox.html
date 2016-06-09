@@ -1,5 +1,5 @@
-<div class="wrapper wrapper-content">
-    <div class="row">
+<div class="wrapper wrapper-content" ng-controller="mailboxController as vm" ng-init="vm.getMessagesForInbox()">
+    <div class="row" ng-init="vm.getNumberOfMessages()">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-content mailbox-content">
@@ -9,9 +9,9 @@
                         <div class="space-25"></div>
                         <h5>Folders</h5>
                         <ul class="folder-list m-b-md" style="padding: 0">
-                            <li><a ui-sref="mailbox.inbox"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">16</span> </a></li>
-                            <li><a ui-sref="mailbox.drafts"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-danger pull-right">2</span></a></li>
-                            <li><a ui-sref="mailbox.sent"> <i class="fa fa-envelope-o"></i><span class="label label-info pull-right">5</span> Sent</a></li>
+                            <li><a ui-sref="mailbox.inbox"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">{{vm.numberOfInbox}}</span> </a></li>
+                            <li><a ui-sref="mailbox.drafts"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-danger pull-right">{{vm.numberOfDraft}}</span></a></li>
+                            <li><a ui-sref="mailbox.sent"> <i class="fa fa-envelope-o"></i><span class="label label-info pull-right">{{vm.numberOfSent}}</span> Sent</a></li>
                             <li><a ui-sref="mailbox.trash"> <i class="fa fa-trash-o"></i> Trash</a></li>
                         </ul>
                         <div class="clearfix"></div>
@@ -20,9 +20,9 @@
             </div>
         </div>
         <div class="col-lg-9 animated fadeInRight">
-            <div class="mail-box-header">
+            <div class="mail-box-header" >
                 <h2>
-                    Inbox (16)
+                    Inbox ({{vm.numberOfInbox}})
                 </h2>
 
                 <div class="mail-tools tooltip-demo m-t-md">
@@ -33,16 +33,15 @@
 
                 </div>
             </div>
-            <div class="mail-box">
-
-                <table class="table table-hover table-mail">
+            <div class="mail-box" >
+                <table class="table table-hover table-mail" >
                     <tbody>
-                        <tr class="unread">
+                        <tr class="read" ng-repeat="x in vm.messages">
                             <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="main.checkOne">
+                               <input icheck type="checkbox" ng-model="vm.defaultCheckbox">
                             </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view">Anna Smith</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view">Lorem ipsum dolor noretek imit set.</a></td>
+                            <td class="mail-ontact"><a ng-click="vm.getMessageDetails(x._id)">support@ngspipeline.com</a></td>
+                            <td class="mail-subject"><a ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
                             <td class="text-right mail-date">6.10 AM</td>
                         </tr>
                         <tr class="unread">

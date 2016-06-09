@@ -1,5 +1,5 @@
-<div class="wrapper wrapper-content">
-    <div class="row">
+<div class="wrapper wrapper-content" ng-controller="mailboxController as vm">
+    <div class="row" ng-init="vm.getNumberOfMessages()">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-content mailbox-content">
@@ -9,9 +9,9 @@
                         <div class="space-25"></div>
                         <h5>Folders</h5>
                         <ul class="folder-list m-b-md" style="padding: 0">
-                            <li><a ui-sref="mailbox.inbox"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">16</span> </a></li>
-                            <li><a ui-sref="mailbox.drafts"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-danger pull-right">2</span></a></li>
-                            <li><a ui-sref="mailbox.sent"> <i class="fa fa-envelope-o"></i> Sent<span class="label label-info pull-right">5</span></a></li>
+                            <li><a ui-sref="mailbox.inbox"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">{{vm.numberOfInbox}}</span> </a></li>
+                            <li><a ui-sref="mailbox.drafts"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-danger pull-right">{{vm.numberOfDraft}}</span></a></li>
+                            <li><a ui-sref="mailbox.sent"> <i class="fa fa-envelope-o"></i> Sent<span class="label label-info pull-right">{{vm.numberOfSent}}</span></a></li>
                             <li><a ui-sref="mailbox.trash"> <i class="fa fa-trash-o"></i> Trash</a></li>
                         </ul>
                         <div class="clearfix"></div>
@@ -30,10 +30,8 @@
                 </h2>
 
                 <div class="mail-tools tooltip-demo m-t-md">
-
-
                     <h3>
-                        <span class="font-noraml">Subject: </span>Aldus PageMaker including versions of Lorem Ipsum.
+                        <span class="font-noraml">Subject: {{vm.currentMessage.subject}} </span>
                     </h3>
                     <h5>
                         <span class="pull-right font-noraml">10:15AM 02 FEB 2014</span>
@@ -46,26 +44,10 @@
 
                 <div class="mail-body">
                     <p>
-                        Hello Jonathan!
-                        <br/>
-                        <br/>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
-                        took a galley of type and scrambled it to make a type <strong>specimen book.</strong>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
-                        passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. It has survived not only five centuries, but also the leap
-                        into electronic typesetting, remaining
-                        essentially unchanged.
+                        {{vm.currentMessage.content}}
                     </p>
 
-                    <p>
-                        It was popularised in the 1960s with the release <a href="" class="text-navy">Letraset sheets</a> containing Lorem Ipsum passages, and more recently with desktop publishing
-                        software
-                        like Aldus PageMaker including versions of Lorem Ipsum.
-                    </p>
-
-                    <p>
-                        There are many variations of passages of <strong>Lorem Ipsum</strong>Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or
-                        randomised words which don't look even slightly believable. If you are going to use a passage of.
-                    </p>
+                    
                 </div>
                                 <div class="mail-text h-200">
 

@@ -3422,9 +3422,20 @@ function loginCtrl($scope, $http, $state) {
  *
  */
 
-function mailboxCtrl($scope, $http, $state) {
+function mailboxCtrl($scope, $http, $state, messageService) {
+    var vm = this;
+    this.defaultCheckbox = false;
+
 
     this.message = {};
+    vm.messages = [];
+
+    vm.numberOfInbox = {};
+    vm.numberOfDraft = {};
+    vm.numberOfSent = {};
+    vm.numberOfTrash = {};
+
+    //vm.getMessagesForInbox();
 
     this.submitMessage = function () {
 
@@ -3441,7 +3452,95 @@ function mailboxCtrl($scope, $http, $state) {
                         this.message = data.msg;
                     }
                 });
-        ;
+    };
+
+    this.saveAsDraft = function () {
+        $http({
+            method: 'POST',
+            url: 'api/save_as_draft',
+            data: this.message
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('mailbox.inbox');
+
+                    } else {
+                        this.message = data.msg;
+                    }
+                });
+    };
+
+    this.getMessagesForInbox = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_messages_for_inbox'
+        })
+                .then(function (response) {
+                    vm.messages = response.data.messages;
+                    vm.length = response.data.length;
+                });
+    };
+
+    this.getMessagesForDrafts = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_messages_for_drafts'
+        })
+                .then(function (response) {
+                    vm.messages = response.data.messages;
+                });
+    };
+
+    this.getMessagesForSent = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_messages_for_sent'
+        })
+                .then(function (response) {
+                    vm.messages = response.data.messages;
+                });
+    };
+
+    this.getMessagesForTrash = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_messages_for_trash'
+        })
+                .then(function (response) {
+                    vm.messages = response.data.messages;
+                });
+    };
+
+    this.getNumberOfMessages = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_number_of_messages'
+        })
+                .then(function (response) {
+                    vm.numberOfInbox = response.data.inbox;
+                    vm.numberOfDraft = response.data.draft;
+                    vm.numberOfSent = response.data.sent;
+                    vm.numberOfTrash = response.data.trash;
+
+                });
+    };
+    
+    vm.test = 'TEST';
+    vm.currentMessage = messageService.message;
+
+    this.getMessageDetails = function (messageId) {
+        
+        $http({
+            method: 'GET',
+            url: 'api/get_message_details',
+            params: {message_id: messageId}
+            
+        })
+                .success(function (response) {
+                    console.log(response);
+                    messageService.message = response.message;
+                    $state.go('mailbox.email_view');
+                });
     };
 
 }
@@ -3493,5 +3592,5 @@ angular
         .controller('tourCtrl', tourCtrl)
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
-        .controller('mailboxController',['$scope', '$http', '$state',  mailboxCtrl]);
+        .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl]);
 

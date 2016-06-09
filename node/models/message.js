@@ -17,7 +17,12 @@ var MessageSchema = new Schema({
     content: {
         type: String,
         required: false
+    },
+    type: {
+        type: String, //inbox, draft, sent, trash
+        required: true
     }
 });
+
 
 module.exports = mongoose.model('Message', MessageSchema);

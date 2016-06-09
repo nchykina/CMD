@@ -1,5 +1,5 @@
-<div class="wrapper wrapper-content">
-    <div class="row">
+<div class="wrapper wrapper-content" ng-controller="mailboxController as vm">
+    <div class="row" ng-init="vm.getNumberOfMessages()">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-content mailbox-content">
@@ -9,9 +9,9 @@
                         <div class="space-25"></div>
                         <h5>Folders</h5>
                         <ul class="folder-list m-b-md" style="padding: 0">
-                            <li><a ui-sref="mailbox.inbox"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">16</span> </a></li>
-                            <li><a ui-sref="mailbox.drafts"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-danger pull-right">2</span></a></li>
-                            <li><a ui-sref="mailbox.sent"> <i class="fa fa-envelope-o"></i> Sent<span class="label label-info pull-right">5</span></a></li>
+                            <li><a ui-sref="mailbox.inbox"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">{{vm.numberOfInbox}}</span> </a></li>
+                            <li><a ui-sref="mailbox.drafts"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-danger pull-right">{{vm.numberOfDraft}}</span></a></li>
+                            <li><a ui-sref="mailbox.sent"> <i class="fa fa-envelope-o"></i> Sent<span class="label label-info pull-right">{{vm.numberOfSent}}</span></a></li>
                             <li><a ui-sref="mailbox.trash"> <i class="fa fa-trash-o"></i> Trash</a></li>
                         </ul>
                         <div class="clearfix"></div>
@@ -30,7 +30,7 @@
                 </h2>
             </div>
             <div class="mail-box" ng-controller="mailboxController as vm">
-                <form class="form-horizontal" method="get" ng-submit="vm.submitMessage()">
+                <form class="form-horizontal" method="get">
 
                     <div class="mail-body">
 
@@ -58,9 +58,9 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="mail-body text-right tooltip-demo">
-                        <button type="submit" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send" ><i class="fa fa-reply"></i> Send</button>
-                        <a ui-sref="inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Discard</a>
-                        <a ui-sref="inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to draft folder"><i class="fa fa-pencil"></i> Save as draft</a>
+                        <button ng-click="vm.submitMessage()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send" ><i class="fa fa-reply"></i> Send</button>
+                        <a ui-sref="mailbox.inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Discard</a>
+                        <button ng-click="vm.saveAsDraft()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Save as draft"><i class="fa fa-pencil"></i> Save as draft</button>
                     </div>
                 </form>
                 <div class="clearfix"></div>
