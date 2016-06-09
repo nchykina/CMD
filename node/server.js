@@ -64,10 +64,15 @@ app.use('/api',apiRouter);
 app.use('/',express.static(__dirname + '/../app'));
 
 //var router = app.Router;
-
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/node_index.html');
+app.all('/*', function(req, res, next) {
+  res.sendfile('index.html', { root: 'app' });
 });
+
+/*app.get('/', function (req, res) {
+    res.sendFile(__dirname + '/node_index.html');
+});*/
+
+
 
 //server = http.createServer(app)
 //server.listen(3000);
