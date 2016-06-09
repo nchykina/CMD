@@ -3566,15 +3566,15 @@ function mailboxCtrl($scope, $http, $state, messageService) {
 
     this.moveToTrash = function () {
         var req = [];
-        
-        for(var i in vm.messages){
+
+        for (var i in vm.messages) {
             var v = vm.messages[i];
-            
-            if(v.selected===true){
+
+            if (v.selected === true) {
                 req.push(v._id);
-            }            
+            }
         }
-               
+
         $http({
             method: 'POST',
             url: 'api/move_to_trash',
@@ -3583,14 +3583,45 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log("SUCCESS");
-                        vm.messages = vm.messages.filter(function(el){
-                           return $.inArray(el._id,req);
-                        });
-                        
-                    } else {
-                        //this.messages = data.msg;
-                        console.log("FAIL");
+                        vm.messages = $.grep(vm.messages,(function (el) {
+                            var res = $.inArray(el._id, req);
+                            vm.getNumberOfMessages();
+                            return (res==-1);
+                        }));
+
+                    }
+                });
+    };
+    
+    this.deleteMessage = function () {
+        var req = [];
+
+        for (var i in vm.messages) {
+            var v = vm.messages[i];
+
+            if (v.selected === true) {
+                req.push(v._id);
+            }
+        }
+        
+        console.log(vm.messages);
+        
+
+        $http({
+            method: 'POST',
+            url: 'api/delete_message',
+            data: req
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log(req);
+                        vm.messages = $.grep(vm.messages,(function (el) {
+                            var res = $.inArray(el._id, req);
+                            vm.getNumberOfMessages();
+                            return (res==-1);
+                        }));
+
                     }
                 });
     };

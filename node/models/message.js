@@ -27,9 +27,9 @@ var MessageSchema = new Schema({
         default: Date.now,
         required: false
     },
-    selected:{
+    read:{
         type: Boolean,
-        default: false,
+        default: true,
         required: false
     }
 });

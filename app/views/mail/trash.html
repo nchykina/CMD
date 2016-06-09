@@ -1,4 +1,4 @@
-<div class="wrapper wrapper-content" ng-controller="mailboxController as vm" ng-init="vm.getMessagesForTrash()">
+<div class="wrapper wrapper-content"  ng-init="vm.getMessagesForTrash()">
     <div class="row" ng-init="vm.getNumberOfMessages()">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
@@ -29,7 +29,7 @@
 
                     <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
                     <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Move back to folder"><i class="fa fa-undo"></i> Move back to folder</button>
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
+                    <button ng-click="vm.deleteMessage()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
 
                     
                 </div>
@@ -40,7 +40,7 @@
                     <tbody>
                         <tr class="read" ng-repeat="x in vm.messages">
                             <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="x.selected">
+                                <input icheck type="checkbox" ng-model="x.selected" ng-click="x.selected = true">
                             </td>
                             <td class="mail-ontact"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.to}}</a></td>
                             <td class="mail-subject"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>

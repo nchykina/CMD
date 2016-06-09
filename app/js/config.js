@@ -13,7 +13,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
     IdleProvider.timeout(120); // in seconds
 
     $urlRouterProvider.otherwise("/pipelines/dna_resequencing");
-    
+
     $locationProvider.html5Mode(true);
 
     $ocLazyLoadProvider.config({
@@ -323,6 +323,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.inbox', {
                 url: "/inbox",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/mailbox.html",
                 data: {pageTitle: 'Inbox'},
                 resolve: {
@@ -337,6 +339,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.sent', {
                 url: "/sent",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/sent.html",
                 data: {pageTitle: 'Sent'},
                 resolve: {
@@ -351,6 +355,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.drafts', {
                 url: "/drafts",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/drafts.html",
                 data: {pageTitle: 'Drafts'},
                 resolve: {
@@ -365,6 +371,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.trash', {
                 url: "/trash",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/trash.html",
                 data: {pageTitle: 'Trash'},
                 resolve: {
@@ -379,11 +387,15 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.email_view', {
                 url: "/email_view",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/mail_detail.html",
                 data: {pageTitle: 'Mail detail'}
             })
             .state('mailbox.mail_compose', {
                 url: "/mail_compose",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/mail_compose.html",
                 data: {pageTitle: 'Mail compose'},
                 resolve: {
@@ -1593,7 +1605,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
 }
 angular
         .module('inspinia')
-        .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider',config])
+        .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider', config])
         .run(function ($rootScope, $state) {
             $rootScope.$state = $state;
         });

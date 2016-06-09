@@ -127,26 +127,38 @@ var moveToTrash = function (req, res) {
                     if (err) {
                         return res.json({success: false, msg: 'Error'});
                     }
-                    res.json({success: true, msg: 'Moved to trash'});
+
                 });
             });
 
         }
     }
+    res.json({success: true, msg: 'Moved to trash'});
+};
 
-    /*
-     * 
-     *         if(message.selected == true){
-     console.log("selected");
-     //console.log(message.to);
-     
-     }
-     Message.update({selected: true}, {type: 'trash'}, function (err) {
-     if (err)
-     return res.json({success: false, msg: 'Error'});
-     //console.log(message);
-     res.json({success: true, msg: 'Items moved to trash'});
-     });       */
+var deleteMessage = function (req, res) {
+    console.log("Deleting messages");
+
+    var messages = req.body;
+    //console.log(messages);
+
+
+    for (var key in messages) {
+        if (req.body.hasOwnProperty(key)) {
+            messageId = req.body[key];
+            console.log(messageId);
+            //console.log(message.selected);
+            Message.remove({'_id': messageId}, function (err) {
+                if (err) {
+                    return res.json({success: false, msg: 'Error'});
+                }
+                
+            });
+
+        }
+    }
+    res.json({success: true, msg: 'Messages deleted'});
+
 };
 
 
@@ -161,6 +173,7 @@ var bindFunction = function (router) {
     router.get('/get_number_of_messages', getNumberOfMessages);
     router.get('/get_message_details', getMessageDetails);
     router.post('/move_to_trash', moveToTrash);
+    router.post('/delete_message', deleteMessage);
 };
 
 module.exports = {
