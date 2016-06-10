@@ -3578,7 +3578,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         $http({
             method: 'POST',
             url: 'api/move_to_trash',
-            data: {'ids': req, 'source': movedToTrashFrom} 
+            data: {'ids': req, 'source': movedToTrashFrom}
 
         })
                 .success(function (data) {
@@ -3657,7 +3657,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 });
     };
 
-this.moveBackFromTrash = function () {
+    this.moveBackFromTrash = function () {
         var req = [];
 
         for (var i in vm.messages) {

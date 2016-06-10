@@ -132,8 +132,8 @@ var moveToTrash = function (req, res) {
 
     var messages = req.body.ids;
     var movedToTrashFrom = req.body.source;
-    console.log("MESSAGE", messages);
-    console.log("MOVED", movedToTrashFrom);
+   // console.log("MESSAGE", messages);
+   // console.log("MOVED", movedToTrashFrom);
 
 
     for (var key in messages) {
