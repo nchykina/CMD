@@ -1,5 +1,5 @@
-<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.getItemsInCart()">
-    <div class="col-lg-10" ng-init="em.getTotalForCart()">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
+    <div class="col-lg-10">
         <h2>Shopping cart</h2>
         <ol class="breadcrumb">
             <li>
@@ -24,7 +24,7 @@
 
             <div class="ibox">
                 <div class="ibox-title">
-                    <span class="pull-right"><strong>2</strong> items</span>
+                    <span class="pull-right"><strong>{{em.numberOfItemsInCart}}</strong> items</span>
                     <h5>Items in your shopping cart</h5>
                 </div>
                 <div class="ibox-content" ng-repeat="x in em.itemsInCart">

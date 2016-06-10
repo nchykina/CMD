@@ -3697,10 +3697,17 @@ function ecommerceCtrl($scope, $http, $state) {
     var em = this;
 
     em.order = {};
-    
+
     em.itemsInCart = {};
     em.totalForCart = {};
+    em.numberOfItemsInCart = {};
     
+    this.init = function(){
+        em.getItemsInCart();
+        em.getTotalForCart();
+        em.getNumberOfItemsInCart();     
+    }
+
 
     this.addToCart = function (productCategory, productName, productPrice) {
 
@@ -3726,9 +3733,9 @@ function ecommerceCtrl($scope, $http, $state) {
                     console.log("ITEMS IN CART", em.itemsInCart);
                 });
     };
-    
+
     this.removeItemFromCart = function (item) {
-        
+
         $http({
             method: 'POST',
             url: 'api/remove_item_from_cart',
@@ -3738,22 +3745,34 @@ function ecommerceCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         em.getTotalForCart();
+                        em.getNumberOfItemsInCart();
                         em.itemsInCart = $.grep(em.itemsInCart, (function (el) {
-                            return el._id!==item._id;
+                            return el._id !== item._id;
                         }));
 
                     }
                 });
     };
-    
-    this.getTotalForCart = function (item) {
-        
+
+    this.getTotalForCart = function () {
+
         $http({
             method: 'GET',
             url: 'api/get_total_for_cart'
         })
                 .then(function (response) {
                     em.totalForCart = response.data.total;
+                });
+    };
+
+    this.getNumberOfItemsInCart = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/get_number_of_items_in_cart'
+        })
+                .then(function (response) {
+                    em.numberOfItemsInCart = response.data.total;
                 });
     };
 

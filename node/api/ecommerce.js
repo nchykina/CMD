@@ -89,12 +89,27 @@ var getTotalForCart = function (req, res) {
 
 };
 
+var getNumberOfItemsInCart = function (req, res) {
+
+    if (req.user) {
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return console.error(err);
+            res.json({total: user.cart.length});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+
+};
+
 
 var bindFunction = function (router) {
     router.post('/add_to_cart', addToCart);
     router.get('/get_items_in_cart', getItemsInCart);
     router.post('/remove_item_from_cart', removeItemFromCart);
     router.get('/get_total_for_cart', getTotalForCart);
+    router.get('/get_number_of_items_in_cart', getNumberOfItemsInCart);
 };
 
 module.exports = {
