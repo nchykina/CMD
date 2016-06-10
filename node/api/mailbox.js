@@ -16,7 +16,8 @@ var createMessage = function (req, res) {
         subject: req.body.subject,
         content: req.body.content,
         type: 'inbox',
-        sentTime: new Date()
+        sentTime: new Date(),
+        read: false // for read/unread messages
     });
     newMessage.save(function (err) {
         if (err) {
@@ -79,7 +80,7 @@ var getMessagesForSent = function (req, res) {
 
 var getMessagesForTrash = function (req, res) {
 
-    Message.find({'type': 'trash', 'owner': req.user.name}, function (err, messages) { 
+    Message.find({'type': 'trash', 'owner': req.user.name}, function (err, messages) {
         if (err)
             return console.error(err);
         res.json({messages: messages});
@@ -116,7 +117,13 @@ var getMessageDetails = function (req, res) {
         if (err)
             return console.error(err);
         //console.log(message);
-        res.json({message: message});
+        message.read = true;
+        message.save(function (err) {
+            if (err) {
+                return res.json({success: false, msg: 'Error'});
+            }
+            res.json({message: message});
+        });       
     });
 };
 
@@ -176,6 +183,36 @@ var deleteMessage = function (req, res) {
 };
 
 
+var markAsRead = function (req, res) { // TBD
+    console.log("Marking as read/unread");
+
+    var messages = req.body;
+
+    for (var key in messages) {
+        if (req.body.hasOwnProperty(key)) {
+            messageId = req.body[key];
+            console.log(messageId);
+            Message.findOne({'_id': messageId}, function (err, message) {
+                if (err)
+                    return console.error(err);
+                if (message.read == true) {
+                    message.read = false;
+                } else {
+                    message.read = true;
+                }
+                message.save(function (err) {
+                    if (err) {
+                        return res.json({success: false, msg: 'Error'});
+                    }
+
+                });
+            });
+
+        }
+    }
+    res.json({success: true, msg: 'Marked as read/unread'});
+};
+
 
 var bindFunction = function (router) {
     router.post('/create_message', createMessage);
@@ -188,6 +225,7 @@ var bindFunction = function (router) {
     router.get('/get_message_details', getMessageDetails);
     router.post('/move_to_trash', moveToTrash);
     router.post('/delete_message', deleteMessage);
+    router.post('/mark_as_read', markAsRead);
 };
 
 module.exports = {

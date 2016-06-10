@@ -3583,16 +3583,16 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        vm.messages = $.grep(vm.messages,(function (el) {
+                        vm.messages = $.grep(vm.messages, (function (el) {
                             var res = $.inArray(el._id, req);
                             vm.getNumberOfMessages();
-                            return (res==-1);
+                            return (res == -1);
                         }));
 
                     }
                 });
     };
-    
+
     this.deleteMessage = function () {
         var req = [];
 
@@ -3603,9 +3603,9 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 req.push(v._id);
             }
         }
-        
+
         console.log(vm.messages);
-        
+
 
         $http({
             method: 'POST',
@@ -3616,11 +3616,42 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         console.log(req);
-                        vm.messages = $.grep(vm.messages,(function (el) {
+                        vm.messages = $.grep(vm.messages, (function (el) {
                             var res = $.inArray(el._id, req);
                             vm.getNumberOfMessages();
-                            return (res==-1);
+                            return (res == -1);
                         }));
+
+                    }
+                });
+    };
+
+    this.markAsRead = function () {
+        var req = [];
+
+        for (var i in vm.messages) {
+            var v = vm.messages[i];
+
+            if (v.selected === true) {
+                req.push(v._id);
+                if (v.read === true) {
+                    vm.messages[i].read = false;
+                } else {
+                    vm.messages[i].read = true;
+                }
+                v.selected = false;
+            }
+        }
+
+        $http({
+            method: 'POST',
+            url: 'api/mark_as_read',
+            data: req
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("marked");
 
                     }
                 });
