@@ -3,7 +3,7 @@ var Message = require('../models/message');
 
 var createMessage = function (req, res) {
     var newMessage = new Message({
-        from: req.body.from,
+        from: req.user.name,
         to: req.body.to,
         subject: req.body.subject,
         content: req.body.content,
@@ -21,7 +21,7 @@ var createMessage = function (req, res) {
 
 var saveAsDraft = function (req, res) {
     var newMessage = new Message({
-        from: req.body.from,
+        from: req.user.name,
         to: req.body.to,
         subject: req.body.subject,
         content: req.body.content,

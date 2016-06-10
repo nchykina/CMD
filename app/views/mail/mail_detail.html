@@ -34,8 +34,12 @@
                         <span class="font-noraml">Subject: {{vm.currentMessage.subject}} </span>
                     </h3>
                     <h5>
-                        <span class="pull-right font-noraml">10:15AM 02 FEB 2014</span>
-                        <span class="font-noraml">From: </span>alex.smith@corporation.com
+                        <span class="pull-right font-noraml">{{vm.currentMessage.sentTime | date:'MMM d, yyyy'}}</span>
+                        <span class="font-noraml">From: {{vm.currentMessage.from}}</span>
+                        
+                    </h5>
+                    <h5>
+                        <span class="font-noraml">To: {{vm.currentMessage.to}}</span>         
                     </h5>
                 </div>
             </div>

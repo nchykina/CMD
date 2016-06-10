@@ -12,7 +12,7 @@
                             <li><a ui-sref="mailbox.inbox"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">{{vm.numberOfInbox}}</span> </a></li>
                             <li><a ui-sref="mailbox.drafts"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-danger pull-right">{{vm.numberOfDraft}}</span></a></li>
                             <li><a ui-sref="mailbox.sent"> <i class="fa fa-envelope-o"></i><span class="label label-info pull-right">{{vm.numberOfSent}}</span> Sent</a></li>
-                        <li><a ui-sref="mailbox.trash"> <i class="fa fa-trash-o"></i> Trash</a></li>
+                            <li><a ui-sref="mailbox.trash"> <i class="fa fa-trash-o"></i> Trash</a></li>
                         </ul>
                         <div class="clearfix"></div>
                     </div>
@@ -35,6 +35,13 @@
             <div class="mail-box">
 
                 <table class="table table-hover table-mail" >
+                    <thead>
+                    <th></th>
+                    <th>To</th>
+                    <th>Subject</th>
+                    <th></th>
+                    <th></th>
+                    </thead>
                     <tbody>
                         <tr class="read" ng-repeat="x in vm.messages">
                             <td class="check-mail">
@@ -43,152 +50,8 @@
                             <td class="mail-ontact"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.to}}</a></td>
                             <td class="mail-subject"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
                             <td class=""></td>
-                            <td class="text-right mail-date">{{x.sentTime | date:'MMM d, yyyy'}}</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check4">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Mailchip</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">There are many variations of passages of Lorem Ipsum.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Mar 22</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check5">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Alex T.</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Lorem ipsum dolor noretek imit set.</a></td>
-                            <td class=""><i class="fa fa-paperclip"></i></td>
-                            <td class="text-right mail-date">December 22</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check6">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Monica Ryther</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">The standard chunk of Lorem Ipsum used.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Jun 12</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check7">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Sandra Derick</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Contrary to popular belief.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">May 28</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check8">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Patrick Pertners</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">If you are going to use a passage of Lorem </a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">May 28</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check9">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Michael Fox</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Humour, or non-characteristic words etc.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Dec 9</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check10">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Damien Ritz</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Oor Lorem Ipsum is that it has a more-or-less normal.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Jun 11</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check11">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Anna Smith</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Lorem ipsum dolor noretek imit set.</a></td>
-                            <td class=""><i class="fa fa-paperclip"></i></td>
-                            <td class="text-right mail-date">6.10 AM</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check12">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Jack Nowak</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Aldus PageMaker including versions of Lorem Ipsum.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">8.22 PM</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check13">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Mailchip</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">There are many variations of passages of Lorem Ipsum.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Mar 22</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check14">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Alex T.</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Lorem ipsum dolor noretek imit set.</a></td>
-                            <td class=""><i class="fa fa-paperclip"></i></td>
-                            <td class="text-right mail-date">December 22</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check15">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Monica Ryther</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">The standard chunk of Lorem Ipsum used.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Jun 12</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check16">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Sandra Derick</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Contrary to popular belief.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">May 28</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check17">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Patrick Pertners</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">If you are going to use a passage of Lorem </a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">May 28</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check18">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Michael Fox</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Humour, or non-characteristic words etc.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Dec 9</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check19">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="email_view">Damien Ritz</a></td>
-                            <td class="mail-subject"><a ui-sref="email_view">Oor Lorem Ipsum is that it has a more-or-less normal.</a></td>
-                            <td class=""></td>
-                            <td class="text-right mail-date">Jun 11</td>
-                        </tr>
+                            <td class="text-right mail-date">{{x.sentTime| date:'MMM d, yyyy'}}</td>
+                        </tr>                        
                     </tbody>
                 </table>
 
