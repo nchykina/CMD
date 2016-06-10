@@ -3701,11 +3701,11 @@ function ecommerceCtrl($scope, $http, $state) {
     em.itemsInCart = {};
     em.totalForCart = {};
     em.numberOfItemsInCart = {};
-    
-    this.init = function(){
+
+    this.init = function () {
         em.getItemsInCart();
         em.getTotalForCart();
-        em.getNumberOfItemsInCart();     
+        em.getNumberOfItemsInCart();
     }
 
 
@@ -3773,6 +3773,41 @@ function ecommerceCtrl($scope, $http, $state) {
         })
                 .then(function (response) {
                     em.numberOfItemsInCart = response.data.total;
+                });
+    };
+
+    this.createOrder = function (paymentType) {
+
+        $http({
+            method: 'POST',
+            url: 'api/create_order',
+            data: {'paymentType': paymentType}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("Order created");
+                        if (paymentType === 'card') {
+                            $state.go('commerce.confirmation'); //TBD
+                        }
+                        if (paymentType === 'paypal') {
+                            $state.go('commerce.confirmation'); //TBD
+                        }
+                        if (paymentType === 'wire') {
+                            $state.go('commerce.invoice');
+                        }
+                        em.clearCart();
+                    }
+                });
+    };
+
+    this.clearCart = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/clear_cart'
+        })
+                .success(function (data) {
+                    em.init();
                 });
     };
 

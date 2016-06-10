@@ -11,8 +11,8 @@ var OrderSchema = new Schema({
         default: Date.now,
         required: true
     },
-    products: [{ name: String, category: String, price: Number, addedDate: Date }],
-    status: {
+    products: [{ productName: String, productCategory: String, price: Number, addedDate: Date }],
+    paymentType: {
         type: String,
         required: false
     }   
