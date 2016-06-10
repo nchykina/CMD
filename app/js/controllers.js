@@ -3564,7 +3564,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 });
     };
 
-    this.moveToTrash = function () {
+    this.moveToTrash = function (movedToTrashFrom) {
         var req = [];
 
         for (var i in vm.messages) {
@@ -3578,7 +3578,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         $http({
             method: 'POST',
             url: 'api/move_to_trash',
-            data: req
+            data: {'ids': req, 'source': movedToTrashFrom} 
 
         })
                 .success(function (data) {
@@ -3653,6 +3653,34 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                     if (data.success) {
                         console.log("marked");
 
+                    }
+                });
+    };
+
+this.moveBackFromTrash = function () {
+        var req = [];
+
+        for (var i in vm.messages) {
+            var v = vm.messages[i];
+
+            if (v.selected === true) {
+                req.push(v._id);
+            }
+        }
+
+        $http({
+            method: 'POST',
+            url: 'api/move_back_from_trash',
+            data: req
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.messages = $.grep(vm.messages, (function (el) {
+                            var res = $.inArray(el._id, req);
+                            vm.getNumberOfMessages();
+                            return (res == -1);
+                        }));
                     }
                 });
     };

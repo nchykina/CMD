@@ -27,9 +27,9 @@
 
                 <div class="mail-tools tooltip-demo m-t-md">
 
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
+                    <button ng-click="vm.getMessagesForInbox()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
                     <button ng-click="vm.markAsRead()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as read"><i class="fa fa-eye"></i></button>
-                    <button ng-click="vm.moveToTrash()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
+                    <button ng-click="vm.moveToTrash('inbox')" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
 
                 </div>
             </div>

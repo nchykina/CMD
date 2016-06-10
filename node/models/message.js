@@ -22,19 +22,23 @@ var MessageSchema = new Schema({
         type: String, //inbox, draft, sent, trash
         required: true
     },
-    sentTime:{
+    sentTime: {
         type: Date,
         default: Date.now,
         required: false
     },
-    read:{
+    read: {
         type: Boolean,
         default: true,
         required: false
     },
-    owner:{ //for moving to trash logic
+    owner: {//logic for moving to trash
         type: String,
-        required: false    
+        required: false
+    },
+    movedToTrashFrom: {//logic for moving back to folder from trash
+        type: String,
+        required: false
     }
 });
 

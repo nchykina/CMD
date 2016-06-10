@@ -130,19 +130,22 @@ var getMessageDetails = function (req, res) {
 var moveToTrash = function (req, res) {
     console.log("Moving items to trash");
 
-    var messages = req.body;
-    //console.log(messages);
+    var messages = req.body.ids;
+    var movedToTrashFrom = req.body.source;
+    console.log("MESSAGE", messages);
+    console.log("MOVED", movedToTrashFrom);
 
 
     for (var key in messages) {
-        if (req.body.hasOwnProperty(key)) {
-            messageId = req.body[key];
+        if (req.body.ids.hasOwnProperty(key)) {
+            messageId = req.body.ids[key];
             console.log(messageId);
             //console.log(message.selected);
             Message.findOne({'_id': messageId}, function (err, message) {
                 if (err)
                     return console.error(err);
                 message.type = 'trash';
+                message.movedToTrashFrom = movedToTrashFrom;
                 message.owner = req.user.name;
                 message.save(function (err) {
                     if (err) {
@@ -214,6 +217,33 @@ var markAsRead = function (req, res) { // TBD
 };
 
 
+var moveBackFromTrash = function (req, res) {
+    console.log("Moving items back from trash");
+
+    var messages = req.body;
+
+    for (var key in messages) {
+        if (req.body.hasOwnProperty(key)) {
+            messageId = req.body[key];
+            console.log(messageId);
+            //console.log(message.selected);
+            Message.findOne({'_id': messageId}, function (err, message) {
+                if (err)
+                    return console.error(err);
+                message.type = message.movedToTrashFrom;
+                message.save(function (err) {
+                    if (err) {
+                        return res.json({success: false, msg: 'Error'});
+                    }
+                });
+            });
+
+        }
+    }
+    res.json({success: true, msg: 'Moved back from trash'});
+};
+
+
 var bindFunction = function (router) {
     router.post('/create_message', createMessage);
     router.post('/save_as_draft', saveAsDraft);
@@ -226,6 +256,7 @@ var bindFunction = function (router) {
     router.post('/move_to_trash', moveToTrash);
     router.post('/delete_message', deleteMessage);
     router.post('/mark_as_read', markAsRead);
+    router.post('/move_back_from_trash', moveBackFromTrash);
 };
 
 module.exports = {
