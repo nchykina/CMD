@@ -3698,14 +3698,10 @@ function ecommerceCtrl($scope, $http, $state) {
 
     em.order = {};
     
-    em.product = [{name: String, category: String, price: Number}];
+    em.itemsInCart = {};
+    
 
-    this.addToCart = function (productName, productCategory, productPrice) {
-        //em.product.name = productName;
-        //em.product.category = productCategory;
-        //em.product.price = productPrice;
-        
-        //console.log("TEST", em.product.name);
+    this.addToCart = function (productCategory, productName, productPrice) {
 
         $http({
             method: 'POST',
@@ -3715,10 +3711,18 @@ function ecommerceCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         //$state.go('mailbox.inbox');
-
-                    } else {
-                        em.product = data.msg;
                     }
+                });
+    };
+
+    this.getItemsInCart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_items_in_cart'
+        })
+                .then(function (response) {
+                    em.itemsInCart = response.data.itemsInCart;
+                    console.log("ITEMS IN CART", em.itemsInCart);
                 });
     };
 

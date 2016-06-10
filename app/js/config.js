@@ -1495,6 +1495,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.cart', {
                 url: "/cart",
                 templateUrl: "views/ecommerce/ecommerce_cart.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Shopping cart'}
             })
 

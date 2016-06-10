@@ -23,9 +23,20 @@ var addToCart = function (req, res) {
     });
 };
 
+var getItemsInCart = function (req, res) {
+    
+    User.findOne({'_id': req.user._id}, function (err, user) {
+        if (err)
+            return console.error(err);
+        var items = user.cart;
+        res.json({itemsInCart: items});
+    });
+};
+
 
 var bindFunction = function (router) {
     router.post('/add_to_cart', addToCart);
+    router.get('/get_items_in_cart', getItemsInCart);
 };
 
 module.exports = {
