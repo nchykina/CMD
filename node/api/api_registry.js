@@ -1,5 +1,7 @@
 var auth = require('./auth');
 var mailbox = require('./mailbox');
+var ecommerce = require('./ecommerce');
+
 
 var bodyParser  = require('body-parser');
 
@@ -9,6 +11,7 @@ var bindFunction = function(router){
     
     auth.bind(router);  
     mailbox.bind(router);
+    ecommerce.bind(router);
 };
 
 module.exports = bindFunction;

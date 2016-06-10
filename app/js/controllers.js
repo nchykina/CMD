@@ -3445,7 +3445,6 @@ function loginCtrl($scope, $http, $state) {
 
 function mailboxCtrl($scope, $http, $state, messageService) {
     var vm = this;
-    vm.defaultCheckboxes = [];
 
 
     this.message = {};
@@ -3688,6 +3687,44 @@ function mailboxCtrl($scope, $http, $state, messageService) {
 }
 
 
+/**
+ * ecommerceCtrl - ecommerce controller
+ * 
+ *
+ */
+
+function ecommerceCtrl($scope, $http, $state) {
+    var em = this;
+
+    em.order = {};
+    
+    em.product = [{name: String, category: String, price: Number}];
+
+    this.addToCart = function (productName, productCategory, productPrice) {
+        //em.product.name = productName;
+        //em.product.category = productCategory;
+        //em.product.price = productPrice;
+        
+        //console.log("TEST", em.product.name);
+
+        $http({
+            method: 'POST',
+            url: 'api/add_to_cart',
+            data: {'product': productName, 'category': productCategory, 'price': productPrice}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        //$state.go('mailbox.inbox');
+
+                    } else {
+                        em.product = data.msg;
+                    }
+                });
+    };
+
+
+}
+
 
 /**
  *
@@ -3734,5 +3771,7 @@ angular
         .controller('tourCtrl', tourCtrl)
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
-        .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl]);
+        .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl])
+        .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl]);
+
 

@@ -420,7 +420,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('widgets', {
                 url: "/widgets",
                 templateUrl: "views/widgets.html",
-                data: {pageTitle: 'Widhets'},
+                data: {pageTitle: 'Widgets'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -1410,6 +1410,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details1', {
                 url: "/product_details1",
                 templateUrl: "views/ecommerce/ecommerce_product_details1.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Additional content'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1428,6 +1430,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details2', {
                 url: "/product_details2",
                 templateUrl: "views/ecommerce/ecommerce_product_details2.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Extra upload/storage size'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1446,6 +1450,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details3', {
                 url: "/product_details3",
                 templateUrl: "views/ecommerce/ecommerce_product_details3.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Processing capacity'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1464,6 +1470,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details4', {
                 url: "/product_details4",
                 templateUrl: "views/ecommerce/ecommerce_product_details4.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Custom pipelines'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
