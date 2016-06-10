@@ -169,7 +169,7 @@ var deleteMessage = function (req, res) {
 
     for (var key in messages) {
         if (req.body.hasOwnProperty(key)) {
-            messageId = req.body[key];
+            messageId = req.body[key]; 
             console.log(messageId);
             //console.log(message.selected);
             Message.remove({'_id': messageId}, function (err) {

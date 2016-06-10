@@ -3699,6 +3699,7 @@ function ecommerceCtrl($scope, $http, $state) {
     em.order = {};
     
     em.itemsInCart = {};
+    em.totalForCart = {};
     
 
     this.addToCart = function (productCategory, productName, productPrice) {
@@ -3725,7 +3726,36 @@ function ecommerceCtrl($scope, $http, $state) {
                     console.log("ITEMS IN CART", em.itemsInCart);
                 });
     };
+    
+    this.removeItemFromCart = function (item) {
+        
+        $http({
+            method: 'POST',
+            url: 'api/remove_item_from_cart',
+            data: item
 
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        em.getTotalForCart();
+                        em.itemsInCart = $.grep(em.itemsInCart, (function (el) {
+                            return el._id!==item._id;
+                        }));
+
+                    }
+                });
+    };
+    
+    this.getTotalForCart = function (item) {
+        
+        $http({
+            method: 'GET',
+            url: 'api/get_total_for_cart'
+        })
+                .then(function (response) {
+                    em.totalForCart = response.data.total;
+                });
+    };
 
 }
 

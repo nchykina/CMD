@@ -1,5 +1,5 @@
 <div class="row wrapper border-bottom white-bg page-heading" ng-init="em.getItemsInCart()">
-    <div class="col-lg-10">
+    <div class="col-lg-10" ng-init="em.getTotalForCart()">
         <h2>Shopping cart</h2>
         <ol class="breadcrumb">
             <li>
@@ -53,7 +53,7 @@
 
 
                                         <div class="m-t-sm">                                 
-                                            <a href="#" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
+                                            <a ng-click="em.removeItemFromCart(x)" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
                                         </div>
                                     </td>
 
@@ -90,7 +90,7 @@
                         Total
                     </span>
                     <h2 class="font-bold">
-                        $20,00
+                        ${{em.totalForCart}},00
                     </h2>
 
                     <hr/>
@@ -113,7 +113,7 @@
 
                     <h3><i class="fa fa-envelope"></i> support@ngspipeline.com</h3>
                     <span class="small">
-                        Please contact with us if you have any questions.
+                        Please contact us if you have any questions.
                     </span>
 
 
