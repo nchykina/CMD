@@ -10,11 +10,24 @@ var createMessage = function (req, res) {
         type: 'sent',
         sentTime: new Date()
     });
+    var receivedMessage = new Message({
+        from: req.user.name,
+        to: req.body.to,
+        subject: req.body.subject,
+        content: req.body.content,
+        type: 'inbox',
+        sentTime: new Date()
+    });
     newMessage.save(function (err) {
         if (err) {
             return res.json({success: false, msg: 'Error'});
         }
-        res.json({success: true, msg: 'Email sent'});
+        receivedMessage.save(function (err) {
+            if (err) {
+                return res.json({success: false, msg: 'Error'});
+            }
+            res.json({success: true, msg: 'Email sent and received'});
+        });
     });
 };
 
@@ -39,7 +52,7 @@ var saveAsDraft = function (req, res) {
 
 var getMessagesForInbox = function (req, res) {
 
-    Message.find({'type': 'inbox'}, function (err, messages) {
+    Message.find({'type': 'inbox', 'to': req.user.name}, function (err, messages) {
         if (err)
             return console.error(err);
         res.json({messages: messages, length: messages.length});
@@ -48,7 +61,7 @@ var getMessagesForInbox = function (req, res) {
 
 var getMessagesForDrafts = function (req, res) {
 
-    Message.find({'type': 'draft'}, function (err, messages) {
+    Message.find({'type': 'draft', 'from': req.user.name}, function (err, messages) {
         if (err)
             return console.error(err);
         res.json({messages: messages});
@@ -57,7 +70,7 @@ var getMessagesForDrafts = function (req, res) {
 
 var getMessagesForSent = function (req, res) {
 
-    Message.find({'type': 'sent'}, function (err, messages) {
+    Message.find({'type': 'sent', 'from': req.user.name}, function (err, messages) {
         if (err)
             return console.error(err);
         res.json({messages: messages});
@@ -66,7 +79,7 @@ var getMessagesForSent = function (req, res) {
 
 var getMessagesForTrash = function (req, res) {
 
-    Message.find({'type': 'trash'}, function (err, messages) {
+    Message.find({'type': 'trash', 'owner': req.user.name}, function (err, messages) { 
         if (err)
             return console.error(err);
         res.json({messages: messages});
@@ -75,16 +88,16 @@ var getMessagesForTrash = function (req, res) {
 
 var getNumberOfMessages = function (req, res) {
 
-    Message.find({'type': 'inbox'}, function (err, inboxMessages) {
+    Message.find({'type': 'inbox', 'to': req.user.name}, function (err, inboxMessages) {
         if (err)
             return console.error(err);
-        Message.find({'type': 'draft'}, function (err, draftMessages) {
+        Message.find({'type': 'draft', 'from': req.user.name}, function (err, draftMessages) {
             if (err)
                 return console.error(err);
-            Message.find({'type': 'sent'}, function (err, sentMessages) {
+            Message.find({'type': 'sent', 'from': req.user.name}, function (err, sentMessages) {
                 if (err)
                     return console.error(err);
-                Message.find({'type': 'trash'}, function (err, trashMessages) {
+                Message.find({'type': 'trash', 'owner': req.user.name}, function (err, trashMessages) { //фильтр по пользователю???
                     if (err)
                         return console.error(err);
                     res.json({inbox: inboxMessages.length, draft: draftMessages.length,
@@ -123,6 +136,7 @@ var moveToTrash = function (req, res) {
                 if (err)
                     return console.error(err);
                 message.type = 'trash';
+                message.owner = req.user.name;
                 message.save(function (err) {
                     if (err) {
                         return res.json({success: false, msg: 'Error'});
@@ -152,7 +166,7 @@ var deleteMessage = function (req, res) {
                 if (err) {
                     return res.json({success: false, msg: 'Error'});
                 }
-                
+
             });
 
         }

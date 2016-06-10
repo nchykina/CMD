@@ -31,6 +31,10 @@ var MessageSchema = new Schema({
         type: Boolean,
         default: true,
         required: false
+    },
+    owner:{ //for moving to trash logic
+        type: String,
+        required: false    
     }
 });
 
