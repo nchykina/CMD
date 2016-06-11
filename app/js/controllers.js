@@ -3766,10 +3766,11 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
                     if (data.success) {
                         console.log("SUCCESS");
                         em.getProductList();
-                       // em.getTotalForCart();
-                        //em.getNumberOfItemsInCart();
+                        em.getTotalForCart();
+                        em.getNumberOfItemsInCart();
+                        em.getItemsInCart();
                         //em.itemsInCart = $.grep(em.itemsInCart, (function (el) {
-                       //     return el._id !== item._id;                  
+                          //  return el._id !== item._id;     }));             
                     }
                 });
     };

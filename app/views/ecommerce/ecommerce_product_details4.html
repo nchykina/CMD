@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
     <div class="col-lg-10">
         <h2>Purchase extra options > Custom pipelines</h2>
         <ol class="breadcrumb">
@@ -34,11 +34,11 @@
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                Add a custom pipeline
+                                {{em.productList[6].productName}}
                             </h2>
                             <small>Upload larger files for processing for any of the pipelines.</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">Negotiable <small class="text-muted">depends on the pipeline complexity</small> </h2>
+                                <h2 class="product-main-price">${{em.productList[6].price}} <small class="text-muted">depends on the pipeline complexity</small> </h2>
                             </div>
                             <hr>
 
@@ -57,8 +57,12 @@
                             <hr>
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button ng-click="em.addToCart('Custom pipelines','Add a custom pipeline', 100)"
-                                        class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="!em.productList[6].inCart" ng-click="em.addToCart(6)" 
+                                            class="btn btn-primary btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="em.productList[6].inCart" ng-click="em.removeItemFromCart(6)" 
+                                            class="btn btn-danger btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
                                     <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
                                 </div>
                             </div>
