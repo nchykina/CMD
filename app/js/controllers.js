@@ -3693,7 +3693,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
  *
  */
 
-function ecommerceCtrl($scope, $http, $state, ecommerceService) {
+function ecommerceCtrl($scope, $http, $state) {
     var em = this;
 
     em.order = {};
@@ -3702,13 +3702,9 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
     em.totalForCart = {};
     em.numberOfItemsInCart = {};
 
-
-    //em.productList = ecommerceService.productList;
     em.productList = {};
-    console.log(em.productList);
 
     this.init = function () {
-        //em.productList = ecommerceService.productList;       
         em.getProductList();
         em.getItemsInCart();
         em.getTotalForCart();
@@ -3725,11 +3721,9 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
                     console.log(data.products);
                     em.productList = data.products;
                 });
-        //return em.productList;
     };
 
     this.addToCart = function (productId) {
-        //console.log(em.productList);
 
         $http({
             method: 'POST',
@@ -3738,7 +3732,6 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log("PRODUCT ADDED");
                         em.getProductList();
                     }
                 });
@@ -3765,13 +3758,10 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log("SUCCESS");
                         em.getProductList();
                         em.getTotalForCart();
                         em.getNumberOfItemsInCart();
-                        em.getItemsInCart();
-                        //em.itemsInCart = $.grep(em.itemsInCart, (function (el) {
-                        //  return el._id !== item._id;     }));             
+                        em.getItemsInCart();             
                     }
                 });
     };
@@ -3882,6 +3872,6 @@ angular
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
         .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl])
-        .controller('ecommerceController', ['$scope', '$http', '$state', 'ecommerceService', ecommerceCtrl]);
+        .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl]);
 
 
