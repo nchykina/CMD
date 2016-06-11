@@ -1,12 +1,53 @@
 var Order = require('../models/order');
 var User = require('../models/user');
+var productList = require('../config/productList');
+
+var getProductList = function (req, res) {
+
+    if (req.user) {
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return res.json({success: false, msg: 'User not found'});
+            var resp = [];
+            for (var key in productList) {
+                
+                var contains = false;
+                
+                for (var key2 in user.cart) {                   
+                     if (user.cart[key2].productName === productList[key].productName) {
+                         contains = true;
+                         break;                         
+                     }
+                 }
+                 if(contains){                     
+                     resp.push({'productName': productList[key].productName,
+                        'productCategory': productList[key].productCategory,
+                        'price': productList[key].price,
+                        'inCart': true
+                    });
+                 } else{
+                     resp.push({'productName': productList[key].productName,
+                        'productCategory': productList[key].productCategory,
+                        'price': productList[key].price,
+                        'inCart': false});                                         
+                 }
+
+            }            
+            res.json({success: true, products: resp, msg: "Success"});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
 
 var addToCart = function (req, res) {
 
     if (req.user) {
 
-        var item = {productName: req.body.product, productCategory: req.body.category,
-            price: req.body.price, addedDate: new Date()};
+        var id = req.body.productId;
+
+        var item = {productName: productList[id].productName, productCategory: productList[id].productCategory,
+            price: productList[id].price, addedDate: new Date()};
 
         User.findOne({'_id': req.user._id}, function (err, user) {
             if (err)
@@ -40,13 +81,15 @@ var getItemsInCart = function (req, res) {
 
 var removeItemFromCart = function (req, res) {
     if (req.user) {
-        var itemId = req.body._id;
+        var productId = req.body.productId;
+        var productName = productList[productId].productName;
+        console.log("Product name: ", productName);
         User.findOne({'_id': req.user._id}, function (err, user) {
             if (err)
                 return res.json({success: false, msg: 'User not found'});
             var items = user.cart;
             for (var key in items) {
-                if (items[key]._id == itemId) {
+                if (items[key].productName == productName) {
                     user.cart.splice(key, 1);
                     user.save(function (err) {
                         if (err) {
@@ -140,7 +183,32 @@ var clearCart = function (req, res) {
     }
 };
 
+var isProductInCart = function (req, res) {
+
+    var id = req.query.productId;
+    console.log("ID", id);
+    var productName = productList[id].productName;
+
+    if (req.user) {
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return res.json({success: false, msg: 'User not found'});
+            var items = user.cart;
+            for (var key in items) {
+                if (items[key].productName === productName) {
+                    res.json({success: true, msg: true});
+                }
+            }
+            res.json({success: true, msg: false});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+
 var bindFunction = function (router) {
+    router.get('/get_product_list', getProductList);
     router.post('/add_to_cart', addToCart);
     router.get('/get_items_in_cart', getItemsInCart);
     router.post('/remove_item_from_cart', removeItemFromCart);
@@ -148,6 +216,7 @@ var bindFunction = function (router) {
     router.get('/get_number_of_items_in_cart', getNumberOfItemsInCart);
     router.post('/create_order', createOrder);
     router.post('/clear_cart', clearCart);
+    router.get('/is_product_in_cart', isProductInCart);
 };
 
 module.exports = {

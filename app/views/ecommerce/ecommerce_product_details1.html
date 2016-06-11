@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
     <div class="col-lg-10">
         <h2>Purchase extra options > Additional content</h2>
         <ol class="breadcrumb">
@@ -34,11 +34,11 @@
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                De-novo assembly
+                                {{em.productList[0].productName}}
                             </h2>
                             <small>Allows you to assemble genomes of different species de novo.</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">$10 <small class="text-muted">per month</small> </h2>
+                                <h2 class="product-main-price">${{em.productList[0].price}} <small class="text-muted">per month</small> </h2>
                             </div>
                             <hr>
 
@@ -57,8 +57,12 @@
                             <hr>
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button ng-click="em.addToCart('Additional Content','De novo assembly', 10)" 
-                                            class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="!em.productList[0].inCart" ng-click="em.addToCart(0)" 
+                                            class="btn btn-primary btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="em.productList[0].inCart" ng-click="em.removeItemFromCart(0)" 
+                                            class="btn btn-danger btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
                                     <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
 
                                 </div>
@@ -96,11 +100,11 @@
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                RNA resequencing
+                                {{em.productList[1].productName}}
                             </h2>
                             <small>Allows you to align RNA data.</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">$10 <small class="text-muted">per month</small> </h2>
+                                <h2 class="product-main-price">${{em.productList[1].price}} <small class="text-muted">per month</small> </h2>
                             </div>
                             <hr>
 
@@ -119,9 +123,14 @@
                             <hr>
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button ng-click="em.addToCart('Additional Content','RNA resequencing', 10)"
-                                            class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="!em.productList[1].inCart" ng-click="em.addToCart(1)" 
+                                            class="btn btn-primary btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="em.productList[1].inCart" ng-click="em.removeItemFromCart(1)"  
+                                            class="btn btn-danger btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
                                     <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
+
                                 </div>
                             </div>
                             <div class="form-group">

@@ -3693,7 +3693,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
  *
  */
 
-function ecommerceCtrl($scope, $http, $state) {
+function ecommerceCtrl($scope, $http, $state, ecommerceService) {
     var em = this;
 
     em.order = {};
@@ -3702,23 +3702,44 @@ function ecommerceCtrl($scope, $http, $state) {
     em.totalForCart = {};
     em.numberOfItemsInCart = {};
 
+
+    //em.productList = ecommerceService.productList;
+    em.productList = {};
+    console.log(em.productList);
+
     this.init = function () {
+        //em.productList = ecommerceService.productList;       
+        em.getProductList();
         em.getItemsInCart();
         em.getTotalForCart();
         em.getNumberOfItemsInCart();
-    }
+    };
 
 
-    this.addToCart = function (productCategory, productName, productPrice) {
+    this.getProductList = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_product_list'
+        })
+                .success(function (response) {
+                    console.log(response.products);
+                    em.productList = response.products;
+                });
+        //return em.productList;
+    };
+
+    this.addToCart = function (productId) {
+        //console.log(em.productList);
 
         $http({
             method: 'POST',
             url: 'api/add_to_cart',
-            data: {'product': productName, 'category': productCategory, 'price': productPrice}
+            data: {'productId': productId}
         })
                 .success(function (data) {
                     if (data.success) {
-                        //$state.go('mailbox.inbox');
+                        console.log("PRODUCT ADDED");
+                        em.getProductList();
                     }
                 });
     };
@@ -3730,26 +3751,25 @@ function ecommerceCtrl($scope, $http, $state) {
         })
                 .then(function (response) {
                     em.itemsInCart = response.data.itemsInCart;
-                    console.log("ITEMS IN CART", em.itemsInCart);
+                    //console.log("ITEMS IN CART", em.itemsInCart);
                 });
     };
 
-    this.removeItemFromCart = function (item) {
+    this.removeItemFromCart = function (productId) {
 
         $http({
             method: 'POST',
             url: 'api/remove_item_from_cart',
-            data: item
-
+            data: {'productId': productId}
         })
                 .success(function (data) {
                     if (data.success) {
-                        em.getTotalForCart();
-                        em.getNumberOfItemsInCart();
-                        em.itemsInCart = $.grep(em.itemsInCart, (function (el) {
-                            return el._id !== item._id;
-                        }));
-
+                        console.log("SUCCESS");
+                        em.getProductList();
+                       // em.getTotalForCart();
+                        //em.getNumberOfItemsInCart();
+                        //em.itemsInCart = $.grep(em.itemsInCart, (function (el) {
+                       //     return el._id !== item._id;                  
                     }
                 });
     };
@@ -3860,6 +3880,6 @@ angular
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
         .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl])
-        .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl]);
+        .controller('ecommerceController', ['$scope', '$http', '$state', 'ecommerceService', ecommerceCtrl]);
 
 
