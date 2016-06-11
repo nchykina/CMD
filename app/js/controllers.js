@@ -3721,9 +3721,9 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
             method: 'GET',
             url: 'api/get_product_list'
         })
-                .success(function (response) {
-                    console.log(response.products);
-                    em.productList = response.products;
+                .success(function (data) {
+                    console.log(data.products);
+                    em.productList = data.products;
                 });
         //return em.productList;
     };
@@ -3749,9 +3749,10 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
             method: 'GET',
             url: 'api/get_items_in_cart'
         })
-                .then(function (response) {
-                    em.itemsInCart = response.data.itemsInCart;
-                    //console.log("ITEMS IN CART", em.itemsInCart);
+                .success(function (data) {
+                    if (data.success) {
+                        em.itemsInCart = data.itemsInCart;
+                    }
                 });
     };
 
@@ -3770,7 +3771,7 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
                         em.getNumberOfItemsInCart();
                         em.getItemsInCart();
                         //em.itemsInCart = $.grep(em.itemsInCart, (function (el) {
-                          //  return el._id !== item._id;     }));             
+                        //  return el._id !== item._id;     }));             
                     }
                 });
     };
@@ -3781,8 +3782,8 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
             method: 'GET',
             url: 'api/get_total_for_cart'
         })
-                .then(function (response) {
-                    em.totalForCart = response.data.total;
+                .success(function (data) {
+                    em.totalForCart = data.total;
                 });
     };
 
@@ -3792,8 +3793,8 @@ function ecommerceCtrl($scope, $http, $state, ecommerceService) {
             method: 'GET',
             url: 'api/get_number_of_items_in_cart'
         })
-                .then(function (response) {
-                    em.numberOfItemsInCart = response.data.total;
+                .success(function (data) {
+                    em.numberOfItemsInCart = data.total;
                 });
     };
 

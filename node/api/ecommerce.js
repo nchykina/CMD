@@ -71,7 +71,7 @@ var getItemsInCart = function (req, res) {
             if (err)
                 return res.json({success: false, msg: 'Error'});
             var items = user.cart;
-            res.json({itemsInCart: items});
+            res.json({success: true, msg: "Items in cart", itemsInCart: items});
         });
     } else {
         res.json({success: false, msg: 'No user logged in'});
