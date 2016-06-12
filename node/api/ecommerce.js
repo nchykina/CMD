@@ -144,7 +144,7 @@ var createOrder = function (req, res) {
     if (req.user) {
 
         var newOrder = new Order({
-            user: req.user.name,
+            userId: req.user._id,
             paymentType: req.body.paymentType,
             products: req.user.cart,
             orderDate: new Date()
@@ -182,6 +182,19 @@ var clearCart = function (req, res) {
     }
 };
 
+
+var getOrders = function (req, res) {
+    if (req.user) {
+        Order.find({'userId': req.user._id}, function (err, orders) {
+            if (err)
+                return res.json({success: false, msg: 'Error'});
+            res.json({success: true, msg: "Orders", orders: orders});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
 var bindFunction = function (router) {
     router.get('/get_product_list', getProductList);
     router.post('/add_to_cart', addToCart);
@@ -191,6 +204,7 @@ var bindFunction = function (router) {
     router.get('/get_number_of_items_in_cart', getNumberOfItemsInCart);
     router.post('/create_order', createOrder);
     router.post('/clear_cart', clearCart);
+    router.get('/get_orders', getOrders);
 };
 
 module.exports = {

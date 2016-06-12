@@ -3822,6 +3822,8 @@ function ecommerceCtrl($scope, $http, $state) {
                     em.init();
                 });
     };
+    
+    
 
 }
 
