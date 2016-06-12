@@ -367,6 +367,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.inbox', {
                 url: "/inbox",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/mailbox.html",
                 data: {pageTitle: 'Inbox'},
                 resolve: {
@@ -381,6 +383,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.sent', {
                 url: "/sent",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/sent.html",
                 data: {pageTitle: 'Sent'},
                 resolve: {
@@ -395,6 +399,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.drafts', {
                 url: "/drafts",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/drafts.html",
                 data: {pageTitle: 'Drafts'},
                 resolve: {
@@ -409,6 +415,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('mailbox.trash', {
                 url: "/trash",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/trash.html",
                 data: {pageTitle: 'Trash'},
                 resolve: {
@@ -422,14 +430,16 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 }
             })
             .state('mailbox.email_view', {
-                url: "/email_view/{messageId}",
-                controller: "mailDetailsController",
-                controllerAs: "md",
+                url: "/email_view",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/mail_detail.html",
                 data: {pageTitle: 'Mail detail'}
             })
             .state('mailbox.mail_compose', {
                 url: "/mail_compose",
+                controller: 'mailboxController',
+                controllerAs: 'vm',
                 templateUrl: "views/mail/mail_compose.html",
                 data: {pageTitle: 'Mail compose'},
                 resolve: {
@@ -454,7 +464,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('widgets', {
                 url: "/widgets",
                 templateUrl: "views/widgets.html",
-                data: {pageTitle: 'Widhets'},
+                data: {pageTitle: 'Widgets'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -1414,6 +1424,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details1', {
                 url: "/product_details1",
                 templateUrl: "views/ecommerce/ecommerce_product_details1.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Additional content'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1432,6 +1444,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details2', {
                 url: "/product_details2",
                 templateUrl: "views/ecommerce/ecommerce_product_details2.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Extra upload/storage size'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1450,6 +1464,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details3', {
                 url: "/product_details3",
                 templateUrl: "views/ecommerce/ecommerce_product_details3.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Processing capacity'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1468,6 +1484,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.product_details4', {
                 url: "/product_details4",
                 templateUrl: "views/ecommerce/ecommerce_product_details4.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Purchase extra options > Custom pipelines'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1485,12 +1503,16 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('commerce.payments', {
                 url: "/payments",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 templateUrl: "views/ecommerce/ecommerce_payments.html",
                 data: {pageTitle: 'E-commerce payments'}
             })
             .state('commerce.cart', {
                 url: "/cart",
                 templateUrl: "views/ecommerce/ecommerce_cart.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
                 data: {pageTitle: 'Shopping cart'}
             })
 

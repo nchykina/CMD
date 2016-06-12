@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
     <div class="col-lg-10">
         <h2>Checkout</h2>
         <ol class="breadcrumb">
@@ -42,7 +42,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <h2>Summary</h2>
-                                    <strong>Price:</strong>: <span class="text-navy">$20.00</span>
+                                    <strong>Price:</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
 
                                     <p class="m-t">
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
@@ -95,7 +95,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <button class="btn btn-info" ui-sref="commerce.confirmation" type="submit">Make a payment</button>
+                                                <button class="btn btn-info" ng-click="em.createOrder('card')" type="submit">Make a payment</button>
                                             </div>
                                         </div>
                                     </form>
@@ -120,14 +120,14 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <h2>Summary</h2>
-                                    <strong>Price:</strong>: <span class="text-navy">$452.90</span>
+                                    <strong>Price:</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
                                     <p class="m-t">
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                                         eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                                         enim ad minim veniam, quis nostrud exercitation ullamco laboris
                                         nisi ut aliquip ex ea commodo consequat.
                                     </p>
-                                    <a class="btn btn-success" ui-sref="commerce.confirmation">
+                                    <a class="btn btn-success" ng-click="em.createOrder('paypal')">
                                         <i class="fa fa-cc-paypal">
                                             Purchase via PayPal
                                         </i>
@@ -150,14 +150,14 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <h2>Summary</h2>
-                                    <strong>Price:</strong>: <span class="text-navy">$452.90</span>
+                                    <strong>Price:</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
                                     <p class="m-t">
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                                         eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                                         enim ad minim veniam, quis nostrud exercitation ullamco laboris
                                         nisi ut aliquip ex ea commodo consequat.
                                     </p>
-                                    <a class="btn btn-info" ui-sref="commerce.invoice">                                       
+                                    <a class="btn btn-info" ng-click="em.createOrder('wire')">                                       
                                             Make a wire transfer                                        
                                     </a>
                                 </div>

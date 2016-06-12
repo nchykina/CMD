@@ -5,6 +5,28 @@ var messageService = function () {
 
 };
 
+//not used
+var ecommerceService = function ($http) {
+
+    var em = {};
+    
+    em.productList = {};
+
+    em.getProductList = function(){
+        $http({
+            method: 'GET',
+            url: 'api/get_product_list'
+        })
+                .success(function (response) {
+                    console.log(response.products);
+                    this.productList = response.products;
+                });
+        //return em.productList;
+    };
+
+    em.getProductList();
+    
+    return em;
 var jobService = function ($http, $q) {
     var vm = this;
 
@@ -39,4 +61,5 @@ var jobService = function ($http, $q) {
 angular
         .module('inspinia')
         .service('messageService', messageService)
-        .service('jobService',['$http','$q',jobService]);
+        .service('jobService',['$http','$q',jobService])
+        .factory('ecommerceService', ['$http', ecommerceService]);

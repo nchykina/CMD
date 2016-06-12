@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
     <div class="col-lg-10">
         <h2>Shopping cart</h2>
         <ol class="breadcrumb">
@@ -19,19 +19,15 @@
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
 
-
-
     <div class="row">
         <div class="col-md-9">
 
             <div class="ibox">
                 <div class="ibox-title">
-                    <span class="pull-right"><strong>2</strong> items</span>
+                    <span class="pull-right"><strong>{{em.numberOfItemsInCart}}</strong> items</span>
                     <h5>Items in your shopping cart</h5>
                 </div>
-                <div class="ibox-content">
-
-
+                <div class="ibox-content" ng-repeat="x in em.itemsInCart">
                     <div class="table-responsive">
                         <table class="table shoping-cart-table">
 
@@ -44,7 +40,7 @@
                                     <td class="desc">
                                         <h3>
                                             <a href="#" class="text-navy">
-                                                Additional content: De-novo assembly
+                                                {{x.productCategory}}: {{x.productName}}
                                             </a>
                                         </h3>
                                         <dl class="small m-b-none">
@@ -57,7 +53,7 @@
 
 
                                         <div class="m-t-sm">                                 
-                                            <a href="#" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
+                                            <a ng-click="em.removeItemFromCart(x.productId)" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
                                         </div>
                                     </td>
 
@@ -65,7 +61,7 @@
 
                                     <td>
                                         <h4>
-                                            $10,00
+                                            ${{x.price}},00
                                         </h4>
                                     </td>
                                 </tr>
@@ -73,45 +69,6 @@
                         </table>
                     </div>
 
-                </div>
-                <div class="ibox-content">
-                    <div class="table-responsive">
-                        <table class="table shoping-cart-table">
-
-                            <tbody>
-                                <tr>
-                                    <td width="90">
-                                        <div class="cart-product-imitation">
-                                        </div>
-                                    </td>
-                                    <td class="desc">
-                                        <h3>
-                                            <a href="#" class="text-navy">
-                                                Extra upload/storage size: Extra upload size (up to 2 Gb)
-                                            </a>
-                                        </h3>
-                                        <dl class="small m-b-none">
-                                            <dt>Description</dt>
-                                        </dl>
-                                        <p class="small">
-                                            There are many variations of passages of Lorem Ipsum available
-                                        </p>
-
-
-                                        <div class="m-t-sm">
-                                            <a href="#" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <h4>
-                                            $10,00
-                                        </h4>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div> 
                 <div class="ibox-content">
 
@@ -133,7 +90,7 @@
                         Total
                     </span>
                     <h2 class="font-bold">
-                        $20,00
+                        ${{em.totalForCart}},00
                     </h2>
 
                     <hr/>
@@ -156,7 +113,7 @@
 
                     <h3><i class="fa fa-envelope"></i> support@ngspipeline.com</h3>
                     <span class="small">
-                        Please contact with us if you have any questions.
+                        Please contact us if you have any questions.
                     </span>
 
 

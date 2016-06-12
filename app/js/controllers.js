@@ -3476,7 +3476,6 @@ function mailDetailCtrl($scope, $http, $state, $stateParams) {
 
 function mailboxCtrl($scope, $http, $state, messageService) {
     var vm = this;
-    this.defaultCheckbox = false;
 
 
     this.message = {};
@@ -3596,6 +3595,127 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 });
     };
 
+    this.moveToTrash = function (movedToTrashFrom) {
+        var req = [];
+
+        for (var i in vm.messages) {
+            var v = vm.messages[i];
+
+            if (v.selected === true) {
+                req.push(v._id);
+            }
+        }
+
+        $http({
+            method: 'POST',
+            url: 'api/move_to_trash',
+            data: {'ids': req, 'source': movedToTrashFrom}
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.messages = $.grep(vm.messages, (function (el) {
+                            var res = $.inArray(el._id, req);
+                            vm.getNumberOfMessages();
+                            return (res == -1);
+                        }));
+
+                    }
+                });
+    };
+
+    this.deleteMessage = function () {
+        var req = [];
+
+        for (var i in vm.messages) {
+            var v = vm.messages[i];
+
+            if (v.selected === true) {
+                req.push(v._id);
+            }
+        }
+
+        console.log(vm.messages);
+
+
+        $http({
+            method: 'POST',
+            url: 'api/delete_message',
+            data: req
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log(req);
+                        vm.messages = $.grep(vm.messages, (function (el) {
+                            var res = $.inArray(el._id, req);
+                            vm.getNumberOfMessages();
+                            return (res == -1);
+                        }));
+
+                    }
+                });
+    };
+
+    this.markAsRead = function () {
+        var req = [];
+
+        for (var i in vm.messages) {
+            var v = vm.messages[i];
+
+            if (v.selected === true) {
+                req.push(v._id);
+                if (v.read === true) {
+                    vm.messages[i].read = false;
+                } else {
+                    vm.messages[i].read = true;
+                }
+                v.selected = false;
+            }
+        }
+
+        $http({
+            method: 'POST',
+            url: 'api/mark_as_read',
+            data: req
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("marked");
+
+                    }
+                });
+    };
+
+    this.moveBackFromTrash = function () {
+        var req = [];
+
+        for (var i in vm.messages) {
+            var v = vm.messages[i];
+
+            if (v.selected === true) {
+                req.push(v._id);
+            }
+        }
+
+        $http({
+            method: 'POST',
+            url: 'api/move_back_from_trash',
+            data: req
+
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.messages = $.grep(vm.messages, (function (el) {
+                            var res = $.inArray(el._id, req);
+                            vm.getNumberOfMessages();
+                            return (res == -1);
+                        }));
+                    }
+                });
+    };
+
 }
 
 function dnaReseqHomeCtrl($http, $state, jobService) {
@@ -3684,6 +3804,146 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
 }
 
 
+/**
+ * ecommerceCtrl - ecommerce controller
+ * 
+ *
+ */
+
+function ecommerceCtrl($scope, $http, $state) {
+    var em = this;
+
+    em.order = {};
+
+    em.itemsInCart = {};
+    em.totalForCart = {};
+    em.numberOfItemsInCart = {};
+
+    em.productList = {};
+
+    this.init = function () {
+        em.getProductList();
+        em.getItemsInCart();
+        em.getTotalForCart();
+        em.getNumberOfItemsInCart();
+    };
+
+
+    this.getProductList = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_product_list'
+        })
+                .success(function (data) {
+                    console.log(data.products);
+                    em.productList = data.products;
+                });
+    };
+
+    this.addToCart = function (productId) {
+
+        $http({
+            method: 'POST',
+            url: 'api/add_to_cart',
+            data: {'productId': productId}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        em.getProductList();
+                    }
+                });
+    };
+
+    this.getItemsInCart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_items_in_cart'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        em.itemsInCart = data.itemsInCart;
+                    }
+                });
+    };
+
+    this.removeItemFromCart = function (productId) {
+
+        $http({
+            method: 'POST',
+            url: 'api/remove_item_from_cart',
+            data: {'productId': productId}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        em.getProductList();
+                        em.getTotalForCart();
+                        em.getNumberOfItemsInCart();
+                        em.getItemsInCart();             
+                    }
+                });
+    };
+
+    this.getTotalForCart = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/get_total_for_cart'
+        })
+                .success(function (data) {
+                    em.totalForCart = data.total;
+                });
+    };
+
+    this.getNumberOfItemsInCart = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/get_number_of_items_in_cart'
+        })
+                .success(function (data) {
+                    em.numberOfItemsInCart = data.total;
+                });
+    };
+
+    this.createOrder = function (paymentType) {
+
+        $http({
+            method: 'POST',
+            url: 'api/create_order',
+            data: {'paymentType': paymentType}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("Order created");
+                        if (paymentType === 'card') {
+                            $state.go('commerce.confirmation'); //TBD
+                        }
+                        if (paymentType === 'paypal') {
+                            $state.go('commerce.confirmation'); //TBD
+                        }
+                        if (paymentType === 'wire') {
+                            $state.go('commerce.invoice');
+                        }
+                        em.clearCart();
+                    }
+                });
+    };
+
+    this.clearCart = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/clear_cart'
+        })
+                .success(function (data) {
+                    em.init();
+                });
+    };
+    
+    
+
+}
+
 
 /**
  *
@@ -3731,6 +3991,7 @@ angular
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
         .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl])
+        .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl])
         .controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);

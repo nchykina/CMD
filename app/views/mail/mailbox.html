@@ -1,4 +1,4 @@
-<div class="wrapper wrapper-content" ng-controller="mailboxController as vm" ng-init="vm.getMessagesForInbox()">
+<div class="wrapper wrapper-content" ng-init="vm.getMessagesForInbox()">
     <div class="row" ng-init="vm.getNumberOfMessages()">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
@@ -27,63 +27,30 @@
 
                 <div class="mail-tools tooltip-demo m-t-md">
 
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as read"><i class="fa fa-eye"></i></button>
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
+                    <button ng-click="vm.getMessagesForInbox()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
+                    <button ng-click="vm.markAsRead()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as read"><i class="fa fa-eye"></i></button>
+                    <button ng-click="vm.moveToTrash('inbox')" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
 
                 </div>
             </div>
             <div class="mail-box" >
                 <table class="table table-hover table-mail" >
+                    <thead>
+                    <th></th>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th></th>
+                    <th></th>
+                    </thead>
                     <tbody>
-                        <tr class="read" ng-repeat="x in vm.messages">
+                        <tr ng-attr-class="{{x.read && 'read' || 'unread'}}" ng-repeat="x in vm.messages">
                             <td class="check-mail">
-                               <input icheck type="checkbox" ng-model="vm.defaultCheckbox">
+                                <input icheck type="checkbox" ng-model="x.selected" ng-click="x.selected = true">
                             </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view({messageId: x._id})">{{x._id}}support@ngspipeline.com</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view({messageId: x._id})">{{x.subject}}</a></td>
-                            <td class="text-right mail-date">6.10 AM</td>
-                        </tr>
-                        <tr class="unread">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="main.checkTwo">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view">Jack Nowak</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view">Aldus PageMaker including versions of Lorem Ipsum.</a></td>
-                            <td class="text-right mail-date">8.22 PM</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check3">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view">Facebook</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view">Many desktop publishing packages and web page editors.</a></td>
-                            <td class="text-right mail-date">Jan 16</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check4">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view">Mailchip</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view">There are many variations of passages of Lorem Ipsum.</a></td>
-                            <td class="text-right mail-date">Mar 22</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check5">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view">Alex T.</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view">Lorem ipsum dolor noretek imit set.</a></td>
-                            <td class="text-right mail-date">December 22</td>
-                        </tr>
-                        <tr class="read">
-                            <td class="check-mail">
-                                <input icheck type="checkbox" ng-model="check6">
-                            </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view">Monica Ryther</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view">The standard chunk of Lorem Ipsum used.</a></td>
-                            <td class="text-right mail-date">Jun 12</td>
-                        </tr>                       
+                            <td class="mail-ontact"><a ng-click="vm.getMessageDetails(x._id)">{{x.from}}</a></td>
+                            <td class="mail-subject"><a ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
+                            <td class="text-right mail-date">{{x.sentTime| date:'MMM d, yyyy'}}</td>
+                        </tr>                                          
                     </tbody>
                 </table>
 

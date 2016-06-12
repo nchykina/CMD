@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
     <div class="col-lg-10">
         <h2>Purchase extra options > Extra upload/storage size</h2>
         <ol class="breadcrumb">
@@ -34,11 +34,11 @@
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                Extra upload size
+                                {{em.productList[2].productName}}
                             </h2>
                             <small>Upload larger files for processing for any of the pipelines.</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">$10 <small class="text-muted">per month</small> </h2>
+                                <h2 class="product-main-price">${{em.productList[2].price}} <small class="text-muted">per month</small> </h2>
                             </div>
                             <hr>
 
@@ -57,8 +57,14 @@
                             <hr>
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="!em.productList[2].inCart" ng-click="em.addToCart(2)" 
+                                            class="btn btn-primary btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="em.productList[2].inCart" ng-click="em.removeItemFromCart(2)" 
+                                            class="btn btn-danger btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
                                     <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
+
                                 </div>
                             </div>
                             <div class="form-group">
@@ -92,11 +98,11 @@
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                Extra storage size
+                                {{em.productList[3].productName}}
                             </h2>
                             <small>Store more data in your account.</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">$10 <small class="text-muted">per month</small> </h2>
+                                <h2 class="product-main-price">${{em.productList[3].price}} <small class="text-muted">per month</small> </h2>
                             </div>
                             <hr>
 
@@ -116,8 +122,14 @@
 
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="!em.productList[3].inCart" ng-click="em.addToCart(3)" 
+                                            class="btn btn-primary btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
+                                    <button ng-if="em.productList[3].inCart" ng-click="em.removeItemFromCart(3)" 
+                                            class="btn btn-danger btn-sm">                                 
+                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
                                     <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
+
                                 </div>
                             </div>
                             <div class="form-group">
