@@ -27,6 +27,9 @@ var ecommerceService = function ($http) {
     em.getProductList();
     
     return em;
+    
+}
+    
 var jobService = function ($http, $q) {
     var vm = this;
 
@@ -62,4 +65,4 @@ angular
         .module('inspinia')
         .service('messageService', messageService)
         .service('jobService',['$http','$q',jobService])
-        .factory('ecommerceService', ['$http', ecommerceService]);
+        .service('ecommerceService', ['$http', ecommerceService]);
