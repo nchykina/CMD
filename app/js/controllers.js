@@ -3728,9 +3728,9 @@ function dnaReseqHomeCtrl($http, $state, jobService) {
                 .then(function (job) {
                     $state.go('pipelines.dna_reseq_new.step1', {job: job});
                 },
-                function (err) {
-                    alert(err);
-                });
+                        function (err) {
+                            alert(err);
+                        });
     }
 
 }
@@ -3739,7 +3739,7 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
     var vm = this;
 
     vm.job = $stateParams.job;
-    
+
     //if some nasty shiet happened along the road - do some protective actions. shouldn't happen under normal circumstances
     /*if ((!jobService.newJob) || (jobService.newJob._id !== vm.jobid)) {
      console.error("Nasty shiet happened");
@@ -3750,57 +3750,56 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
         console.log('no job object passed to wizard. going back');
         $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
     }
-    
-    vm.species = vm.job.seq_species;    
 
-    vm.files = [ {}, {}];
-    
+    vm.species = vm.job.seq_species;
+
+    vm.files = [{}, {}];
+
     this.upload = function (filenum, file) {
-        if(file==null){
+        if (file == null) {
             console.log('ima buggy shiet');
             return;
         }
-        
+
         vm.job.filesIn[filenum] = null;
-        
+
         vm.files[filenum] = {};
         vm.files[filenum].uploading = true;
         vm.files[filenum].progress = 0;
-        
-        if(vm.job.filesIn[filenum]){
+
+        if (vm.job.filesIn[filenum]) {
             console.log("object is not null!");
         }
-        
+
         Upload.upload({
             url: 'api/job/submit_file/' + vm.job._id + '/' + filenum,
             data: {data: file}
         }).then(function (resp) {
             var server_resp = resp.data;
-            if(server_resp.success){
+            if (server_resp.success) {
                 console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
                 vm.job.filesIn[filenum] = server_resp.file_entry;
                 vm.files[filenum].uploading = false;
                 vm.file1 = {};
-            }
-            else {
+            } else {
                 vm.files[filenum].uploading = false;
                 vm.file1 = {};
-                console.log('Error uploading '+resp.config.data.data.name+': '+server_resp.msg);
+                console.log('Error uploading ' + resp.config.data.data.name + ': ' + server_resp.msg);
             }
-        }, function (resp) {            
+        }, function (resp) {
             vm.files[filenum].uploading = false;
             console.log('Error status: ' + resp.status);
-        }, function (evt) {     
+        }, function (evt) {
             vm.files[filenum].current = evt.loaded;
             vm.files[filenum].total = evt.total;
-            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))            
+            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
         });
     }
 
     this.processForm = function () {
         alert('Wizard completed');
-    };   
-    
+    };
+
 }
 
 
@@ -3878,7 +3877,7 @@ function ecommerceCtrl($scope, $http, $state) {
                         em.getProductList();
                         em.getTotalForCart();
                         em.getNumberOfItemsInCart();
-                        em.getItemsInCart();             
+                        em.getItemsInCart();
                     }
                 });
     };
@@ -3939,8 +3938,31 @@ function ecommerceCtrl($scope, $http, $state) {
                     em.init();
                 });
     };
-    
-    
+
+
+    this.createInvoice = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/get_token'
+        })
+                .success(function (data) {
+                    console.log("TOKEN RECEIVED");
+            
+                    $http({
+                        method: 'POST',
+                        url: 'api/create_invoice'
+                    })
+                            .success(function (data) {
+                                console.log("INVOICE CREATED");
+
+
+                            });
+
+                });
+    };
+
+
 
 }
 
