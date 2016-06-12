@@ -40,8 +40,8 @@
                             <td class="check-mail">
                                <input icheck type="checkbox" ng-model="vm.defaultCheckbox">
                             </td>
-                            <td class="mail-ontact"><a ng-click="vm.getMessageDetails(x._id)">support@ngspipeline.com</a></td>
-                            <td class="mail-subject"><a ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
+                            <td class="mail-ontact"><a ui-sref="mailbox.email_view({messageId: x._id})">{{x._id}}support@ngspipeline.com</a></td>
+                            <td class="mail-subject"><a ui-sref="mailbox.email_view({messageId: x._id})">{{x.subject}}</a></td>
                             <td class="text-right mail-date">6.10 AM</td>
                         </tr>
                         <tr class="unread">

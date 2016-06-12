@@ -12,8 +12,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
-    $urlRouterProvider.otherwise("/pipelines/dna_resequencing");
-    
+    $urlRouterProvider.otherwise("/pipelines/dna_resequencing/home");
+
     $locationProvider.html5Mode(true);
 
     $ocLazyLoadProvider.config({
@@ -185,12 +185,56 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/pipelines",
                 templateUrl: "views/common/content.html",
             })
-            .state('pipelines.dna_resequencing', {
-                url: "/dna_resequencing",
-                templateUrl: "views/dna_resequencing.html",
+            .state('pipelines.dna_reseq_home', {
+                url: "/dna_resequencing/home",
+                controller: 'dnaReseqHomeController',
+                controllerAs: 'homec',
+                templateUrl: "views/pipelines/dna_reseq/home.html",                
                 data: {pageTitle: 'DNA resequencing'}
             })
-
+            .state('pipelines.dna_reseq_new', {
+             url: "/dna_resequencing/new",
+             templateUrl: "views/pipelines/dna_reseq/new.html",
+             //templateUrl: "views/debug/parent_state.html",
+             controller: 'dnaReseqNewController',
+             controllerAs: 'newc',
+             params: { job: {} },
+             data: {pageTitle: 'DNA resequencing'},
+             resolve: {
+             loadPlugin: function ($ocLazyLoad) {
+             return $ocLazyLoad.load([
+             {
+             files: ['css/plugins/steps/jquery.steps.css']
+             }
+             ]);
+             }
+             }
+             })
+             .state('pipelines.dna_reseq_new.step1', {
+             url: '/step1',
+             templateUrl: "views/pipelines/dna_reseq/step1.html",
+             //templateUrl: "views/debug/normal_state.html",
+             controller: 'dnaReseqNewController',
+             controllerAs: 'newc',
+             //params: { job: {} },
+             data: {pageTitle: 'DNA resequencing pipeline: Step 1'}
+             })
+             .state('pipelines.dna_reseq_new.step2', {
+             url: '/step2',
+             templateUrl: "views/pipelines/dna_reseq/step2.html",
+             controller: 'dnaReseqNewController',
+             controllerAs: 'newc',
+             //params: { job: {} },
+             data: {pageTitle: 'DNA resequencing pipeline: Step 2'}
+             })
+             .state('pipelines.dna_reseq_new.step3', {
+             url: '/step3',
+             templateUrl: "views/pipelines/dna_reseq/step3.html",
+             controller: 'dnaReseqNewController',                
+             controllerAs: 'newc',
+             //params: { job: {} },
+             data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
+             }) 
             .state('charts', {
                 abstract: true,
                 url: "/charts",
@@ -378,7 +422,9 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 }
             })
             .state('mailbox.email_view', {
-                url: "/email_view",
+                url: "/email_view/{messageId}",
+                controller: "mailDetailsController",
+                controllerAs: "md",
                 templateUrl: "views/mail/mail_detail.html",
                 data: {pageTitle: 'Mail detail'}
             })
@@ -540,36 +586,6 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                         ]);
                     }
                 }
-            })
-            .state('forms.wizard2', {
-                url: "/dna_resequencing_pipeline",
-                templateUrl: "views/form_wizard2.html",
-                controller: wizardCtrl,
-                data: {pageTitle: 'DNA resequencing'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                files: ['css/plugins/steps/jquery.steps.css']
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('forms.wizard2.step_one2', {
-                url: '/step1',
-                templateUrl: 'views/wizard2/step_one2.html',
-                data: {pageTitle: 'DNA resequencing pipeline: Step 1'}
-            })
-            .state('forms.wizard2.step_two2', {
-                url: '/step2',
-                templateUrl: 'views/wizard2/step_two2.html',
-                data: {pageTitle: 'DNA resequencing pipeline: Step 2'}
-            })
-            .state('forms.wizard2.step_three2', {
-                url: '/step3',
-                templateUrl: 'views/wizard2/step_three2.html',
-                data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
             })
             .state('forms.faq', {
                 url: "/faq",
@@ -1593,7 +1609,33 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
 }
 angular
         .module('inspinia')
-        .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider',config])
+        .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider', config])
         .run(function ($rootScope, $state) {
             $rootScope.$state = $state;
+
+            var debug = false;
+
+            if (debug) {
+                $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+                    console.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
+                });
+                $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+                    console.log('$stateChangeError - fired when an error occurs during transition.');
+                    console.log(arguments);
+                });
+                $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+                    console.log('$stateChangeSuccess to ' + toState.name + '- fired once the state transition is complete.');
+                });
+// $rootScope.$on('$viewContentLoading',function(event, viewConfig){
+//   // runs on individual scopes, so putting it in "run" doesn't work.
+//   console.log('$viewContentLoading - view begins loading - dom not rendered',viewConfig);
+// });
+                $rootScope.$on('$viewContentLoaded', function (event) {
+                    console.log('$viewContentLoaded - fired after dom rendered', event);
+                });
+                $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
+                    console.log('$stateNotFound ' + unfoundState.to + '  - fired when a state cannot be found by its name.');
+                    console.log(unfoundState, fromState, fromParams);
+                });
+            }
         });

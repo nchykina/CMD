@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
+var cfg = require('../config/config');
 
 var config = {
     passport_secret: 'myJWMsecret',
-    passport_db: 'mongodb://localhost/passport'
+    passport_db: 'mongodb://'+cfg.mongo_host+'/passport'
 };
 
 config.passport_mongo = mongoose.connect(config.passport_db);

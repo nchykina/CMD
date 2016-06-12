@@ -49,9 +49,14 @@
 
 <!-- Peace JS -->
 <script src="js/plugins/pace/pace.min.js"></script>
+<script type="text/javascript">
+    XMLHttpRequest.prototype = Object.getPrototypeOf(new XMLHttpRequest);
+</script>
 
 <!-- Custom and plugin javascript -->
 <script src="js/inspinia.js"></script>
+
+<script src="bower_components/ng-file-upload/ng-file-upload-shim.js"></script>
 
 <!-- Main Angular scripts-->
 <script src="js/angular/angular.min.js"></script>
@@ -61,6 +66,7 @@
 <script src="js/ui-router/angular-ui-router.min.js"></script>
 <script src="js/bootstrap/ui-bootstrap-tpls-1.1.2.min.js"></script>
 <script src="js/plugins/angular-idle/angular-idle.js"></script>
+<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
 
 <!--
  You need to include this script on any page that has a Google Map.
@@ -77,6 +83,7 @@
 <script src="js/directives.js"></script>
 <script src="js/controllers.js"></script>
 <script src="js/services.js"></script>
+<script src="js/filters.js"></script>
 
 </body>
 </html>

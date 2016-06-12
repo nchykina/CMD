@@ -1,15 +1,12 @@
 var redis_cli = require('redis');
 var express = require('express');
 
+var cfg = require('../config/config');
 
+var SESS_REDIS_URL = 'redis://'+cfg.redis_host+':6379/0'; //session storage
 
-
-
-
-var SESS_REDIS_URL = 'redis://localhost:6379/0'; //session storage
-
-var SIO_REDIS_URL = 'redis://localhost:6379/1'; //socket.io storage
-var SOCKSTORE_REDIS_URL = 'redis://localhost:6379/2'; //storage for mappings between sessions and sockids
+var SIO_REDIS_URL = 'redis://'+cfg.redis_host+':6379/1'; //socket.io storage
+var SOCKSTORE_REDIS_URL = 'redis://'+cfg.redis_host+':6379/2'; //storage for mappings between sessions and sockids
 
 /* Socket.IO Redis Custom storage
  * 

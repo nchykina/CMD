@@ -8258,3 +8258,27 @@ body.md-skin {
   padding: 40px 20px !important;
 }
 
+.ngs_dz_empty {
+  border: 2px dashed #1ab394 !important;
+  padding: 40px 20px !important;
+}
+
+.ngs_dz_noborder {
+  border: none !important;
+  padding: 40px 20px !important;
+}
+
+.ngs_dz_noborder.dragover {
+  border: 2px dashed red !important;
+  padding: 40px 20px !important;
+}
+
+.progress-bar {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+

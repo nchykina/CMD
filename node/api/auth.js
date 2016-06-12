@@ -40,8 +40,6 @@ require('../config/passport')(passport);
 }; */
 
 var login = function(req,res,next) {
-    console.log(req.body.name);
-    console.log(req.body.password);
     passport.authenticate('local-login',
     function(err, user, info) {
       //console.log(user);
@@ -64,7 +62,6 @@ var logout = function(req, res) {
 };
 
 var register = function(req,res) {
-  console.log('register: '+req);
   if (!req.body.name || !req.body.password) {
     res.json({success: false, msg: 'Please pass name and password.'});
   } else {
@@ -112,7 +109,6 @@ var register = function(req,res) {
 }; */
 
 var memberinfo = function(req,res){
-  console.log('Memberinfo called');
   
   res.send(req.isAuthenticated() ? req.user : '0');
 };
@@ -144,7 +140,6 @@ var authenticateMw = function(req,res,next){
 };
 
 var bindFunction = function(router) {
- console.log('binding auth hooks');
  router.post('/login', login);
  router.post('/register', register);
  router.post('/logout',logout);

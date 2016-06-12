@@ -1,0 +1,210 @@
+<fieldset>
+    <h2>Set up your data analysis pipeline: </h2>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div><label> <input icheck type="radio" name="radioTest"
+                                ng-model="newc.dataset_type" value="sample"> Choose sample .FASTA dataset</label></div>
+            <div class="form-group">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-4 m-b-xs">
+                            <div class="contact-box">
+                                <div class="col-sm-4">                                    
+                                    <div class="text-center" ng-switch="newc.species">
+                                        <div ng-switch-when="homo">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="mus">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a9.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="canis">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3><strong>Homo sapiens</strong></h3>
+                                    <p>European guy with blue eyes and white skin</p>
+                                    <address>
+                                        <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
+                                    </address>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div class="iradio_square-green">
+                                    <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                  value="sample1"></input>
+                                        Choose this sample dataset</label>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="col-sm-4 m-b-xs">
+                            <div class="contact-box">
+                                <div class="col-sm-4">
+                                    <div class="text-center" ng-switch="newc.species">
+                                        <div ng-switch-when="homo">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="mus">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a9.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="canis">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3><strong>Homo sapiens</strong></h3>
+                                    <p>Chinese woman with brown eyes</p>
+                                    <address>
+                                        <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
+                                    </address>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div class="iradio_square-green">
+                                    <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                  value="sample2"></input>
+                                        Choose this sample dataset</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
+                            <div class="contact-box">
+                                <div class="col-sm-4">
+                                    <div class="text-center" >
+                                        <div ng-switch-when="homo">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="mus">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a9.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                        <div ng-switch-when="canis">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
+                                            <div class="m-t-xs font-bold">Sample 1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3><strong>Homo sapiens</strong></h3>
+                                    <p>European guy with blue eyes and white skin</p>
+                                    <address>
+                                        <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
+                                    </address>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div class="iradio_square-green">
+                                    <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                  value="sample3"></input>
+                                        Choose this sample dataset</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div><label> <input icheck type="radio" name="radioTest"
+                                    ng-model="newc.dataset_type" value="upload"> Upload a new dataset </label>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Left DNA strand</h5>
+
+                                <div ibox-tools></div>
+                            </div>
+                            <div class="ibox-content" id="">                                
+                                    <form action="#">
+                                        <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)" ng-model="newc.file1">
+                                        <div ng-if="( (!newc.job.filesIn[0]) && (!newc.files[0].uploading) )" class="dz-message m-t-lg m-b-lg">                                            
+                                            
+                                                <h1>Drop files here.</h1>                                        
+                                            
+                                        </div>
+                                        <div ng-if="( (!newc.job.filesIn[0]) && (newc.files[0].uploading) )">                                          
+                                         
+                                            <h1>Uploading file...</h1>
+                                            <div class="progress-striped active progress">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[0].progress < 100 ? newc.files[0].progress : 100) + '%'}">                                                
+                                            </div>                
+                                            </div>
+                                            {{newc.files[0].current | filesize:2}} / {{newc.files[0].total | filesize:2}} ({{newc.files[0].progress}})%
+                                        </div>
+                                           
+                                        <div ng-if="(newc.job.filesIn[0])">                                            
+                                                <p>File size: {{newc.job.filesIn[0].filesize | filesize:0}}</p>
+                                                <p>Uploaded: {{newc.job.filesIn[0].upload_ended | date:'medium'}}</p>
+                                        </div>
+                                       </div>
+                                    </form>                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Right DNA strand</h5>
+
+                                <div ibox-tools></div>
+                            </div>
+                            <div class="ibox-content" id="">
+                                <div class="ngs_dropzone">
+                                    <form action="#">
+                                        <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)" ng-model="newc.file2">
+                                        <div ng-if="( (!newc.job.filesIn[1]) && (!newc.files[1].uploading) )" class="dz-message m-t-lg m-b-lg">                                            
+                                                <h1>Drop files here.</h1>                                            
+                                        </div>
+                                        <div ng-if="( (!newc.job.filesIn[1]) && (newc.files[1].uploading) )">                                          
+                                         
+                                            <h1>Uploading file...</h1>
+                                            <div class="progress-striped active progress">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[1].progress < 100 ? newc.files[1].progress : 100) + '%'}">                                                
+                                            </div>                
+                                            </div>
+                                            {{newc.files[1].current | filesize:2}} / {{newc.files[1].total | filesize:2}} ({{newc.files[1].progress}})%
+                                        </div>
+                                           
+                                        <div ng-if="(newc.job.filesIn[1])">                                            
+                                                <p>File size: {{newc.job.filesIn[1].filesize | filesize:0}}</p>
+                                                <p>Uploaded: {{newc.job.filesIn[1].upload_ended | date:'medium'}}</p>
+                                        </div>
+                                       </div>
+                                    </form>                                           
+                                </div>                            
+                            </div>
+                        </div>                   
+
+
+                    </div>
+                    <div class="col-sm-4">
+                        <p>
+                            If you want to upload your own reads, you need to have 
+                            two separate .fasta files: reads from the forward strand and from the reverse strand.
+                            In this case, we can apply paired-ended alignment algorithm to your data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+    </div>
+</div>
+<a ui-sref="pipelines.dna_reseq_new.step2({job: newc.job})" ng-click="newc.submitJob()" class="btn btn-primary">Align my reads to the genome</a>
+</fieldset>

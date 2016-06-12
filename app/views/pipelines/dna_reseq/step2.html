@@ -12,52 +12,52 @@
                 <ul class="todo-list m-t">
 
                     <li>
-                        <input icheck type="checkbox" ng-model="check1">
+                        <input icheck type="checkbox" ng-model="newc.check1">
                         <span class="m-l-xs">FASTQC: checking the quality of the reads</span>
                         <small class="label label-info"><i class="fa fa-clock-o"></i> 3 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check2">
+                        <input icheck type="checkbox" ng-model="newc.check2">
                         <span class="m-l-xs">BWA: aligning paired reads to the reference genome</span>
                         <small class="label label-info"><i class="fa fa-clock-o"></i> 3 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check3">
+                        <input icheck type="checkbox" ng-model="newc.check3">
                         <span class="m-l-xs">SAMtools: converting .sam file to .bam format</span>
                         <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check4">
+                        <input icheck type="checkbox" ng-model="newc.check4">
                         <span class="m-l-xs">SAMtools: sorting the .bam file</span>
                         <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check5">
+                        <input icheck type="checkbox" ng-model="newc.check5">
                         <span class="m-l-xs">SAMtools: indexing the .bam file</span>
                         <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check6">
+                        <input icheck type="checkbox" ng-model="newc.check6">
                         <span class="m-l-xs">Picard: marking the duplicates</span>
                         <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check7">
+                        <input icheck type="checkbox" ng-model="newc.check7">
                         <span class="m-l-xs">GATK: performing local realignment</span>
                         <small class="label label-warning"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check8">
+                        <input icheck type="checkbox" ng-model="newc.check8">
                         <span class="m-l-xs">SAM tools: performing mpileup</span>
                         <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check9">
+                        <input icheck type="checkbox" ng-model="newc.check9">
                         <span class="m-l-xs">BCF tools: creating vcf file from mpileup</span>
                         <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
                     <li>
-                        <input icheck type="checkbox" ng-model="check10">
+                        <input icheck type="checkbox" ng-model="newc.check10">
                         <span class="m-l-xs">Annovar: annotating vcf file</span>
                         <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
                     </li>
@@ -85,8 +85,8 @@
         </div>
     </div>
 
-    <a ui-sref="forms.wizard2.step_one2" class="btn btn-default">Cancel</a>
-    <a ui-sref="forms.wizard2.step_three2" class="btn btn-primary">Get my output files</a>
+    <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn btn-default">Cancel</a>
+    <a ui-sref="pipelines.dna_reseq_new.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
 
 
 

@@ -141,8 +141,6 @@ function MainCtrl() {
         }
     };
 
-    this.species = 'mouse';
-
 
     /**
      * knobs - Few variables for knob plugin used in Advanced Plugins view
@@ -3390,52 +3388,85 @@ function jstreeCtrl($scope) {
  * 
  *
  */
-function loginCtrl($scope,$http,$state) {    
-   var vm = this;
-    
-   vm.user = {};
-   vm.loginMessage = '';
-   vm.registerMessage = '';
-   
-   this.submitLogin = function() {
-       
-       $http({
-          method  : 'POST',
-          url     : 'api/login',
-          data    : vm.user, //forms user object
-          //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         })
-          .success(function(data) {
-            if (data.success) {
-                vm.loginMessage = data.msg;
-                $state.go('pipelines.dna_resequencing');
-              
-            } else {
-              vm.loginMessage = data.msg;
-            }
-          });
-   };
-   
-   this.submitRegister = function() {
-       
-       $http({
-          method  : 'POST',
-          url     : 'api/register',
-          data    : vm.user, //forms user object
-          //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         })
-          .success(function(data) {
-            if (data.success) {
-                vm.registerMessage = data.msg;                
-                $state.go('pipelines.dna_resequencing');
-              
-            } else {               
-              vm.registerMessage = data.msg;          
-            }
-          });
-   };
+function loginCtrl($scope, $http, $state) {
+    var vm = this;
+
+    vm.user = {};
+    vm.loginMessage = '';
+    vm.registerMessage = '';
+
+    this.submitLogin = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/login',
+            data: vm.user, //forms user object
+            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.loginMessage = data.msg;
+                        $state.go('pipelines.dna_reseq_home');
+
+                    } else {
+                        vm.loginMessage = data.msg;
+                    }
+                });
+    };
+
+    this.submitRegister = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/register',
+            data: vm.user, //forms user object
+            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.registerMessage = data.msg;
+                        $state.go('pipelines.dna_reseq_home');
+
+                    } else {
+                        vm.registerMessage = data.msg;
+                    }
+                });
+    };
 }
 
+/**
+ * mailDetailCtrl - maildetails controller
+ * 
+ *
+ */
+
+function mailDetailCtrl($scope, $http, $state, $stateParams) {
+    var vm = this;
+
+    vm.messageId = $stateParams.messageId;
+    vm.message = {};
+
+    console.log($stateParams);
+    console.log("contoller id: " + vm.messageId);
+
+    //vm.getMessagesForInbox();
+
+    this.getMessageDetails = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/get_message_details',
+            params: {message_id: vm.messageId}
+
+        })
+                .success(function (response) {
+                    console.log(response);
+                    vm.message = response.message;
+                });
+    };
+
+    this.getMessageDetails();
+}
 
 /**
  * mailboxCtrl - mailbox controller
@@ -3519,6 +3550,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .then(function (response) {
                     vm.messages = response.data.messages;
+                    console.log(vm.messages);
                 });
     };
 
@@ -3545,17 +3577,17 @@ function mailboxCtrl($scope, $http, $state, messageService) {
 
                 });
     };
-    
+
     vm.test = 'TEST';
     vm.currentMessage = messageService.message;
 
     this.getMessageDetails = function (messageId) {
-        
+
         $http({
             method: 'GET',
             url: 'api/get_message_details',
             params: {message_id: messageId}
-            
+
         })
                 .success(function (response) {
                     console.log(response);
@@ -3564,6 +3596,91 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 });
     };
 
+}
+
+function dnaReseqHomeCtrl($http, $state, jobService) {
+    var vm = this;
+
+    //vm.job = jobService.newJob;
+
+    this.createJob = function (species) {
+        jobService.createOrUpdateJob('dna_reseq', {seq_species: species})
+                .then(function (job) {
+                    $state.go('pipelines.dna_reseq_new.step1', {job: job});
+                },
+                function (err) {
+                    alert(err);
+                });
+    }
+
+}
+
+function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService, filesizeFilter) {
+    var vm = this;
+
+    vm.job = $stateParams.job;
+    
+    //if some nasty shiet happened along the road - do some protective actions. shouldn't happen under normal circumstances
+    /*if ((!jobService.newJob) || (jobService.newJob._id !== vm.jobid)) {
+     console.error("Nasty shiet happened");
+     //jobService.newJob = jobService.getJob(vm.jobid);
+     }*/
+
+    if (!vm.job) {
+        console.log('no job object passed to wizard. going back');
+        $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
+    }
+    
+    vm.species = vm.job.seq_species;    
+
+    vm.files = [ {}, {}];
+    
+    this.upload = function (filenum, file) {
+        if(file==null){
+            console.log('ima buggy shiet');
+            return;
+        }
+        
+        vm.job.filesIn[filenum] = null;
+        
+        vm.files[filenum] = {};
+        vm.files[filenum].uploading = true;
+        vm.files[filenum].progress = 0;
+        
+        if(vm.job.filesIn[filenum]){
+            console.log("object is not null!");
+        }
+        
+        Upload.upload({
+            url: 'api/job/submit_file/' + vm.job._id + '/' + filenum,
+            data: {data: file}
+        }).then(function (resp) {
+            var server_resp = resp.data;
+            if(server_resp.success){
+                console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
+                vm.job.filesIn[filenum] = server_resp.file_entry;
+                vm.files[filenum].uploading = false;
+                vm.file1 = {};
+            }
+            else {
+                vm.files[filenum].uploading = false;
+                vm.file1 = {};
+                console.log('Error uploading '+resp.config.data.data.name+': '+server_resp.msg);
+            }
+        }, function (resp) {            
+            vm.files[filenum].uploading = false;
+            console.log('Error status: ' + resp.status);
+        }, function (evt) {     
+            vm.files[filenum].current = evt.loaded;
+            vm.files[filenum].total = evt.total;
+            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))            
+        });
+    }
+
+    this.processForm = function () {
+        alert('Wizard completed');
+    };   
+    
 }
 
 
@@ -3613,5 +3730,9 @@ angular
         .controller('tourCtrl', tourCtrl)
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
-        .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl]);
+        .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl])
+        .controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
+        .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
+        .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
+
 

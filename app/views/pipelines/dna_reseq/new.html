@@ -32,27 +32,27 @@
                     <div class="steps clearfix">
                         <ul>
                             <li ui-sref-active="current">
-                                <a ui-sref=".step_one2" class="btn-default"><span>1</span> Upload data</a>
+                                <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn-default"><span>1</span> Upload data</a>
                             </li>
                             <li ui-sref-active="current">
-                                <a ui-sref=".step_two2" class="btn-default"><span>2</span> Data processing</a>
+                                <a ui-sref="pipelines.dna_reseq_new.step2({job: newc.job})" class="btn-default"><span>2</span> Data processing</a>
                             </li>
                             <li ui-sref-active="current">
-                                <a ui-sref=".step_three2" class="btn-default"><span>3</span> Get your output files</a>
+                                <a ui-sref="pipelines.dna_reseq_new.step3({job: newc.job})" class="btn-default"><span>3</span> Get your output files</a>
                             </li>
                         </ul>
                     </div>
                     <div class="wizard">
                         <div class="content">
 
-                        <form name="signupForm" ng-submit="processForm()" class="p-lg">
+                            <form name="signupForm" ng-submit="newc.processForm()" class="p-lg">
 
-                            <!-- our nested state views will be injected here -->
-                            <div id="form-views" ui-view></div>
-                        </form>
+                                <!-- our nested state views will be injected here -->
+                                <div id="form-views" ui-view></div>
+                            </form>
 
                         </div>
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
