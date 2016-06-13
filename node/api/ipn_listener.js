@@ -54,7 +54,6 @@ var simulateWebhookEvent = function (req, res) {
 var activateListener = function (req, res) {
 
     console.log("Node called");
-    //var = message 
 
     //reply to Paypal: POST HTTP 200
     res.statusCode = 200;

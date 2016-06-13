@@ -12,7 +12,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
-    $urlRouterProvider.otherwise("/pipelines/dna_resequencing/home");
+    $urlRouterProvider.otherwise("/landing");
 
     $locationProvider.html5Mode(true);
 
