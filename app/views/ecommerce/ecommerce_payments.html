@@ -24,150 +24,105 @@
                 <h2>Choose payment method</h2>
             </div>
             <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3> <strong>Order total price</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
+                        </h3>
 
-                <uib-accordion class="panel-group payments-method">
+                    </div>
+                </div>    
+            </div>
 
-                    <uib-accordion-group is-open="true">
-                        <uib-accordion-heading>
-                            <div class="pull-right">
-                                <i class="fa fa-cc-visa text-success"></i>
-                                <i class="fa fa-cc-mastercard text-warning"></i>
-                            </div>
-                            <h4 class="panel-title">
-                                Credit Card
-                            </h4>
-                        </uib-accordion-heading>
-                        <div class="panel-body">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <uib-accordion class="panel-group payments-method">
 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h2>Summary</h2>
-                                    <strong>Price:</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
+                            <uib-accordion-group is-open="true">
+                                <uib-accordion-heading>
+                                    <div class="pull-right">
+                                        <i class="fa fa-cc-visa text-success"></i>
+                                        <i class="fa fa-cc-mastercard text-warning"></i>
+                                        <i class="fa fa-cc-paypal text-success"></i>
+                                    </div>
+                                    <h4 class="panel-title">
+                                        Credit card or Paypal
+                                    </h4>
+                                </uib-accordion-heading>
+                                <div class="panel-body">
 
-                                    <p class="m-t">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                        enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                        nisi ut aliquip ex ea commodo consequat.
+                                    <div class="row">
 
-                                    </p>
-                                    <p>
-                                        Duis aute irure dolor
-                                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                                        nulla pariatur. Excepteur sint occaecat cupidatat.
-                                    </p>
-                                </div>
-                                <div class="col-md-8">
+                                        <p class="m-t">
+                                            We can send an invoice to your email address.
+                                            This invoice will contain a link to Paypal website,
+                                            where you can pay <b><u>either with your credit card 
+                                                    or with your Paypal account</u></b>.
+                                            Please note that you do not have to have a Paypal account to 
+                                            make a payment.
+                                        </p>
+                                        <p>
+                                            Once you pay, we will get notified immediately and 
+                                            will enable the access to the purchased options for you.
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <button class="btn btn-info" 
+                                                ng-click="em.createInvoice('Credit card / Paypal')" 
+                                                type="submit">Send invoice to my email</button>
 
-                                    <form role="form" id="payment-form">
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="form-group">
-                                                    <label>Card number</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" name="Number" placeholder="Valid Card Number" required />
-                                                        <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-7 col-md-7">
-                                                <div class="form-group">
-                                                    <label>Expiration date</label>
-                                                    <input type="text" class="form-control" name="Expiry" placeholder="MM / YY"  required/>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-5 col-md-5 pull-right">
-                                                <div class="form-group">
-                                                    <label>CVC</label>
-                                                    <input type="text" class="form-control" name="CVC" placeholder="CVC"  required/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="form-group">
-                                                    <label>Name on the card</label>
-                                                    <input type="text" class="form-control" name="nameCard" placeholder="NAME AND SURNAME"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <button class="btn btn-info" ng-click="em.createOrder('card')" type="submit">Make a payment</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    </div>
 
                                 </div>
 
-                            </div>
+                            </uib-accordion-group>                            
+                        </uib-accordion>
+                    </div>
 
-                        </div>
-                    </uib-accordion-group>
-                    <uib-accordion-group>
-                        <uib-accordion-heading>
-                            <div class="pull-right">
-                                <i class="fa fa-cc-paypal text-success"></i>
-                            </div>
-                            <h4 class="panel-title">
-                                PayPal
-                            </h4>
-                        </uib-accordion-heading>
-                        <div class="panel-body">
+                    <div class="col-lg-6">
+                        <uib-accordion class="panel-group payments-method">
 
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <h2>Summary</h2>
-                                    <strong>Price:</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
-                                    <p class="m-t">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                        enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                        nisi ut aliquip ex ea commodo consequat.
-                                    </p>
-                                    <a class="btn btn-success" ng-click="em.createOrder('paypal')">
-                                        <i class="fa fa-cc-paypal">
-                                            Purchase via PayPal
-                                        </i>
-                                    </a>
+                            <uib-accordion-group is-open="true">
+                                <uib-accordion-heading>
+                                    <div class="pull-right">
+                                    </div>
+                                    <h4 class="panel-title">
+                                        Wire transfer
+                                    </h4>
+                                </uib-accordion-heading>
+                                <div class="panel-body">
+
+                                    <div class="row">
+
+                                        <p class="m-t">
+                                            You can make a wire transfer to us to pay for your order.
+                                            The details for the transfer are provided below:
+                                        </p>
+                                        <p>
+                                            Account number: 321321323 <br>
+                                            Correspondent account: 32234324235 <br>
+                                            BIC: 24234234234 <br>
+                                            Company name: NGS Pipeline Inc <br>
+                                        </p>
+                                        <p class="m-t">
+                                            If you choose to make a wire transfer, 
+                                            we will grant you access to all the purchased options 
+                                            on the website immediately,
+                                            but please note that we will revoke it if we don't get 
+                                            your transfer within 7 days.
+                                        </p>                                      
+                                    </div>
+                                    <div class="row">
+                                        <button class="btn btn-info" 
+                                                ng-click="em.createInvoice('Wire transfer')" 
+                                                type="submit">Print invoice for wire transfer</button>
+                                    </div>
+
                                 </div>
-                            </div>
-                        </div>
-                    </uib-accordion-group>
-                    <uib-accordion-group>
-                        <uib-accordion-heading>
-                            <div class="pull-right">
-                                <i class="fa fa-credit-card text-success"></i>
-                            </div>
-                            <h4 class="panel-title">
-                                Wire transfer
-                            </h4>
-                        </uib-accordion-heading>
-                        <div class="panel-body">
-
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <h2>Summary</h2>
-                                    <strong>Price:</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
-                                    <p class="m-t">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                        enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                        nisi ut aliquip ex ea commodo consequat.
-                                    </p>
-                                    <a class="btn btn-info" ng-click="em.createOrder('wire')">                                       
-                                            Make a wire transfer                                        
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </uib-accordion-group>
-                </uib-accordion>
-
-
-
+                            </uib-accordion-group>                            
+                        </uib-accordion>
+                    </div>
+                </div>
 
             </div>
 
