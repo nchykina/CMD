@@ -32,7 +32,7 @@ module.exports = {
         address: {
             line1: "Zemlyanoy Val 21/2, bdg 1, ap 95",
             city: "Moscow",
-            state: "NY",
+            state: "NY",//required field!
             postal_code: "121609",
             country_code: "RU"
         }

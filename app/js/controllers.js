@@ -3948,22 +3948,24 @@ function ecommerceCtrl($scope, $http, $state) {
         })
                 .success(function (data) {
                     console.log("TOKEN RECEIVED");
-            
+
                     $http({
                         method: 'POST',
                         url: 'api/create_invoice'
                     })
                             .success(function (data) {
                                 console.log("INVOICE CREATED");
-
-
+                                $http({
+                                    method: 'POST',
+                                    url: 'api/send_invoice',
+                                    data: {'invoiceId': data.invoiceId}
+                                })
+                                        .success(function (data) {
+                                            console.log("INVOICE SENT");
+                                        });
                             });
-
                 });
     };
-
-
-
 }
 
 
