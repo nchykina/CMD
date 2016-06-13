@@ -25,6 +25,16 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
+                    <div class="col-lg-12">
+                        <h3> <strong>Order total price</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
+                        </h3>
+
+                    </div>
+                </div>    
+            </div>
+
+            <div class="ibox-content">
+                <div class="row">
                     <div class="col-lg-6">
                         <uib-accordion class="panel-group payments-method">
 
@@ -42,36 +52,34 @@
                                 <div class="panel-body">
 
                                     <div class="row">
-                                            <h2>Order summary</h2>
-                                            <strong>Price</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
 
-                                            <p class="m-t">
-                                                We can send an invoice to your email address.
-                                                This invoice will contain a link to Paypal website,
-                                                where you can pay <b><u>either with your credit card 
+                                        <p class="m-t">
+                                            We can send an invoice to your email address.
+                                            This invoice will contain a link to Paypal website,
+                                            where you can pay <b><u>either with your credit card 
                                                     or with your Paypal account</u></b>.
-                                                    You do not have to have a Paypal account to 
-                                                    make a payment.
-                                            </p>
-                                            <p>
-                                                Once you pay, we will get notified immediately and 
-                                                will enable the access to the purchased options for you.
-                                            </p>
+                                            You do not have to have a Paypal account to 
+                                            make a payment.
+                                        </p>
+                                        <p>
+                                            Once you pay, we will get notified immediately and 
+                                            will enable the access to the purchased options for you.
+                                        </p>
                                     </div>
-                                        <div class="row">
+                                    <div class="row">
                                         <button class="btn btn-info" 
                                                 ng-click="em.createInvoice()" 
-                                                type="submit">Send invoice</button>
-
-                                        </div>
+                                                type="submit">Send invoice to my email</button>
 
                                     </div>
+
+                                </div>
 
                             </uib-accordion-group>                            
                         </uib-accordion>
                     </div>
-                    
-                                        <div class="col-lg-6">
+
+                    <div class="col-lg-6">
                         <uib-accordion class="panel-group payments-method">
 
                             <uib-accordion-group is-open="true">
@@ -85,68 +93,29 @@
                                 <div class="panel-body">
 
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <h2>Order summary</h2>
-                                            <strong>Price</strong>: <span class="text-navy">${{em.totalForCart}}.00</span>
 
-                                            <p class="m-t">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                                nisi ut aliquip ex ea commodo consequat.
-
-                                            </p>
-                                            <p>
-                                                Duis aute irure dolor
-                                                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                                                nulla pariatur. Excepteur sint occaecat cupidatat.
-                                            </p>
-                                        </div>
-                                        <div class="col-md-8">
-
-                                            <form role="form" id="payment-form">
-                                                <div class="row">
-                                                    <div class="col-xs-12">
-                                                        <div class="form-group">
-                                                            <label>Card number</label>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" name="Number" placeholder="Valid Card Number" required />
-                                                                <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-7 col-md-7">
-                                                        <div class="form-group">
-                                                            <label>Expiration date</label>
-                                                            <input type="text" class="form-control" name="Expiry" placeholder="MM / YY"  required/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xs-5 col-md-5 pull-right">
-                                                        <div class="form-group">
-                                                            <label>CVC</label>
-                                                            <input type="text" class="form-control" name="CVC" placeholder="CVC"  required/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12">
-                                                        <div class="form-group">
-                                                            <label>Name on the card</label>
-                                                            <input type="text" class="form-control" name="nameCard" placeholder="NAME AND SURNAME"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12">
-                                                        <button class="btn btn-info" ng-click="em.createInvoice()" type="submit">Create invoice</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-
-                                        </div>
-
+                                        <p class="m-t">
+                                            You can make a wire transfer to us to pay for your order.
+                                            The details for the transfer are provided below:
+                                        </p>
+                                        <p>
+                                            Account number: 321321323 <br>
+                                            Correspondent account: 32234324235 <br>
+                                            BIC: 24234234234 <br>
+                                            Company name: NGS Pipeline Inc <br>
+                                        </p>
+                                        <p class="m-t">
+                                            If you choose to make a wire transfer, 
+                                            we will grant you access to all the purchased options 
+                                            on the website immediately,
+                                            but please note that we will revoke it if we don't get 
+                                            your transfer within 7 days.
+                                        </p>                                      
+                                    </div>
+                                    <div class="row">
+                                        <button class="btn btn-info" 
+                                                ng-click="em.createInvoice()" 
+                                                type="submit">Print invoice for wire transfer</button>
                                     </div>
 
                                 </div>
