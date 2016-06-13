@@ -9,7 +9,7 @@ var JobStepSchema = new Schema({
     },
   steptype: {      
       type: String,
-      required: true
+      required: false
   },
   status: {
       type: String,
@@ -17,16 +17,36 @@ var JobStepSchema = new Schema({
   },
   date_created: {
         type: Date,
-        required: true
+        required: false
     },
   date_updated: {
         type: Date,
-        required: true
+        required: false
     },
   date_finished: {
         type: Date,
+        required: false
+    },
+  command: {
+        type: String,
+        required: false
+    },
+  cpu: {
+        type: Number,
         required: true
-    }
+    },
+  memory: {
+        type: Number,
+        required: true
+    },
+  singularity_deploy_id: {
+        type: String,
+        required: false   
+  },
+  arguments:  {
+        type: [String],
+        required: false   
+  }
 });
  
 var JobSchema = new Schema({
