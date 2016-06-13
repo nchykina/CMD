@@ -2,9 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var InvoiceSchema = new Schema({
-    userId:{
+    userId: {
         type: String,
-        required: true        
+        required: true
     },
     id: {
         type: String,
@@ -110,6 +110,16 @@ var InvoiceSchema = new Schema({
         },
         due_date: {
             type: Date,
+            required: false
+        }
+    },
+    total_amount: {
+        currency: {
+            type: String,
+            required: false
+        },
+        value: {
+            type: Number,
             required: false
         }
     }

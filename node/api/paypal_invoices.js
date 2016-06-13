@@ -1,6 +1,9 @@
 var paypalConfig = require('../config/paypal');
 var request = require("request");
 var Invoice = require('../models/invoice');
+var User = require('../models/user');
+var Order = require('../models/order');
+
 
 
 var getToken = function (req, res) {
@@ -38,43 +41,31 @@ var createInvoice = function (req, res) {
             email: "example@example.com" // TBD: user email
         }];
 
-    var items = [// TBD list of items to bill
-        {
-            name: "DNA alignment",
+    var itemsFromCart = req.user.cart;
+    var items = [];
+    for (var key in itemsFromCart) {
+        var nameString = itemsFromCart[key].productCategory + ": " + itemsFromCart[key].productName;
+        var item = {
+            name: nameString,
             quantity: 1,
             unit_price: {
                 currency: "USD",
-                value: "10"
+                value: itemsFromCart[key].price
             }
-        }
-    ];
+        };
+        items.push(item);
+    }
 
     var payment_term = {
         term_type: "NET_45"
     };
 
-    var shipping_info = {
-        first_name: "Sally",
-        last_name: "Patient",
-        business_name: "Not applicable",
-        phone: {
-            country_code: "001",
-            national_number: "5039871234"
-        },
-        address: {
-            line1: "1234 Broad St.",
-            city: "Portland",
-            state: "OR",
-            postal_code: "97216",
-            country_code: "US"
-        }};
 
     var bodyContent = {
         merchant_info: merchantInfo,
         billing_info: billingInfo,
         items: items,
         payment_term: payment_term
-                // shipping_info: shipping_info
     };
     var bodyString = JSON.stringify(bodyContent);
 
@@ -92,8 +83,8 @@ var createInvoice = function (req, res) {
         }
         //req.session.invoiceId = body.id;
         //req.session.invoiceNumber = body.number;
-        // console.log("BODY ", body);
-        // console.log("ERROR ", error);
+        console.log("BODY ", body);
+        console.log("ERROR ", error);
         var bodyJSON = JSON.parse(body);
 
         // console.log("DATA", req.user._id, " ", bodyJSON.merchant_info);
@@ -108,7 +99,8 @@ var createInvoice = function (req, res) {
             billing_info: bodyJSON.billing_info,
             items: bodyJSON.items,
             invoice_date: bodyJSON.invoice_date,
-            payment_term: bodyJSON.payment_term
+            payment_term: bodyJSON.payment_term,
+            total_amount: bodyJSON.total_amount
         });
 
 
@@ -116,38 +108,70 @@ var createInvoice = function (req, res) {
             if (err) {
                 return res.json({success: false, msg: err});
             }
-            res.json({success: true, msg: 'Invoice created and saved to database', invoiceId: bodyJSON.id});
+            res.json({success: true, msg: 'Invoice created and saved to database', invoiceId: bodyJSON.id,
+                invoiceNumber: bodyJSON.number});
         });
     });
 
 };
 
 var sendInvoice = function (req, res) {
+    if (req.user) {
 
-    var uString = 'Bearer ' + req.session.paypalToken;
+        var uString = 'Bearer ' + req.session.paypalToken;
 
-    var invoiceId = req.body.invoiceId;
+        var invoiceId = req.body.invoiceId;
+        var invoiceNumber = req.body.invoiceNumber;
 
-    request({
-        uri: "https://api.sandbox.paypal.com/v1/invoicing/invoices/" + invoiceId + "/send",
-        method: "POST",
-        headers: {
-            "Authorization": uString,
-            "Content-Type": "application/json"
-        }
-    }, function (error, response, body) {
-        if (error) {
-            res.json({success: false, msg: error});
-        }
-        console.log("BODY ", body);
-        console.log("ERROR ", error);
-        console.log("RESPONSE ", response.statusCode, " ", response.statusMessage);
-        if (response.statusCode == 202) {
-            res.json({success: true, msg: "Invoice sent to user"});
-        } else {
-            res.json({success: true, msg: "Invoice not accepted by Paypal and not sent to user"});
-        }
-    });
+        request({
+            uri: "https://api.sandbox.paypal.com/v1/invoicing/invoices/" + invoiceId + "/send",
+            method: "POST",
+            headers: {
+                "Authorization": uString,
+                "Content-Type": "application/json"
+            }
+        }, function (error, response, body) {
+            if (error) {
+                res.json({success: false, msg: error});
+            }
+            console.log("BODY ", body);
+            console.log("ERROR ", error);
+            console.log("RESPONSE ", response.statusCode, " ", response.statusMessage);
+            if (response.statusCode == 202) {
+                //if invoice is sent, create an order
+                var newOrder = new Order({
+                    userId: req.user._id,
+                    paymentType: req.body.paymentType,
+                    products: req.user.cart,
+                    orderId: invoiceNumber,
+                    orderDate: new Date()
+                });
+
+                newOrder.save(function (err) {
+                    if (err) {
+                        return res.json({success: false, msg: 'Order not created'});
+                    }
+                    //after order is created, clear user cart
+                    User.findOne({'_id': req.user._id}, function (err, user) {
+                        if (err)
+                            return res.json({success: false, msg: 'User not found'});
+                        user.cart = [];
+                        user.save(function (err) {
+                            if (err)
+                                return res.json({success: false, msg: 'Error'});
+                            res.json({success: true, msg: 'Cart cleared, order created, invoice sent to user'});
+                        });
+                    }
+                    );
+                });
+
+            } else {
+                res.json({success: false, msg: "Invoice not accepted by Paypal and not sent to user"});
+            }
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 
 };
 

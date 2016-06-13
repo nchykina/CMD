@@ -139,30 +139,6 @@ var getNumberOfItemsInCart = function (req, res) {
 
 };
 
-var createOrder = function (req, res) {
-
-    if (req.user) {
-
-        var newOrder = new Order({
-            userId: req.user._id,
-            paymentType: req.body.paymentType,
-            products: req.user.cart,
-            orderDate: new Date()
-        });
-
-        newOrder.save(function (err) {
-            if (err) {
-                return res.json({success: false, msg: 'Order not created'});
-            }
-            res.json({success: true, msg: 'Order created'});
-        });
-
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-
 var clearCart = function (req, res) {
     if (req.user) {
         User.findOne({'_id': req.user._id}, function (err, user) {
@@ -173,7 +149,7 @@ var clearCart = function (req, res) {
                 if (err) {
                     return res.json({success: false, msg: 'Error'});
                 }
-                res.json({success: true, msg: 'Cart cleared, order created'});
+                res.json({success: true, msg: 'Cart cleared'});
             });
         }
         );
@@ -202,7 +178,6 @@ var bindFunction = function (router) {
     router.post('/remove_item_from_cart', removeItemFromCart);
     router.get('/get_total_for_cart', getTotalForCart);
     router.get('/get_number_of_items_in_cart', getNumberOfItemsInCart);
-    router.post('/create_order', createOrder);
     router.post('/clear_cart', clearCart);
     router.get('/get_orders', getOrders);
 };

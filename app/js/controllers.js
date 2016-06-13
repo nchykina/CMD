@@ -3958,10 +3958,12 @@ function ecommerceCtrl($scope, $http, $state) {
                                 $http({
                                     method: 'POST',
                                     url: 'api/send_invoice',
-                                    data: {'invoiceId': data.invoiceId}
+                                    data: {'invoiceId': data.invoiceId,
+                                            'invoiceNumber': data.invoiceNumber}
                                 })
                                         .success(function (data) {
                                             console.log("INVOICE SENT");
+                                            $state.go('commerce.orders');
                                         });
                             });
                 });
