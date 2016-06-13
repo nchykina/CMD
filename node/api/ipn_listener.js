@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var https = require('https').Server(app);
 var request = require("request");
 
 var paypalConfig = require('../config/paypal');
