@@ -1399,8 +1399,10 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('commerce.orders', {
                 url: "/orders",
+                controller: 'ecommerceController',
+                controllerAs: 'em',        
                 templateUrl: "views/ecommerce/ecommerce_orders.html",
-                data: {pageTitle: 'E-commerce orders'}
+                data: {pageTitle: 'My purchases'}
             })
             .state('commerce.product', {
                 url: "/product",

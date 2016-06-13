@@ -16,10 +16,22 @@ var OrderSchema = new Schema({
         required: true
     },
     products: [{ productName: String, productCategory: String, price: Number, addedDate: Date, productId: Number}],
-    paymentType: {
+    paymentType: { // 1. credit card/paypal or 2. wire transfer
         type: String,
         required: false
-    }   
+    },
+    totalAmount: {
+        type: Number,
+        required: false
+    },
+    status: { // Confirmed, pending, cancelled
+        type: String,
+        required: false
+    }
+    //статус ордера (подтвержден - в процессе - отменен)
+    //button "record a payment" -- admin only
+    //IPN
+    //product list for order list
 });
 
 

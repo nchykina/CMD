@@ -3819,12 +3819,14 @@ function ecommerceCtrl($scope, $http, $state) {
     em.numberOfItemsInCart = {};
 
     em.productList = {};
+    em.orders = {};
 
     this.init = function () {
         em.getProductList();
         em.getItemsInCart();
         em.getTotalForCart();
         em.getNumberOfItemsInCart();
+        em.getOrders();
     };
 
 
@@ -3904,30 +3906,6 @@ function ecommerceCtrl($scope, $http, $state) {
                 });
     };
 
-    this.createOrder = function (paymentType) {
-
-        $http({
-            method: 'POST',
-            url: 'api/create_order',
-            data: {'paymentType': paymentType}
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        console.log("Order created");
-                        if (paymentType === 'card') {
-                            $state.go('commerce.confirmation'); //TBD
-                        }
-                        if (paymentType === 'paypal') {
-                            $state.go('commerce.confirmation'); //TBD
-                        }
-                        if (paymentType === 'wire') {
-                            $state.go('commerce.invoice');
-                        }
-                        em.clearCart();
-                    }
-                });
-    };
-
     this.clearCart = function () {
 
         $http({
@@ -3940,7 +3918,7 @@ function ecommerceCtrl($scope, $http, $state) {
     };
 
 
-    this.createInvoice = function () {
+    this.createInvoice = function (paymentType) {
 
         $http({
             method: 'GET',
@@ -3959,7 +3937,9 @@ function ecommerceCtrl($scope, $http, $state) {
                                     method: 'POST',
                                     url: 'api/send_invoice',
                                     data: {'invoiceId': data.invoiceId,
-                                            'invoiceNumber': data.invoiceNumber}
+                                            'invoiceNumber': data.invoiceNumber,
+                                            'paymentType': paymentType
+                                        }
                                 })
                                         .success(function (data) {
                                             console.log("INVOICE SENT");
@@ -3968,6 +3948,20 @@ function ecommerceCtrl($scope, $http, $state) {
                             });
                 });
     };
+    
+    
+        this.getOrders = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_orders'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        em.orders = data.orders;
+                    }
+                });
+    };
+    
 }
 
 

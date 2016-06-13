@@ -14,7 +14,7 @@ var InvoiceSchema = new Schema({
         type: String,
         required: true
     },
-    status: {
+    status: { //Possible values: DRAFT, SENT, PAID, MARKED_AS_PAID, CANCELLED, REFUNDED, PARTIALLY_REFUNDED, MARKED_AS_REFUNDED, UNPAID, PAYMENT_PENDING
         type: String,
         required: true
     },

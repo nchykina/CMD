@@ -122,31 +122,66 @@ var sendInvoice = function (req, res) {
 
         var invoiceId = req.body.invoiceId;
         var invoiceNumber = req.body.invoiceNumber;
+        var paymentType = req.body.paymentType;
 
-        request({
-            uri: "https://api.sandbox.paypal.com/v1/invoicing/invoices/" + invoiceId + "/send",
-            method: "POST",
-            headers: {
-                "Authorization": uString,
-                "Content-Type": "application/json"
-            }
-        }, function (error, response, body) {
-            if (error) {
-                res.json({success: false, msg: error});
-            }
-            console.log("BODY ", body);
-            console.log("ERROR ", error);
-            console.log("RESPONSE ", response.statusCode, " ", response.statusMessage);
-            if (response.statusCode == 202) {
-                //if invoice is sent, create an order
-                var newOrder = new Order({
-                    userId: req.user._id,
-                    paymentType: req.body.paymentType,
-                    products: req.user.cart,
-                    orderId: invoiceNumber,
-                    orderDate: new Date()
+        Invoice.findOne({'id': invoiceId}, function (err, invoice) {
+            if (err)
+                return res.json({success: false, msg: 'Invoice with this id not found'});
+            var invoiceAmount = invoice.total_amount.value;
+
+            var newOrder = new Order({
+                userId: req.user._id,
+                paymentType: req.body.paymentType,
+                products: req.user.cart,
+                orderId: invoiceNumber,
+                orderDate: new Date(),
+                totalAmount: invoiceAmount,
+                status: 'Pending'
+            });
+
+            if (paymentType == "Credit card / Paypal") {
+                //if credit card or paypal
+
+                request({
+                    uri: "https://api.sandbox.paypal.com/v1/invoicing/invoices/" + invoiceId + "/send",
+                    method: "POST",
+                    headers: {
+                        "Authorization": uString,
+                        "Content-Type": "application/json"
+                    }
+                }, function (error, response, body) {
+                    if (error) {
+                        res.json({success: false, msg: error});
+                    }
+                    console.log("BODY ", body);
+                    console.log("ERROR ", error);
+                    console.log("RESPONSE ", response.statusCode, " ", response.statusMessage);
+                    if (response.statusCode == 202) {
+                        //if invoice is sent, create an order
+                        newOrder.save(function (err) {
+                            if (err) {
+                                return res.json({success: false, msg: 'Order not created'});
+                            }
+                            //after order is created, clear user cart
+                            User.findOne({'_id': req.user._id}, function (err, user) {
+                                if (err)
+                                    return res.json({success: false, msg: 'User not found'});
+                                user.cart = [];
+                                user.save(function (err) {
+                                    if (err)
+                                        return res.json({success: false, msg: 'Error'});
+                                    res.json({success: true, msg: 'Cart cleared, order created, invoice sent to user'});
+                                });
+                            }
+                            );
+                        });
+
+                    } else {
+                        res.json({success: false, msg: "Invoice not accepted by Paypal and not sent to user"});
+                    }
                 });
-
+            } else {
+                //if wire transfer, Paypal invoice is created but never sent to the user
                 newOrder.save(function (err) {
                     if (err) {
                         return res.json({success: false, msg: 'Order not created'});
@@ -159,16 +194,15 @@ var sendInvoice = function (req, res) {
                         user.save(function (err) {
                             if (err)
                                 return res.json({success: false, msg: 'Error'});
-                            res.json({success: true, msg: 'Cart cleared, order created, invoice sent to user'});
+                            res.json({success: true, msg: 'Cart cleared, order created'});
                         });
                     }
                     );
                 });
-
-            } else {
-                res.json({success: false, msg: "Invoice not accepted by Paypal and not sent to user"});
             }
-        });
+        }
+        );
+
     } else {
         res.json({success: false, msg: 'No user logged in'});
     }
