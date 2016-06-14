@@ -30,7 +30,8 @@ var UserSchema = new Schema({
         required: true
     },
     roles: [String],
-    cart: [{productName: String, productCategory: String, price: Number, addedDate: Date, productId: Number}]
+    cart: [{productName: String, productCategory: String, price: Number, addedDate: Date, productId: Number,
+        description_short: String, description_long: String}]
 });
 
 UserSchema.pre('save', function (next) {

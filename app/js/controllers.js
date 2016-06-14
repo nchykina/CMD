@@ -3460,6 +3460,16 @@ function loginCtrl($scope, $http, $state) {
                 });
     };
 
+    vm.change = false;
+
+    this.changePassword = function () {
+        if (vm.change) {
+            vm.change = false;
+        } else {
+            vm.change = true;
+        }
+    };
+
 }
 
 /**
