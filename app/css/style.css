@@ -5334,7 +5334,8 @@ table.shoping-cart-table tr td:last-child {
 .image-imitation-small {
   background-color: #f8f8f9;
   text-align: center;
-  padding: 100px 0;
+  padding-top: 10px;
+  padding-bottom: 190px;
 }
 
 .product-main-price small {

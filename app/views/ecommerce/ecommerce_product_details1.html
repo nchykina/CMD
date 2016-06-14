@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                [IMAGE 1]
+                                <img alt="product1" src="img/products/prod1.png" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -36,7 +36,7 @@
                             <h2 class="font-bold m-b-xs">
                                 {{em.productList[0].productName}}
                             </h2>
-                            <small>Allows you to assemble genomes of different species de novo.</small>
+                            <small>Allows you to assemble genomes of different species de novo</small>
                             <div class="m-t-md">
                                 <h2 class="product-main-price">${{em.productList[0].price}} <small class="text-muted">per month</small> </h2>
                             </div>
@@ -45,14 +45,18 @@
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
+                                De novo assembly pipeline differs quite a bit from the techniques of alignment to
+                                a reference genome in terms of complexity and time requirements.
+                                In case of de novo assembly, the reference sequence of nucleotides is unknown, so
+                                the process resembles putting together a puzzle without looking at the image on the top of 
+                                the box.
+                                
+                                <br/>
+                                <br/>
+                                Bioinformatics packages used for de novo assembly include Tophat, Trinity and Velvet.
+                                Common de novo assembly techniques comprise De Brujin graphs, suffix trees and different 
+                                modifications of greedy algorithm.
 
-                                <br/>
-                                <br/>
-                                There are many variations of passages of Lorem Ipsum available, but the majority
-                                have suffered alteration in some form, by injected humour, or randomised words
-                                which don't look even slightly believable.
                             </div>
                             <hr>
                             <div class="form-group">
@@ -94,7 +98,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                [IMAGE 1]
+                                <img align='top' alt="product2" src="img/products/prod2.png" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -102,7 +106,7 @@
                             <h2 class="font-bold m-b-xs">
                                 {{em.productList[1].productName}}
                             </h2>
-                            <small>Allows you to align RNA data.</small>
+                            <small>Allows you to align RNA data</small>
                             <div class="m-t-md">
                                 <h2 class="product-main-price">${{em.productList[1].price}} <small class="text-muted">per month</small> </h2>
                             </div>
@@ -111,14 +115,17 @@
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-
+                                RNA sequencing techniques are used to analyze the continually changing cellular
+                                transcriptome. Due to the small size of the reads, de novo assembly might be 
+                                difficult, so RNA-Seq is usually done either on a reference genome or on species 
+                                with shorter DNA (bacteria, viruses, yeast etc.).
+                                
                                 <br/>
                                 <br/>
-                                There are many variations of passages of Lorem Ipsum available, but the majority
-                                have suffered alteration in some form, by injected humour, or randomised words
-                                which don't look even slightly believable.
+                                RNA sequencing is usually used to compare gene expression between conditions, 
+                                such as drug treatment vs untreated. Bioinformatic tools used for RNA sequencing 
+                                include both common alignment tools like Bowtie/BWA, as well as specialized differential
+                                expression and splicing analysis tools.
                             </div>
                             <hr>
                             <div class="form-group">
