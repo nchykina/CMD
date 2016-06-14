@@ -56,7 +56,8 @@ var activateListener = function (req, res) {
 
     //reply to Paypal: POST HTTP 200
     res.statusCode = 200;
-    res.json({success: true, msg: "Response with Status 200 sent"});
+    var msgString = "Response with Status 200 sent for " + req.body ;
+    res.json({success: true, msg: msgString});
 
     //read data from req
 
