@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                <img alt="product1" src="img/products/prod1.png" style='height: 100%; width: 100%; object-fit: contain'>
+                                <img alt="product1" src="{{em.productList[0].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -90,7 +90,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                <img align='top' alt="product2" src="img/products/prod2.png" style='height: 100%; width: 100%; object-fit: contain'>
+                                <img alt="product2" src="{{em.productList[1].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -107,17 +107,10 @@
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                RNA sequencing techniques are used to analyze the continually changing cellular
-                                transcriptome. Due to the small size of the reads, de novo assembly might be 
-                                difficult, so RNA-Seq is usually done either on a reference genome or on species 
-                                with shorter DNA (bacteria, viruses, yeast etc.).
-                                
-                                <br/>
-                                <br/>
-                                RNA sequencing is usually used to compare gene expression between conditions, 
-                                such as drug treatment vs untreated. Bioinformatic tools used for RNA sequencing 
-                                include both common alignment tools like Bowtie/BWA, as well as specialized differential
-                                expression and splicing analysis tools.
+                                {{em.productList[1].description_short}}
+                                <br>
+                                <br>
+                                {{em.productList[1].description_long}} 
                             </div>
                             <hr>
                             <div class="form-group">
