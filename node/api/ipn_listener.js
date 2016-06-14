@@ -53,10 +53,11 @@ var simulateWebhookEvent = function (req, res) {
 var activateListener = function (req, res) {
 
     console.log("Node called");
+    console.log("REQUEST "+req.host);
 
     //reply to Paypal: POST HTTP 200
     res.statusCode = 200;
-    var msgString = "Response with Status 200 sent for " + req.body ;
+    var msgString = "Response with Status 200 sent to " + req.host ;
     res.json({success: true, msg: msgString});
 
     //read data from req
