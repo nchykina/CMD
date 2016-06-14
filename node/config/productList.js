@@ -20,15 +20,15 @@
         
         
         {productName: 'Extra upload size', productCategory: 'Extra upload/storage size', price: 30,
-        description_short: '', description_long: '', img_url: ''},
+        description_short: '', description_long: '', img_url: 'img/products/prod3.png'},
         {productName: 'Extra storage size', productCategory: 'Extra upload/storage size', price: 40,
-        description_short: '', description_long: '', img_url: ''},
+        description_short: '', description_long: '', img_url: 'img/products/prod4.png'},
         {productName: 'Extra vCPUs', productCategory: 'Processing capacity', price: 50,
-        description_short: '', description_long: '', img_url: ''},
+        description_short: '', description_long: '', img_url: 'img/products/prod5.png'},
         {productName: 'Enable MPI', productCategory: 'Processing capacity', price: 60,
-        description_short: '', description_long: '', img_url: ''},
+        description_short: '', description_long: '', img_url: 'img/products/prod6.png'},
         {productName: 'Custom pipelines', productCategory: 'Add a custom pipeline', price: 100,
-        description_short: '', description_long: '', img_url: ''}
+        description_short: '', description_long: '', img_url: 'img/products/prod7.png'}
     ];
 
 module.exports = productList;
