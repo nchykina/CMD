@@ -38,7 +38,7 @@ var createInvoice = function (req, res) {
     var merchantInfo = paypalConfig.merchantInfo;
 
     var billingInfo = [{
-            email: "example@example.com" // TBD: user email
+            email: req.user.email
         }];
 
     var itemsFromCart = req.user.cart;

@@ -610,7 +610,9 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('user.profile', {
                 url: "/profile",
-                templateUrl: "views/user_profile.html",
+                controller: 'loginController',
+                controllerAs: 'vm', 
+                templateUrl: "views/account/user_profile.html",
                 data: {pageTitle: 'User profile'}
             })
             .state('user.subscription', {
@@ -835,13 +837,13 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('login_page', {
                 url: "/login_page",
-                templateUrl: "views/login_page.html",
+                templateUrl: "views/account/login_page.html",
                 controller: 'loginController',
                 data: {pageTitle: 'Login page', specialClass: 'gray-bg'}
             })
             .state('create_account', {
                 url: "/create_account",
-                templateUrl: "views/create_account.html",
+                templateUrl: "views/account/create_account.html",
                 controller: 'loginController',
                 data: {pageTitle: 'Create account', specialClass: 'gray-bg'}
             })

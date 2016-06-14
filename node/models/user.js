@@ -20,6 +20,10 @@ var UserSchema = new Schema({
         type: String,
         required: false
     },
+    company: {
+        type: String,
+        required: false
+    },
     email: {
         type: String,
         unique: true,

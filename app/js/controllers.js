@@ -3400,8 +3400,8 @@ function loginCtrl($scope, $http, $state) {
         $http({
             method: 'POST',
             url: 'api/login',
-            data: vm.user, //forms user object
-            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+            data: vm.user //forms user object
+                    //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
         })
                 .success(function (data) {
                     if (data.success) {
@@ -3419,8 +3419,8 @@ function loginCtrl($scope, $http, $state) {
         $http({
             method: 'POST',
             url: 'api/register',
-            data: vm.user, //forms user object
-            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+            data: vm.user //forms user object
+                    //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
         })
                 .success(function (data) {
                     if (data.success) {
@@ -3432,6 +3432,34 @@ function loginCtrl($scope, $http, $state) {
                     }
                 });
     };
+
+    this.init = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/memberinfo'
+
+        })
+                .success(function (response) {
+                    vm.user = response;
+                    console.log("TEST ", vm.user);
+                });
+    };
+
+    this.saveProfileChanges = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/save_profile_changes',
+            data: vm.user
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('pipelines.dna_reseq_home');
+                    }
+                });
+    };
+
 }
 
 /**
