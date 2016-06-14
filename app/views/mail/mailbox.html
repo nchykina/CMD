@@ -50,9 +50,12 @@
                             <td class="mail-ontact"><a ng-click="vm.getMessageDetails(x._id)">{{x.from}}</a></td>
                             <td class="mail-subject"><a ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
                             <td class="text-right mail-date">{{x.sentTime| date:'MMM d, yyyy'}}</td>
-                        </tr>                                          
+                        </tr>  
                     </tbody>
+
                 </table>
+                         <div class="ibox-content" ng-if="vm.numberOfInbox==0" align="center">Your inbox is empty</div>
+      
 
 
             </div>

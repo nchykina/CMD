@@ -20,6 +20,11 @@ var UserSchema = new Schema({
         type: String,
         required: false
     },
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
     roles: [String],
     cart: [{productName: String, productCategory: String, price: Number, addedDate: Date, productId: Number}]
 });

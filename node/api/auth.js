@@ -70,6 +70,7 @@ var register = function(req,res) {
       password: req.body.password,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
+      email: req.body.email,
       roles: ['user'],
     });
     // save the user
