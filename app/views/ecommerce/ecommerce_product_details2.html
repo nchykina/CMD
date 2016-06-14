@@ -45,14 +45,10 @@
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-
-                                <br/>
-                                <br/>
-                                There are many variations of passages of Lorem Ipsum available, but the majority
-                                have suffered alteration in some form, by injected humour, or randomised words
-                                which don't look even slightly believable.
+                                {{em.productList[2].description_short}}
+                                <br>
+                                <br>
+                                {{em.productList[2].description_long}}   
                             </div>
                             <hr>
                             <div class="form-group">
@@ -63,7 +59,7 @@
                                     <button ng-if="em.productList[2].inCart" ng-click="em.removeItemFromCart(2)" 
                                             class="btn btn-danger btn-sm">                                 
                                         <i class="fa fa-cart-plus"></i> Remove from cart</button>
-                                    <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
+                                    <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
 
                                 </div>
                             </div>
@@ -128,7 +124,7 @@
                                     <button ng-if="em.productList[3].inCart" ng-click="em.removeItemFromCart(3)" 
                                             class="btn btn-danger btn-sm">                                 
                                         <i class="fa fa-cart-plus"></i> Remove from cart</button>
-                                    <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
+                                    <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
 
                                 </div>
                             </div>

@@ -20,7 +20,16 @@
         
         
         {productName: 'Extra upload size', productCategory: 'Extra upload/storage size', price: 30,
-        description_short: '', description_long: '', img_url: 'img/products/prod3.png'},
+        description_short: 'This upgrade allows you to upload files up to 10G to our system, while \
+        the free file size upload limit is 1G. If you need to upload larger files by any chance, \
+        please let us know, and we will figure out a way how to do it for you. Larger file size \
+        will allow your analysis to have good coverage with the reads.',
+        description_long: 'Coverage is a very important characteristic of the file with reads, as \
+        it ensures that the information extracted from reads is statistically significant. Good coverage \
+        for realignment pipeline is around 20-40x for the whole genome, so the larger is the genome you \
+        analyze, the larger should be your files with reads.', 
+         img_url: 'img/products/prod3.png'},
+    
         {productName: 'Extra storage size', productCategory: 'Extra upload/storage size', price: 40,
         description_short: '', description_long: '', img_url: 'img/products/prod4.png'},
         {productName: 'Extra vCPUs', productCategory: 'Processing capacity', price: 50,
