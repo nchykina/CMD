@@ -27,7 +27,7 @@ var simulateWebhookEvent = function (req, res) {
         //2. simulate webhook
         var tokenString = 'Bearer ' + paypalToken;
         var bodyContent = {
-            url: 'https://www.ngspipeline.com', // TBD
+            url: 'http://www.ngspipeline.com/api/webhooks',
             event_type: 'INVOICING.INVOICE.PAID'
         };
         var bodyString = JSON.stringify(bodyContent);
@@ -56,7 +56,7 @@ var activateListener = function (req, res) {
 
     //reply to Paypal: POST HTTP 200
     res.statusCode = 200;
-    res.end();
+    res.json({success: true, msg: "Response with Status 200 sent"});
 
     //read data from req
 

@@ -3962,6 +3962,8 @@ function ecommerceCtrl($scope, $http, $state) {
                 });
     };
 
+    em.test = '111';
+
     this.testListener = function () {
         $http({
             method: 'GET',
@@ -3970,6 +3972,7 @@ function ecommerceCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         console.log("TEST");
+                        em.test = data.msg;
                     }
                 });
     };
