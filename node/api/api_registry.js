@@ -3,6 +3,7 @@ var mailbox = require('./mailbox');
 var ecommerce = require('./ecommerce');
 var paypalInvoices = require('./paypal_invoices');
 var ipnListener = require('./ipn_listener');
+var mailServer = require('./mailserver');
 
 var job = require('./job');
 
@@ -18,6 +19,7 @@ var bindFunction = function(router){
     ecommerce.bind(router);
     paypalInvoices.bind(router);
     ipnListener.bind(router);
+    mailServer.bind(router);
 };
 
 module.exports = bindFunction;

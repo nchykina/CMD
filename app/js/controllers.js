@@ -4031,6 +4031,23 @@ function ecommerceCtrl($scope, $http, $state) {
 
 }
 
+function mailServerCtrl($scope, $http, $state) {
+    var tm = this;
+
+    this.greetUser = function () {
+        console.log("TEST");
+
+        $http({
+            method: 'GET',
+            url: 'api/greet_user'            
+
+        })
+                .success(function (response) {
+                    console.log("Greeting success");
+                });
+    };
+
+}
 
 /**
  *
@@ -4081,6 +4098,7 @@ angular
         .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl])
         .controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
+        .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 

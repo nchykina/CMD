@@ -687,6 +687,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('storage.stats', {
                 url: "/form_stats",
+                controller: 'mailServerController',
+                controllerAs: 'vm',
                 templateUrl: "views/form_stats.html",
                 data: {pageTitle: 'Statistics'},
                 resolve: {
