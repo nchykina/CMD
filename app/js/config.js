@@ -837,6 +837,11 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controller: 'loginController',
                 data: {pageTitle: 'Login', specialClass: 'gray-bg'}
             })
+            .state('test', {
+                url: "/test",
+                templateUrl: "views/account/test.html",
+                data: {pageTitle: 'TEST', specialClass: 'gray-bg'}
+            })
             .state('login_page', {
                 url: "/login_page",
                 templateUrl: "views/account/login_page.html",
