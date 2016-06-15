@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var ejs = require('ejs');
 
-//отправляет письмо на внешний и внутренний почтовый ящик при первом логине
+//отправляет письмо на внешний почтовый ящик при первом логине
 var greetUser = function (req, res) {
 
     var filePath = path.join(__dirname, 'mail_messages/greeting_message.html');
@@ -17,14 +17,14 @@ var greetUser = function (req, res) {
         }
         
         var mailMessageWithParams = ejs.render(mailMessage, {
-            userName: 'USER111'
+            userName: req.user.name
         });
 
         var mailData = {
             from: 'support@ngspipeline.com',
             to: 'support@ngspipeline.com', // update to user email when ready
             subject: 'Welcome to NGS Pipeline!',
-            text: 'Plaintext version of the message',
+            text: 'Plaintext version of the message', // TBD
             html: mailMessageWithParams
         };
 
@@ -32,10 +32,8 @@ var greetUser = function (req, res) {
 
         transporter.sendMail(mailData, function (error, info) {
             if (error) {
-                //console.log(error);
                 return res.json({success: false, msg: 'Error'});
             }
-            //console.log('Message sent: ' + info.response + ' ' + info.accepted);
             res.json({success: true, msg: 'Message sent'});
         });
     });

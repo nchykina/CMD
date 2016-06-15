@@ -8,6 +8,7 @@ var config = require('../config/mongo');
 var User = require('../models/user');
 var jwt = require('jwt-simple');
 var passport = require('passport');
+//var mailserver = require('./mailserver');
 
 require('../config/passport')(passport);
 
@@ -63,7 +64,7 @@ var logout = function (req, res) {
     ;
 };
 
-var register = function (req, res) {
+var register = function (req, res, next) {
     if (!req.body.name || !req.body.password) {
         res.json({success: false, msg: 'Please pass name and password.'});
     } else {
@@ -82,10 +83,13 @@ var register = function (req, res) {
             }
 
             req.logIn(newUser, function (err) {
-                return err
-                        ? next(err) :
-                        res.json({success: true, msg: 'Successfuly created new user'});
-            })
+                if (err) {
+                    return next(err);
+                } else {
+                   // mailserver.greetUser(req, res); нет, так нельзя
+                    res.json({success: true, msg: 'Successfuly created new user'});
+                }
+            });
         });
     }
 };

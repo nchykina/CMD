@@ -3425,8 +3425,16 @@ function loginCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         vm.registerMessage = data.msg;
-                        $state.go('pipelines.dna_reseq_home');
+                        $http({
+                            method: 'GET',
+                            url: 'api/greet_user',
+                        })
+                                .success(function (data) {
+                                    if (data.success) {
+                                        $state.go('pipelines.dna_reseq_home');
 
+                                    }
+                                });
                     } else {
                         vm.registerMessage = data.msg;
                     }
@@ -3471,7 +3479,7 @@ function loginCtrl($scope, $http, $state) {
     };
 
     this.logout = function () {
-          $http({
+        $http({
             method: 'GET',
             url: 'api/logout'
         })
@@ -3480,8 +3488,8 @@ function loginCtrl($scope, $http, $state) {
                         $state.go('landing');
                     }
                 });
-   
-    }; 
+
+    };
 
 }
 
@@ -4039,7 +4047,7 @@ function mailServerCtrl($scope, $http, $state) {
 
         $http({
             method: 'GET',
-            url: 'api/greet_user'            
+            url: 'api/greet_user'
 
         })
                 .success(function (response) {
