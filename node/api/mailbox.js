@@ -2,245 +2,293 @@ var Message = require('../models/message');
 
 
 var createMessage = function (req, res) {
-    var newMessage = new Message({
-        from: req.user.name,
-        to: req.body.to,
-        subject: req.body.subject,
-        content: req.body.content,
-        type: 'sent',
-        sentTime: new Date()
-    });
-    var receivedMessage = new Message({
-        from: req.user.name,
-        to: req.body.to,
-        subject: req.body.subject,
-        content: req.body.content,
-        type: 'inbox',
-        sentTime: new Date(),
-        read: false // for read/unread messages
-    });
-    newMessage.save(function (err) {
-        if (err) {
-            return res.json({success: false, msg: 'Error'});
-        }
-        receivedMessage.save(function (err) {
+    if (req.user) {
+        var newMessage = new Message({
+            from: req.user.name,
+            to: req.body.to,
+            subject: req.body.subject,
+            content: req.body.content,
+            type: 'sent',
+            sentTime: new Date()
+        });
+        var receivedMessage = new Message({
+            from: req.user.name,
+            to: req.body.to,
+            subject: req.body.subject,
+            content: req.body.content,
+            type: 'inbox',
+            sentTime: new Date(),
+            read: false // for read/unread messages
+        });
+        newMessage.save(function (err) {
             if (err) {
                 return res.json({success: false, msg: 'Error'});
             }
-            res.json({success: true, msg: 'Email sent and received'});
+            receivedMessage.save(function (err) {
+                if (err) {
+                    return res.json({success: false, msg: 'Error'});
+                }
+                res.json({success: true, msg: 'Email sent and received'});
+            });
         });
-    });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 
 var saveAsDraft = function (req, res) {
-    var newMessage = new Message({
-        from: req.user.name,
-        to: req.body.to,
-        subject: req.body.subject,
-        content: req.body.content,
-        type: 'draft',
-        sentTime: new Date()
-    });
-    newMessage.save(function (err) {
-        if (err) {
-            return res.json({success: false, msg: 'Error'});
-        }
-        res.json({success: true, msg: 'Saved as draft'});
-    });
+    if (req.user) {
+        var newMessage = new Message({
+            from: req.user.name,
+            to: req.body.to,
+            subject: req.body.subject,
+            content: req.body.content,
+            type: 'draft',
+            sentTime: new Date()
+        });
+        newMessage.save(function (err) {
+            if (err) {
+                return res.json({success: false, msg: 'Error'});
+            }
+            res.json({success: true, msg: 'Saved as draft'});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 
 var getMessagesForInbox = function (req, res) {
+    if (req.user) {
 
-    Message.find({'type': 'inbox', 'to': req.user.name}, function (err, messages) {
-        if (err)
-            return console.error(err);
-        res.json({messages: messages, length: messages.length});
-    });
+        Message.find({'type': 'inbox', 'to': req.user.name}, function (err, messages) {
+            if (err)
+                return console.error(err);
+            res.json({messages: messages, length: messages.length});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 var getMessagesForDrafts = function (req, res) {
+    if (req.user) {
 
-    Message.find({'type': 'draft', 'from': req.user.name}, function (err, messages) {
-        if (err)
-            return console.error(err);
-        res.json({messages: messages});
-    });
+        Message.find({'type': 'draft', 'from': req.user.name}, function (err, messages) {
+            if (err)
+                return console.error(err);
+            res.json({messages: messages});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 var getMessagesForSent = function (req, res) {
+    if (req.user) {
 
-    Message.find({'type': 'sent', 'from': req.user.name}, function (err, messages) {
-        if (err)
-            return console.error(err);
-        res.json({messages: messages});
-    });
+        Message.find({'type': 'sent', 'from': req.user.name}, function (err, messages) {
+            if (err)
+                return console.error(err);
+            res.json({messages: messages});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 var getMessagesForTrash = function (req, res) {
+    if (req.user) {
 
-    Message.find({'type': 'trash', 'owner': req.user.name}, function (err, messages) {
-        if (err)
-            return console.error(err);
-        res.json({messages: messages});
-    });
+        Message.find({'type': 'trash', 'owner': req.user.name}, function (err, messages) {
+            if (err)
+                return console.error(err);
+            res.json({messages: messages});
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 var getNumberOfMessages = function (req, res) {
+    if (req.user) {
 
-    Message.find({'type': 'inbox', 'to': req.user.name}, function (err, inboxMessages) {
-        if (err)
-            return console.error(err);
-        Message.find({'type': 'draft', 'from': req.user.name}, function (err, draftMessages) {
+        Message.find({'type': 'inbox', 'to': req.user.name}, function (err, inboxMessages) {
             if (err)
                 return console.error(err);
-            Message.find({'type': 'sent', 'from': req.user.name}, function (err, sentMessages) {
+            Message.find({'type': 'draft', 'from': req.user.name}, function (err, draftMessages) {
                 if (err)
                     return console.error(err);
-                Message.find({'type': 'trash', 'owner': req.user.name}, function (err, trashMessages) { //фильтр по пользователю???
+                Message.find({'type': 'sent', 'from': req.user.name}, function (err, sentMessages) {
                     if (err)
                         return console.error(err);
-                    res.json({inbox: inboxMessages.length, draft: draftMessages.length,
-                        sent: sentMessages.length, trash: trashMessages.length});
+                    Message.find({'type': 'trash', 'owner': req.user.name}, function (err, trashMessages) { //фильтр по пользователю???
+                        if (err)
+                            return console.error(err);
+                        res.json({inbox: inboxMessages.length, draft: draftMessages.length,
+                            sent: sentMessages.length, trash: trashMessages.length});
+                    });
                 });
             });
         });
-    });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 
 var getMessageDetails = function (req, res) {
-    console.log(req.query.message_id);
+    if (req.user) {
+        console.log(req.query.message_id);
 
-    Message.findOne({'_id': req.query.message_id}, function (err, message) {
-        if (err)
-            return console.error(err);
-        //console.log(message);
-        message.read = true;
-        message.save(function (err) {
-            if (err) {
-                return res.json({success: false, msg: 'Error'});
-            }
-            res.json({message: message});
-        });       
-    });
+        Message.findOne({'_id': req.query.message_id}, function (err, message) {
+            if (err)
+                return console.error(err);
+            //console.log(message);
+            message.read = true;
+            message.save(function (err) {
+                if (err) {
+                    return res.json({success: false, msg: 'Error'});
+                }
+                res.json({message: message});
+            });
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
 var moveToTrash = function (req, res) {
-    console.log("Moving items to trash");
+    if (req.user) {
+        console.log("Moving items to trash");
 
-    var messages = req.body.ids;
-    var movedToTrashFrom = req.body.source;
-   // console.log("MESSAGE", messages);
-   // console.log("MOVED", movedToTrashFrom);
+        var messages = req.body.ids;
+        var movedToTrashFrom = req.body.source;
+        // console.log("MESSAGE", messages);
+        // console.log("MOVED", movedToTrashFrom);
 
 
-    for (var key in messages) {
-        if (req.body.ids.hasOwnProperty(key)) {
-            messageId = req.body.ids[key];
-            console.log(messageId);
-            //console.log(message.selected);
-            Message.findOne({'_id': messageId}, function (err, message) {
-                if (err)
-                    return console.error(err);
-                message.type = 'trash';
-                message.movedToTrashFrom = movedToTrashFrom;
-                message.owner = req.user.name;
-                message.save(function (err) {
+        for (var key in messages) {
+            if (req.body.ids.hasOwnProperty(key)) {
+                messageId = req.body.ids[key];
+                console.log(messageId);
+                //console.log(message.selected);
+                Message.findOne({'_id': messageId}, function (err, message) {
+                    if (err)
+                        return console.error(err);
+                    message.type = 'trash';
+                    message.movedToTrashFrom = movedToTrashFrom;
+                    message.owner = req.user.name;
+                    message.save(function (err) {
+                        if (err) {
+                            return res.json({success: false, msg: 'Error'});
+                        }
+
+                    });
+                });
+
+            }
+        }
+        res.json({success: true, msg: 'Moved to trash'});
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+var deleteMessage = function (req, res) {
+    if (req.user) {
+        console.log("Deleting messages");
+
+        var messages = req.body;
+        //console.log(messages);
+
+
+        for (var key in messages) {
+            if (req.body.hasOwnProperty(key)) {
+                messageId = req.body[key];
+                console.log(messageId);
+                //console.log(message.selected);
+                Message.remove({'_id': messageId}, function (err) {
                     if (err) {
                         return res.json({success: false, msg: 'Error'});
                     }
 
                 });
-            });
 
+            }
         }
+        res.json({success: true, msg: 'Messages deleted'});
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
     }
-    res.json({success: true, msg: 'Moved to trash'});
-};
-
-var deleteMessage = function (req, res) {
-    console.log("Deleting messages");
-
-    var messages = req.body;
-    //console.log(messages);
-
-
-    for (var key in messages) {
-        if (req.body.hasOwnProperty(key)) {
-            messageId = req.body[key]; 
-            console.log(messageId);
-            //console.log(message.selected);
-            Message.remove({'_id': messageId}, function (err) {
-                if (err) {
-                    return res.json({success: false, msg: 'Error'});
-                }
-
-            });
-
-        }
-    }
-    res.json({success: true, msg: 'Messages deleted'});
 
 };
 
 
 var markAsRead = function (req, res) { // TBD
-    console.log("Marking as read/unread");
+    if (req.user) {
+        console.log("Marking as read/unread");
 
-    var messages = req.body;
+        var messages = req.body;
 
-    for (var key in messages) {
-        if (req.body.hasOwnProperty(key)) {
-            messageId = req.body[key];
-            console.log(messageId);
-            Message.findOne({'_id': messageId}, function (err, message) {
-                if (err)
-                    return console.error(err);
-                if (message.read == true) {
-                    message.read = false;
-                } else {
-                    message.read = true;
-                }
-                message.save(function (err) {
-                    if (err) {
-                        return res.json({success: false, msg: 'Error'});
+        for (var key in messages) {
+            if (req.body.hasOwnProperty(key)) {
+                messageId = req.body[key];
+                console.log(messageId);
+                Message.findOne({'_id': messageId}, function (err, message) {
+                    if (err)
+                        return console.error(err);
+                    if (message.read == true) {
+                        message.read = false;
+                    } else {
+                        message.read = true;
                     }
+                    message.save(function (err) {
+                        if (err) {
+                            return res.json({success: false, msg: 'Error'});
+                        }
 
+                    });
                 });
-            });
 
+            }
         }
+        res.json({success: true, msg: 'Marked as read/unread'});
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
     }
-    res.json({success: true, msg: 'Marked as read/unread'});
 };
 
 
 var moveBackFromTrash = function (req, res) {
-    console.log("Moving items back from trash");
+    if (req.user) {
+        console.log("Moving items back from trash");
 
-    var messages = req.body;
+        var messages = req.body;
 
-    for (var key in messages) {
-        if (req.body.hasOwnProperty(key)) {
-            messageId = req.body[key];
-            console.log(messageId);
-            //console.log(message.selected);
-            Message.findOne({'_id': messageId}, function (err, message) {
-                if (err)
-                    return console.error(err);
-                message.type = message.movedToTrashFrom;
-                message.save(function (err) {
-                    if (err) {
-                        return res.json({success: false, msg: 'Error'});
-                    }
+        for (var key in messages) {
+            if (req.body.hasOwnProperty(key)) {
+                messageId = req.body[key];
+                console.log(messageId);
+                //console.log(message.selected);
+                Message.findOne({'_id': messageId}, function (err, message) {
+                    if (err)
+                        return console.error(err);
+                    message.type = message.movedToTrashFrom;
+                    message.save(function (err) {
+                        if (err) {
+                            return res.json({success: false, msg: 'Error'});
+                        }
+                    });
                 });
-            });
 
+            }
         }
+        res.json({success: true, msg: 'Moved back from trash'});
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
     }
-    res.json({success: true, msg: 'Moved back from trash'});
 };
 
 

@@ -41,7 +41,7 @@ var greetUser = function (req, res) {
 var sendNewPassword = function (req, res) {
 
     var filePath = path.join(__dirname, 'mail_messages/new_password_message.html');
-    var transporter = nodemailer.createTransport(mailConfig.smtpConfig);
+    var transporter = nodemailer.createTransport(smtpConfig);
 
     fs.readFile(filePath, 'utf8', function (err, mailMessage) {
         if (err) {
@@ -49,7 +49,7 @@ var sendNewPassword = function (req, res) {
         }
         
         var mailMessageWithParams = ejs.render(mailMessage, {
-            userName: req.user.name,
+            userName: req.user.name, //здесь неправильно
             password: 'qwerty'
         });
 
