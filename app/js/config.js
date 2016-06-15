@@ -867,9 +867,17 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('forgot_password', {
                 url: "/forgot_password",
-                templateUrl: "views/forgot_password.html",
+                templateUrl: "views/account/forgot_password.html",
                 controller: 'loginController',
+                controllerAs: 'vm',
                 data: {pageTitle: 'Forgot password', specialClass: 'gray-bg'}
+            })
+            .state('reset_password', {
+                url: "/reset_password",
+                templateUrl: "views/account/reset_password.html",
+                controller: 'loginController',
+                controllerAs: 'vm',
+                data: {pageTitle: 'Reset password', specialClass: 'gray-bg'}
             })
             .state('errorOne', {
                 url: "/errorOne",

@@ -3490,6 +3490,21 @@ function loginCtrl($scope, $http, $state) {
                 });
 
     };
+    
+    
+    this.sendNewPassword = function () {
+        console.log("HIT!!");
+        $http({
+            method: 'GET',
+            url: 'api/send_new_password'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('landing');
+                    }
+                });
+
+    };
 
 }
 
