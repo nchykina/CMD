@@ -3470,6 +3470,19 @@ function loginCtrl($scope, $http, $state) {
         }
     };
 
+    this.logout = function () {
+          $http({
+            method: 'GET',
+            url: 'api/logout'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('landing');
+                    }
+                });
+   
+    }; 
+
 }
 
 /**

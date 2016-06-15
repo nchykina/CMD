@@ -164,6 +164,11 @@ var saveProfileChanges = function (req, res) {
 
 };
 
+var logout = function (req, res) {
+    req.logout();
+    res.json({success: true, msg: 'User logged out'});
+};
+
 
 var bindFunction = function (router) {
     router.post('/login', login);
@@ -172,6 +177,7 @@ var bindFunction = function (router) {
     router.get('/session', authenticateMw, session_content);
     router.get('/memberinfo', authenticateMw, memberinfo);
     router.post('/save_profile_changes', saveProfileChanges);
+    router.get('/logout', logout);
 };
 
 module.exports = {
