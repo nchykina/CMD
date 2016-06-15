@@ -1,6 +1,6 @@
 var Message = require('../models/message');
 var nodemailer = require('nodemailer');
-var mailConfig = require('../config/mailconfig');
+var smtpConfig = require('../config/mailconfig');
 var fs = require('fs');
 var path = require('path');
 var ejs = require('ejs');
@@ -9,7 +9,7 @@ var ejs = require('ejs');
 var greetUser = function (req, res) {
 
     var filePath = path.join(__dirname, 'mail_messages/greeting_message.html');
-    var transporter = nodemailer.createTransport(mailConfig.smtpConfig);
+    var transporter = nodemailer.createTransport(smtpConfig);
 
     fs.readFile(filePath, 'utf8', function (err, mailMessage) {
         if (err) {
@@ -30,7 +30,8 @@ var greetUser = function (req, res) {
       
         transporter.sendMail(mailData, function (error, info) {
             if (error) {
-                return res.json({success: false, msg: 'Error'});
+                console.error(error);
+                return res.json({success: false, msg: 'Error sending to '+req.user.email});
             }
             res.json({success: true, msg: 'Message sent'});
         });
