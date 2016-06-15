@@ -7,8 +7,4 @@ var smtpConfig = {
     }
 };
 
-var directConfig = {
-    name: 'mail.ngspipeline.com',   
-};
-
 module.exports = smtpConfig;
