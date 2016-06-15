@@ -26,6 +26,7 @@ var getProductList = function (req, res) {
                         'description_short': productList[key].description_short,
                         'description_long': productList[key].description_long,
                         'img_url': productList[key].img_url,
+                        'product_url': productList[key].product_url,
                         'inCart': true
                     });
                 } else {
@@ -35,6 +36,7 @@ var getProductList = function (req, res) {
                         'description_short': productList[key].description_short,
                         'description_long': productList[key].description_long,
                         'img_url': productList[key].img_url,
+                        'product_url': productList[key].product_url,
                         'inCart': false});
                 }
 
@@ -55,6 +57,7 @@ var addToCart = function (req, res) {
         var item = {productName: productList[id].productName, productCategory: productList[id].productCategory,
             price: productList[id].price, description_short: productList[id].description_short,
             description_long: productList[id].description_long, img_url: productList[id].img_url,
+            product_url: productList[id].product_url,
             addedDate: new Date(), productId: id};
 
         User.findOne({'_id': req.user._id}, function (err, user) {

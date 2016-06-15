@@ -6,7 +6,7 @@
         description_long:'Bioinformatics packages used for de novo assembly include Tophat, Trinity and Velvet. Common de novo \
         assembly techniques comprise De Brujin graphs, suffix trees\
         and different modifications of greedy algorithm.',
-        img_url: 'img/products/prod1.png'},
+        img_url: 'img/products/prod1.png', product_url: 'commerce.product_details1'},
         
         
         {productName: 'RNA resequencing', productCategory: 'Additional content', price: 20,
@@ -16,7 +16,7 @@
         description_long: 'RNA sequencing is usually used to compare gene expression between conditions, such \
         as drug treatment vs untreated. Bioinformatic tools used for RNA sequencing include both common alignment\
          tools like Bowtie/BWA, as well as specialized differential expression and splicing analysis tools.',
-        img_url: 'img/products/prod2.png'},
+        img_url: 'img/products/prod2.png', product_url: 'commerce.product_details1'},
         
         
         {productName: 'Extra upload size', productCategory: 'Extra upload/storage size', price: 30,
@@ -28,7 +28,7 @@
         it ensures that the information extracted from reads is statistically significant. Good coverage \
         for realignment pipeline is around 20-40x for the whole genome, so the larger is the genome you \
         analyze, the larger should be your files with reads.', 
-         img_url: 'img/products/prod3.png'},
+         img_url: 'img/products/prod3.png', product_url: 'commerce.product_details2'},
      
     
         {productName: 'Extra storage size', productCategory: 'Extra upload/storage size', price: 40,
@@ -40,7 +40,7 @@
         actually store only input and output files and do not need HDD space for genome files\
         (they are available for you on our server), as well as for files generated on\
         intermediary steps of the pipeline (like .mpileup files, for instance).',
-        img_url: 'img/products/prod4.png'},
+        img_url: 'img/products/prod4.png', product_url: 'commerce.product_details2'},
     
    
         {productName: 'Extra vCPUs', productCategory: 'Processing capacity', price: 50,
@@ -53,7 +53,7 @@
         bioinformatics is somewhat special here, as the majority of standard steps in every \
         processing pipeline still can be launched in parallel. Therefore, parallel computing \
         skills are widespread and highly demanded among bioinformaticians.', 
-        img_url: 'img/products/prod5.png'},
+        img_url: 'img/products/prod5.png', product_url: 'commerce.product_details3'},
     
     
         {productName: 'Enable MPI', productCategory: 'Processing capacity', price: 60,
@@ -65,7 +65,7 @@
          use RDMA technology (direct access to RAM across computing units). This tremendously affects \
         the speed of calculations, as the data should not be transferred across nodes in the cluster \
         any more during calculations, so the whole cluster turns into a single extra-powerful computer.', 
-        img_url: 'img/products/prod6.png'},
+        img_url: 'img/products/prod6.png', product_url: 'commerce.product_details3'},
     
     
         {productName: 'Add a custom pipeline', productCategory: 'Custom pipelines', price: 100,
@@ -77,7 +77,7 @@
         We will make it run in Apache Mesos container and optimize it for parallel processing. As a result,\
         you will have private access to your pipeline via a convenient browser interface, plus powerful\
         infrastructure to run it efficiently.', 
-        img_url: 'img/products/prod7.png'}
+        img_url: 'img/products/prod7.png', product_url: 'commerce.product_details4'}
     ];
 
 module.exports = productList;
