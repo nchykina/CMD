@@ -41,17 +41,19 @@
                             </div>
                             <div class="form-group" ng-if="vm.change">
                                 <label class="col-sm-2 control-label">Old password*</label>
-                                <div class="col-sm-6"><input type="text" class="form-control">
+                                <div class="col-sm-6"><input type="text" class="form-control" ng-model="vm.oldPassword"
+                                                             required="true">
                                 </div>
                             </div>
                             <div class="form-group" ng-if="vm.change">
                                 <label class="col-sm-2 control-label">New password*</label>
-                                <div class="col-sm-6"><input type="text" class="form-control">
+                                <div class="col-sm-6"><input type="text" class="form-control" ng-model="vm.newPassword"
+                                                             required="true">
                                 </div>
                             </div>
                             <div class="form-group" ng-if="vm.change"><label class="col-sm-2 control-label"></label>
                                 <div class="col-lg-6">
-                                    <button class="btn btn-primary" ng-click="vm.changePassword()">Save</button>
+                                    <button class="btn btn-primary" ng-click="vm.updatePassword()">Save</button>
                                     <button class="btn btn-danger" ng-click="vm.changePassword()">Cancel</button>
 
                                 </div>

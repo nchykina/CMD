@@ -148,7 +148,6 @@ var authenticateMw = function (req, res, next) {
 
 var saveProfileChanges = function (req, res) {
     var userData = req.body;
-    console.log("USER DATA IN NODE", req.body);
 
     User.findOne({'_id': req.user._id}, function (err, user) {
         if (err)
@@ -165,7 +164,32 @@ var saveProfileChanges = function (req, res) {
             res.json({success: true, msg: 'User profile successfully updated'});
         });
     });
+};
 
+var updatePassword = function (req, res) {
+    
+    var userId = req.user._id;
+    var oldPassword = req.body.oldPassword;
+    var newPassword = req.body.newPassword;
+    
+    console.log("USER DATA IN NODE", userId, " ", oldPassword, " ", newPassword);
+    res.json({success: true, msg: 'Done'});
+
+   /* User.findOne({'_id': req.user._id}, function (err, user) {
+        if (err)
+            return console.error(err);
+
+        user.firstname = userData.firstname;
+        user.lastname = userData.lastname;
+        user.company = userData.company;
+
+        user.save(function (err) {
+            if (err) {
+                return res.json({success: false, msg: 'User data not updated'});
+            }
+            res.json({success: true, msg: 'User profile successfully updated'});
+        });
+    });*/
 };
 
 var logout = function (req, res) {
@@ -182,6 +206,7 @@ var bindFunction = function (router) {
     router.get('/memberinfo', authenticateMw, memberinfo);
     router.post('/save_profile_changes', saveProfileChanges);
     router.get('/logout', logout);
+    router.post('/update_password', updatePassword);
 };
 
 module.exports = {

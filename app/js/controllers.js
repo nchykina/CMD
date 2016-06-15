@@ -3478,6 +3478,22 @@ function loginCtrl($scope, $http, $state) {
         }
     };
 
+    this.updatePassword = function () {
+        $http({
+            method: 'POST',
+            url: 'api/update_password',
+            data:  {'oldPassword': vm.oldPassword, 'newPassword': vm.newPassword} 
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("Password changed");
+                        vm.change = false;
+                        vm.oldPassword = '';
+                        vm.newPassword = '';
+                    }
+                });
+    };
+
     this.logout = function () {
         $http({
             method: 'GET',
@@ -3490,8 +3506,8 @@ function loginCtrl($scope, $http, $state) {
                 });
 
     };
-    
-    
+
+
     this.sendNewPassword = function () {
         console.log("HIT!!");
         $http({

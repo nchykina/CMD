@@ -22,7 +22,7 @@ var greetUser = function (req, res) {
 
         var mailData = {
             from: 'support@ngspipeline.com',
-            to: 'support@ngspipeline.com', // update to user email when ready
+            to: req.user.email, // update to user email when ready
             subject: 'Welcome to NGS Pipeline!',
             text: 'Plaintext version of the message', // TBD
             html: mailMessageWithParams
@@ -54,7 +54,7 @@ var sendNewPassword = function (req, res) {
 
         var mailData = {
             from: 'support@ngspipeline.com',
-            to: 'support@ngspipeline.com', // update to user email when ready
+            to: req.user.email, // update to user email when ready
             subject: 'Your new password for NGS Pipeline',
             text: 'Plaintext version of the message', // TBD
             html: mailMessageWithParams
