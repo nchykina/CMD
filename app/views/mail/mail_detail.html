@@ -22,8 +22,8 @@
         <div class="col-lg-9 animated fadeInRight">
             <div class="mail-box-header">
                 <div class="pull-right tooltip-demo">
-                    <a ui-sref="mailbox.mail_compose" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
-                    <a ui-sref="mailbox.inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
+                    <a ui-sref="mailbox.mail_compose" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
+                    <a ui-sref="mailbox.inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
                 </div>
                 <h2>
                     View Message
@@ -54,8 +54,10 @@
                     
                 </div>                              
                 <div class="mail-body text-right tooltip-demo">
-                    <a ui-sref="mailbox.mail_compose" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
-                    <a ui-sref="mailbox.inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
+                    <button ng-click="vm.reply(vm.currentMessage.from, vm.currentMessage.content)"
+                       class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" 
+                       title="Reply"><i class="fa fa-reply"></i> Reply</button>
+                    <a ui-sref="mailbox.inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
                 </div>
                 <div class="clearfix"></div>
 

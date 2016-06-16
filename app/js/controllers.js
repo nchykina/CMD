@@ -3591,8 +3591,8 @@ function loginCtrl($scope, $http, $state) {
 function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
     var vm = this;
 
-    this.message = {};
-    vm.messages = [];
+    vm.message = {};
+    //vm.messages = [];
 
     vm.messagesForInbox = [];
     vm.messagesForDrafts = [];
@@ -3612,7 +3612,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             if (sessionStorage.messageId) {
                 console.log("SESSION STORAGE 2 ", sessionStorage.messageId);
                 console.log("MEANWHILE IN CURRENT MESSAGE ", vm.currentMessage._id);
-                
+
                 //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
                 vm.currentMessage = {'_id': sessionStorage.messageId,
                     'from': sessionStorage.messageFrom,
@@ -3632,15 +3632,17 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             url: 'api/get_messages'
         })
                 .success(function (data) {
-                    vm.messagesForInbox = data.messagesForInbox;
-                    vm.messagesForDrafts = data.messagesForDrafts;
-                    vm.messagesForSent = data.messagesForSent;
-                    vm.messagesForTrash = data.messagesForTrash;
+                    if (data.success) {
+                        vm.messagesForInbox = data.messagesForInbox;
+                        vm.messagesForDrafts = data.messagesForDrafts;
+                        vm.messagesForSent = data.messagesForSent;
+                        vm.messagesForTrash = data.messagesForTrash;
 
-                    vm.numberOfInbox = data.inbox;
-                    vm.numberOfDraft = data.draft;
-                    vm.numberOfSent = data.sent;
-                    vm.numberOfTrash = data.trash;
+                        vm.numberOfInbox = data.inbox;
+                        vm.numberOfDraft = data.draft;
+                        vm.numberOfSent = data.sent;
+                        vm.numberOfTrash = data.trash;
+                    }
 
                 });
     };
@@ -3655,9 +3657,6 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         $state.go('mailbox.inbox');
-
-                    } else {
-                        this.message = data.msg;
                     }
                 });
     };
@@ -3671,11 +3670,18 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         $state.go('mailbox.inbox');
-
-                    } else {
-                        this.message = data.msg;
                     }
                 });
+    };
+
+
+    this.reply = function (to, text) {
+
+        vm.message.to = to;
+        vm.message.content = text;
+        sessionStorage.to = to;
+        sessionStorage.content = text;
+        $state.go('mailbox.mail_compose', {myParam: {to: to}});
     };
 
 
@@ -3688,17 +3694,19 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
 
         })
                 .success(function (data) {
-                    vm.currentMessage = data.message;
-                    //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
-                    sessionStorage.messageId = data.message._id;
-                    sessionStorage.messageTo = data.message.to;
-                    sessionStorage.messageFrom = data.message.from;
-                    sessionStorage.messageSubject = data.message.subject;
-                    sessionStorage.messageSentTime = data.message.sentTime;
-                    sessionStorage.messageContent = data.message.content;
+                    if (data.success) {
+                        vm.currentMessage = data.message;
+                        //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
+                        sessionStorage.messageId = data.message._id;
+                        sessionStorage.messageTo = data.message.to;
+                        sessionStorage.messageFrom = data.message.from;
+                        sessionStorage.messageSubject = data.message.subject;
+                        sessionStorage.messageSentTime = data.message.sentTime;
+                        sessionStorage.messageContent = data.message.content;
 
-                    console.log("SESSION STORAGE 1 ", sessionStorage.messageId);
-                    $state.go('mailbox.email_view');
+                        console.log("SESSION STORAGE 1 ", sessionStorage.messageId);
+                        $state.go('mailbox.email_view');
+                    }
 
                 });
     };
