@@ -109,18 +109,17 @@ var getMessages = function (req, res) {
 
 var getMessageDetails = function (req, res) {
     if (req.user) {
-        console.log(req.query.message_id);
+        console.log("MESSAGE ID", req.query.message_id);
 
         Message.findOne({'_id': req.query.message_id}, function (err, message) {
             if (err)
-                return console.error(err);
-            //console.log(message);
+                return res.json({success: false, msg: 'Error'});
             message.read = true;
             message.save(function (err) {
                 if (err) {
                     return res.json({success: false, msg: 'Error'});
                 }
-                res.json({message: message});
+                res.json({success: true, message: message});
             });
         });
     } else {
@@ -134,9 +133,6 @@ var moveToTrash = function (req, res) {
 
         var messages = req.body.ids;
         var movedToTrashFrom = req.body.source;
-        // console.log("MESSAGE", messages);
-        // console.log("MOVED", movedToTrashFrom);
-
 
         for (var key in messages) {
             if (req.body.ids.hasOwnProperty(key)) {
@@ -177,7 +173,6 @@ var deleteMessage = function (req, res) {
             if (req.body.hasOwnProperty(key)) {
                 messageId = req.body[key];
                 console.log(messageId);
-                //console.log(message.selected);
                 Message.remove({'_id': messageId}, function (err) {
                     if (err) {
                         return res.json({success: false, msg: 'Error'});

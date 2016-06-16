@@ -31,7 +31,7 @@
 
                 <div class="mail-tools tooltip-demo m-t-md">
                     <h3>
-                        <span class="font-noraml">Subject: {{md.message.subject}} </span>
+                        <span class="font-noraml">Subject: {{vm.currentMessage.subject}} </span>
                     </h3>
                     <h5>
                         <span class="pull-right font-noraml">{{vm.currentMessage.sentTime | date:'MMM d, yyyy'}}</span>
@@ -48,7 +48,7 @@
 
                 <div class="mail-body">
                     <p>
-                        {{md.message.content}}
+                        {{vm.currentMessage.content}}
                     </p>
 
                     

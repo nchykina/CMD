@@ -25,7 +25,7 @@ var greetUser = function (req, res) {
 
         var mailData = {
             from: 'support@ngspipeline.com',
-            to: req.user.email, // update to user email when ready
+            to: req.user.email,
             subject: 'Welcome to NGS Pipeline!',
             text: 'Plaintext version of the message', // TBD
             html: mailMessageWithParams

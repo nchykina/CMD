@@ -3556,33 +3556,31 @@ function loginCtrl($scope, $http, $state) {
  *
  */
 
-function mailDetailCtrl($scope, $http, $state, $stateParams) {
-    var vm = this;
-
-    vm.messageId = $stateParams.messageId;
-    vm.message = {};
-
-    console.log($stateParams);
-    console.log("contoller id: " + vm.messageId);
-
-    //vm.getMessagesForInbox();
-
-    this.getMessageDetails = function () {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_message_details',
-            params: {message_id: vm.messageId}
-
-        })
-                .success(function (response) {
-                    console.log(response);
-                    vm.message = response.message;
-                });
-    };
-
-    this.getMessageDetails();
-}
+/*function mailDetailCtrl($scope, $http, $state, $stateParams) {
+ var vm = this;
+ 
+ vm.messageId = $stateParams.messageId;
+ vm.message = {};
+ 
+ console.log($stateParams);
+ console.log("contoller id: " + vm.messageId);
+ 
+ this.getMessageDetails = function () {
+ 
+ $http({
+ method: 'GET',
+ url: 'api/get_message_details',
+ params: {message_id: vm.messageId}
+ 
+ })
+ .success(function (response) {
+ console.log(response);
+ vm.message = response.message;
+ });
+ };
+ 
+ this.getMessageDetails();
+ }*/
 
 /**
  * mailboxCtrl - mailbox controller
@@ -3590,7 +3588,7 @@ function mailDetailCtrl($scope, $http, $state, $stateParams) {
  *
  */
 
-function mailboxCtrl($scope, $http, $state, messageService) {
+function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
     var vm = this;
 
     this.message = {};
@@ -3606,8 +3604,26 @@ function mailboxCtrl($scope, $http, $state, messageService) {
     vm.numberOfSent = {};
     vm.numberOfTrash = {};
 
+    vm.currentMessage = {};
+
     this.init = function () {
         vm.getMessages();
+        if ($state.current.name == "mailbox.email_view") {
+            if (sessionStorage.messageId) {
+                console.log("SESSION STORAGE 2 ", sessionStorage.messageId);
+                console.log("MEANWHILE IN CURRENT MESSAGE ", vm.currentMessage._id);
+                
+                //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
+                vm.currentMessage = {'_id': sessionStorage.messageId,
+                    'from': sessionStorage.messageFrom,
+                    'to': sessionStorage.messageTo,
+                    'subject': sessionStorage.messageSubject,
+                    'sentTime': sessionStorage.messageSentTime,
+                    'content': sessionStorage.messageContent
+                };
+            }
+        }
+
     };
 
     this.getMessages = function () {
@@ -3616,7 +3632,6 @@ function mailboxCtrl($scope, $http, $state, messageService) {
             url: 'api/get_messages'
         })
                 .success(function (data) {
-                    console.log("TESTTESTTEST");
                     vm.messagesForInbox = data.messagesForInbox;
                     vm.messagesForDrafts = data.messagesForDrafts;
                     vm.messagesForSent = data.messagesForSent;
@@ -3663,8 +3678,6 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 });
     };
 
-    vm.test = 'TEST';
-    vm.currentMessage = messageService.message;
 
     this.getMessageDetails = function (messageId) {
 
@@ -3674,10 +3687,19 @@ function mailboxCtrl($scope, $http, $state, messageService) {
             params: {message_id: messageId}
 
         })
-                .success(function (response) {
-                    console.log(response);
-                    messageService.message = response.message;
+                .success(function (data) {
+                    vm.currentMessage = data.message;
+                    //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
+                    sessionStorage.messageId = data.message._id;
+                    sessionStorage.messageTo = data.message.to;
+                    sessionStorage.messageFrom = data.message.from;
+                    sessionStorage.messageSubject = data.message.subject;
+                    sessionStorage.messageSentTime = data.message.sentTime;
+                    sessionStorage.messageContent = data.message.content;
+
+                    console.log("SESSION STORAGE 1 ", sessionStorage.messageId);
                     $state.go('mailbox.email_view');
+
                 });
     };
 
@@ -4133,9 +4155,9 @@ angular
         .controller('tourCtrl', tourCtrl)
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
-        .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl])
+        .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
         .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl])
-        .controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
+        //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
