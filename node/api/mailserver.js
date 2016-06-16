@@ -69,7 +69,7 @@ var sendNewPassword = function (req, res) {
                 });
                 var mailData = {
                     from: 'support@ngspipeline.com',
-                    to: user.email, 
+                    to: user.email,
                     subject: 'Your new password for NGS Pipeline',
                     text: 'Plaintext version of the message', // TBD
                     html: mailMessageWithParams
@@ -86,9 +86,46 @@ var sendNewPassword = function (req, res) {
 };
 
 
+//отправляет письмо о том, что пароль был изменен
+var confirmResetPassword = function (req, res) {
+
+    var userNameTemp = req.body.userNameTemp;
+    var filePath = path.join(__dirname, 'mail_messages/password_reset_confirmation.html');
+    var transporter = nodemailer.createTransport(smtpConfig);
+
+    fs.readFile(filePath, 'utf8', function (err, mailMessage) {
+        if (err) {
+            console.log(err);
+        }
+
+        User.findOne({'name': userNameTemp}, function (err, user) {
+            if (err)
+                return res.json({success: false, msg: 'No user with such email in the database'});
+
+            var mailData = {
+                from: 'support@ngspipeline.com',
+                to: user.email, 
+                subject: 'Your password has been reset successfully',
+                text: 'Plaintext version of the message', // TBD
+                html: mailMessage
+            };
+
+            transporter.sendMail(mailData, function (error, info) {
+                if (error) {
+                    console.error(error);
+                    return res.json({success: false, msg: 'Error sending to ' + user.email});
+                }
+                res.json({success: true, msg: 'Message sent'});
+            });
+        });
+    });
+};
+
+
 var bindFunction = function (router) {
     router.get('/greet_user', greetUser);
     router.post('/send_new_password', sendNewPassword);
+    router.post('/confirm_reset_password', confirmResetPassword);
 };
 
 module.exports = {

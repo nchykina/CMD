@@ -22,7 +22,7 @@
         img_url: 'img/products/prod2.png', product_url: 'commerce.product_details1'},
         
         
-        /*
+        
         {productName: 'Extra upload size', productCategory: 'Extra upload/storage size', price: 30,
         description_short: 'This upgrade allows you to upload files up to 20G to our system, while \
         the free file size upload limit is 5G. If you need to upload larger files by any chance, \
@@ -32,7 +32,7 @@
         it ensures that the information extracted from reads is statistically significant. Good coverage \
         for realignment pipeline is around 20-40x for the whole genome, so the larger is the genome you \
         analyze, the larger should be your files with reads.', 
-         img_url: 'img/products/prod3.png', product_url: 'commerce.product_details2'},*/
+         img_url: 'img/products/prod3.png', product_url: 'commerce.product_details2'},
      
        //20 за 5$, 100 за 20$
         {productName: 'Extra storage size', productCategory: 'Extra upload/storage size', price: 40,
@@ -59,7 +59,7 @@
         skills are widespread and highly demanded among bioinformaticians.', 
         img_url: 'img/products/prod5.png', product_url: 'commerce.product_details3'},
     
-    /*
+    
         {productName: 'Enable MPI', productCategory: 'Processing capacity', price: 60,
         description_short: 'MPI is a communication protocol for programming parallel computers\
          that remains a de facto standard for high performance computing today. Purchasing this upgrade \
@@ -70,7 +70,7 @@
         the speed of calculations, as the data should not be transferred across nodes in the cluster \
         any more during calculations, so the whole cluster turns into a single extra-powerful computer.', 
         img_url: 'img/products/prod6.png', product_url: 'commerce.product_details3'},
-    */
+    
     
         {productName: 'Add a custom pipeline', productCategory: 'Custom pipelines', price: 100,
         description_short: 'We can migrate the functionality of any of your pipelines to our \

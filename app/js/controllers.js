@@ -3525,7 +3525,6 @@ function loginCtrl($scope, $http, $state) {
     };
 
     this.loginAfterResetPassword = function () {
-        console.log("HIT!! ", vm.userEmail);
         $http({
             method: 'POST',
             url: 'api/update_forgotten_password',
@@ -3535,10 +3534,18 @@ function loginCtrl($scope, $http, $state) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        $state.go('landing');
+                        $http({
+                            method: 'POST',
+                            url: 'api/confirm_reset_password',
+                            data: {'userNameTemp': vm.userNameTemp}
+                        })
+                                .success(function (data) {
+                                    if (data.success) {
+                                        $state.go('login_page');
+                                    }
+                                });
                     }
                 });
-
     };
 
 }
