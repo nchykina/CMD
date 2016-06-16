@@ -34,7 +34,7 @@
                     <li ui-sref-active="active"><a ui-sref="commerce.orders">My purchases</a></li>
                 </ul>
             </li>
-            <li ng-class="{active: $state.includes('mailbox')}" ng-controller="mailboxController as t" ng-init="t.getNumberOfMessages()">
+            <li ng-class="{active: $state.includes('mailbox')}" ng-controller="mailboxController as t" ng-init="t.init()">
                 <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">Support </span>
                     <span class="label label-warning pull-right" ng-if="t.numberOfInbox>0">{{t.numberOfInbox}}</span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('mailbox')}">

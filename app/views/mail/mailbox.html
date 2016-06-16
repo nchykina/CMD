@@ -1,5 +1,5 @@
-<div class="wrapper wrapper-content" ng-init="vm.getMessagesForInbox()">
-    <div class="row" ng-init="vm.getNumberOfMessages()">
+<div class="wrapper wrapper-content" ng-init="vm.init()">
+    <div class="row">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-content mailbox-content">
@@ -27,7 +27,7 @@
 
                 <div class="mail-tools tooltip-demo m-t-md">
 
-                    <button ng-click="vm.getMessagesForInbox()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
+                    <button ng-click="vm.init()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh"><i class="fa fa-refresh"></i> Refresh</button>
                     <button ng-click="vm.markAsRead()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as read"><i class="fa fa-eye"></i></button>
                     <button ng-click="vm.moveToTrash('inbox')" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash-o"></i></button>
 
@@ -43,7 +43,7 @@
                     <th></th>
                     </thead>
                     <tbody>
-                        <tr ng-attr-class="{{x.read && 'read' || 'unread'}}" ng-repeat="x in vm.messages">
+                        <tr ng-attr-class="{{x.read && 'read' || 'unread'}}" ng-repeat="x in vm.messagesForInbox">
                             <td class="check-mail">
                                 <input icheck type="checkbox" ng-model="x.selected" ng-click="x.selected = true">
                             </td>

@@ -1,5 +1,5 @@
-<div class="wrapper wrapper-content" ng-controller="mailboxController as vm">
-    <div class="row" ng-init="vm.getNumberOfMessages()">
+<div class="wrapper wrapper-content" ng-init="vm.init()">
+    <div class="row">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-content mailbox-content">
@@ -52,17 +52,7 @@
                     </p>
 
                     
-                </div>
-                                <div class="mail-text h-200">
-
-                                <div class="form-group">
-
-                                    <textarea class="form-control message-input-mail" name="message" 
-                                              placeholder="Reply"></textarea>
-                                </div>
-                    
-                    <div class="clearfix"></div>
-                </div>
+                </div>                              
                 <div class="mail-body text-right tooltip-demo">
                     <a ui-sref="mailbox.mail_compose" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
                     <a ui-sref="mailbox.inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>

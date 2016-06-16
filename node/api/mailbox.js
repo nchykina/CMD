@@ -59,13 +59,62 @@ var saveAsDraft = function (req, res) {
 };
 
 
+var getMessages = function (req, res) {
+    var messagesForInbox = [];
+    var messagesForDrafts = [];
+    var messagesForSent = [];
+    var messagesForTrash = [];
+
+
+    if (req.user) {
+        var userName = req.user.name;
+        Message.find({
+            $or: [
+                {'type': 'inbox', 'to': userName},
+                {'type': 'draft', 'from': userName},
+                {'type': 'sent', 'from': userName},
+                {'type': 'trash', 'owner': userName}
+            ]}, function (err, messages) {
+            if (err)
+                return res.json({success: false, msg: "No messages found for this user"});
+            for (var key in messages) {
+                if (messages[key].type == 'inbox') {
+                    messagesForInbox.push(messages[key]);
+                }
+                if (messages[key].type == 'draft') {
+                    messagesForDrafts.push(messages[key]);
+                }
+                if (messages[key].type == 'sent') {
+                    messagesForSent.push(messages[key]);
+                }
+                if (messages[key].type == 'trash') {
+                    messagesForTrash.push(messages[key]);
+                }
+            }
+            res.json({success: true, msg: "List of messages acquired",
+                messagesForInbox: messagesForInbox,
+                messagesForDrafts: messagesForDrafts,
+                messagesForSent: messagesForSent,
+                messagesForTrash: messagesForTrash,
+                inbox: messagesForInbox.length,
+                draft: messagesForDrafts.length,
+                sent: messagesForSent.length,
+                trash: messagesForTrash.length
+            });
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+
 var getMessagesForInbox = function (req, res) {
     if (req.user) {
 
         Message.find({'type': 'inbox', 'to': req.user.name}, function (err, messages) {
             if (err)
                 return console.error(err);
-            res.json({messages: messages, length: messages.length});
+            res.json({success: true, messages: messages});
         });
     } else {
         res.json({success: false, msg: 'No user logged in'});
@@ -295,16 +344,13 @@ var moveBackFromTrash = function (req, res) {
 var bindFunction = function (router) {
     router.post('/create_message', createMessage);
     router.post('/save_as_draft', saveAsDraft);
-    router.get('/get_messages_for_inbox', getMessagesForInbox);
-    router.get('/get_messages_for_drafts', getMessagesForDrafts);
-    router.get('/get_messages_for_sent', getMessagesForSent);
-    router.get('/get_messages_for_trash', getMessagesForTrash);
     router.get('/get_number_of_messages', getNumberOfMessages);
     router.get('/get_message_details', getMessageDetails);
     router.post('/move_to_trash', moveToTrash);
     router.post('/delete_message', deleteMessage);
     router.post('/mark_as_read', markAsRead);
     router.post('/move_back_from_trash', moveBackFromTrash);
+    router.get('/get_messages', getMessages);
 };
 
 module.exports = {

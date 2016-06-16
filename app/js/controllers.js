@@ -3593,16 +3593,42 @@ function mailDetailCtrl($scope, $http, $state, $stateParams) {
 function mailboxCtrl($scope, $http, $state, messageService) {
     var vm = this;
 
-
     this.message = {};
     vm.messages = [];
+
+    vm.messagesForInbox = [];
+    vm.messagesForDrafts = [];
+    vm.messagesForSent = [];
+    vm.messagesForTrash = [];
 
     vm.numberOfInbox = {};
     vm.numberOfDraft = {};
     vm.numberOfSent = {};
     vm.numberOfTrash = {};
 
-    //vm.getMessagesForInbox();
+    this.init = function () {
+        vm.getMessages();
+    };
+
+    this.getMessages = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_messages'
+        })
+                .success(function (data) {
+                    console.log("TESTTESTTEST");
+                    vm.messagesForInbox = data.messagesForInbox;
+                    vm.messagesForDrafts = data.messagesForDrafts;
+                    vm.messagesForSent = data.messagesForSent;
+                    vm.messagesForTrash = data.messagesForTrash;
+
+                    vm.numberOfInbox = data.inbox;
+                    vm.numberOfDraft = data.draft;
+                    vm.numberOfSent = data.sent;
+                    vm.numberOfTrash = data.trash;
+
+                });
+    };
 
     this.submitMessage = function () {
 
@@ -3637,62 +3663,6 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 });
     };
 
-    this.getMessagesForInbox = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_inbox'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                    vm.length = response.data.length;
-                });
-    };
-
-    this.getMessagesForDrafts = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_drafts'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                });
-    };
-
-    this.getMessagesForSent = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_sent'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                    console.log(vm.messages);
-                });
-    };
-
-    this.getMessagesForTrash = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_trash'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                });
-    };
-
-    this.getNumberOfMessages = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_number_of_messages'
-        })
-                .then(function (response) {
-                    vm.numberOfInbox = response.data.inbox;
-                    vm.numberOfDraft = response.data.draft;
-                    vm.numberOfSent = response.data.sent;
-                    vm.numberOfTrash = response.data.trash;
-
-                });
-    };
-
     vm.test = 'TEST';
     vm.currentMessage = messageService.message;
 
@@ -3713,9 +3683,22 @@ function mailboxCtrl($scope, $http, $state, messageService) {
 
     this.moveToTrash = function (movedToTrashFrom) {
         var req = [];
+        var messages = [];
+        if (movedToTrashFrom == 'inbox') {
+            messages = vm.messagesForInbox;
+        }
+        if (movedToTrashFrom == 'draft') {
+            messages = vm.messagesForDrafts;
+        }
+        if (movedToTrashFrom == 'sent') {
+            messages = vm.messagesForSent;
+        }
+        if (movedToTrashFrom == 'trash') {
+            messages = vm.messagesForTrash;
+        }
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in messages) {
+            var v = messages[i];
 
             if (v.selected === true) {
                 req.push(v._id);
@@ -3730,12 +3713,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        vm.messages = $.grep(vm.messages, (function (el) {
-                            var res = $.inArray(el._id, req);
-                            vm.getNumberOfMessages();
-                            return (res == -1);
-                        }));
-
+                        vm.init();
                     }
                 });
     };
@@ -3743,16 +3721,13 @@ function mailboxCtrl($scope, $http, $state, messageService) {
     this.deleteMessage = function () {
         var req = [];
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in vm.messagesForTrash) {
+            var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
                 req.push(v._id);
             }
         }
-
-        console.log(vm.messages);
-
 
         $http({
             method: 'POST',
@@ -3762,10 +3737,9 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log(req);
-                        vm.messages = $.grep(vm.messages, (function (el) {
+                        vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
                             var res = $.inArray(el._id, req);
-                            vm.getNumberOfMessages();
+                            vm.init();
                             return (res == -1);
                         }));
 
@@ -3776,15 +3750,15 @@ function mailboxCtrl($scope, $http, $state, messageService) {
     this.markAsRead = function () {
         var req = [];
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in vm.messagesForInbox) {
+            var v = vm.messagesForInbox[i];
 
             if (v.selected === true) {
                 req.push(v._id);
                 if (v.read === true) {
-                    vm.messages[i].read = false;
+                    vm.messagesForInbox[i].read = false;
                 } else {
-                    vm.messages[i].read = true;
+                    vm.messagesForInbox[i].read = true;
                 }
                 v.selected = false;
             }
@@ -3807,8 +3781,8 @@ function mailboxCtrl($scope, $http, $state, messageService) {
     this.moveBackFromTrash = function () {
         var req = [];
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in vm.messagesForTrash) {
+            var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
                 req.push(v._id);
@@ -3823,9 +3797,9 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        vm.messages = $.grep(vm.messages, (function (el) {
+                        vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
                             var res = $.inArray(el._id, req);
-                            vm.getNumberOfMessages();
+                            vm.init();
                             return (res == -1);
                         }));
                     }
