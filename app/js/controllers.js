@@ -3510,12 +3510,14 @@ function loginCtrl($scope, $http, $state) {
 
     };
 
+    //vm.userEmail = {};
 
     this.sendNewPassword = function () {
-        console.log("HIT!!");
+        console.log("HIT!! ", vm.userEmail);
         $http({
-            method: 'GET',
-            url: 'api/send_new_password'
+            method: 'POST',
+            url: 'api/send_new_password',
+            data: {'userEmail': vm.userEmail}
         })
                 .success(function (data) {
                     if (data.success) {
