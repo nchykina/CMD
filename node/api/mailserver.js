@@ -41,11 +41,8 @@ var greetUser = function (req, res) {
     });
 };
 
-//отправлять новый пароль при forgot password
+//отправляет новый пароль при forgot password
 var sendNewPassword = function (req, res) {
-
-    //var userEmail = req.body.userEmail;
-    console.log("USER EMAIL IN NODE ", req.body.userEmail);
 
     var filePath = path.join(__dirname, 'mail_messages/new_password_message.html');
     var transporter = nodemailer.createTransport(smtpConfig);

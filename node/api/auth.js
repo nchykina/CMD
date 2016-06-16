@@ -147,53 +147,90 @@ var authenticateMw = function (req, res, next) {
 
 
 var saveProfileChanges = function (req, res) {
-    var userData = req.body;
+    if (req.user) {
+        var userData = req.body;
 
-    User.findOne({'_id': req.user._id}, function (err, user) {
-        if (err)
-            return console.error(err);
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return console.error(err);
 
-        user.firstname = userData.firstname;
-        user.lastname = userData.lastname;
-        user.company = userData.company;
+            user.firstname = userData.firstname;
+            user.lastname = userData.lastname;
+            user.company = userData.company;
 
-        user.save(function (err) {
-            if (err) {
-                return res.json({success: false, msg: 'User data not updated'});
-            }
-            res.json({success: true, msg: 'User profile successfully updated'});
+            user.save(function (err) {
+                if (err) {
+                    return res.json({success: false, msg: 'User data not updated'});
+                }
+                res.json({success: true, msg: 'User profile successfully updated'});
+            });
         });
-    });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
 };
 
+//для апдейта пароля залогиненного пользователя в User Details
 var updatePassword = function (req, res) {
+    if (req.user) {
+        var userId = req.user._id;
+        var oldPassword = req.body.oldPassword;
+        var newPassword = req.body.newPassword;
 
-    var userId = req.user._id;
-    var oldPassword = req.body.oldPassword;
-    var newPassword = req.body.newPassword;
-
-    console.log("USER DATA IN NODE", userId, " ", oldPassword, " ", newPassword);
+        console.log("USER DATA IN NODE", userId, " ", oldPassword, " ", newPassword);
 
 
-    User.findOne({'_id': req.user._id}, function (err, user) {
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return console.error(err);
+            user.comparePassword(oldPassword, function (err, isMatch) {
+                //if correct old password is provided
+                if (isMatch && !err) {
+                    console.log("MATCH");
+                    user.password = newPassword;
+                    user.save(function (err) {
+                        if (err) {
+                            return res.json({success: false, msg: 'User data not updated'});
+                        }
+                        res.json({success: true, msg: 'Password data successfully updated'});
+                    });
+                } else {
+                    console.log("NO MATCH");
+                    res.send({success: false, msg: 'Old password is incorrect'});
+                }
+            });
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+
+//для апдейта пароля после восстановления
+var updateForgottenPassword = function (req, res) {
+
+    var userNameTemp = req.body.userNameTemp;
+    var tempPassword = req.body.tempPassword;
+    var newPasswordTemp = req.body.newPasswordTemp;
+
+    console.log("USER DATA IN NODE", userNameTemp, " ", tempPassword, " ", newPasswordTemp);
+
+
+    User.findOne({'name': userNameTemp}, function (err, user) {
         if (err)
-            return console.error(err);
-        user.comparePassword(oldPassword, function (err, isMatch) {
-            //if correct old password is provided
-            if (isMatch && !err) {
-                console.log("MATCH");
-                user.password = newPassword;
-                user.save(function (err) {
-                    if (err) {
-                        return res.json({success: false, msg: 'User data not updated'});
-                    }
-                    res.json({success: true, msg: 'Password data successfully updated'});
-                });
-            } else {
-                console.log("NO MATCH");
-                res.send({success: false, msg: 'Old password is incorrect'});
-            }
-        });        
+            return res.json({success: false, msg: 'User not found'});
+
+        if (user.tempPassword == tempPassword) {
+            user.password = newPasswordTemp;
+            user.save(function (err) {
+                if (err) {
+                    return res.json({success: false, msg: 'User data not updated'});
+                }
+                res.json({success: true, msg: 'Password data successfully updated'});
+            });
+        } else {
+            res.json({success: false, msg: 'Temporary password data incorrect'});
+        }
     });
 };
 
@@ -212,6 +249,7 @@ var bindFunction = function (router) {
     router.post('/save_profile_changes', saveProfileChanges);
     router.get('/logout', logout);
     router.post('/update_password', updatePassword);
+    router.post('/update_forgotten_password', updateForgottenPassword);
 };
 
 module.exports = {

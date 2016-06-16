@@ -3482,7 +3482,7 @@ function loginCtrl($scope, $http, $state) {
         $http({
             method: 'POST',
             url: 'api/update_password',
-            data:  {'oldPassword': vm.oldPassword, 'newPassword': vm.newPassword} 
+            data: {'oldPassword': vm.oldPassword, 'newPassword': vm.newPassword}
         })
                 .success(function (data) {
                     if (data.success) {
@@ -3491,7 +3491,7 @@ function loginCtrl($scope, $http, $state) {
                         vm.oldPassword = '';
                         vm.newPassword = '';
                         vm.passwordUpdateMessage = data.msg;
-                    } else{
+                    } else {
                         vm.passwordUpdateMessage = data.msg;
                     }
                 });
@@ -3510,14 +3510,28 @@ function loginCtrl($scope, $http, $state) {
 
     };
 
-    //vm.userEmail = {};
-
     this.sendNewPassword = function () {
-        console.log("HIT!! ", vm.userEmail);
         $http({
             method: 'POST',
             url: 'api/send_new_password',
             data: {'userEmail': vm.userEmail}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('landing');
+                    }
+                });
+
+    };
+
+    this.loginAfterResetPassword = function () {
+        console.log("HIT!! ", vm.userEmail);
+        $http({
+            method: 'POST',
+            url: 'api/update_forgotten_password',
+            data: {'userNameTemp': vm.userNameTemp,
+                'tempPassword': vm.tempPassword,
+                'newPasswordTemp': vm.newPasswordTemp}
         })
                 .success(function (data) {
                     if (data.success) {
