@@ -107,86 +107,6 @@ var getMessages = function (req, res) {
     }
 };
 
-
-var getMessagesForInbox = function (req, res) {
-    if (req.user) {
-
-        Message.find({'type': 'inbox', 'to': req.user.name}, function (err, messages) {
-            if (err)
-                return console.error(err);
-            res.json({success: true, messages: messages});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-var getMessagesForDrafts = function (req, res) {
-    if (req.user) {
-
-        Message.find({'type': 'draft', 'from': req.user.name}, function (err, messages) {
-            if (err)
-                return console.error(err);
-            res.json({messages: messages});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-var getMessagesForSent = function (req, res) {
-    if (req.user) {
-
-        Message.find({'type': 'sent', 'from': req.user.name}, function (err, messages) {
-            if (err)
-                return console.error(err);
-            res.json({messages: messages});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-var getMessagesForTrash = function (req, res) {
-    if (req.user) {
-
-        Message.find({'type': 'trash', 'owner': req.user.name}, function (err, messages) {
-            if (err)
-                return console.error(err);
-            res.json({messages: messages});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-var getNumberOfMessages = function (req, res) {
-    if (req.user) {
-
-        Message.find({'type': 'inbox', 'to': req.user.name}, function (err, inboxMessages) {
-            if (err)
-                return console.error(err);
-            Message.find({'type': 'draft', 'from': req.user.name}, function (err, draftMessages) {
-                if (err)
-                    return console.error(err);
-                Message.find({'type': 'sent', 'from': req.user.name}, function (err, sentMessages) {
-                    if (err)
-                        return console.error(err);
-                    Message.find({'type': 'trash', 'owner': req.user.name}, function (err, trashMessages) { //фильтр по пользователю???
-                        if (err)
-                            return console.error(err);
-                        res.json({inbox: inboxMessages.length, draft: draftMessages.length,
-                            sent: sentMessages.length, trash: trashMessages.length});
-                    });
-                });
-            });
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-
 var getMessageDetails = function (req, res) {
     if (req.user) {
         console.log(req.query.message_id);
@@ -344,7 +264,6 @@ var moveBackFromTrash = function (req, res) {
 var bindFunction = function (router) {
     router.post('/create_message', createMessage);
     router.post('/save_as_draft', saveAsDraft);
-    router.get('/get_number_of_messages', getNumberOfMessages);
     router.get('/get_message_details', getMessageDetails);
     router.post('/move_to_trash', moveToTrash);
     router.post('/delete_message', deleteMessage);
