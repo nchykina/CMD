@@ -3487,9 +3487,12 @@ function loginCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         console.log("Password changed");
-                        vm.change = false;
+                        //vm.change = false;
                         vm.oldPassword = '';
                         vm.newPassword = '';
+                        vm.passwordUpdateMessage = data.msg;
+                    } else{
+                        vm.passwordUpdateMessage = data.msg;
                     }
                 });
     };

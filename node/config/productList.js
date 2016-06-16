@@ -7,6 +7,9 @@
         assembly techniques comprise De Brujin graphs, suffix trees\
         and different modifications of greedy algorithm.',
         img_url: 'img/products/prod1.png', product_url: 'commerce.product_details1'},
+    
+    //Use our processing power to  
+    //Assess your sequencing results against the reference genome to uncover mutations 
         
         
         {productName: 'RNA resequencing', productCategory: 'Additional content', price: 20,
@@ -19,22 +22,23 @@
         img_url: 'img/products/prod2.png', product_url: 'commerce.product_details1'},
         
         
+        /*
         {productName: 'Extra upload size', productCategory: 'Extra upload/storage size', price: 30,
-        description_short: 'This upgrade allows you to upload files up to 10G to our system, while \
-        the free file size upload limit is 1G. If you need to upload larger files by any chance, \
+        description_short: 'This upgrade allows you to upload files up to 20G to our system, while \
+        the free file size upload limit is 5G. If you need to upload larger files by any chance, \
         please let us know, and we will figure out a way how to do it for you. Larger file size \
         will allow your analysis to have good coverage with the reads.',
         description_long: 'Coverage is a very important characteristic of the file with reads, as \
         it ensures that the information extracted from reads is statistically significant. Good coverage \
         for realignment pipeline is around 20-40x for the whole genome, so the larger is the genome you \
         analyze, the larger should be your files with reads.', 
-         img_url: 'img/products/prod3.png', product_url: 'commerce.product_details2'},
+         img_url: 'img/products/prod3.png', product_url: 'commerce.product_details2'},*/
      
-    
+       //20 за 5$, 100 за 20$
         {productName: 'Extra storage size', productCategory: 'Extra upload/storage size', price: 40,
         description_short: 'Files with bioinformatics data are quite bulky, so you need \
-        a convenient place to store them. This upgrade provides additional 30G of storage space\
-        in addition to 10G of free storage space already available for you in our system. On average, \
+        a convenient place to store them. This upgrade provides additional 20G of storage space\
+        in addition to 5G of free storage space already available for you in our system. On average, \
         it allows you to have approximately 10 pipeline job results stored in the system.',
         description_long: 'From our experience, this is usually more than enough, as you \
         actually store only input and output files and do not need HDD space for genome files\
@@ -42,12 +46,12 @@
         intermediary steps of the pipeline (like .mpileup files, for instance).',
         img_url: 'img/products/prod4.png', product_url: 'commerce.product_details2'},
     
-   
+        //радиобаттон
         {productName: 'Extra vCPUs', productCategory: 'Processing capacity', price: 50,
         description_short: 'A lot of bioinformatics software is multithreaded, so adding\
         vCPUs can speed up the data processing significantly. By default your pipelines \
-        are launched in an 8-vCPUs virtual container, and by purchasing this upgrade option\
-        you can scale up to a 16-vCPUs machine in a single click.', 
+        are launched in an 4-vCPUs virtual container, and by purchasing this upgrade option\
+        you can scale up to a 64-vCPUs machine in a single click.', 
         description_long: 'Of course, not every processing algorithm can be parallelized, \
         so there is no linear dependency between the number of vCPUs and execution speed. However, \
         bioinformatics is somewhat special here, as the majority of standard steps in every \
@@ -55,7 +59,7 @@
         skills are widespread and highly demanded among bioinformaticians.', 
         img_url: 'img/products/prod5.png', product_url: 'commerce.product_details3'},
     
-    
+    /*
         {productName: 'Enable MPI', productCategory: 'Processing capacity', price: 60,
         description_short: 'MPI is a communication protocol for programming parallel computers\
          that remains a de facto standard for high performance computing today. Purchasing this upgrade \
@@ -66,7 +70,7 @@
         the speed of calculations, as the data should not be transferred across nodes in the cluster \
         any more during calculations, so the whole cluster turns into a single extra-powerful computer.', 
         img_url: 'img/products/prod6.png', product_url: 'commerce.product_details3'},
-    
+    */
     
         {productName: 'Add a custom pipeline', productCategory: 'Custom pipelines', price: 100,
         description_short: 'We can migrate the functionality of any of your pipelines to our \

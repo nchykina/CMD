@@ -86,7 +86,7 @@ var register = function (req, res, next) {
                 if (err) {
                     return next(err);
                 } else {
-                   // mailserver.greetUser(req, res); нет, так нельзя
+                    // mailserver.greetUser(req, res); нет, так нельзя
                     res.json({success: true, msg: 'Successfuly created new user'});
                 }
             });
@@ -167,29 +167,34 @@ var saveProfileChanges = function (req, res) {
 };
 
 var updatePassword = function (req, res) {
-    
+
     var userId = req.user._id;
     var oldPassword = req.body.oldPassword;
     var newPassword = req.body.newPassword;
-    
-    console.log("USER DATA IN NODE", userId, " ", oldPassword, " ", newPassword);
-    res.json({success: true, msg: 'Done'});
 
-   /* User.findOne({'_id': req.user._id}, function (err, user) {
+    console.log("USER DATA IN NODE", userId, " ", oldPassword, " ", newPassword);
+
+
+    User.findOne({'_id': req.user._id}, function (err, user) {
         if (err)
             return console.error(err);
-
-        user.firstname = userData.firstname;
-        user.lastname = userData.lastname;
-        user.company = userData.company;
-
-        user.save(function (err) {
-            if (err) {
-                return res.json({success: false, msg: 'User data not updated'});
+        user.comparePassword(oldPassword, function (err, isMatch) {
+            //if correct old password is provided
+            if (isMatch && !err) {
+                console.log("MATCH");
+                user.password = newPassword;
+                user.save(function (err) {
+                    if (err) {
+                        return res.json({success: false, msg: 'User data not updated'});
+                    }
+                    res.json({success: true, msg: 'Password data successfully updated'});
+                });
+            } else {
+                console.log("NO MATCH");
+                res.send({success: false, msg: 'Old password is incorrect'});
             }
-            res.json({success: true, msg: 'User profile successfully updated'});
-        });
-    });*/
+        });        
+    });
 };
 
 var logout = function (req, res) {
