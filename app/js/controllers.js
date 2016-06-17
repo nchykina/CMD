@@ -3675,13 +3675,14 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
     };
 
 
+    //TBD, doesn't work
     this.reply = function (to, text) {
 
         vm.message.to = to;
         vm.message.content = text;
         sessionStorage.to = to;
         sessionStorage.content = text;
-        $state.go('mailbox.mail_compose', {myParam: {to: to}});
+        $state.go('mailbox.mail_compose', {param: {to: to}});
     };
 
 
