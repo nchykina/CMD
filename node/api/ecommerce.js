@@ -10,29 +10,37 @@ var getProductList = function (req, res) {
                 return res.json({success: false, msg: 'User not found'});
             var resp = [];
             for (var key in productList) {
-                
+
                 var contains = false;
-                
-                for (var key2 in user.cart) {                   
-                     if (user.cart[key2].productName === productList[key].productName) {
-                         contains = true;
-                         break;                         
-                     }
-                 }
-                 if(contains){                     
-                     resp.push({'productName': productList[key].productName,
+
+                for (var key2 in user.cart) {
+                    if (user.cart[key2].productName === productList[key].productName) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (contains) {
+                    resp.push({'productName': productList[key].productName,
                         'productCategory': productList[key].productCategory,
                         'price': productList[key].price,
+                        'description_short': productList[key].description_short,
+                        'description_long': productList[key].description_long,
+                        'img_url': productList[key].img_url,
+                        'product_url': productList[key].product_url,
                         'inCart': true
                     });
-                 } else{
-                     resp.push({'productName': productList[key].productName,
+                } else {
+                    resp.push({'productName': productList[key].productName,
                         'productCategory': productList[key].productCategory,
                         'price': productList[key].price,
-                        'inCart': false});                                         
-                 }
+                        'description_short': productList[key].description_short,
+                        'description_long': productList[key].description_long,
+                        'img_url': productList[key].img_url,
+                        'product_url': productList[key].product_url,
+                        'inCart': false});
+                }
 
-            }            
+            }
             res.json({success: true, products: resp, msg: "Success"});
         });
     } else {
@@ -47,7 +55,10 @@ var addToCart = function (req, res) {
         var id = req.body.productId;
 
         var item = {productName: productList[id].productName, productCategory: productList[id].productCategory,
-            price: productList[id].price, addedDate: new Date(), productId: id};
+            price: productList[id].price, description_short: productList[id].description_short,
+            description_long: productList[id].description_long, img_url: productList[id].img_url,
+            product_url: productList[id].product_url,
+            addedDate: new Date(), productId: id};
 
         User.findOne({'_id': req.user._id}, function (err, user) {
             if (err)

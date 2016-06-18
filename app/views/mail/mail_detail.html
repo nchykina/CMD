@@ -1,5 +1,5 @@
-<div class="wrapper wrapper-content" ng-controller="mailboxController as vm">
-    <div class="row" ng-init="vm.getNumberOfMessages()">
+<div class="wrapper wrapper-content" ng-init="vm.init()">
+    <div class="row">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-content mailbox-content">
@@ -22,8 +22,8 @@
         <div class="col-lg-9 animated fadeInRight">
             <div class="mail-box-header">
                 <div class="pull-right tooltip-demo">
-                    <a ui-sref="mailbox.mail_compose" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
-                    <a ui-sref="mailbox.inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
+                    <a ui-sref="mailbox.mail_compose" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
+                    <a ui-sref="mailbox.inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
                 </div>
                 <h2>
                     View Message
@@ -31,7 +31,7 @@
 
                 <div class="mail-tools tooltip-demo m-t-md">
                     <h3>
-                        <span class="font-noraml">Subject: {{md.message.subject}} </span>
+                        <span class="font-noraml">Subject: {{vm.currentMessage.subject}} </span>
                     </h3>
                     <h5>
                         <span class="pull-right font-noraml">{{vm.currentMessage.sentTime | date:'MMM d, yyyy'}}</span>
@@ -48,24 +48,16 @@
 
                 <div class="mail-body">
                     <p>
-                        {{md.message.content}}
+                        {{vm.currentMessage.content}}
                     </p>
 
                     
-                </div>
-                                <div class="mail-text h-200">
-
-                                <div class="form-group">
-
-                                    <textarea class="form-control message-input-mail" name="message" 
-                                              placeholder="Reply"></textarea>
-                                </div>
-                    
-                    <div class="clearfix"></div>
-                </div>
+                </div>                              
                 <div class="mail-body text-right tooltip-demo">
-                    <a ui-sref="mailbox.mail_compose" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
-                    <a ui-sref="mailbox.inbox" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
+                    <button ng-click="vm.reply(vm.currentMessage.from, vm.currentMessage.content)"
+                       class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" 
+                       title="Reply"><i class="fa fa-reply"></i> Reply</button>
+                    <a ui-sref="mailbox.inbox" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> Remove </a>
                 </div>
                 <div class="clearfix"></div>
 

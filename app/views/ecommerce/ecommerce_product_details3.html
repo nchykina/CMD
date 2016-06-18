@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                [IMAGE 1]
+                                <img alt="product1" src="{{em.productList[4].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -36,7 +36,7 @@
                             <h2 class="font-bold m-b-xs">
                                 {{em.productList[4].productName}}
                             </h2>
-                            <small>Upload larger files for processing for any of the pipelines.</small>
+                            <small>Speed up your pipelines execution by plugging in additional vCPUs</small>
                             <div class="m-t-md">
                                 <h2 class="product-main-price">${{em.productList[4].price}} <small class="text-muted">per month</small> </h2>
                             </div>
@@ -45,14 +45,10 @@
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-
-                                <br/>
-                                <br/>
-                                There are many variations of passages of Lorem Ipsum available, but the majority
-                                have suffered alteration in some form, by injected humour, or randomised words
-                                which don't look even slightly believable.
+                                {{em.productList[4].description_short}}
+                                <br>
+                                <br>
+                                {{em.productList[4].description_long}}  
                             </div>
                             <hr>
                             <div class="form-group">
@@ -63,7 +59,7 @@
                                     <button ng-if="em.productList[4].inCart" ng-click="em.removeItemFromCart(4)" 
                                             class="btn btn-danger btn-sm">                                 
                                         <i class="fa fa-cart-plus"></i> Remove from cart</button>
-                                    <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
+                                    <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
 
                                 </div>
                             </div>
@@ -82,7 +78,8 @@
 
         </div>
     </div>
-
+<!--
+    
     <div class="row">
         <div class="col-lg-12">
 
@@ -92,7 +89,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                [IMAGE 1]
+                                <img alt="product1" src="{{em.productList[5].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -100,7 +97,7 @@
                             <h2 class="font-bold m-b-xs">
                                 {{em.productList[5].productName}}
                             </h2>
-                            <small>Store more data in your account.</small>
+                            <small>Enable MPI-optimized pipeline execution</small>
                             <div class="m-t-md">
                                 <h2 class="product-main-price">${{em.productList[5].price}} <small class="text-muted">per month</small> </h2>
                             </div>
@@ -109,14 +106,10 @@
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-
-                                <br/>
-                                <br/>
-                                There are many variations of passages of Lorem Ipsum available, but the majority
-                                have suffered alteration in some form, by injected humour, or randomised words
-                                which don't look even slightly believable.
+                                {{em.productList[5].description_short}}
+                                <br>
+                                <br>
+                                {{em.productList[5].description_long}} 
                             </div>
                             <hr>
 
@@ -128,7 +121,7 @@
                                     <button ng-if="em.productList[5].inCart" ng-click="em.removeItemFromCart(5)" 
                                             class="btn btn-danger btn-sm">                                 
                                         <i class="fa fa-cart-plus"></i> Remove from cart</button>
-                                    <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Ask a question </button>
+                                    <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
 
                                 </div>
                             </div>
@@ -148,6 +141,6 @@
 
         </div>
     </div>
-
+-->
 
 </div>

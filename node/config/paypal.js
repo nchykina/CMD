@@ -36,5 +36,8 @@ module.exports = {
             postal_code: "121609",
             country_code: "RU"
         }
-    }
+    },
+    
+    //IPN listener config
+    IPN_url: "https://www.sandbox.paypal.com/cgi-bin/webscr"
 };

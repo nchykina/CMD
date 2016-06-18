@@ -35,11 +35,12 @@
                                 <tr>
                                     <td width="90">
                                         <div class="cart-product-imitation">
+                                            <img src="{{x.img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
                                         </div>
                                     </td>
                                     <td class="desc">
                                         <h3>
-                                            <a href="#" class="text-navy">
+                                            <a ui-sref="{{x.product_url}}" class="text-navy">
                                                 {{x.productCategory}}: {{x.productName}}
                                             </a>
                                         </h3>
@@ -47,8 +48,7 @@
                                             <dt>Description</dt>
                                         </dl>
                                         <p class="small">
-                                            It is a long established fact that a reader will be distracted by the readable
-                                            content of a page when looking at its layout. The point of using Lorem Ipsum is
+                                            {{x.description_short}}
                                         </p>
 
 
@@ -70,9 +70,11 @@
                     </div>
 
                 </div> 
+                <div class="ibox-content" ng-if="em.numberOfItemsInCart == 0" align="center">Your shopping cart is empty</div>
                 <div class="ibox-content">
 
-                    <button ui-sref="commerce.payments" class="btn btn-info pull-right"><i class="fa fa fa-shopping-cart"></i> Checkout</button>
+                    <button ng-if="em.numberOfItemsInCart != 0" ui-sref="commerce.payments" class="btn btn-info pull-right"><i class="fa fa fa-shopping-cart"></i> Checkout</button>
+                    <button ng-if="em.numberOfItemsInCart == 0" class="btn btn-info disabled pull-right"><i class="fa fa fa-shopping-cart"></i> Checkout</button>
                     <button ui-sref="commerce.products_grid" class="btn btn-white"><i class="fa fa-arrow-left"></i> Continue shopping</button>
 
                 </div>
@@ -96,7 +98,8 @@
                     <hr/>
                     <div class="m-t-sm">
                         <div class="btn-group">
-                            <a ui-sref="commerce.payments" class="btn btn-info btn-sm"><i class="fa fa-shopping-cart"></i> Checkout</a>
+                            <a ng-if="em.numberOfItemsInCart != 0" ui-sref="commerce.payments" class="btn btn-info btn-sm"><i class="fa fa-shopping-cart"></i> Checkout</a>
+                            <a ng-if="em.numberOfItemsInCart == 0" class="btn btn-info disabled btn-sm"><i class="fa fa-shopping-cart"></i> Checkout</a>
                             <a ng-click="em.clearCart()"  class="btn btn-white btn-sm"> Clear cart</a>
                         </div>
                     </div>
@@ -111,7 +114,7 @@
 
 
 
-                    <h3><i class="fa fa-envelope"></i> support@ngspipeline.com</h3>
+                    <h3><a href="mailto:support@ngspipeline.com"><i class="fa fa-envelope"></i> support@ngspipeline.com</a></h3>
                     <span class="small">
                         Please contact us if you have any questions.
                     </span>

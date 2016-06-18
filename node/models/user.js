@@ -20,8 +20,22 @@ var UserSchema = new Schema({
         type: String,
         required: false
     },
+    company: {
+        type: String,
+        required: false
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    tempPassword: {
+        type: String,
+        required: false        
+    },
     roles: [String],
-    cart: [{productName: String, productCategory: String, price: Number, addedDate: Date, productId: Number}]
+    cart: [{productName: String, productCategory: String, price: Number, addedDate: Date, productId: Number,
+        description_short: String, description_long: String, img_url: String, product_url: String}]
 });
 
 UserSchema.pre('save', function (next) {

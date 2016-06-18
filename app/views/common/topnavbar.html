@@ -1,4 +1,4 @@
-<div class="row border-bottom">
+<div class="row border-bottom" ng-controller="loginController as vm">
     <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <ul class="nav navbar-top-links navbar-right">
             <!--<li>-->
@@ -15,9 +15,9 @@
             </li>
                        
             <li>
-                <a ui-sref="login_page">
+                <button ng-click="vm.logout()">
                     <i class="fa fa-sign-out"></i> Log out
-                </a>
+                </button>
             </li>
         </ul>
 

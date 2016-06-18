@@ -3400,8 +3400,8 @@ function loginCtrl($scope, $http, $state) {
         $http({
             method: 'POST',
             url: 'api/login',
-            data: vm.user, //forms user object
-            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+            data: vm.user //forms user object
+                    //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
         })
                 .success(function (data) {
                     if (data.success) {
@@ -3419,19 +3419,135 @@ function loginCtrl($scope, $http, $state) {
         $http({
             method: 'POST',
             url: 'api/register',
-            data: vm.user, //forms user object
-            //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+            data: vm.user //forms user object
+                    //headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
         })
                 .success(function (data) {
                     if (data.success) {
                         vm.registerMessage = data.msg;
-                        $state.go('pipelines.dna_reseq_home');
+                        $http({
+                            method: 'GET',
+                            url: 'api/greet_user',
+                        })
+                                .success(function (data) {
+                                    if (data.success) {
+                                        $state.go('pipelines.dna_reseq_home');
 
+                                    }
+                                });
                     } else {
                         vm.registerMessage = data.msg;
                     }
                 });
     };
+
+    this.init = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/memberinfo'
+
+        })
+                .success(function (response) {
+                    vm.user = response;
+                    console.log("TEST ", vm.user);
+                });
+    };
+
+    this.saveProfileChanges = function () {
+
+        $http({
+            method: 'POST',
+            url: 'api/save_profile_changes',
+            data: vm.user
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('pipelines.dna_reseq_home');
+                    }
+                });
+    };
+
+    vm.change = false;
+
+    this.changePassword = function () {
+        if (vm.change) {
+            vm.change = false;
+        } else {
+            vm.change = true;
+        }
+    };
+
+    this.updatePassword = function () {
+        $http({
+            method: 'POST',
+            url: 'api/update_password',
+            data: {'oldPassword': vm.oldPassword, 'newPassword': vm.newPassword}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("Password changed");
+                        //vm.change = false;
+                        vm.oldPassword = '';
+                        vm.newPassword = '';
+                        vm.passwordUpdateMessage = data.msg;
+                    } else {
+                        vm.passwordUpdateMessage = data.msg;
+                    }
+                });
+    };
+
+    this.logout = function () {
+        $http({
+            method: 'GET',
+            url: 'api/logout'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('landing');
+                    }
+                });
+
+    };
+
+    this.sendNewPassword = function () {
+        $http({
+            method: 'POST',
+            url: 'api/send_new_password',
+            data: {'userEmail': vm.userEmail}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $state.go('landing');
+                    }
+                });
+
+    };
+
+    this.loginAfterResetPassword = function () {
+        $http({
+            method: 'POST',
+            url: 'api/update_forgotten_password',
+            data: {'userNameTemp': vm.userNameTemp,
+                'tempPassword': vm.tempPassword,
+                'newPasswordTemp': vm.newPasswordTemp}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        $http({
+                            method: 'POST',
+                            url: 'api/confirm_reset_password',
+                            data: {'userNameTemp': vm.userNameTemp}
+                        })
+                                .success(function (data) {
+                                    if (data.success) {
+                                        $state.go('login_page');
+                                    }
+                                });
+                    }
+                });
+    };
+
 }
 
 /**
@@ -3440,33 +3556,31 @@ function loginCtrl($scope, $http, $state) {
  *
  */
 
-function mailDetailCtrl($scope, $http, $state, $stateParams) {
-    var vm = this;
-
-    vm.messageId = $stateParams.messageId;
-    vm.message = {};
-
-    console.log($stateParams);
-    console.log("contoller id: " + vm.messageId);
-
-    //vm.getMessagesForInbox();
-
-    this.getMessageDetails = function () {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_message_details',
-            params: {message_id: vm.messageId}
-
-        })
-                .success(function (response) {
-                    console.log(response);
-                    vm.message = response.message;
-                });
-    };
-
-    this.getMessageDetails();
-}
+/*function mailDetailCtrl($scope, $http, $state, $stateParams) {
+ var vm = this;
+ 
+ vm.messageId = $stateParams.messageId;
+ vm.message = {};
+ 
+ console.log($stateParams);
+ console.log("contoller id: " + vm.messageId);
+ 
+ this.getMessageDetails = function () {
+ 
+ $http({
+ method: 'GET',
+ url: 'api/get_message_details',
+ params: {message_id: vm.messageId}
+ 
+ })
+ .success(function (response) {
+ console.log(response);
+ vm.message = response.message;
+ });
+ };
+ 
+ this.getMessageDetails();
+ }*/
 
 /**
  * mailboxCtrl - mailbox controller
@@ -3474,19 +3588,64 @@ function mailDetailCtrl($scope, $http, $state, $stateParams) {
  *
  */
 
-function mailboxCtrl($scope, $http, $state, messageService) {
+function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
     var vm = this;
 
+    vm.message = {};
+    //vm.messages = [];
 
-    this.message = {};
-    vm.messages = [];
+    vm.messagesForInbox = [];
+    vm.messagesForDrafts = [];
+    vm.messagesForSent = [];
+    vm.messagesForTrash = [];
 
     vm.numberOfInbox = {};
     vm.numberOfDraft = {};
     vm.numberOfSent = {};
     vm.numberOfTrash = {};
 
-    //vm.getMessagesForInbox();
+    vm.currentMessage = {};
+
+    this.init = function () {
+        vm.getMessages();
+        if ($state.current.name == "mailbox.email_view") {
+            if (sessionStorage.messageId) {
+                console.log("SESSION STORAGE 2 ", sessionStorage.messageId);
+                console.log("MEANWHILE IN CURRENT MESSAGE ", vm.currentMessage._id);
+
+                //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
+                vm.currentMessage = {'_id': sessionStorage.messageId,
+                    'from': sessionStorage.messageFrom,
+                    'to': sessionStorage.messageTo,
+                    'subject': sessionStorage.messageSubject,
+                    'sentTime': sessionStorage.messageSentTime,
+                    'content': sessionStorage.messageContent
+                };
+            }
+        }
+
+    };
+
+    this.getMessages = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_messages'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        vm.messagesForInbox = data.messagesForInbox;
+                        vm.messagesForDrafts = data.messagesForDrafts;
+                        vm.messagesForSent = data.messagesForSent;
+                        vm.messagesForTrash = data.messagesForTrash;
+
+                        vm.numberOfInbox = data.inbox;
+                        vm.numberOfDraft = data.draft;
+                        vm.numberOfSent = data.sent;
+                        vm.numberOfTrash = data.trash;
+                    }
+
+                });
+    };
 
     this.submitMessage = function () {
 
@@ -3498,9 +3657,6 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         $state.go('mailbox.inbox');
-
-                    } else {
-                        this.message = data.msg;
                     }
                 });
     };
@@ -3514,71 +3670,21 @@ function mailboxCtrl($scope, $http, $state, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         $state.go('mailbox.inbox');
-
-                    } else {
-                        this.message = data.msg;
                     }
                 });
     };
 
-    this.getMessagesForInbox = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_inbox'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                    vm.length = response.data.length;
-                });
+
+    //TBD, doesn't work
+    this.reply = function (to, text) {
+
+        vm.message.to = to;
+        vm.message.content = text;
+        sessionStorage.to = to;
+        sessionStorage.content = text;
+        $state.go('mailbox.mail_compose', {param: {to: to}});
     };
 
-    this.getMessagesForDrafts = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_drafts'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                });
-    };
-
-    this.getMessagesForSent = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_sent'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                    console.log(vm.messages);
-                });
-    };
-
-    this.getMessagesForTrash = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_messages_for_trash'
-        })
-                .then(function (response) {
-                    vm.messages = response.data.messages;
-                });
-    };
-
-    this.getNumberOfMessages = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_number_of_messages'
-        })
-                .then(function (response) {
-                    vm.numberOfInbox = response.data.inbox;
-                    vm.numberOfDraft = response.data.draft;
-                    vm.numberOfSent = response.data.sent;
-                    vm.numberOfTrash = response.data.trash;
-
-                });
-    };
-
-    vm.test = 'TEST';
-    vm.currentMessage = messageService.message;
 
     this.getMessageDetails = function (messageId) {
 
@@ -3588,18 +3694,42 @@ function mailboxCtrl($scope, $http, $state, messageService) {
             params: {message_id: messageId}
 
         })
-                .success(function (response) {
-                    console.log(response);
-                    messageService.message = response.message;
-                    $state.go('mailbox.email_view');
+                .success(function (data) {
+                    if (data.success) {
+                        vm.currentMessage = data.message;
+                        //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
+                        sessionStorage.messageId = data.message._id;
+                        sessionStorage.messageTo = data.message.to;
+                        sessionStorage.messageFrom = data.message.from;
+                        sessionStorage.messageSubject = data.message.subject;
+                        sessionStorage.messageSentTime = data.message.sentTime;
+                        sessionStorage.messageContent = data.message.content;
+
+                        console.log("SESSION STORAGE 1 ", sessionStorage.messageId);
+                        $state.go('mailbox.email_view');
+                    }
+
                 });
     };
 
     this.moveToTrash = function (movedToTrashFrom) {
         var req = [];
+        var messages = [];
+        if (movedToTrashFrom == 'inbox') {
+            messages = vm.messagesForInbox;
+        }
+        if (movedToTrashFrom == 'draft') {
+            messages = vm.messagesForDrafts;
+        }
+        if (movedToTrashFrom == 'sent') {
+            messages = vm.messagesForSent;
+        }
+        if (movedToTrashFrom == 'trash') {
+            messages = vm.messagesForTrash;
+        }
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in messages) {
+            var v = messages[i];
 
             if (v.selected === true) {
                 req.push(v._id);
@@ -3614,12 +3744,7 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        vm.messages = $.grep(vm.messages, (function (el) {
-                            var res = $.inArray(el._id, req);
-                            vm.getNumberOfMessages();
-                            return (res == -1);
-                        }));
-
+                        vm.init();
                     }
                 });
     };
@@ -3627,16 +3752,13 @@ function mailboxCtrl($scope, $http, $state, messageService) {
     this.deleteMessage = function () {
         var req = [];
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in vm.messagesForTrash) {
+            var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
                 req.push(v._id);
             }
         }
-
-        console.log(vm.messages);
-
 
         $http({
             method: 'POST',
@@ -3646,10 +3768,9 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log(req);
-                        vm.messages = $.grep(vm.messages, (function (el) {
+                        vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
                             var res = $.inArray(el._id, req);
-                            vm.getNumberOfMessages();
+                            vm.init();
                             return (res == -1);
                         }));
 
@@ -3660,15 +3781,15 @@ function mailboxCtrl($scope, $http, $state, messageService) {
     this.markAsRead = function () {
         var req = [];
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in vm.messagesForInbox) {
+            var v = vm.messagesForInbox[i];
 
             if (v.selected === true) {
                 req.push(v._id);
                 if (v.read === true) {
-                    vm.messages[i].read = false;
+                    vm.messagesForInbox[i].read = false;
                 } else {
-                    vm.messages[i].read = true;
+                    vm.messagesForInbox[i].read = true;
                 }
                 v.selected = false;
             }
@@ -3691,8 +3812,8 @@ function mailboxCtrl($scope, $http, $state, messageService) {
     this.moveBackFromTrash = function () {
         var req = [];
 
-        for (var i in vm.messages) {
-            var v = vm.messages[i];
+        for (var i in vm.messagesForTrash) {
+            var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
                 req.push(v._id);
@@ -3707,9 +3828,9 @@ function mailboxCtrl($scope, $http, $state, messageService) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        vm.messages = $.grep(vm.messages, (function (el) {
+                        vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
                             var res = $.inArray(el._id, req);
-                            vm.getNumberOfMessages();
+                            vm.init();
                             return (res == -1);
                         }));
                     }
@@ -3937,9 +4058,9 @@ function ecommerceCtrl($scope, $http, $state) {
                                     method: 'POST',
                                     url: 'api/send_invoice',
                                     data: {'invoiceId': data.invoiceId,
-                                            'invoiceNumber': data.invoiceNumber,
-                                            'paymentType': paymentType
-                                        }
+                                        'invoiceNumber': data.invoiceNumber,
+                                        'paymentType': paymentType
+                                    }
                                 })
                                         .success(function (data) {
                                             console.log("INVOICE SENT");
@@ -3948,9 +4069,9 @@ function ecommerceCtrl($scope, $http, $state) {
                             });
                 });
     };
-    
-    
-        this.getOrders = function () {
+
+
+    this.getOrders = function () {
         $http({
             method: 'GET',
             url: 'api/get_orders'
@@ -3961,9 +4082,42 @@ function ecommerceCtrl($scope, $http, $state) {
                     }
                 });
     };
-    
+
+    em.test = '111';
+
+    this.testListener = function () {
+        $http({
+            method: 'GET',
+            url: 'api/activate_listener'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("TEST");
+                        em.test = data.msg;
+                    }
+                });
+    };
+
+
 }
 
+function mailServerCtrl($scope, $http, $state) {
+    var tm = this;
+
+    this.greetUser = function () {
+        console.log("TEST");
+
+        $http({
+            method: 'GET',
+            url: 'api/greet_user'
+
+        })
+                .success(function (response) {
+                    console.log("Greeting success");
+                });
+    };
+
+}
 
 /**
  *
@@ -4010,10 +4164,11 @@ angular
         .controller('tourCtrl', tourCtrl)
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
-        .controller('mailboxController', ['$scope', '$http', '$state', 'messageService', mailboxCtrl])
+        .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
         .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl])
-        .controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
+        //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
+        .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 

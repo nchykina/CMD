@@ -12,7 +12,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
-    $urlRouterProvider.otherwise("/pipelines/dna_resequencing/home");
+    $urlRouterProvider.otherwise("/landing");
 
     $locationProvider.html5Mode(true);
 
@@ -610,7 +610,9 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('user.profile', {
                 url: "/profile",
-                templateUrl: "views/user_profile.html",
+                controller: 'loginController',
+                controllerAs: 'vm', 
+                templateUrl: "views/account/user_profile.html",
                 data: {pageTitle: 'User profile'}
             })
             .state('user.subscription', {
@@ -685,6 +687,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('storage.stats', {
                 url: "/form_stats",
+                controller: 'mailServerController',
+                controllerAs: 'vm',
                 templateUrl: "views/form_stats.html",
                 data: {pageTitle: 'Statistics'},
                 resolve: {
@@ -833,15 +837,20 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controller: 'loginController',
                 data: {pageTitle: 'Login', specialClass: 'gray-bg'}
             })
+            .state('test', {
+                url: "/test",
+                templateUrl: "views/account/test.html",
+                data: {pageTitle: 'TEST', specialClass: 'gray-bg'}
+            })
             .state('login_page', {
                 url: "/login_page",
-                templateUrl: "views/login_page.html",
+                templateUrl: "views/account/login_page.html",
                 controller: 'loginController',
                 data: {pageTitle: 'Login page', specialClass: 'gray-bg'}
             })
             .state('create_account', {
                 url: "/create_account",
-                templateUrl: "views/create_account.html",
+                templateUrl: "views/account/create_account.html",
                 controller: 'loginController',
                 data: {pageTitle: 'Create account', specialClass: 'gray-bg'}
             })
@@ -858,9 +867,17 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('forgot_password', {
                 url: "/forgot_password",
-                templateUrl: "views/forgot_password.html",
+                templateUrl: "views/account/forgot_password.html",
                 controller: 'loginController',
+                controllerAs: 'vm',
                 data: {pageTitle: 'Forgot password', specialClass: 'gray-bg'}
+            })
+            .state('reset_password', {
+                url: "/reset_password",
+                templateUrl: "views/account/reset_password.html",
+                controller: 'loginController',
+                controllerAs: 'vm',
+                data: {pageTitle: 'Reset password', specialClass: 'gray-bg'}
             })
             .state('errorOne', {
                 url: "/errorOne",
