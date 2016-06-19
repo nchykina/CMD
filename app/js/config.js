@@ -189,52 +189,52 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/dna_resequencing/home",
                 controller: 'dnaReseqHomeController',
                 controllerAs: 'homec',
-                templateUrl: "views/pipelines/dna_reseq/home.html",                
+                templateUrl: "views/pipelines/dna_reseq/home.html",
                 data: {pageTitle: 'DNA resequencing'}
             })
             .state('pipelines.dna_reseq_new', {
-             url: "/dna_resequencing/new",
-             templateUrl: "views/pipelines/dna_reseq/new.html",
-             //templateUrl: "views/debug/parent_state.html",
-             controller: 'dnaReseqNewController',
-             controllerAs: 'newc',
-             params: { job: {} },
-             data: {pageTitle: 'DNA resequencing'},
-             resolve: {
-             loadPlugin: function ($ocLazyLoad) {
-             return $ocLazyLoad.load([
-             {
-             files: ['css/plugins/steps/jquery.steps.css']
-             }
-             ]);
-             }
-             }
-             })
-             .state('pipelines.dna_reseq_new.step1', {
-             url: '/step1',
-             templateUrl: "views/pipelines/dna_reseq/step1.html",
-             //templateUrl: "views/debug/normal_state.html",
-             controller: 'dnaReseqNewController',
-             controllerAs: 'newc',
-             //params: { job: {} },
-             data: {pageTitle: 'DNA resequencing pipeline: Step 1'}
-             })
-             .state('pipelines.dna_reseq_new.step2', {
-             url: '/step2',
-             templateUrl: "views/pipelines/dna_reseq/step2.html",
-             controller: 'dnaReseqNewController',
-             controllerAs: 'newc',
-             //params: { job: {} },
-             data: {pageTitle: 'DNA resequencing pipeline: Step 2'}
-             })
-             .state('pipelines.dna_reseq_new.step3', {
-             url: '/step3',
-             templateUrl: "views/pipelines/dna_reseq/step3.html",
-             controller: 'dnaReseqNewController',                
-             controllerAs: 'newc',
-             //params: { job: {} },
-             data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
-             }) 
+                url: "/dna_resequencing/new",
+                templateUrl: "views/pipelines/dna_reseq/new.html",
+                //templateUrl: "views/debug/parent_state.html",
+                controller: 'dnaReseqNewController',
+                controllerAs: 'newc',
+                params: {job: {}},
+                data: {pageTitle: 'DNA resequencing'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/steps/jquery.steps.css']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('pipelines.dna_reseq_new.step1', {
+                url: '/step1',
+                templateUrl: "views/pipelines/dna_reseq/step1.html",
+                //templateUrl: "views/debug/normal_state.html",
+                controller: 'dnaReseqNewController',
+                controllerAs: 'newc',
+                //params: { job: {} },
+                data: {pageTitle: 'DNA resequencing pipeline: Step 1'}
+            })
+            .state('pipelines.dna_reseq_new.step2', {
+                url: '/step2',
+                templateUrl: "views/pipelines/dna_reseq/step2.html",
+                controller: 'dnaReseqNewController',
+                controllerAs: 'newc',
+                //params: { job: {} },
+                data: {pageTitle: 'DNA resequencing pipeline: Step 2'}
+            })
+            .state('pipelines.dna_reseq_new.step3', {
+                url: '/step3',
+                templateUrl: "views/pipelines/dna_reseq/step3.html",
+                controller: 'dnaReseqNewController',
+                controllerAs: 'newc',
+                //params: { job: {} },
+                data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
+            })
             .state('charts', {
                 abstract: true,
                 url: "/charts",
@@ -611,7 +611,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('user.profile', {
                 url: "/profile",
                 controller: 'loginController',
-                controllerAs: 'vm', 
+                controllerAs: 'vm',
                 templateUrl: "views/account/user_profile.html",
                 data: {pageTitle: 'User profile'}
             })
@@ -1417,7 +1417,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('commerce.orders', {
                 url: "/orders",
                 controller: 'ecommerceController',
-                controllerAs: 'em',        
+                controllerAs: 'em',
                 templateUrl: "views/ecommerce/ecommerce_orders.html",
                 data: {pageTitle: 'My purchases'}
             })
@@ -1644,6 +1644,26 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/article3",
                 templateUrl: "views/guides/article3.html",
                 data: {pageTitle: 'Article 3'}
+            })
+            .state('guides.article4', {
+                url: "/article4",
+                templateUrl: "views/guides/article4.html",
+                data: {pageTitle: 'Article 4'}
+            })
+            .state('blog', {
+                abstract: true,
+                url: "/blog",
+                templateUrl: "views/common/blog.html",
+            })
+            .state('blog.article1', {
+                url: "/article1",
+                templateUrl: "views/guides/article1.html",
+                data: {pageTitle: 'Article 1'}
+            })
+            .state('blog.article4', {
+                url: "/article4",
+                templateUrl: "views/guides/article4.html",
+                data: {pageTitle: 'Article 4'}
             })
             ;
 

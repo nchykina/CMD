@@ -1,22 +1,3 @@
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-10">
-        <h2>FASTA/FASTQ format</h2>
-        <ol class="breadcrumb">
-            <li>
-                <a href="index.html">Home</a>
-            </li>
-            <li>
-                <a>Guides</a>
-            </li>
-            <li class="active">
-                <strong>FASTA/FASTQ format</strong>
-            </li>
-        </ol>
-    </div>
-    <div class="col-lg-2">
-
-    </div>
-</div>
 <div class="wrapper wrapper-content  animated fadeInRight article">
     <div class="row">
         <div class="col-lg-10 col-lg-offset-1">
@@ -43,56 +24,172 @@
                         market.</p>
                     <p>
                         To understand FASTA format you should first grasp the basics of what is going on in the lab.
-                        In simple terms, the "magical" process that is happening at the facilities of a sequencing provider
+                        In simple terms, the "magic" that is happening at the facilities of a sequencing provider
                         looks the following way:
                     <h3>1. NGS library preparation</h3>
-                    <p> Lab technician orders a <b class="text-navy">library preparation kit </b>, usually from the sequencing device manufacturer.
-                        This kit is used to prepare long nucleic acid chains (DNA or RNA) for high throughput sequencing process. 
-                        Preparation kits vary a lot depending on many factors, but conceptually they usually
-                        comprise 3 kinds of chemical compounds: <b class="text-navy">adapters</b>,  <b class="text-navy">restriction
-                            enzymes </b> and <b class="text-navy">primers</b>. </p>
-                    <p>
-                        So, how do these chemical compounds work? At the first stage, restriction enzymes cut the long nucleotide chains
-                        of DNA or RNA into pieces of randomized length. This step is necessary because high throughput sequencing 
-                        assumes reading many relatively short nucleotide chains (100-150 bases) in parallel.
-                    </p>
-                    <p>
-                        Afterwards, the adapters come into play. These are short synthesized double-stranded DNA molecules
-                        with sticky ends that are attached to every DNA/RNA fragment at both ends. After the adapters are attached,
+                    <div class="row">
+                        <div class='col-lg-8'>
+                            <p> Lab technician orders a <b class="text-navy">library preparation kit </b>, usually from the sequencing device manufacturer.
+                                This kit is used to prepare long nucleic acid chains (DNA or RNA) for high throughput sequencing process. 
+                                Preparation kits vary a lot depending on many factors, but conceptually they usually
+                                comprise 3 kinds of chemical compounds: <b class="text-navy">adapters</b>,  <b class="text-navy">restriction
+                                    enzymes </b> and <b class="text-navy">primers</b>. </p>
+                            <p>
+                                So, how do these chemical compounds work? At the first stage, restriction enzymes cut the long nucleotide chains
+                                of DNA or RNA into pieces of randomized length. This step is necessary because high throughput sequencing 
+                                assumes reading many relatively short nucleotide chains (100-150 bases) in parallel, while the length of human genome
+                                is over 3 billion nucleotides.
+                            </p>
+                            <p>
+                                Afterwards, the adapters come into play. These are short synthesized double-stranded nucleotide chains
+                                with sticky ends that are attached to every DNA/RNA fragment at both ends.                        
+                            </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h4>Image 1. Adapter ligation</h4>
+                            <img src='img/guides/img1.png' width="100%" > 
+                        </div>
+                    </div>
+                    <p> Now, we need to create multiple copies of our fragments to ensure that when we will later read them with a 
+                        sequencer, we wouldn't make mistakes. So, after the adapters have been attached,
                         the fragments are  <b class="text-navy">PCR-amplified</b> (copied) to get more genetic material available
-                        for further processing.</p>
-                    <p> Next, the lab technician takes a special flow cell. This flow cell has lanes with surface-bound short oligos
-                        that are complementary to the adapters. The DNA/RNA fragments are ligated (attached) to these oligos, each 
-                        at one end (as shown on the picture).
+                        for further processing. During PCR-amplification double-stranded nucleotide chains are broken into single-stranded ones
+                        (this process is called <b class="text-navy">denaturation </b> and happens at approximately 94-96 C).
+                        Then each of the strands is "repaired" back by <b class="text-navy">DNA-polymerase</b> to its double-stranded version (remember, A sticks
+                        to T and C sticks to G). The process is repeated again and again, so as a result we get multiple copies of 
+                        the same nucleotide chain. </p>
+                    <p>One of the key points here is that PCR-amplification can't be done without primers. DNA-polymerase can't just
+                        begin "repairing" the single-stranded chains at a random place, it needs a "hook" to know where to start. 
+                        These "hooks" are formed by primers that we attach to our single-stranded chains. Primers are short (about 20 bases)
+                        nucleic acid sequences complementary to certain parts of DNA/RNA fragments. DNA-polymerase finds a primer and starts
+                        the single-strand reparation process from it onwards, forming a double-stranded chain from a single-stranded one.
                     </p>
+                    <div class="row">
+                        <div class='col-lg-4'>
+                            <h4>Image 2. Attachment to the flow cell</h4>
+                            <img src='img/guides/img2.png' width="100%">
+                        </div>
+                        <div class='col-lg-8'>
+                            <p> Now, say we've completed the PCR-amplification and eventually have enough genetic material available for
+                                further processing. Next, the lab technician takes a special flow cell with lanes on it. 
+                                The lanes have surface-bound short oligos that are complementary to the adapters we attached. 
+                                The DNA/RNA fragments are ligated (attached) to these oligos, each at one end.
+                            </p>
+                            <p>
+                                How exactly does the ligation process happen? A single-stranded fragment sticks to the oligo, as they are
+                                complementary to each other, and the latter is "glued" to the flow cell surface. Then, the oligo works
+                                basically as a primer for DNA-polymerase, as the polymerase rebuilds the single-stranded chain to a double-
+                                stranded one starting from the oligo. Then, we heat the flow cell to denaturate the chains and wash away
+                                the single-strands not attached to the surface. Eventually we get a "forest" of single-stranded chains 
+                                safely attached at one end to the surface (as shown on the image 2).
+                            </p>
+                        </div>
+                    </div>
                     <h3>2. Bridge amplification and clustering</h3>
                     <p>
-                        The subsequent process of bridge amplification and clustering is built around the concept of iterative
-                        "reconstruction" of single-stranded DNA/RNA to double-stranded chains. This is done by <b class="text-navy">                    
-                            dNTP molecules.</b> dNTP (<i>deoxyribose nucleoside triphosphate</i>) is the common name of a 
-                            molecule that consists of a nucleotide (A,T,C or G), three phosphate groups and deoxyribose. </p>
-                    <p> This iterative process goes the following way: remember we had our segments attached at one end. 
-                        So, the next thing we do is attaching them at the second end to another oligo from the flow cell to form
-                        a U-shaped "bridge". Then this single-stranded bridge is "repaired" by dNTP to 
-                        a double stranded bridge chain and again broken into 2 separate strands. What we get as a result is 2
-                        complementary sequences identical to each other but attached at different ends to the flow cell.</p>
+                        Next thing we do is, again, iteratively multiplying the number of "trees" in our "forest" to make it easier
+                        for a sequencing device to read the nucleotides. This is done via a process that is very similar to
+                        PCR-amplification and that is called <b class="text-navy">bridge amplification</b>.</p>
+                    <p>    
+                        Bridge amplification process follows essentially the same cycle (<i>attach primer -> apply DNA polymerase ->
+                            denaturate double-stranded chains into single-stranded ones -> repeat</i>). The only difference
+                        here is that our initial sequences are now attached at one of the ends. The trick here 
+                        is that we use the free attached oligos left on the lanes as our primers. In other words, 
+                        we form U-shaped bridges from the single-stranded nucleotide chains, and then run the amplification
+                        process on them. As a result of each iteration, we get 2 complementary sequences identical to 
+                        each other but attached at different ends to the flow cell. </p>
                     <p>
                         The process is repeated numerous times, and as a result we get "islands" (<b class="text-navy">clusters</b>)
-                        of segment copies and reverse complements, where all copies are attached at one end and all complements - 
-                        at the other end. This whole process is called <b class="text-navy">bridge amplification</b>.
+                        of segment copies and their reverse complements, where all copies are attached at one end and all complements - 
+                        at the other end. Now, we are eventually ready to sequence the data on our flow cell.
                     </p>
-                    <h3>3. Attachment of primers and sequencing</h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Image 3. Bridge amplification process</h4>
+                            <img src='img/guides/img3.png' width="100%">
+                        </div>
+                    </div>
+                    <h3>3. Sequencing</h3>
                     <p>                           
+                        Sequencing process is done iteratively, nucleotide by nucleotide, but on all attached fragments in parallel.
+                        First, again, we attach the primers to our single-stranded sequences, to mark the starting point for
+                        sequence reconstruction. Next, instead of DNA-polymerase, we spray a mix of four 
+                        types of reversible terminator bases <b class="text-navy">(RT-bases)</b> on the flow cell.
+                        Each RT-base consists of one of four nucleotides plus a fluorescent dye.
+                        Nucleotides in the RT-bases attach to our single-stranded chains at the spots marked by primers
+                        and fluoresce. A camera takes an image of the surface, determining which fluorescent nucleotide
+                        has been attached to every fragment, thereby "reading" one nucleotide per fragment.</p>
+                    <p>    
+                        An important point about RT-bases is the following: they are able to
+                        attach to the nucleotide chains <u>only one base at a time</u>, as they contain a terminal 3' blocker.
+                        But then, after the camera has taken the image, they can be treated chemically to remove the blocker 
+                        and the dye and become a binding point for attachment of the next RT-base nucleotide. In this way, the 
+                        sequencing device can read the nucleotide chains base-by-base, taking an image and then washing away 
+                        the blockers and the dye at each iteration.
+                    </p>    
+                    <p>
+                        Technical limitation on the number of iterations is 100-120 launches. In other words, an Illumina 
+                        sequencing device can read the fragments of 100-120 nucleotides long. These processed fragments are recorded
+                        in the FASTA/FASTQ file and called <b class="text-navy">reads</b>. The number of fragments read in parallel
+                        at every "shot" of the camera is several million fragments, so the processing speed of a sequencing device
+                        is pretty fast.  
+                    </p>    
+                    <p>
+                        What kind of extra information does the sequencing device record apart from the nucleotides themselves?
+                        Lots of it. First of all, it records the location of the fragment on the flow cell/lane to trace back the
+                        local impurities/contamination, if any. Second, as many of the reads are exact copies of each other, the
+                        device validates the quality of its processing by comparing the reads from the same cluster. Finally,
+                        the sequencer stores the information about whether the reads are <b class="text-navy">paired-ended </b>
+                        which means that they are taken from the same cluster, but from a fragment and its reverse complement.
+                        All this information is also stored in the FASTQ files in different ways, together with the reads themselves.
+                    </p>
+                    <br/>
+
+
+                    First, in most cases we don't need to sequence the whole genome (it is quite costly), but only 
+                    certain genes in it.
+                    Primers can stick to a particular part of the genome and act as markers. 
+                    Usually 
+                    when a researcher is interested in a particular gene, he orders a primer that is complementary to a 
+                    particular spot on the genome close to that gene. The primer sticks to this spot and marks the place 
+                    starting from which the sequencing device should read the data.
+                    //как работают панели?
+
+                    <h3>FASTA format</h3>
+
+                    Tradeoff between coverage depth and breadth of the survey (whole genome with good coverage is extremely expensive)
+
+                    targeted gene sequencing
+                    Gene panels can be purchased with preselected content or custom designed to include genomic regions of interest.
+                    Targeted gene sequencing also produces a smaller, more manageable data set compared to broader 
+                    approaches such as whole-genome sequencing, making analysis easier.
+                    </p>                     
+                    <p>
+                        DNA polymerases can only add nucleotides to existing parts of DNA, not at any random spot of the chain. 
+                    </p>
+                    <p>
+                        So they stick, and the dNTP begins rebuilding the chain, which is detected by the reader and recorded as
+                        a FASTA sequence.
+
+                        DNA polymerase synthesizes DNA from deoxyribonucleotides.
+                        DNA polymerase и dNTP -- это одно и то же?
+
+                        No known DNA polymerase is able to begin a new chain (de novo); it can only add a nucleotide onto a
+                        pre-existing 3'-OH group, and therefore needs a primer at which it can add the first nucleotide
+
+                        Получается адаптеры -- это тоже праймеры?
+
+                        Fluorescency -- как используется?
                         Primers are used to mark the parts of DNA/RNA that are going to be sequenced, as in most cases you don't
                         want to sequence the whole genome (it's very costly) but only particular parts of it.
                         Primers possess chemical structure that allows them to bind to the specific sites on the genome marking
                         these sites for further processing.</p>
 
-                       
-                        dNTP copies each chain, and then                     
-                        How does Illumina know which strands are forward and which are reverse?
-                        This is how the quality of the read is determined.
-                    
+
+                    dNTP copies each chain, and then                     
+                    How does Illumina know which strands are forward and which are reverse?
+                    This is how the quality of the read is determined.
+
                     The technique commonly used in molecular biology for to amplify a single copy of DNA fragment into 
                     multiple copies is PCR (polymerase chain reaction).
 
@@ -100,7 +197,7 @@
                     Fluorescently labeled nucleotides
                     Solid phase amplification generates copies around the template molecule.
                     Sequencing by synthesis and dNTP
-                    
+
                     Here's a very good video from Illumina that visualizes the whole process.
 
                     <b class="text-navy">Flow cell</b> has lanes
@@ -165,14 +262,18 @@
                     Paired-end DNA sequencing reads provide superior alignment across DNA regions containing repetitive sequences, 
                     and produce longer contigs for de novo sequencing by filling gaps in the consensus sequence.
 
-                    </p>
-                    <br/>
-                    <h3>1. FASTA format</h3>
+
                     <p>
                         So, let's finally move to the FASTA format topic and what kind of information is stored in the files of 
                         this format.
                         FASTA format is a text-based format that contains information about nucleotide sequences. 
                         Every record in the file represents a sequence and consists of two lines.
+
+                        Why is it important to understand the basics of lab process to work with FASTA files?
+                        1. Removing adapters
+                        2. Quality of the reads
+                        3. How to we distinguish between forward and reverse strand reads?
+                        4. What are lanes for, and what is encoded in FASTA heading?
                     </p>
 
                     <p>
