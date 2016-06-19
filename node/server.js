@@ -171,7 +171,18 @@ setInterval(function(){
 },500);
 
 http.listen(3000, function(){
-  console.log('listening on *:3000');
+  console.log('http listening on *:3000');
 });
 
+var https = require('https');
+var fs = require('fs');
+
+var ssl_options = {
+  key: fs.readFileSync('node/ssl/pkey.pem'),
+  cert: fs.readFileSync('node/ssl/cert.pem')
+};
+
+https.createServer(ssl_options,app).listen(443, function() {
+  console.log('https listening on *:443');
+});
 
