@@ -9,7 +9,7 @@
 
                 </div>
                 <div class="logo-element">
-                    
+
                 </div>
             </li>
             <li ng-class="{active: $state.includes('pipelines')}">
@@ -36,7 +36,7 @@
             </li>
             <li ng-class="{active: $state.includes('mailbox')}" ng-controller="mailboxController as t" ng-init="t.init()">
                 <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">Support </span>
-                    <span class="label label-warning pull-right" ng-if="t.numberOfInbox>0">{{t.numberOfInbox}}</span></a>
+                    <span class="label label-warning pull-right" ng-if="t.numberOfInbox > 0">{{t.numberOfInbox}}</span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('mailbox')}">
                     <li ui-sref-active="active"><a ui-sref="mailbox.inbox">Mailbox</a></li>
                 </ul>
@@ -46,6 +46,7 @@
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('guides')}">
                     <li ui-sref-active="active"><a ui-sref="guides.article4">Genomics 101: what is going on in the lab?</a></li>
                     <li ui-sref-active="active"><a ui-sref="guides.article1">FASTA/FASTQ format</a></li>
+                    <li ui-sref-active="active"><a ui-sref="guides.article5">What is reference genome?</a></li>
                     <li ui-sref-active="active"><a ui-sref="guides.article2">BWA vs Bowtie</a></li>
                     <li ui-sref-active="active"><a ui-sref="guides.article3">SNPs and InDels</a></li>
                 </ul>

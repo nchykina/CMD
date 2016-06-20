@@ -1650,6 +1650,11 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/guides/article4.html",
                 data: {pageTitle: 'Article 4'}
             })
+            .state('guides.article5', {
+                url: "/article5",
+                templateUrl: "views/guides/article5.html",
+                data: {pageTitle: 'Article 5'}
+            })
             .state('blog', {
                 abstract: true,
                 url: "/blog",
@@ -1664,6 +1669,11 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/article4",
                 templateUrl: "views/guides/article4.html",
                 data: {pageTitle: 'Article 4'}
+            })
+            .state('blog.article5', {
+                url: "/article5",
+                templateUrl: "views/guides/article5.html",
+                data: {pageTitle: 'Article 5'}
             })
             ;
 
