@@ -16,7 +16,7 @@ var createOrUpdateCustomer = function (req, res) {
             if (err)
                 return res.json({success: false, msg: 'No user found with such id'});
             if (user.stripeCustomerId) { //1. если уже существующий клиент
-                stripe.customers.createSource(user.stripeCustomerId,{source: token},
+                stripe.customers.createSource(user.stripeCustomerId, {source: token},
                         function (error, card) {
                             if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается card=null
                                 res.json({success: false, msg: error});
@@ -36,7 +36,7 @@ var createOrUpdateCustomer = function (req, res) {
                     email: req.user.email
                 }, function (error, customer) {
                     if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается customer=null
-                        res.json({success: false, msg: error});
+                        res.json({success: false, msg: 'Error'});
                     }
                     //если клиент создан
                     if (customer) {
@@ -59,60 +59,39 @@ var createOrUpdateCustomer = function (req, res) {
     }
 };
 
-var retrieveCustomer = function (req, res) {
+
+var createSubscriptions = function (req, res) {
     if (req.user) {
-
-        var customerId = req.body.customerId;
         var secret = stripeConfig.secret;
-        stripe.customers.retrieve(customerId, function (error, customer) {
-            if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается customer=null
-                res.json({success: false, msg: error});
-            }
-            //если клиент существует
-            if (customer) {
-                console.log(customer.id);
-                res.json({success: true, msg: "Customer exists"});
+
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return res.json({success: false, msg: 'No user found with such id'});
+            if (user.stripeCustomerId) {
+
+                for (var key in user.cart) { //а если зафейлится посередине?
+                    //сейчас почему-то только первая подписка
+                    stripe.subscriptions.create({
+                        customer: user.stripeCustomerId,
+                        plan: user.cart[key].productId
+                    },
+                            function (error, subscription) {
+                                if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается customer=null
+                                    //res.json({success: false, msg: 'Error'});
+                                    console.log(error);
+                                }
+                                if (!subscription) {
+                                    //res.json({success: false, msg: "Error, subscription not created"});
+                                }
+                            }
+                    );
+                }
+                res.json({success: true, msg: "Subscriptions created"});
             } else {
-                console.log(res);
-                res.json({success: false, msg: "No such customer in Stripe"});
+                res.json({success: false, msg: "Stripe customer ID not set"});
             }
-        }
-        );
 
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-
-
-
-var createSubscription = function (req, res) {
-    if (req.user) {
-
-
-        var customerId = req.body.customerId;
-        var secret = stripeConfig.secret;
-        stripe.customers.create({
-            description: 'TEST',
-            source: token,
-            email: 'test@test.com'
-        }, function (error, customer) {
-            if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается null
-                console.log("FAIL");
-                res.json({success: false, msg: error});
-            }
-            console.log("SUCCESS");
-            //если клиент создан
-            if (customer) {
-                console.log(customer);
-                res.json({success: true, msg: "Customer created"});
-            } else {
-                console.log(res);
-                res.json({success: false, msg: "Error, no customer created"});
-            }
-        }
-        );
+        });
 
     } else {
         res.json({success: false, msg: 'No user logged in'});
@@ -121,8 +100,7 @@ var createSubscription = function (req, res) {
 
 var bindFunction = function (router) {
     router.post('/create_or_update_customer', createOrUpdateCustomer);
-    //router.get('/retrieve_customer', createCustomer);
-    router.post('/create_subscription', createSubscription);
+    router.post('/create_subscriptions', createSubscriptions);
 };
 
 module.exports = {

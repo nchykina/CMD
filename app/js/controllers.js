@@ -4142,12 +4142,22 @@ function stripeCtrl($scope, $http, $state) {
                     .success(function (response) {
                         if (response.success) {
                             console.log("Customer created/updated");
-                        }
-                        else{
-                           console.log("Error"); 
+                            //create subscriptions from user cart here
+                            $http({
+                                method: 'POST',
+                                url: 'api/create_subscriptions'
+                            })
+                                    .success(function (response) {
+                                        if (response.success) {
+                                            console.log("Subscriptions created");
+                                        } else {
+                                            console.log("Error, subscriptions not created");
+                                        }
+                                    });
+                        } else {
+                            console.log("Error, customer not created/updated");
                         }
                     });
-
         }
 
     };
