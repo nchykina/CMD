@@ -4134,15 +4134,20 @@ function stripeCtrl($scope, $http, $state) {
             console.log("FAILURE"); //сделать нормальную валидацию с выводом всего на формочку
         } else {
             var token = response.id;
-            console.log("SUCCESS, TOKEN=", token);
             $http({
                 method: 'POST',
-                url: 'api/create_customer',
+                url: 'api/create_or_update_customer',
                 data: {'token': token}
             })
                     .success(function (response) {
-                        console.log("Customer created");
+                        if (response.success) {
+                            console.log("Customer created/updated");
+                        }
+                        else{
+                           console.log("Error"); 
+                        }
                     });
+
         }
 
     };

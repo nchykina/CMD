@@ -1686,9 +1686,6 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
 angular
         .module('inspinia')
         .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider', config])
-       // .config(function ($window) {
-        //        $window.Stripe.setPublishableKey('pk_test_3PdEaAF2Xakn5JoEG6CEKSau');
-        //    })
         .run(function ($rootScope, $state) {
             $rootScope.$state = $state;
 
