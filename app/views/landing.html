@@ -2,7 +2,8 @@
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" 
+                        data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -14,6 +15,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a class="page-scroll" page-scroll href="#page-top">Home</a></li>
                     <li><a class="page-scroll" page-scroll href="#summary">Our services</a></li>
+                    <li><a class="page-scroll" page-scroll href="#guides">Guides</a></li>
                     <li><a class="page-scroll" page-scroll href="#contact">Contact</a></li>
                 </ul>
             </div>
@@ -189,27 +191,27 @@
         </div>
         <div class="row">
             <div class="col-sm-4 wow fadeInLeft">
-                <div class="team-member">
-                    <img src="img/guides/logo1.png" class="img-responsive img-small" ui-sref="blog.article4" alt="">
+                <div class="team-member" ui-sref="blog.article4">
+                    <img src="img/guides/logo1.png" class="img-responsive img-small"  alt=""/>
                     <h4><span class="navy">Genomics 101: </span> What is going on in the lab?</h4>
                     <p>Learn how to get the reads from the raw data with Illumina</p>
-                    
+
                 </div>
             </div>
             <div class="col-sm-4">
-                <div class="team-member wow zoomIn">
-                    <img src="img/guides/logo2.png" class="img-responsive img-small ui-sref="blog.article1" alt="">
+                <div class="team-member wow zoomIn" ui-sref="blog.article1">
+                    <img src="img/guides/logo2.png" class="img-responsive img-small  alt=""/>
                     <h4><span class="navy">Reading the genetic code: </span> FASTA/FASTQ formats</h4>
                     <p>Understand how bioinformaticians store the raw data about nucleotides</p>
-                    
+
                 </div>
             </div>
             <div class="col-sm-4 wow fadeInRight">
-                <div class="team-member">
-                    <img src="img/guides/logo3.png" class="img-responsive img-small" ui-sref="blog.article5" alt="">
+                <div class="team-member" ui-sref="blog.article5">
+                    <img src="img/guides/logo3.png" class="img-responsive img-small"  alt=""/>
                     <h4><span class="navy">Reference genome: </span> where does it come from?</h4>
                     <p>Figure out who is the default homo sapiens we compare ourselves to</p>
-                    
+
                 </div>
             </div>
         </div>
@@ -411,8 +413,7 @@
             var sy = scrollY();
             if (sy >= changeHeaderOn) {
                 $(header).addClass('navbar-scroll')
-            }
-            else {
+            } else {
                 $(header).removeClass('navbar-scroll')
             }
             didScroll = false;

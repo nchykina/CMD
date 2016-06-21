@@ -1534,7 +1534,11 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controllerAs: 'em',
                 data: {pageTitle: 'Shopping cart'}
             })
-
+            .state('commerce.stripe', {
+                url: "/stripe",
+                templateUrl: "views/ecommerce/stripe_form.html",
+                data: {pageTitle: 'Stripe form'}
+            })
 
 
             .state('gallery', {
@@ -1628,7 +1632,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('guides', {
                 abstract: true,
                 url: "/guides",
-                templateUrl: "views/common/content.html",
+                templateUrl: "views/common/content.html"
             })
             .state('guides.article1', {
                 url: "/article1",
@@ -1670,6 +1674,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/guides/article4.html",
                 data: {pageTitle: 'Article 4'}
             })
+
             .state('blog.article5', {
                 url: "/article5",
                 templateUrl: "views/guides/article5.html",
@@ -1681,6 +1686,9 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
 angular
         .module('inspinia')
         .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider', config])
+       // .config(function ($window) {
+        //        $window.Stripe.setPublishableKey('pk_test_3PdEaAF2Xakn5JoEG6CEKSau');
+        //    })
         .run(function ($rootScope, $state) {
             $rootScope.$state = $state;
 

@@ -22,6 +22,7 @@ var express_sess = require('express-session');
 var cookie = require('cookie');
 var connect = require('connect');
 var redis_connect = require('connect-redis');
+var cfg = require('./config/config');
 
 
 var User = require('./models/user');
@@ -182,7 +183,7 @@ var ssl_options = {
   cert: fs.readFileSync('node/ssl/cert.pem')
 };
 
-https.createServer(ssl_options,app).listen(443, function() {
+https.createServer(ssl_options,app).listen(cfg.ssl_port, function() {
   console.log('https listening on *:443');
 });
 

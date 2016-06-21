@@ -4119,12 +4119,43 @@ function mailServerCtrl($scope, $http, $state) {
 
 }
 
+
+function stripeCtrl($scope, $http, $state) {
+    var tm = this;
+
+    $scope['getStripeToken'] = function (status, response) {
+        console.log("TEST STRIPE");
+        console.log("CARD Number:", $scope.number);
+        console.log("Name on card:", $scope.name);
+        console.log("Expiration month:", $scope.expMonth);
+        console.log("Expiration year:", $scope.expYear);
+        console.log("CVC:", $scope.cvc);
+        if (response.error) {
+            console.log("FAILURE"); //сделать нормальную валидацию с выводом всего на формочку
+        } else {
+            var token = response.id;
+            console.log("SUCCESS, TOKEN=", token);
+            $http({
+                method: 'POST',
+                url: 'api/create_customer',
+                data: {'token': token}
+            })
+                    .success(function (response) {
+                        console.log("Customer created");
+                    });
+        }
+
+    };
+
+}
+
 /**
  *
  * Pass all functions into module
  */
 angular
         .module('inspinia')
+        // .module('angularPayments')
         .controller('MainCtrl', MainCtrl)
         .controller('dashboardFlotOne', dashboardFlotOne)
         .controller('dashboardFlotTwo', dashboardFlotTwo)
@@ -4169,6 +4200,7 @@ angular
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
+        .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 
