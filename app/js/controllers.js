@@ -4150,6 +4150,7 @@ function stripeCtrl($scope, $http, $state) {
                                     .success(function (response) {
                                         if (response.success) {
                                             console.log("Subscriptions created");
+                                            //здесь вызвать send_invoice, перенести его в mailSender и переписать
                                             $state.go('commerce.orders');
                                         } else {
                                             console.log("Error, subscriptions not created");
