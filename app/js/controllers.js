@@ -4121,7 +4121,15 @@ function mailServerCtrl($scope, $http, $state) {
 
 
 function stripeCtrl($scope, $http, $state) {
+
     var tm = this;
+
+    tm.subscriptions = {};
+    tm.numberOfActiveSubscriptions = {};
+
+    this.init = function () {
+        tm.getActiveSubscriptions();
+    };
 
     $scope['getStripeToken'] = function (status, response) {
         console.log("TEST STRIPE");
@@ -4162,6 +4170,38 @@ function stripeCtrl($scope, $http, $state) {
                     });
         }
 
+    };
+
+    this.getActiveSubscriptions = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_active_subscriptions'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("TEST");
+                        tm.subscriptions = data.subscriptions;
+                        tm.numberOfActiveSubscriptions = data.numberOfActiveSubscriptions;
+                    } else {
+                        tm.numberOfActiveSubscriptions = 0;
+                    }
+                });
+    };
+
+    this.unsubscribe = function (subscriptionId) {
+        $http({
+            method: 'POST',
+            url: 'api/unsubscribe',
+            data: {'subscriptionId': subscriptionId}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("UNSUBSCRIBED");
+                        tm.init();
+                    } else {
+                        console.log("ERROR");
+                    }
+                });
     };
 
 }

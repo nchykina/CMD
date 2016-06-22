@@ -615,10 +615,12 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/account/user_profile.html",
                 data: {pageTitle: 'User profile'}
             })
-            .state('user.subscription', {
-                url: "/subscription",
-                templateUrl: "views/user_subscription.html",
-                data: {pageTitle: 'Manage my subscription'}
+            .state('user.subscriptions', {
+                url: "/subscriptions",
+                controller: 'stripeController',
+                controllerAs: 'tm',
+                templateUrl: "views/account/user_subscriptions.html",
+                data: {pageTitle: 'Manage my subscriptions'}
             })
 
             .state('forms.file_upload', {

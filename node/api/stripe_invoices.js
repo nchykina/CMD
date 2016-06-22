@@ -70,7 +70,6 @@ var createSubscriptions = function (req, res) {
             if (user.stripeCustomerId) {
 
                 for (var key in user.cart) { //а если зафейлится посередине?
-                    //сейчас почему-то только первая подписка
                     stripe.subscriptions.create({
                         customer: user.stripeCustomerId,
                         plan: user.cart[key].productId
@@ -98,9 +97,78 @@ var createSubscriptions = function (req, res) {
     }
 };
 
+var getActiveSubscriptions = function (req, res) {
+    if (req.user) {
+        var secret = stripeConfig.secret;
+
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return res.json({success: false, msg: 'No user found with such id'});
+            if (user.stripeCustomerId) {
+
+                stripe.subscriptions.list({
+                    customer: user.stripeCustomerId,
+                    limit: 100
+                },
+                        function (error, subscriptions) {
+                            if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается customer=null
+                                res.json({success: false, msg: 'Error'});
+                            }
+                            if (subscriptions) {
+                                console.log(subscriptions.data);
+                                res.json({success: true, msg: "Subscriptions retrieved",
+                                    subscriptions: subscriptions.data, numberOfActiveSubscriptions: subscriptions.data.length});
+                            } else {
+                                res.json({success: false, msg: 'Error'});
+                            }
+                        }
+                );
+            } else {
+                res.json({success: false, msg: "Stripe customer ID not set"});
+            }
+
+        });
+
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+var unsubscribe = function (req, res) {
+    if (req.user) {
+        var subscriptionId = req.body.subscriptionId;
+        var secret = stripeConfig.secret;
+
+        //проверяем есть ли уже такой юзер в базе Stripe (тогда у него есть stripeCustomerId)
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return res.json({success: false, msg: 'No user found with such id'});
+            stripe.subscriptions.del(subscriptionId,
+                    function (error, confirmation) {
+                        if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается card=null
+                            res.json({success: false, msg: "Error"});
+                        }
+                        //если карта создана
+                        if (confirmation) {
+                            res.json({success: true, msg: "Subscription cancelled"});
+                        } else {
+                            res.json({success: false, msg: "Error"});
+                        }
+                    }
+            );
+
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+
 var bindFunction = function (router) {
     router.post('/create_or_update_customer', createOrUpdateCustomer);
     router.post('/create_subscriptions', createSubscriptions);
+    router.get('/get_active_subscriptions', getActiveSubscriptions);
+    router.post('/unsubscribe', unsubscribe);
 };
 
 module.exports = {
