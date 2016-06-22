@@ -69,6 +69,7 @@ var createSubscriptions = function (req, res) {
                 return res.json({success: false, msg: 'No user found with such id'});
             if (user.stripeCustomerId) {
 
+                var subscriptionIds = [];
                 for (var key in user.cart) { //а если зафейлится посередине?
                     stripe.subscriptions.create({
                         customer: user.stripeCustomerId,
@@ -164,11 +165,51 @@ var unsubscribe = function (req, res) {
 };
 
 
+var checkIfSubscribed = function (req, res) {
+    if (req.user) {
+        var secret = stripeConfig.secret;
+
+        User.findOne({'_id': req.user._id}, function (err, user) {
+            if (err)
+                return res.json({success: false, msg: 'No user found with such id'});
+            if (user.stripeCustomerId) {
+
+                stripe.customers.retrieve(user.stripeCustomerId,
+                        function (error, customer) {
+                            if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается customer=null
+                                res.json({success: false, msg: 'Error'});
+                            }
+                            if (customer) {
+                                if(customer.subscriptions){
+                                    console.log("SUBSCRIPTIONS: ", customer.subscriptions.data);
+                                    res.json({success: true, msg: 'Error'});
+                                }
+                                else{
+                                    res.json({success: false, msg: 'No subscriptions for this customer'});
+                                }                        
+                            } else {
+                                res.json({success: false, msg: 'Error'});
+                            }
+                        }
+                );
+            } else {
+                res.json({success: false, msg: "Stripe customer ID not set"});
+            }
+
+        });
+
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+
 var bindFunction = function (router) {
     router.post('/create_or_update_customer', createOrUpdateCustomer);
     router.post('/create_subscriptions', createSubscriptions);
     router.get('/get_active_subscriptions', getActiveSubscriptions);
     router.post('/unsubscribe', unsubscribe);
+    router.get('/check_if_subscribed', checkIfSubscribed);
 };
 
 module.exports = {

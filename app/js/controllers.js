@@ -4083,17 +4083,19 @@ function ecommerceCtrl($scope, $http, $state) {
                 });
     };
 
-    em.test = '111';
-
-    this.testListener = function () {
+    this.checkIfSubscribed = function (productId) { // TBD
         $http({
             method: 'GET',
-            url: 'api/activate_listener'
+            url: 'api/check_if_subscribed',
+            params: {'productId': productId}
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log("TEST");
-                        em.test = data.msg;
+                        //update data in productList?
+                        console.log("SUBSCRIBED");
+                        em.init();
+                    } else {
+                        console.log("NOT SUBSCRIBED");
                     }
                 });
     };
@@ -4158,8 +4160,7 @@ function stripeCtrl($scope, $http, $state) {
                                     .success(function (response) {
                                         if (response.success) {
                                             console.log("Subscriptions created");
-                                            //здесь вызвать send_invoice, перенести его в mailSender и переписать
-                                            $state.go('commerce.orders');
+                                            tm.sendPurchaseConfirmation();
                                         } else {
                                             console.log("Error, subscriptions not created");
                                         }
@@ -4179,7 +4180,6 @@ function stripeCtrl($scope, $http, $state) {
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log("TEST");
                         tm.subscriptions = data.subscriptions;
                         tm.numberOfActiveSubscriptions = data.numberOfActiveSubscriptions;
                     } else {
@@ -4203,6 +4203,22 @@ function stripeCtrl($scope, $http, $state) {
                     }
                 });
     };
+    
+    this.sendPurchaseConfirmation = function () {
+        $http({
+            method: 'POST',
+            url: 'api/send_purchase_confirmation'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("PURCHASE CONFIRMATION SENT");
+                        $state.go("commerce.orders");
+                       
+                    } else {
+                        console.log("PURCHASE CONFIRMATION NOT SENT");
+                    }
+                });
+    };
 
 }
 
@@ -4212,7 +4228,6 @@ function stripeCtrl($scope, $http, $state) {
  */
 angular
         .module('inspinia')
-        // .module('angularPayments')
         .controller('MainCtrl', MainCtrl)
         .controller('dashboardFlotOne', dashboardFlotOne)
         .controller('dashboardFlotTwo', dashboardFlotTwo)
