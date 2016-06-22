@@ -4170,7 +4170,7 @@ function stripeCtrl($scope, $http, $state) {
 
         if (tm.performCardValidation()) {
             if (response.error) {
-                console.log("FAILURE ", response); //сделать нормальную валидацию с выводом всего на формочку
+                console.log("FAILURE ", response);
                 tm.generalValidationMessage = "Please enter correct card data";
             } else {
                 tm.generalValidationMessage = '';
