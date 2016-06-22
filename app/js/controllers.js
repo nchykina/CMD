@@ -4203,7 +4203,7 @@ function stripeCtrl($scope, $http, $state) {
                     }
                 });
     };
-    
+
     this.sendPurchaseConfirmation = function () {
         $http({
             method: 'POST',
@@ -4212,8 +4212,20 @@ function stripeCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         console.log("PURCHASE CONFIRMATION SENT");
-                        $state.go("commerce.orders");
-                       
+                        $http({
+                            method: 'POST',
+                            url: 'api/create_order'
+                        })
+                                .success(function (data) {
+                                    if (data.success) {
+                                        console.log("ORDER CREATED");
+                                        $state.go("commerce.orders");
+
+                                    } else {
+                                        console.log("ORDER NOT CREATED");
+                                    }
+                                });
+
                     } else {
                         console.log("PURCHASE CONFIRMATION NOT SENT");
                     }
