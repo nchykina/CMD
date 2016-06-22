@@ -20,12 +20,13 @@ var createOrUpdateCustomer = function (req, res) {
                         function (error, card) {
                             if (error) { // неправильно хэндлятся ошибки в Страйпе!!! Если неправильный запрос, просто возвращается card=null
                                 res.json({success: false, msg: error});
-                            }
-                            //если карта создана
-                            if (card) {
-                                res.json({success: true, msg: "Customer updated"});
                             } else {
-                                res.json({success: false, msg: "Failed to create a new card for the customer"});
+                                //если карта создана
+                                if (card) {
+                                    res.json({success: true, msg: "Customer updated"});
+                                } else {
+                                    res.json({success: false, msg: "Failed to create a new card for the customer"});
+                                }
                             }
                         }
                 );
@@ -180,13 +181,12 @@ var checkIfSubscribed = function (req, res) {
                                 res.json({success: false, msg: 'Error'});
                             }
                             if (customer) {
-                                if(customer.subscriptions){
+                                if (customer.subscriptions) {
                                     console.log("SUBSCRIPTIONS: ", customer.subscriptions.data);
                                     res.json({success: true, msg: 'Error'});
-                                }
-                                else{
+                                } else {
                                     res.json({success: false, msg: 'No subscriptions for this customer'});
-                                }                        
+                                }
                             } else {
                                 res.json({success: false, msg: 'Error'});
                             }

@@ -4133,43 +4133,76 @@ function stripeCtrl($scope, $http, $state) {
         tm.getActiveSubscriptions();
     };
 
-    $scope['getStripeToken'] = function (status, response) {
-        console.log("TEST STRIPE");
-        console.log("CARD Number:", $scope.number);
-        console.log("Name on card:", $scope.name);
-        console.log("Expiration month:", $scope.expMonth);
-        console.log("Expiration year:", $scope.expYear);
-        console.log("CVC:", $scope.cvc);
-        if (response.error) {
-            console.log("FAILURE"); //сделать нормальную валидацию с выводом всего на формочку
+    tm.cardValidationMessage = '';
+    tm.cvcValidationMessage = '';
+    tm.expiryValidationMessage = '';
+    tm.generalValidationMessage = '';
+
+    this.performCardValidation = function () {
+        if (!Stripe.card.validateCardNumber($scope.number)) {
+            tm.cardValidationMessage = "Invalid card number";
+            return false;
         } else {
-            var token = response.id;
-            $http({
-                method: 'POST',
-                url: 'api/create_or_update_customer',
-                data: {'token': token}
-            })
-                    .success(function (response) {
-                        if (response.success) {
-                            console.log("Customer created/updated");
-                            //create subscriptions from user cart here
-                            $http({
-                                method: 'POST',
-                                url: 'api/create_subscriptions'
-                            })
-                                    .success(function (response) {
-                                        if (response.success) {
-                                            console.log("Subscriptions created");
-                                            tm.sendPurchaseConfirmation();
-                                        } else {
-                                            console.log("Error, subscriptions not created");
-                                        }
-                                    });
-                        } else {
-                            console.log("Error, customer not created/updated");
-                        }
-                    });
+            if ($scope.number.length != 16) {
+                tm.cardValidationMessage = "Invalid card number";
+                return false;
+            } else {
+                tm.cardValidationMessage = '';
+                if (!Stripe.card.validateCVC($scope.cvc)) {
+                    tm.cvcValidationMessage = "Invalid CVC";
+                    return false;
+                } else {
+                    tm.cvcValidationMessage = '';
+                    if (!Stripe.card.validateExpiry($scope.expiry)) { //expMonth и expYear в этом сраном фреймворке не работают
+                        tm.expiryValidationMessage = "Invalid expiration date";
+                        return false;
+                    } else {
+                        tm.expiryValidationMessage = '';
+                        return true;
+                    }
+                }
+            }
         }
+    };
+
+    $scope['makePurchase'] = function (status, response) {
+        console.log("Name on card:", $scope.name); //no validation here at all!!!
+
+        if (tm.performCardValidation()) {
+            if (response.error) {
+                console.log("FAILURE ", response); //сделать нормальную валидацию с выводом всего на формочку
+                tm.generalValidationMessage = "Please enter correct card data";
+            } else {
+                tm.generalValidationMessage = '';
+                var token = response.id;
+                $http({
+                    method: 'POST',
+                    url: 'api/create_or_update_customer',
+                    data: {'token': token}
+                })
+                        .success(function (response) {
+                            if (response.success) {
+                                console.log("Customer created/updated");
+                                //create subscriptions from user cart here
+                                $http({
+                                    method: 'POST',
+                                    url: 'api/create_subscriptions'
+                                })
+                                        .success(function (response) {
+                                            if (response.success) {
+                                                console.log("Subscriptions created");
+                                                tm.sendPurchaseConfirmation();
+                                            } else {
+                                                console.log("Error, subscriptions not created");
+                                            }
+                                        });
+                            } else {
+                                console.log("Error, customer not created/updated");
+                            }
+                        });
+            }
+        }
+
 
     };
 
