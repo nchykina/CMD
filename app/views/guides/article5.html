@@ -6,22 +6,263 @@
                     <div class="text-center article-title">
                         <span class="text-muted"><i class="fa fa-clock-o"></i> 20th June 2016</span>
                         <h1>
-                            What is reference genome?
+                            What is the reference genome?
                         </h1>
                     </div>
                     <p>
-                        There are two basic kinds of tasks that are solved by bioinformaticians working with a DNA:
-                        first, one can assemble a genome de novo, and, second, one can align the reads to a reference genome.
-                        But what exactly is this reference genome? Who does it belong to, and who sequenced it?
-                        Why do we compare our reads with it, and how different is a particular living creature from this 
-                        "referent" human being, mouse or dog?
+                        When doing DNA realignment, we are always using a reference genome of the corresponding
+                        species, as we compare the information in the reads with it, looking for SNPs and Indels. 
+                        But what exactly is this reference genome? Who does it belong to, and who assembled it?
                     </p>
-                    <p>
-                        Actually, there  
-                        haploid
-                    </p>
-                    <h3>Human genome project</h3>
 
+                    <h3>Haploidity</h3>
+                    <p>   
+                        Let's make it clear first what forms the human genome and how it is different from the DNA.
+                        The prevailing majority of cells in our body are <b class="text-navy">
+                            diploid</b>, which means that they have pairs of chromosomes, not a single copy of 
+                        each non-sex chromosome. The exception are sex cells which are <b class="text-navy">haploid
+                        </b>, so each of them contains only 1 chromosome in each of the 22 pairs. So,
+                        when scientists are talking about a human DNA, they usually mean the whole set of the
+                        DNA sequences contained in a diploid cell: 22 pairs of non-sex chromosomes, 1 pair of sex 
+                        chromosomes (XX for females and XY for males) and mitochondrial DNA that is located 
+                        outside of the cell's nucleus. </p>
+                    <div class="row">
+                        <div class='col-lg-8'>
+                            <p>
+                                Inclusion of both chromosomes in every pair allows to keep the information about <b class="text-navy">
+                                    homozygous</b> and <b class="text-navy">heterozygous</b> alleles in the chromosomes.
+                                Homozygous allels are the ones that have the same nucleotide on the same loci on both 
+                                chromosomes in a pair, while heterozygous alleles have different nucleotides on the same
+                                loci on each of the chromosomes (please see the picture on the right for 
+                                clarification).
+                            </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h4>Image 1. Zygosity</h4>
+                            <img src='img/guides/img7.jpg' width="100%" > 
+                        </div>
+                    </div>
+                    <p>
+                        So how is the human genome different? The simplifying assumption that the bioinformaticians
+                        make here is that the human genome is the DNA of a haploid cell, so it comprises only one chromosome
+                        per pair. In addition to that, it includes both chrX and chrY (so technically, it's a male),
+                        as well as the mitochondrial DNA (chrM).</p>
+                    <p>
+                        You can easily see the problem that arises here. Say, the reference person (suppose there has 
+                        been one, although there actually hasn't, as will be explained later) had heterozygosity on a particular
+                        allele with A on one chromosome and T on another. Then, we've made the reference genome haploid 
+                        and included only A-s in it. Afterwards, we take the reads from someone with the same heterozygosity
+                        on the same allele, and - voila - half of the reads show that there is an SNP on that allele,
+                        which is of course incorrect.
+                    </p>
+                    <h3>Human Genome Project</h3>
+                    <div class="row">
+                        <div class='col-lg-8'>
+                            <p>
+                                The Human Genome Project was started in 1990 with the goal of sequencing and identifying all three 
+                                billion chemical units in the human genetic instruction set
+                                
+                                HGP-Read and HGP-Write; synthesizing the human genome (announced only recently, in June 2016).
+                                a 'rough draft' of the genome was finished in 2000
+                                This first available rough draft assembly of the genome was completed by the Genome Bioinformatics 
+                                Group at the University of California, Santa Cruz, primarily led by then graduate student Jim Kent
+
+                                In May 2006, another milestone was passed on the way to completion of the project, when the 
+                                sequence of the last chromosome was published in Nature.
+
+                                The project did not aim to sequence all the DNA found in human cells. It sequenced only "euchromatic"
+                                regions of the genome, which make up about 90% of the genome. The other regions, called "heterochromatic"
+                                are found in centromeres and telomeres, and were not sequenced under the project.
+
+                                The Human Genome Project was declared complete in April 2003. An initial rough draft of the human
+                                genome was available in June 2000 and by February 2001 a working draft had been completed and 
+                                published followed by the final sequencing mapping of the human genome on April 14, 2003. 
+                            </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h4>Image 2. Euchromatin</h4>
+                            <img src='img/guides/img8.png' width="100%" > 
+                        </div>
+                    </div>
+                    <h3>Sampling</h3>
+                    <p>
+                        Another good question is how the scientists came up with the sample of people to be sequenced
+                        for the reference genome. GRCh37 was assembled from a sample of 13 anonymous volunteers from 
+                        Buffalo, New York.
+
+                        Averaging across N people and across alleles, we get 2N samples.
+                        <b class="text-navy">Haplotype</b> is a set of SNPs that are statistically associated (in other 
+                        words, that often occur together).
+                        used by bioinformaticians in realignment process is assumed to be
+                        haploid. This makes the alignment process quite complicated and perplexed, as 
+                        if an allele is heterozygous, it's unclear whether there is a mutation on that spot or not.
+                        Minor alleles and highly variable loci
+                        This haplotype has never existed in reality.
+                        Dominant vs recessive alleles.
+                        Population-wide studies
+
+                        The genome published by the HGP does not represent the sequence of every individual's genome. 
+                        It is the combined mosaic of a small number of anonymous donors, all of European origin. The 
+                        HGP genome is a scaffold for future work in identifying differences among individuals. 
+                        Subsequent projects sequenced the genomes of multiple distinct ethnic groups, though as of 
+                        today there is still only one "reference genome."
+                    </p>
+
+                    In May 2016, scientists considered extending the HGP to include creating a synthetic human genome.[5] 
+                    In June 2016, scientists formally announced HGP-Write, a plan to synthesize the human genome
+                    <h3>Versions of the human genome</h3>
+                    <p>
+                        Human genome project
+
+                        (In 2002 the National Institutes of Health started a $138 million project called the HapMap 
+                        to catalog the common variants in European, East Asian and African genomes.)
+
+                        Apart from the technical problems and issues described above, there is a lot of 
+                        institutional ones. Several major institutions have assembled their versions of the 
+                        reference genomes, and claim that their version should be used as a golden standard.
+                        There are actually several versions of human reference genome that are slightly different
+                        from each other. These versions have been assembled by different institutes and groups
+                        of scientists, and therefore vary in annotations and content. Also, the human genome is 
+                        constantly updated, as new information about it being discovered.</p>
+                    <p>
+                        The first reference genome has been assembled during Human Genome Project (HGP), and the cost
+                        of this process was around XXX USD mln. 
+                        
+                        The genome was broken into smaller pieces; approximately 150,000 base pairs in length.[36] These 
+                        pieces were then ligated into a type of vector known as "bacterial artificial chromosomes", or 
+                        BACs, which are derived from bacterial chromosomes which have been genetically engineered. 
+                        The vectors containing the genes can be inserted into bacteria where they are copied by the 
+                        bacterial DNA replication machinery. Each of these pieces was then sequenced separately as 
+                        a small "shotgun" project and then assembled. The larger, 150,000 base pairs go together to 
+                        create chromosomes. This is known as the "hierarchical shotgun" approach, because the genome
+                        is first broken into relatively large chunks, which are then mapped to chromosomes before 
+                        being selected for sequencing.
+                        
+                        In February 2009 GRC (Genome Reference Consortium) released the version of the genome called
+                        GRCh37. Afterwards, GRC planned to release GRCh38 sometime in 2013 and currently plans to issue
+                        a new version.
+                        The GRCh37 release comprises the following parts:
+                    </p>
+                    <ul>
+                        <li>24 chromosomal sequences (chr1 to chr22, X and Y)</li>
+                        <li>Mitochondrial sequence</li>
+                        <li>Several unlocalized sequences (those that are attributed to a particular chromosome, 
+                            but their location on it is unknown</li>
+                        <li>Several unplaced sequences (those that can't be aligned to a particular chromosome</li>
+                        <li>Alternative loci (sequences that contain alternative representations of 
+                            specific human genome regions</li>
+                    </ul>
+                    <p>    
+                        Actually, the person with hg19 genome never existed. 
+
+                    </p>
+
+                    <p>
+                        haploid means 
+                    </p>
+
+                    <h3>UCSC and hg19</h3>
+                    <p>
+                        UCSC is University of California, Santa Cruz.
+                        After GRCh37 was released, UCSC issued its own version of it and called in hg19.
+                        This version is essentially the same as GRCh37, but the sequences in it are named
+                        under a certain naming convention (for example, chrUn_gl000221 represents an unplaced
+                        sequence). More important point is that hg19 contains a different version of chrM
+                        (mitochondrial DNA) taken from the previous, GRCh36 build. This makes 
+
+                        Key difference was that the mitochondrial DNA part was taken from the previous build (GRCh36
+                        instead of GRCh37)
+
+                        Despite the nonstandard sequence naming, the stale mitochondrial sequence, and the inclusion
+                        of alternate loci (which is sometimes undesirable for read mapping), hg19 has gained popularity 
+                        due to its exposure via the UCSC genome browser, and is often the convention used by vendors 
+                        when reporting exome enrichment kit coordinates.
+
+                        Как соотносятся NCBI и UCSC?
+                        Genbank
+
+                    </p>
+
+                    <table class="footable table table-stripped">
+                        <thead>
+                            <tr>
+
+                                <th></th>
+                                <th>NCBI 36 (hg18)</th>
+                                <th>GRC h37</th>
+                                <th>UCSC hg19</th>
+                                <th>1000 Genomes Phase 1 (b37)</th>                                
+                                <th>1000 Genomes Phase 2 (b37+decoy)</th>
+                                <th>Ion Torrent hg19</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Chromosomes 1-22, X and Y</b></td>
+                                <td></td>
+                                <td>Named from "1" to "22", "X" and "Y"</td>
+                                <td>Named from "chr1" to "chr22", "chrX" and "chrY"</td>
+                                <td></td>
+                                <td></td>
+                                <td>Named from "chr1" to "chr22", "chrX" and "chrY"</td>
+                            </tr>
+                            <tr>
+                                <td><b>Mitochondrial DNA</b></td>
+                                <td></td>
+                                <td>Named as "MT"</td>
+                                <td>Named as "chrM"; <i>data taken from GRC h36</i></td>
+                                <td></td>
+                                <td></td>
+                                <td>Named as "chrM"; <i>data taken from GRC h37</i></td>
+                            </tr>
+                            <tr>
+                                <td><b>Unlocalized sequences</b></td>
+                                <td></td>
+                                <td>Named after accession numbers (e.g."GL000191.1") </td>
+                                <td>Named with custom names (e.g. "chr1_gl000191_random")</td>
+                                <td></td>
+                                <td></td>
+                                <td>Named with custom names (e.g. "chr1_gl000191_random")</td>
+                            </tr>
+                            <tr>
+                                <td><b>Unplaced sequences</b></td>
+                                <td></td>
+                                <td>Named after accession numbers (e.g."GL000211.1")</td>
+                                <td>Named with custom names (e.g. "chrUn_gl000221")</td>
+                                <td></td>
+                                <td></td>
+                                <td>Named with custom names (e.g. "chrUn_gl000221")</td>
+                            </tr>
+                            <tr>
+                                <td><b>Alternative loci</b></td>
+                                <td></td>
+                                <td>Included</td>
+                                <td>Included with custom names (e.g. "chr6_apd_hap1")</td>
+                                <td>Not included</td>
+                                <td>Not included</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Alternative loci</h3>
+                    Certain spots in the genome are highly variable among different people.
+
+
+
+                    Minor alleles are often included as a reference version, that's why the genotyping of
+                    individuals is usually performed on population data.
+
+                    <h3>1000 genomes project, phases I and II</h3>
 
                     <h3>Versions of the human reference genome</h3>
                     <p>Let's start with the human first. Current version o</p>
@@ -30,37 +271,34 @@
                     UCSC
                     NCBI
                     Ensembl?
-                    
+
                     The human reference genome sequence is maintained by the Genome Reference Consortium (GRC). 
-                    
+
                     The current version is called GRCh37 (also referred to as hg19), older versions are NCBI36 
                     (hg18), NCBI35 (hg17) etc. etc.
-                    
+
                     Unlike the previous assemblies NCBI36 etc. GRCh37 does include some alternative regions that attempt to 
                     cover some parts of the genome known to be highly variant between individuals (the MHC region for instance).
-                    
+
                     Note that the reference sequence is a mosaic haploid genome, meaning that it is assembled from mulitple 
                     individuals but only ever lists one individual's sequence at any given locus. This can have the unfortunate 
                     (but rare) effect of some regions of the reference having a haplotype which has never existed in any human population.
 
-The major browsers (Ensembl, UCSC, NCBI MapViewer) are all using the GRCh37 assembly.
-
                     What is haplotype?
-                    
+
                     because it is derived from just a few individuals, for part of the sequence variants the reference sequence contains the minor allele.
 
                     Genome Reference Consortium (GRC)
 
-                    Complex genome
-                    
+                    <h3>Complex genome</h3>
+
                     Genome in a Bottle
-                    
-                    <h3>GRC h37 = hg19</h3>
-                    
-                     <h3>Alternate loci</h3>
-                     MHC region (major histocompatibility complex)
+                    MHC region (major histocompatibility complex)
 
                     //a кто собирал референтный геном для собак и кошек?
+                    
+                    
+                    Craig Venter and Celera Genomics
                     <hr>
                 </div>
             </div>
