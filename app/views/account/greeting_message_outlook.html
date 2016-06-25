@@ -19,7 +19,7 @@
                                 <div style="clear:both;margin-bottom:25px;margin-top:0;padding:0">
                                     <div style="border-color:#e7eaec;border-image:none;border-style:solid solid none;border-width:3px 0 0;color:inherit;margin-bottom:0;padding:14px 15px 7px;min-height:48px">
                                         <br>
-                                        <h2 style="font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:30px;font-weight:100;font-size:24px;margin-top:5px">Dear <%= userName %>,</h2>
+                                        <h2 style="font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:30px;font-weight:100;font-size:24px;margin-top:5px">Dear ,</h2>
                                     </div>
                                     <div style="color:inherit;padding:15px 20px 20px 20px;border-color:#e7eaec;border-image:none;border-style:solid solid none;border-width:1px 0;clear:both">
                                         <p style="margin:0 0 10px">
@@ -39,15 +39,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% for(var i=0; i < cart.length; i++) { %>
                                     <tr>
                                         <td style="padding:0;line-height:1.42857143;border-top:1px solid #ddd;border-top:1px solid #e7eaec;line-height:1.42857;padding:8px;vertical-align:top">
-                                            <div><strong style="font-weight:700"><%= cart[i].productCategory %>: <%= cart[i].productName %></strong></div>
-                                            <small style="font-size:80%"><%= cart[i].description_short %> </small>
+                                            <div><strong style="font-weight:700">: </strong></div>
+                                            <small style="font-size:80%"> </small>
                                         </td>
-                                        <td style="padding:0;line-height:1.42857143;border-top:1px solid #ddd;border-top:1px solid #e7eaec;line-height:1.42857;padding:8px;vertical-align:top;text-align:right">$<%= cart[i].price %>.00</td>
+                                        <td style="padding:0;line-height:1.42857143;border-top:1px solid #ddd;border-top:1px solid #e7eaec;line-height:1.42857;padding:8px;vertical-align:top;text-align:right">$.00</td>
                                     </tr>
-                                     <% } %>
                                 </tbody>
                             </table>
                         </div>
