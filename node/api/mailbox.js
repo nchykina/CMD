@@ -1,4 +1,4 @@
-var Message = require('../models/message');
+/* var Message = require('../models/message');
 
 
 var createMessage = function (req, res) {
@@ -269,4 +269,4 @@ var bindFunction = function (router) {
 
 module.exports = {
     bind: bindFunction
-};
+}; */

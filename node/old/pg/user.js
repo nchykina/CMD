@@ -1,13 +1,14 @@
 var sequelize = require('../../config/pg');
 var Sequelize = require('sequelize');
 var Role = require('../../models/pg/role');
+var Product = require('../../models/pg/product');
 var q = require('Q');
 var bcrypt = require('bcryptjs');
 
 var User = sequelize.define('user', {
     firstname: Sequelize.STRING,
     lastname: Sequelize.STRING,
-    name: Sequelize.STRING,
+    name: Sequelize.STRING,        
     email: Sequelize.STRING,
     company: Sequelize.STRING,
     password: Sequelize.STRING,
@@ -56,7 +57,17 @@ var User = sequelize.define('user', {
             
             return defer.promise();
         }
+    },
+   indexes: [
+       {
+       unique: true,
+       fields: ['email']
+    },
+    {
+       unique: true,
+       fields: ['name']
     }
+   ]
 });
 
 User.belongsToMany(Role, {through: 'user_role'});

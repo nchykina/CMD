@@ -1,71 +1,55 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+'use strict';
+
+var q = require('Q');
 var bcrypt = require('bcryptjs');
 
-var UserSchema = new Schema({
-    name: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    firstname: {
-        type: String,
-        required: false
-    },
-    lastname: {
-        type: String,
-        required: false
-    },
-    company: {
-        type: String,
-        required: false
-    },
-    email: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    tempPassword: {
-        type: String,
-        required: false        
-    },
-    roles: [String],
-    cart: [{productName: String, productCategory: String, price: Number, addedDate: Date, productId: Number,
-        description_short: String, description_long: String, img_url: String, product_url: String}]
-});
-
-UserSchema.pre('save', function (next) {
-    var user = this;
-    if (this.isModified('password') || this.isNew) {
-        bcrypt.genSalt(10, function (err, salt) {
-            if (err) {
-                return next(err);
+module.exports = function (sequelize, DataTypes) {
+    var User = sequelize.define('User', {
+        firstname: DataTypes.STRING,
+        lastname: DataTypes.STRING,
+        name:
+                {
+                    type: DataTypes.STRING,
+                    unique: true
+                },
+        email:
+                {
+                    type: DataTypes.STRING,
+                    unique: true
+                },
+        company: DataTypes.STRING,
+        password: DataTypes.STRING,
+        temp_password: DataTypes.STRING
+    }, {
+        classMethods: {
+            associate: function (models) {
+                User.belongsToMany(models.Role, {through: models.UserRole, foreignKey: 'user_id', as: 'roles'});
+                User.belongsToMany(models.Product, {through: models.UserCart, foreignKey: 'user_id', as: 'cart'});
+                User.hasMany(models.Order, {as: 'orders'});
             }
-            bcrypt.hash(user.password, salt, function (err, hash) {
-                if (err) {
-                    return next(err);
-                }
-                user.password = hash;
-                next();
-            });
-        });
-    } else {
-        return next();
-    }
-});
+        },
+        
+        instanceMethods: {
+            comparePassword: function (passw) {
+                var defer = q.defer();
 
-UserSchema.methods.comparePassword = function (passw, cb) {
-    bcrypt.compare(passw, this.password, function (err, isMatch) {
-        if (err) {
-            return cb(err);
-        }
-        cb(null, isMatch);
+                bcrypt.compare(passw, this.password, function (err, isMatch) {
+                    if (err) {
+                        return defer.reject(err);
+                    }
+
+                    if (isMatch) {
+                        defer.resolve();
+                    } else {
+                        defer.reject('Password mismatch');
+                    }
+                });
+
+                return defer.promise;
+            }
+        },
+        
+        underscored: true
     });
+    return User;
 };
-
-
-module.exports = mongoose.model('User', UserSchema);

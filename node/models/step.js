@@ -1,17 +1,16 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Job = sequelize.define('Job', {
-    name: DataTypes.STRING,
-    jobtype: DataTypes.STRING,
+  var Step = sequelize.define('Step', {
+    command: DataTypes.STRING,
     status: DataTypes.STRING,
-    seq_species: DataTypes.STRING
+    taskid: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
-        Job.belongsTo(models.User, {as: 'owner'});
+        Step.belongsTo(models.Job);
       }
     },    
     underscored: true
   });
-  return Job;
+  return Step;
 };

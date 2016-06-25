@@ -1,16 +1,16 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Order = sequelize.define('Order', {
+  var OrderLine = sequelize.define('OrderLine', {
     payment_type: DataTypes.STRING,
     status: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
-        Order.belongsTo(models.User);
-        Order.hasMany(models.OrderLine);
+        OrderLine.belongsTo(models.Order);
+        OrderLine.belongsTo(models.Product);
       }
     },    
     underscored: true
   });
-  return Order;
+  return OrderLine;
 };

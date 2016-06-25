@@ -1,8 +1,11 @@
 var LocalStrategy = require('passport-local').Strategy;
+var config = require('../config');
+
+var models = require('../models');
 
 // load up the user model
-var User = require('../models/pg/user');
-var config = require('../config/mongo'); // get db config file
+//var User = require('../models/pg/user');
+//var config = require('../config/mongo'); // get db config file
 
 /* module.exports = function(passport) {
  var opts = {};
@@ -37,7 +40,7 @@ module.exports = function (passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function (id, done) {
-        User.findById(id).then(function (user) {
+        models.User.findById(id).then(function (user) {
             return done(null, user);
         }).catch(function (err) {
             return done(err, null);
@@ -106,7 +109,7 @@ module.exports = function (passport) {
 
                 // find a user whose email is the same as the forms email
                 // we are checking to see if the user trying to login already exists
-                User.findOne({'name': name}).then(function (user) {
+                models.User.findOne({'name': name}).then(function (user) {
                     // if the user is found but the password is wrong            
                     user.comparePassword(password).then(function () {
                         return done(null, user);

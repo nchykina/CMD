@@ -14,12 +14,12 @@ var bindFunction = function(router){
     router.use(bodyParser.json());
     
     auth.bind(router);  
-    mailbox.bind(router);
+    //mailbox.bind(router);
     job.bind(router);
     ecommerce.bind(router);
-    paypalInvoices.bind(router);
-    ipnListener.bind(router);
-    mailServer.bind(router);
+    //paypalInvoices.bind(router);
+    //ipnListener.bind(router);
+    //mailServer.bind(router);
 };
 
 module.exports = bindFunction;

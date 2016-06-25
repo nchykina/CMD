@@ -12,10 +12,7 @@
     
 }; */
 
-var SESS_SECRET = 'I love nuts!'; //secret to encrypt cookie (weak forging prevention)
-var SESS_SID = 'ngs.sid'; //name of cookie
 
-var redis = require('./config/redis');
 var express = require('express');
 var express_cp = require('cookie-parser');
 var express_sess = require('express-session');
@@ -23,15 +20,31 @@ var cookie = require('cookie');
 var connect = require('connect');
 var redis_connect = require('connect-redis');
 
-
-var User = require('./models/user');
+var config = require('./config');
 
 var app = express();
 var http = require('http').Server(app);
 
+var SESS_REDIS_URL = 'redis://'+config.redis_host+':6379/0'; //session storage
+var SIO_REDIS_URL = 'redis://'+config.redis_host+':6379/1'; //socket.io storage
+
+/* Socket.IO Redis Custom storage
+ * 
+ * see https://github.com/socketio/socket.io-redis#custom-client-eg-with-authentication
+ */
+
+var redis_cli = require('redis');
+
+var redis = {
+  sess_cli: redis_cli.createClient(SESS_REDIS_URL),
+  sub_cli: redis_cli.createClient(SIO_REDIS_URL),
+  pub_cli: redis_cli.createClient(SIO_REDIS_URL, {return_buffers: true }),
+  sess_store: null  
+};
+
 redis.sess_store = redis_connect(express_sess);
 
-var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: SESS_SECRET, key: 'ngs.sid'});
+var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: config.session_secret, key: config.session_sid});
 
 app.use(express_cp());
 app.use(sess_store);
@@ -65,7 +78,7 @@ app.use('/',express.static(__dirname + '/../app'));
 
 //var router = app.Router;
 app.all('/*', function(req, res, next) {
-  res.sendfile('index.html', { root: 'app' });
+  res.sendFile('index.html', { root: 'app' });
 });
 
 /*app.get('/', function (req, res) {

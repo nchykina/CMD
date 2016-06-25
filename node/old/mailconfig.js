@@ -1,4 +1,4 @@
-var smtpConfig = {
+/* var smtpConfig = {
     direct: false,
     host: 'mail.ngspipeline.com',
     port: 25,
@@ -8,4 +8,4 @@ var smtpConfig = {
     }
 };
 
-module.exports = smtpConfig;
+module.exports = smtpConfig; */

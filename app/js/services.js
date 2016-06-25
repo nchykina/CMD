@@ -5,12 +5,11 @@ var messageService = function () {
 
 };
 
-//not used
 var ecommerceService = function ($http) {
 
     var em = {};
     
-    em.productList = {};
+    em.cart = [];
 
     em.getProductList = function(){
         $http({

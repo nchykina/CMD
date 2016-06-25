@@ -1,0 +1,74 @@
+{
+    "development": {
+        "username": "ngspipeline",
+        "password": "qwerty",
+        "database": "ngspipeline_dev",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "redis_host": "localhost",
+        "storage_root": "/jobfiles",
+        "passport_secret": "myJWMsecret",
+        
+        "session_secret": "I love nuts!",
+        "session_sid": "ngs.sid",
+        
+        "smtpConfig": {
+            "direct": false,
+            "host": "mail.ngspipeline.com",
+            "port": 25,
+            "auth": {
+                "user": "support",
+                "pass": "Lapalapa1"
+            }
+        },
+        
+        "singularity": {
+            "api_url": "http://192.168.4.5:7099/singularity",
+            "my_url": "http://192.168.1.4:3000"
+        }
+    },
+    
+    "sergey-home-dev": {
+        "username": "ngspipeline",
+        "password": "qwerty",
+        "database": "ngspipeline_dev",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "redis_host": "192.168.1.7",
+        "storage_root": "C:\\node_files",
+        "passport_secret": "myJWMsecret",
+        
+        "session_secret": "I love nuts!",
+        "session_sid": "ngs.sid",
+        
+        "smtpConfig": {
+            "direct": false,
+            "host": "mail.ngspipeline.com",
+            "port": 25,
+            "auth": {
+                "user": "support",
+                "pass": "Lapalapa1"
+            }
+        },
+        
+        "singularity": {
+            "api_url": "http://192.168.4.5:7099/singularity",
+            "my_url": "http://192.168.1.4:3000"
+        }
+    },
+    
+    "test": {
+        "username": "root",
+        "password": null,
+        "database": "database_test",
+        "host": "127.0.0.1",
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "root",
+        "password": null,
+        "database": "database_production",
+        "host": "127.0.0.1",
+        "dialect": "mysql"
+    }
+}

@@ -1,11 +1,11 @@
-var Job = require('../models/job').model;
-var JobFile = require('../models/jobfile').model;
-var cfg = require('../config/config');
+//var cfg = require('../config/config');
+var env = process.env.NODE_ENV || 'development';
+var config = require(__dirname + '/../config/config.json')[env];
+var models = require('../models');
 var path = require('path');
 var fs = require('fs');
 
 var request = require('request');
-var singularity = require('../config/singularity');
 
 var extend = require('node.extend'); //merge JavaScript objects 
 var mkdirp = require('mkdirp'); //ensure dir exists
@@ -73,16 +73,20 @@ var job_create = function (req, res) {
         job_dna_reseq_create_steps(jobObj);
     }
 
-    var newJob = new Job(jobObj);
-
-    newJob.save(function (err) {
-        if (err) {
-            res.json({success: false, msg: 'Failed to create job'});
-            console.log(err);
-        } else {
-            res.json({success: true, msg: 'Successfuly created new job', job: newJob});
-        }
-    });
+    var newJob = models.Job.create(
+            jobObj,
+            {
+                include:
+                        [{model: models.Step,
+                                as: 'steps'}]
+            })
+            .then(function () {
+                res.json({success: true, msg: 'Successfuly created new job', job: newJob});
+            })
+            .catch(function (err) {
+                console.error('job_create: ' + err);
+                res.json({success: false, msg: 'Failed to create job'});
+            });
 }
 
 var job_dna_reseq_create_steps = function (job) {
@@ -129,54 +133,30 @@ var job_create_or_update = function (req, res) {
 
     extend(queryparams, req.body.jobparams);
 
-    Job.findOne(queryparams, function (err, job) {
-        if (err) {
-            res.json({success: false, msg: 'Lookup error'});
-        } else if (!job) {
-            job_create(req, res);
-        } else {
-            res.json({success: true, msg: 'Returning orphaned job. Abandoning your jobs is bad for society. And hurts your karma too', job: job});
-        }
-    });
-
-
+    models.Job.findOne(queryparams)
+            .then(function (job) {
+                res.json({success: true, msg: 'Returning orphaned job. Abandoning your jobs is bad for society. And hurts your karma too', job: job});
+            })
+            .catch(function (err) {
+                job_create(req, res);
+            });
 }
 
 var job_update = function (job) {
-    var defer = q.defer();
-
-    Job.findById(job._id,
-            function (err, dbjob) {
-                if (err) {
-                    console.error(err);
-                    defer.reject('db error: ' + err);
-                } else {                    
-                    extend(dbjob,job);
-                    
-                    dbjob.save(function (err) {
-                        if (err) {
-                            console.error(err);
-                            defer.reject('db error: ' + err);
-                        } else {
-                            defer.resolve();
-                        }
-                    });
-                }
-            });    
-    return defer.promise;
+    return job.save();
 }
 
 var job_submit_step = function (job, stepnum) {
     var step = job.steps[stepnum];
     var defer = q.defer();
 
-    var job_path = cfg.storage_path + path.sep + job._id;
+    var job_path = config.storage_root + path.sep + job._id;
 
-    var sing_id = job._id + '_' +stepnum +'_' + Date.now();
+    var sing_id = job._id + '_' + stepnum + '_' + Date.now();
 
     //create a request
     request.post({
-        url: singularity.singularity_api + '/api/requests',
+        url: config.singularity.api_url + '/api/requests',
         body: {
             id: sing_id,
             requestType: 'RUN_ONCE',
@@ -219,7 +199,7 @@ var job_submit_step = function (job, stepnum) {
             };
 
             request.post({
-                url: singularity.singularity_api + '/api/deploys',
+                url: config.singularity.api_url + '/api/deploys',
                 body: req_deploy,
                 json: true
             },
@@ -256,7 +236,7 @@ var job_submit_step = function (job, stepnum) {
                             return defer.resolve({msg: 'Successfuly submitted new job', job: job});
                         })
                                 .catch(function () {
-                                    return defer.reject({msg:'Failed to save job submission status'});
+                                    return defer.reject({msg: 'Failed to save job submission status'});
                                 });
 
                     });
@@ -279,18 +259,13 @@ var job_get = function (req, res) {
 
 
 
-    Job.findById(req.params.id, function (err, job) {
-        if (err) {
-            res.json({success: false, msg: 'Lookup error'});
-            return;
-        } else if (!job) {
-            res.json({success: false, msg: 'Job not found'});
-            return;
-        }
-
-        res.json({success: true, job: job});
-
-    });
+    models.Job.findById(req.params.id)
+            .then(function (job) {
+                return res.json({success: true, job: job});
+            })
+            .catch(function (err) {
+                return res.json({success: true, msg: 'Lookup failed'});
+            });
 }
 
 var job_submit = function (req, res, next) {
@@ -298,14 +273,20 @@ var job_submit = function (req, res, next) {
         res.json({success: false, msg: 'No jobid specified'});
     } else {
 
-        Job.findById(req.params.id, function (err, job) {
-            if (err) {
-                res.json({success: false, msg: 'Lookup error'});
-                return;
-            } else {
-                job_really_submit(job, req, res, next);
-            }
-        });
+        models.Job.findById(req.params.id, {
+            include: [
+                {model: models.Step,
+                    as: 'steps'}
+            ]})
+                .then(function (job) {
+                    job_really_submit(job, req, res, next);
+                }
+                )
+                .catch(function (err) {
+                    return res.json({success: false, msg: 'Lookup failed'});
+                }
+
+                );
     }
 }
 
@@ -329,10 +310,10 @@ var sing_bind = function () {
     var sing_hookid = '';
 
     request.post({
-        url: singularity.singularity_api + '/api/webhooks',
+        url: config.singularity.api_url + '/api/webhooks',
         body: {
             type: 'TASK',
-            uri: singularity.my_addr + '/api/job/hook'
+            uri: config.singularity.my_url + '/api/job/hook'
         },
         json: true
     },
@@ -359,88 +340,93 @@ var sing_hook = function (req, res) {
     //console.log('job update from singularity');
     if (!req.body.task) {
         //console.log('deploy singularity junk - skipping, we only care about tasks');
+        res.status(200).send('ok, got it');
     } else {
         //console.log(req.body);        
         var state = req.body.taskUpdate.taskState;
         var taskid = req.body.taskUpdate.taskId.deployId;
-        
+
         var i1 = taskid.indexOf('_');
-        var i2 = taskid.indexOf('_',i1+1);
-                
-        var jobid = taskid.substring(0,i1);
-        var stepid = taskid.substring(i1+1,i2);
-                
+        var i2 = taskid.indexOf('_', i1 + 1);
+
+        var jobid = taskid.substring(0, i1);
+        var stepid = taskid.substring(i1 + 1, i2);
+
         console.log('TASK ' + taskid);
         console.log('status change to ' + state);
-        
-        Job.findById(jobid, function(err, job){
-           if(err){
-               console.error('task status database update failed - could not select: '+err);
-               res.status(500).send('we\'ve got problems here. retry later please');
-           } 
-           else {
-               var cstate = job.steps[stepid].status;
-               
-               if(state === 'TASK_LAUNCHED'){
-                   switch(cstate){
-                       case 'submitted':
-                         job.steps[stepid].status = 'started';
-                         break;
-                     default:
-                         console.log('skipping wrong task status update order - current status: '+cstate+' new status: '+state);
-                         break;
-                   }                         
-               }
-               
-               if(state === 'TASK_RUNNING'){
-                   switch(cstate){
-                       case 'submitted':
-                       case 'started':
-                         job.steps[stepid].status = 'running';
-                         break;
-                     default:
-                         console.log('skipping wrong task status update order - current status: '+cstate+' new status: '+state);
-                         break;
-                   }                         
-               }
-               
-               if(state === 'TASK_FINISHED'){
-                   switch(cstate){
-                       case 'submitted':
-                       case 'started':
-                       case 'running':
-                         job.steps[stepid].status = 'finished';
-                         break;
-                     default:
-                         console.log('skipping wrong task status update order - current status: '+cstate+' new status: '+state);
-                         break;
-                   }                         
-               }
-               
-               if(state === 'TASK_FAILED'){
-                   switch(cstate){
-                       case 'submitted':
-                       case 'started':
-                       case 'running':
-                         job.steps[stepid].status = 'failed';
-                         break;
-                     default:
-                         console.log('skipping wrong task status update order - current status: '+cstate+' new status: '+state);
-                         break;
-                   }                         
-               }
-               
-               job.save(function(err){
-                   if(err){
-                       console.error('task status database update failed - could not save: '+err);
-                       res.status(500).send('we\'ve got problems here. retry later please');
-                   }
-               })
-           }
-        });
-    }
 
-    res.status(200).send('ok, got it');
+        models.sequelize.transaction(function (t) {
+            return models.Job.findById(jobid,
+                    {transaction: t,
+                        include: [
+                            {
+                                model: models.Step,
+                                as: 'steps'
+                            }
+                        ]}).then(function (job) {
+                var cstate = job.steps[stepid].status;
+
+                if (state === 'TASK_LAUNCHED') {
+                    switch (cstate) {
+                        case 'submitted':
+                            job.steps[stepid].status = 'started';
+                            break;
+                        default:
+                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            break;
+                    }
+                }
+
+                if (state === 'TASK_RUNNING') {
+                    switch (cstate) {
+                        case 'submitted':
+                        case 'started':
+                            job.steps[stepid].status = 'running';
+                            break;
+                        default:
+                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            break;
+                    }
+                }
+
+                if (state === 'TASK_FINISHED') {
+                    switch (cstate) {
+                        case 'submitted':
+                        case 'started':
+                        case 'running':
+                            job.steps[stepid].status = 'finished';
+                            break;
+                        default:
+                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            break;
+                    }
+                }
+
+                if (state === 'TASK_FAILED') {
+                    switch (cstate) {
+                        case 'submitted':
+                        case 'started':
+                        case 'running':
+                            job.steps[stepid].status = 'failed';
+                            break;
+                        default:
+                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            break;
+                    }
+                }
+
+                return job.save();
+
+            });
+        })
+                .then(function (result) {
+                    res.status(200).send('ok, got it');
+                })
+                .catch(function (err) {
+                    console.error("sing_hook: " + err);
+                    res.status(500).send('processing error');
+                });
+    }
 }
 
 var job_submit_file = function (req, res, next) {
@@ -455,81 +441,85 @@ var job_submit_file = function (req, res, next) {
         return;
     }
 
-    Job.findById(req.params.id, function (err, job) {
-        if (err) {
-            res.json({success: false, msg: 'Job lookup error'});
-        } else if (!job) {
-            res.json({success: false, msg: 'Job not found'});
-        } else if (job.status !== 'new') {
-            res.json({success: false, msg: 'Job cannot be changed after submission'});
-        } else {
-            var jobFile = {};
+    models.Job.findById(req.params.id)
+            .then(function (job) {
+                if (job.status !== 'new') {
+                    return res.json({success: false, msg: 'Job cannot be changed after submission'});
+                } else {
+                    var jobFile = {};
 
-            var uploadErrHandler = function (err) {
-                if (err) {
-                    console.log(err);
-                    res.json({success: false, msg: 'Error during upload'});
-                    return;
-                }
+                    /* this function is called later in the code */
+                    var uploadErrHandler = function (err) {
+                        if (err) {
+                            console.log(err);
+                            res.json({success: false, msg: 'Error during upload'});
+                            return;
+                        }
+                        
+                        //TODO: redesign for normal file storage
 
-                jobFile.upload_ended = Date.now();
+                        jobFile.upload_ended = Date.now();
 
-                //update jobFile parameters;
-                fs.stat(jobFile.store_path, function (err, stats) {
-                    if (err) {
-                        res.json({success: false, msg: 'Internal error: fs.stat'});
-                        return;
-                    } else {
-                        jobFile.filesize = stats.size;
-                        var jf = new JobFile(jobFile);
-                        job.filesIn[req.params.filenum] = jf;
-
-                        job.save(function (err) {
-
+                        //update jobFile parameters;
+                        fs.stat(jobFile.store_path, function (err, stats) {
                             if (err) {
-                                console.log(err);
-                                res.json({success: false, msg: 'Job update failed'});
+                                res.json({success: false, msg: 'Internal error: fs.stat'});
                                 return;
                             } else {
-                                res.json({success: true, msg: 'File uploaded', file_entry: jf});
+                                jobFile.filesize = stats.size;
+                                
+                                var jf = new JobFile(jobFile);
+                                job.filesIn[req.params.filenum] = jf;
+
+                                job.save(function (err) {
+
+                                    if (err) {
+                                        console.log(err);
+                                        res.json({success: false, msg: 'Job update failed'});
+                                        return;
+                                    } else {
+                                        res.json({success: true, msg: 'File uploaded', file_entry: jf});
+                                    }
+                                });
+                            }
+                        });
+                    };
+
+                    var parseJobFile = function (req, jobFile) {
+                        var str = jobFile.store_path;
+                        var i1 = str.lastIndexOf(path.sep);
+                        req.upload_folder = str.substring(0, i1);
+                        req.upload_file = str.substring(i1 + 1, str.length);
+
+                        mkdirp(req.upload_folder, function (err) {
+                            if (err) {
+                                res.json({success: false, msg: 'Failed to create storage'});
+                                return;
+                            } else {
+                                jobFile.upload_started = Date.now();
+                                upload(req, res, uploadErrHandler);
                             }
                         });
                     }
-                });
-            };
 
-            var parseJobFile = function (req, jobFile) {
-                var str = jobFile.store_path;
-                var i1 = str.lastIndexOf(path.sep);
-                req.upload_folder = str.substring(0, i1);
-                req.upload_file = str.substring(i1 + 1, str.length);
+                    jobFile = {
+                        store_path: config.storage_root + path.sep + job._id + path.sep + req.params.filenum
+                    };
 
-                mkdirp(req.upload_folder, function (err) {
-                    if (err) {
-                        res.json({success: false, msg: 'Failed to create storage'});
-                        return;
-                    } else {
-                        jobFile.upload_started = Date.now();
-                        upload(req, res, uploadErrHandler);
-                    }
-                });
-            }
+                    /* jobFile.save(function (err) {
+                     if (err) {
+                     res.json({success: false, msg: 'Failed to create file db entry'});
+                     return;
+                     } else { */
+                    parseJobFile(req, jobFile);
+                    /*}
+                     }); */
+                }
 
-            jobFile = {
-                store_path: cfg.storage_root + path.sep + job._id + path.sep + req.params.filenum
-            };
-
-            /* jobFile.save(function (err) {
-             if (err) {
-             res.json({success: false, msg: 'Failed to create file db entry'});
-             return;
-             } else { */
-            parseJobFile(req, jobFile);
-            /*}
-             }); */
-        }
-
-    });
+            })
+            .catch(function (err) {
+                return res.json({success: false, msg: 'Job selection failed'});
+            });
 }
 
 

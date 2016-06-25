@@ -1,4 +1,4 @@
-var Message = require('../models/message');
+/* var Message = require('../models/message');
 var nodemailer = require('nodemailer');
 var smtpConfig = require('../config/mailconfig');
 var fs = require('fs');
@@ -130,4 +130,4 @@ var bindFunction = function (router) {
 
 module.exports = {
     bind: bindFunction
-};
+}; */

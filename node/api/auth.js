@@ -1,11 +1,11 @@
 //var config = require('../config/mongo');
-var User = require('../models/pg/user');
-var Role = require('../models/pg/role');
+var models = require('../models');
 var passport = require('passport');
 
-//var mailserver = require('./mailserver');
-
 require('../config/passport')(passport);
+
+var q = require('Q');
+var bcrypt = require('bcryptjs');
 
 var login = function (req, res, next) {
     passport.authenticate('local-login',
@@ -31,58 +31,64 @@ var logout = function (req, res) {
     ;
 };
 
+var encryptPassword = function (password) {
+    var defer = q.defer();
+
+    bcrypt.genSalt(10, function (err, salt) {
+        if (err) {
+            return defer.reject(err);
+        }
+
+        bcrypt.hash(password, salt, function (err, hash) {
+            if (err) {
+                return defer.reject(err);
+            }
+
+            return defer.resolve(hash);
+        });
+    });
+
+    return defer.promise;
+}
+
 var register = function (req, res, next) {
     if (!req.body.name || !req.body.password) {
         res.json({success: false, msg: 'Please pass name and password.'});
     } else {
-        User.create({
-            name: req.body.name,
-            password: req.body.password,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-            roles: [
-                {name: 'user'}
-            ]
-        }, {
-            include: [ Role ]
-        }).then(function (user) {
-            req.logIn(user, function (err) {
-                if (err) {
-                    return next(err);
-                } else {
-                    // mailserver.greetUser(req, res); нет, так нельзя
-                    res.json({success: true, msg: 'Successfuly created new user'});
-                }
-            });
-        }).catch(function (err) {
-            console.error('Error while creating user: ' + err);
-            return res.json({success: false, msg: 'Username already exists.'});
+        encryptPassword(req.body.password).then(function (hash) {
 
-        });
+            models.User.create({
+                name: req.body.name,
+                password: hash,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                roles: [
+                    {name: 'user'}
+                ]
+            }, {
+                include: [models.Role]
+            }).then(function (user) {
+                req.logIn(user, function (err) {
+                    if (err) {
+                        return next(err);
+                    } else {
+                        // mailserver.greetUser(req, res); нет, так нельзя
+                        res.json({success: true, msg: 'Successfuly created new user'});
+                    }
+                });
+            }).catch(function (err) {
+                console.error('Error while creating user: ' + err);
+                return res.json({success: false, msg: 'Username already exists.'});
+
+            });
+        })
+                .catch(function (err) {
+                    console.error('Could not encrypt password: ' + err);
+                    return res.json({success: false, msg: 'Internal error'});
+                });
     }
 };
-
-/* var memberinfo = function(req,res){
- console.log('Memberinfo called');
- var token = getToken(req.headers);
- if (token) {
- var decoded = jwt.decode(token, config.secret);
- User.findOne({
- name: decoded.name
- }, function(err, user) {
- if (err) throw err;
- 
- if (!user) {
- return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
- } else {
- res.json({success: true, msg: 'Welcome in the member area ' + user.name + '!'});
- }
- });
- } else {
- return res.status(403).send({success: false, msg: 'No token provided.'});
- }
- }; */
 
 var memberinfo = function (req, res) {
 
@@ -119,7 +125,7 @@ var saveProfileChanges = function (req, res) {
     if (req.user) {
         var userData = req.body;
 
-        User.findOne({'id': req.user.id}, function (err, user) {
+        models.User.findOne({'id': req.user.id}, function (err, user) {
             if (err)
                 return console.error(err);
 
@@ -149,7 +155,7 @@ var updatePassword = function (req, res) {
         console.log("USER DATA IN NODE", userId, " ", oldPassword, " ", newPassword);
 
 
-        User.findOne({'id': req.user.id}).then(function (user) {
+        models.User.findOne({'id': req.user.id}).then(function (user) {
 
             user.comparePassword(oldPassword).then(function () {
                 //if correct old password is provided
@@ -189,7 +195,7 @@ var updateForgottenPassword = function (req, res) {
 
     console.log("USER DATA IN NODE", userNameTemp, " ", tempPassword, " ", newPasswordTemp);
 
-    User.findOne({'name': userNameTemp}).then(function (user) {
+    models.User.findOne({'name': userNameTemp}).then(function (user) {
         if (user.tempPassword === tempPassword) {
             user.setPassword(newPasswordTemp);
             user.tempPassword = '';

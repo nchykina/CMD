@@ -3941,6 +3941,10 @@ function ecommerceCtrl($scope, $http, $state) {
 
     em.productList = {};
     em.orders = {};
+    
+    this.updateCart = function() {        
+        
+    }
 
     this.init = function () {
         em.getProductList();
