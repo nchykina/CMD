@@ -134,9 +134,11 @@
                         The human genome in GRCh37 release comprises <i>24 chromosomal sequences</i> (chromosomes 1 to 22, X
                         and Y) and <i>mitochondrial DNA sequence</i>. In addition to that, it included several <i>unlocalized
                             sequences</i> (those that are attributed to a particular chromosome, but their location on it is
-                        unknown), <i>unplaced sequences</i> (those that couldn't have been aligned to a particular 
-                        chromosome) and <i>alternative loci</i> (sequences that contain alternative representations
-                        of specific human genome regions).
+                        unknown) and <i>unplaced sequences</i> (those that couldn't have been aligned to a particular 
+                        chromosome). Also, starting from the h37 release, GRC reference genome began to include
+                        the <b class="text-navy">alternative loci</b> - sequences that contain alternative representations
+                        of specific, highly variable human genome regions (such as major histocompatibility complex
+                        region, essential for the immune system).
                     </p>
                     <p>
                         In December 2013 a new version of the GRC reference genome (<b class="text-navy">GRCh38</b>)
@@ -148,114 +150,85 @@
                     <h4>3. UCSC hg19</h4> 
                     <p>
                         Shortly after GRCh37 has been released, UCSC (University of California, Santa Cruz) released
-                        its own build of the reference genome called hg19, that is currently widely used. The key
+                        its own build of the reference genome called <b class="text-navy">hg19</b>. The key
                         difference in this build is the mitochondrial DNA sequence, which is taken from the previous,
                         GRCh36 genome version. Also, UCSC uses slightly different naming scheme for the 
-                        chromosomes and unplaced/unlocalized sequences.
-                    </p>
+                        chromosomes and unplaced/unlocalized sequences.</p>
                     <p>
-                        Afterwards, Ion Torrent (one of the key producers of sequencing devices) has also issued its 
+                        The hg19 build has gained popularity due to its availability via the UCSC genome browser, 
+                        and is often the convention used by vendors when reporting exome enrichment kit coordinates.
+                        Also, Ion Torrent (one of the key producers of sequencing devices) has also issued its 
                         own version of UCSC's hg19 reference genome, with the only difference being that chrM is used
                         from GRCh37, not GRCh36 build.
                     </p>
-                    <h4>4. HapMap and 1000 genomes</h4> 
+                    <h4>4. 1000 genomes project</h4> 
                     <p>
                         1000 Genomes project took quite a different approach. It was launched in January 2008 and was aimed
                         at sequencing the genomes of 1000 anonymous participants from different ethnic groups.
-                        
+                        The reference genome created by the project was called <b class="text-navy">b37</b>.
+                        It follows the naming conventions similar to GRC's ones, but doesn't include the
+                        alternative loci at all.
                     </p>
                     <p>
-                        1000 Genomes naming conventions are followed in dbSNP!
-                        (In 2002 the National Institutes of Health started a $138 million project called the HapMap 
-                        to catalog the common variants in European, East Asian and African genomes.)
-                    </p>
-
-                    <h3>Versions of the human genome</h3>             
-
+                        The International HapMap Project launched in 2002 had somewhat similar goal as 1000 Genomes, 
+                        being aimed at creating a haplotype map of the human genome to describe the common patterns 
+                        of human genetic variation. It used samples from 269 individuals that were genotyped;
+                        however, it didn't sequence the whole genome of every individual (it was still too costly
+                        at that time). Instead, the scientists selected several million well-defined SNPs and genotyped 
+                        the individuals for them.
+                    </p>      
                     <p>
-                        Another issue is the <b class="text-navy">alternative loci</b> on the human genome that are 
-                        highly variable
+                        So, in short, the key differences among the versions of the reference genome can be summarized
+                        in a table below:
                     </p>
-
-
-                    <h3>UCSC and hg19</h3>
-                    <p>
-                        This version is essentially the same as GRCh37, but the sequences in it are named
-                        under a certain naming convention (for example, chrUn_gl000221 represents an unplaced
-                        sequence). More important point is that hg19 contains a different version of chrM
-                        (mitochondrial DNA) taken from the previous, GRCh36 build. This makes 
-
-                        Key difference was that the mitochondrial DNA part was taken from the previous build (GRCh36
-                        instead of GRCh37)
-
-                        Despite the nonstandard sequence naming, the stale mitochondrial sequence, and the inclusion
-                        of alternate loci (which is sometimes undesirable for read mapping), hg19 has gained popularity 
-                        due to its exposure via the UCSC genome browser, and is often the convention used by vendors 
-                        when reporting exome enrichment kit coordinates.
-
-                    </p>
-
                     <table class="footable table table-stripped">
                         <thead>
                             <tr>
 
                                 <th></th>
-                                <th>NCBI 36 (hg18)</th>
                                 <th>GRC h37</th>
                                 <th>UCSC hg19</th>
-                                <th>1000 Genomes Phase 1 (b37)</th>                                
-                                <th>1000 Genomes Phase 2 (b37+decoy)</th>
+                                <th>1000 Genomes b37</th>                                
                                 <th>Ion Torrent hg19</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><b>Chromosomes 1-22, X and Y</b></td>
-                                <td></td>
                                 <td>Named from "1" to "22", "X" and "Y"</td>
                                 <td>Named from "chr1" to "chr22", "chrX" and "chrY"</td>
-                                <td></td>
-                                <td></td>
+                                <td>Named from "1" to "22", "X" and "Y"</td>
                                 <td>Named from "chr1" to "chr22", "chrX" and "chrY"</td>
                             </tr>
                             <tr>
                                 <td><b>Mitochondrial DNA</b></td>
-                                <td></td>
                                 <td>Named as "MT"</td>
                                 <td>Named as "chrM"; <i>data taken from GRC h36</i></td>
-                                <td></td>
-                                <td></td>
+                                <td>Named as "MT"</td>
                                 <td>Named as "chrM"; <i>data taken from GRC h37</i></td>
                             </tr>
                             <tr>
                                 <td><b>Unlocalized sequences</b></td>
-                                <td></td>
                                 <td>Named after accession numbers (e.g."GL000191.1") </td>
                                 <td>Named with custom names (e.g. "chr1_gl000191_random")</td>
-                                <td></td>
-                                <td></td>
+                                <td>Named after accession numbers (e.g."GL000191.1")</td>
                                 <td>Named with custom names (e.g. "chr1_gl000191_random")</td>
                             </tr>
                             <tr>
                                 <td><b>Unplaced sequences</b></td>
-                                <td></td>
                                 <td>Named after accession numbers (e.g."GL000211.1")</td>
                                 <td>Named with custom names (e.g. "chrUn_gl000221")</td>
-                                <td></td>
-                                <td></td>
+                                <td>Named after accession numbers (e.g."GL000211.1")</td>
                                 <td>Named with custom names (e.g. "chrUn_gl000221")</td>
                             </tr>
                             <tr>
                                 <td><b>Alternative loci</b></td>
-                                <td></td>
                                 <td>Included</td>
                                 <td>Included with custom names (e.g. "chr6_apd_hap1")</td>
                                 <td>Not included</td>
-                                <td>Not included</td>
-                                <td></td>
+                                <td>Included with custom names (e.g. "chr6_apd_hap1")</td>
                             </tr>
                             <tr>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -266,57 +239,16 @@
                         </tbody>
                     </table>
 
-                    <h3>Alternative loci</h3>
-                    Certain spots in the genome are highly variable among different people.
-
-
-
-                    Minor alleles are often included as a reference version, that's why the genotyping of
-                    individuals is usually performed on population data.
-
-                    <h3>1000 genomes project, phases I and II</h3>
-
-                    <h3>Versions of the human reference genome</h3>
-                    <p>Let's start with the human first. Current version o</p>
-
-                    Each institution has its own version of the reference genome. 
-                    UCSC
-                    NCBI
-                    Ensembl?
-
-                    The human reference genome sequence is maintained by the Genome Reference Consortium (GRC). 
-
-                    The current version is called GRCh37 (also referred to as hg19), older versions are NCBI36 
-                    (hg18), NCBI35 (hg17) etc. etc.
-
-                    Unlike the previous assemblies NCBI36 etc. GRCh37 does include some alternative regions that attempt to 
-                    cover some parts of the genome known to be highly variant between individuals (the MHC region for instance).
-
-                    Note that the reference sequence is a mosaic haploid genome, meaning that it is assembled from mulitple 
-                    individuals but only ever lists one individual's sequence at any given locus. This can have the unfortunate 
-                    (but rare) effect of some regions of the reference having a haplotype which has never existed in any human population.
-
-                    What is haplotype?
-
-                    because it is derived from just a few individuals, for part of the sequence variants the reference sequence contains the minor allele.
-
-                    Genome Reference Consortium (GRC)
-
-                    <h3>Complex genome</h3>
-
-                    Genome in a Bottle
-                    MHC region (major histocompatibility complex)
-
-                    //a кто собирал референтный геном для собак и кошек?
-
-
-                    Craig Venter and Celera Genomics
-
                     <h3>What's next?</h3>
-                    HGP-Read and HGP-Write; synthesizing the human genome (announced only recently, in June 2016).
-                    In May 2016, scientists considered extending the HGP to include creating a synthetic human genome.[5] 
-                    In June 2016, scientists formally announced HGP-Write, a plan to synthesize the human genome
-
+                    <p>
+                    
+                    Further advances in the reference genome area are constantly taking place, as different organizations
+                    continue the issuance of improved and more precise builds. </p>
+                    <p>
+                        Also, in June 2016 HGP-Write mega-project has been officially announced, as a continuation of 
+                        the HGP-Read project that has been completed. The goal of HGP-Write iss to create
+                        a synthetic human genome within the next 10 years.
+                    </p>                                  
                     <hr>
                 </div>
             </div>
