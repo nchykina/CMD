@@ -4087,17 +4087,19 @@ function ecommerceCtrl($scope, $http, $state) {
                 });
     };
 
-    em.test = '111';
-
-    this.testListener = function () {
+    this.checkIfSubscribed = function (productId) { // TBD
         $http({
             method: 'GET',
-            url: 'api/activate_listener'
+            url: 'api/check_if_subscribed',
+            params: {'productId': productId}
         })
                 .success(function (data) {
                     if (data.success) {
-                        console.log("TEST");
-                        em.test = data.msg;
+                        //update data in productList?
+                        console.log("SUBSCRIBED");
+                        em.init();
+                    } else {
+                        console.log("NOT SUBSCRIBED");
                     }
                 });
     };
@@ -4118,6 +4120,152 @@ function mailServerCtrl($scope, $http, $state) {
         })
                 .success(function (response) {
                     console.log("Greeting success");
+                });
+    };
+
+}
+
+
+function stripeCtrl($scope, $http, $state) {
+
+    var tm = this;
+
+    tm.subscriptions = {};
+    tm.numberOfActiveSubscriptions = {};
+
+    this.init = function () {
+        tm.getActiveSubscriptions();
+    };
+
+    tm.cardValidationMessage = '';
+    tm.cvcValidationMessage = '';
+    tm.expiryValidationMessage = '';
+    tm.generalValidationMessage = '';
+
+    this.performCardValidation = function () {
+        if (!Stripe.card.validateCardNumber($scope.number)) {
+            tm.cardValidationMessage = "Invalid card number";
+            return false;
+        } else {
+            if ($scope.number.length != 16) {
+                tm.cardValidationMessage = "Invalid card number";
+                return false;
+            } else {
+                tm.cardValidationMessage = '';
+                if (!Stripe.card.validateCVC($scope.cvc)) {
+                    tm.cvcValidationMessage = "Invalid CVC";
+                    return false;
+                } else {
+                    tm.cvcValidationMessage = '';
+                    if (!Stripe.card.validateExpiry($scope.expiry)) { //expMonth и expYear в этом сраном фреймворке не работают
+                        tm.expiryValidationMessage = "Invalid expiration date";
+                        return false;
+                    } else {
+                        tm.expiryValidationMessage = '';
+                        return true;
+                    }
+                }
+            }
+        }
+    };
+
+    $scope['makePurchase'] = function (status, response) {
+        console.log("Name on card:", $scope.name); //no validation here at all!!!
+
+        if (tm.performCardValidation()) {
+            if (response.error) {
+                console.log("FAILURE ", response);
+                tm.generalValidationMessage = "Please enter correct card data";
+            } else {
+                tm.generalValidationMessage = '';
+                var token = response.id;
+                $http({
+                    method: 'POST',
+                    url: 'api/create_or_update_customer',
+                    data: {'token': token}
+                })
+                        .success(function (response) {
+                            if (response.success) {
+                                console.log("Customer created/updated");
+                                //create subscriptions from user cart here
+                                $http({
+                                    method: 'POST',
+                                    url: 'api/create_subscriptions'
+                                })
+                                        .success(function (response) {
+                                            if (response.success) {
+                                                console.log("Subscriptions created");
+                                                tm.sendPurchaseConfirmation();
+                                            } else {
+                                                console.log("Error, subscriptions not created");
+                                            }
+                                        });
+                            } else {
+                                console.log("Error, customer not created/updated");
+                            }
+                        });
+            }
+        }
+
+
+    };
+
+    this.getActiveSubscriptions = function () {
+        $http({
+            method: 'GET',
+            url: 'api/get_active_subscriptions'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        tm.subscriptions = data.subscriptions;
+                        tm.numberOfActiveSubscriptions = data.numberOfActiveSubscriptions;
+                    } else {
+                        tm.numberOfActiveSubscriptions = 0;
+                    }
+                });
+    };
+
+    this.unsubscribe = function (subscriptionId) {
+        $http({
+            method: 'POST',
+            url: 'api/unsubscribe',
+            data: {'subscriptionId': subscriptionId}
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("UNSUBSCRIBED");
+                        tm.init();
+                    } else {
+                        console.log("ERROR");
+                    }
+                });
+    };
+
+    this.sendPurchaseConfirmation = function () {
+        $http({
+            method: 'POST',
+            url: 'api/send_purchase_confirmation'
+        })
+                .success(function (data) {
+                    if (data.success) {
+                        console.log("PURCHASE CONFIRMATION SENT");
+                        $http({
+                            method: 'POST',
+                            url: 'api/create_order'
+                        })
+                                .success(function (data) {
+                                    if (data.success) {
+                                        console.log("ORDER CREATED");
+                                        $state.go("commerce.orders");
+
+                                    } else {
+                                        console.log("ORDER NOT CREATED");
+                                    }
+                                });
+
+                    } else {
+                        console.log("PURCHASE CONFIRMATION NOT SENT");
+                    }
                 });
     };
 
@@ -4173,6 +4321,7 @@ angular
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
+        .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 

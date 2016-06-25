@@ -1,0 +1,96 @@
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="http://ngspipeline.com/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://ngspipeline.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+        <link href="http://ngspipeline.com/css/animate.css" rel="stylesheet">
+        <link href="http://ngspipeline.com/css/style.css" rel="stylesheet">
+
+    </head>
+    <body>       
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="ibox-content p-xl">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <img src="http://ngspipeline.com/img/logo.png" width="100%">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+
+                                        <br>
+                                        <h2>Dear <%= userName %>,</h2>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <p>
+                                            Thank you for your recent purchase at NGS Pipeline. 
+                                            Please find below the list of products that are currently available for you.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive m-t">
+                            <table class="table invoice-table">
+                                <thead>
+                                    <tr>
+                                        <th>List of subscriptions activated</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i < cart.length; i++) { %>
+                                    <tr>
+                                        <td>
+                                            <div><strong><%= cart[i].productCategory %>: <%= cart[i].productName %></strong></div>
+                                            <small> <%= cart[i].description_short %></small>
+                                        </td>
+                                        <td>$<%= cart[i].price %>.00</td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox float-e-margins">
+
+                                    <div class="ibox-content">
+                                        <p>                                            
+                                            If you have any questions, please let us know.
+                                        </p>
+                                        <p>
+                                            Yours,<br/>
+                                            NGS Pipeline Team
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="text-muted">
+                                    Copyright NGS Pipeline &copy; 2016. 
+                                    Please feel free to contact us at 
+                                    <a href="mailto:support@ngspipeline.com">support@ngspipeline.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

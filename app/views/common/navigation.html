@@ -3,14 +3,11 @@
         <ul side-navigation class="nav metismenu" id="side-menu">
             <li class="nav-header">
 
-                <div class="profile-element" uib-dropdown >
+                <div class="profile-element" uib-dropdown style="cursor:pointer">
                     <h1 class="text-navy" ui-sref="landing"><b>NGS</b></h1>
                     <h1 class="text-white text-center" ui-sref="landing"><b>Pipeline</b></h1>
 
-                </div>
-                <div class="logo-element">
-                    IN+
-                </div>
+                </div>             
             </li>
             <li ng-class="{active: $state.includes('pipelines')}">
                 <a href=""><i class="fa fa-table"></i> <span class="nav-label">Perform data analysis</span><span class="fa arrow"></span></a>
@@ -32,11 +29,12 @@
                     <li ui-sref-active="active"><a ui-sref="commerce.products_grid">Purchase extra options</a></li>
                     <li ui-sref-active="active"><a ui-sref="commerce.cart">Shopping cart</a></li>
                     <li ui-sref-active="active"><a ui-sref="commerce.orders">My purchases</a></li>
+
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('mailbox')}" ng-controller="mailboxController as t" ng-init="t.init()">
                 <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">Support </span>
-                    <span class="label label-warning pull-right" ng-if="t.numberOfInbox>0">{{t.numberOfInbox}}</span></a>
+                    <span class="label label-warning pull-right" ng-if="t.numberOfInbox > 0">{{t.numberOfInbox}}</span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('mailbox')}">
                     <li ui-sref-active="active"><a ui-sref="mailbox.inbox">Mailbox</a></li>
                 </ul>
@@ -44,8 +42,9 @@
             <li ng-class="{active: $state.includes('guides')}">
                 <a ui-sref="inbox"><i class="fa fa-globe"></i> <span class="nav-label">Guides </span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('guides')}">
+                    <li ui-sref-active="active"><a ui-sref="guides.article4">Genomics 101: what is going on in the lab?</a></li>
                     <li ui-sref-active="active"><a ui-sref="guides.article1">FASTA/FASTQ format</a></li>
-                    <li ui-sref-active="active"><a ui-sref="guides.article2">BWA vs Bowtie</a></li>
+                    <li ui-sref-active="active"><a ui-sref="guides.article5">What is the reference genome?</a></li>
                     <li ui-sref-active="active"><a ui-sref="guides.article3">SNPs and InDels</a></li>
                 </ul>
             </li>

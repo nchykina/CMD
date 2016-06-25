@@ -1,0 +1,71 @@
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="tm.init()">
+    <div class="col-sm-4">
+        <h2>My account</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li class="active">
+                <strong>Manage my subscriptions</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>My active subscriptions </h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                            <tr>
+
+                                <th>Product</th>
+                                <th>Purchase date</th>
+                                <th>Current subscription period start</th> 
+                                <th>Current subscription period end</th>    
+                                 <th></th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in tm.subscriptions">
+                                <td>
+                                    {{x.plan.name}}
+                                </td>  
+                                <td>
+                                    {{x.start * 1000| date:'MMM d, yyyy'}}
+                                </td>
+                                <td>
+                                    {{x.current_period_start * 1000| date:'MMM d, yyyy'}}
+                                </td>
+                                <td>
+                                    {{x.current_period_end * 1000| date:'MMM d, yyyy'}}
+                                </td> 
+                                <td class="text-right">
+                                    <div class="btn-group">
+                                        <button class="btn-danger btn btn-xs" ng-click="tm.unsubscribe(x.id)">Unsubscribe</button>
+                                    </div>
+                                </td>
+                            </tr>                                                                       
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                         <div class="ibox-content" ng-if="tm.numberOfActiveSubscriptions==0" align="center">You have no active subscriptions</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

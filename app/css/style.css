@@ -6827,13 +6827,11 @@ body.landing-page {
 }
 .landing-page .carousel-caption p {
   font-weight: 700;
-  text-transform: uppercase;
   text-shadow: none;
 }
 .landing-page .caption-link {
   color: #fff;
   margin-left: 10px;
-  text-transform: capitalize;
   font-weight: 400;
 }
 .landing-page .caption-link:hover {

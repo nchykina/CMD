@@ -95,7 +95,7 @@ var confirmResetPassword = function (req, res) {
 
     fs.readFile(filePath, 'utf8', function (err, mailMessage) {
         if (err) {
-            console.log(err);
+            return res.json({success: false, msg: 'Unable to read template file'});
         }
 
         User.findOne({'name': userNameTemp}, function (err, user) {
@@ -104,7 +104,7 @@ var confirmResetPassword = function (req, res) {
 
             var mailData = {
                 from: 'support@ngspipeline.com',
-                to: user.email, 
+                to: user.email,
                 subject: 'Your password has been reset successfully',
                 text: 'Plaintext version of the message', // TBD
                 html: mailMessage
@@ -121,11 +121,55 @@ var confirmResetPassword = function (req, res) {
     });
 };
 
+var sendPurchaseConfirmation = function (req, res) {
+    if (req.user) {
+        var filePath = path.join(__dirname, 'mail_messages/invoice_message.html');
+        var transporter = nodemailer.createTransport(smtpConfig);
+
+        fs.readFile(filePath, 'utf8', function (err, mailMessage) {
+            if (err) {
+                return res.json({success: false, msg: 'Unable to read template file'});
+            }
+
+            User.findOne({'_id': req.user._id}, function (err, user) {
+                if (err)
+                    return res.json({success: false, msg: 'No user found'});
+
+                var itemsFromCart = req.user.cart;
+
+                var mailMessageWithParams = ejs.render(mailMessage, {
+                    userName: user.name,
+                    cart: itemsFromCart
+                });
+                
+                var mailData = {
+                    from: 'support@ngspipeline.com',
+                    to: user.email,
+                    subject: 'Thank you for your purchase with NGS Pipeline!',
+                    text: 'Plaintext version of the message', // TBD
+                    html: mailMessageWithParams
+                };
+                transporter.sendMail(mailData, function (error, info) {
+                    if (error) {
+                        return res.json({success: false, msg: 'Error, email not sent'});
+                    }
+                    res.json({success: true, msg: 'Email sent'});
+                });
+
+            });
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+
+};
+
 
 var bindFunction = function (router) {
     router.get('/greet_user', greetUser);
     router.post('/send_new_password', sendNewPassword);
     router.post('/confirm_reset_password', confirmResetPassword);
+    router.post('/send_purchase_confirmation', sendPurchaseConfirmation);
 };
 
 module.exports = {

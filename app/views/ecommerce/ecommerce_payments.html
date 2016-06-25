@@ -43,38 +43,61 @@
                                     <div class="pull-right">
                                         <i class="fa fa-cc-visa text-success"></i>
                                         <i class="fa fa-cc-mastercard text-warning"></i>
-                                        <i class="fa fa-cc-paypal text-success"></i>
                                     </div>
                                     <h4 class="panel-title">
-                                        Credit card or Paypal
+                                        Credit card
                                     </h4>
                                 </uib-accordion-heading>
                                 <div class="panel-body">
 
-                                    <div class="row">
+                                    <div class="row" ng-controller="stripeController as stripe">
+                                        <form id="cardInput" stripe-form="makePurchase">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>CARD NUMBER</label>
+                                                        <div class="input-group">
+                                                            <input ng-model="number" class="form-control" placeholder="XXXX XXXX XXXX XXXX"
+                                                                   name="card" payments-format="card" payments-validate="card" required/>
+                                                            <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>                                
+                                                        </div>
+                                                        <span class="help-block m-b-none text-danger">{{stripe.cardValidationMessage}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="form-group">
+                                                        <label>NAME ON CARD</label>
+                                                        <input ng-model="name" class="form-control" placeholder="First and Last Name" required/>                                                           
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-7 col-md-7">
+                                                    <div class="form-group">
+                                                        <label>EXPIRATION DATE</label>
+                                                        <input class="form-control" ng-model="expiry" placeholder="MM/YYYY"
+                                                               payments-validate="expiry" payments-format="expiry" required/>
+                                                        <span class="help-block m-b-none text-danger">{{stripe.expiryValidationMessage}}</span>
 
-                                        <p class="m-t">
-                                            We can send an invoice to your email address.
-                                            This invoice will contain a link to Paypal website,
-                                            where you can pay <b><u>either with your credit card 
-                                                    or with your Paypal account</u></b>.
-                                            Please note that you do not have to have a Paypal account to 
-                                            make a payment.
-                                        </p>
-                                        <p>
-                                            Once you pay, we will get notified immediately and 
-                                            will enable the access to the purchased options for you.
-                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-5 col-md-5">
+                                                    <div class="form-group">
+                                                        <label>CVC</label>
+                                                        <input class="form-control" ng-model="cvc" placeholder="CVC" 
+                                                                 required/>
+                                                        <span class="help-block m-b-none text-danger">{{stripe.cvcValidationMessage}}</span>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-info" type="submit">Submit</button>
+                                            <span class="text-danger">{{stripe.generalValidationMessage}}</span>
+                                        </form>
                                     </div>
-                                    <div class="row">
-                                        <button class="btn btn-info" 
-                                                ng-click="em.createInvoice('Credit card / Paypal')" 
-                                                type="submit">Send invoice to my email</button>
-
-                                    </div>
-
                                 </div>
-
                             </uib-accordion-group>                            
                         </uib-accordion>
                     </div>
@@ -132,4 +155,3 @@
 
 </div>
 
-</div>

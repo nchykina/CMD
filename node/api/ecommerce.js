@@ -194,6 +194,51 @@ var getOrders = function (req, res) {
     }
 };
 
+var createOrder = function (req, res) {
+    if (req.user) {
+        var paymentType = req.body.paymentType;
+        var itemsFromCart = req.user.cart;
+        var orderId = crypto.randomBytes(Math.ceil(6)).toString('hex').slice(0, 6); // рандомный IDшник по-хорошему уникальным не является...
+        var itemsInCart = req.user.cart;
+
+        var orderAmount = 0;
+        for (var key in itemsInCart) {
+            orderAmount = orderAmount + itemsInCart[key].price;
+        }
+
+        var newOrder = new Order({
+            userId: req.user._id,
+            paymentType: 'Card',
+            products: req.user.cart,
+            orderId: orderId,
+            orderDate: new Date(),
+            totalAmount: orderAmount,
+            status: 'Confirmed'
+        });
+        
+        //create an order
+        newOrder.save(function (err) {
+            if (err) {
+                return res.json({success: false, msg: 'Order not created'});
+            }
+            //after order is created, clear user cart
+            User.findOne({'_id': req.user._id}, function (err, user) {
+                if (err)
+                    return res.json({success: false, msg: 'User not found'});
+                user.cart = [];
+                user.save(function (err) {
+                    if (err)
+                        return res.json({success: false, msg: 'Error'});
+                    res.json({success: true, msg: 'Cart cleared, order created'});
+                });
+            }
+            );
+        });
+    } else {
+        res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
 var bindFunction = function (router) {
     router.get('/get_product_list', getProductList);
     router.post('/add_to_cart', addToCart);
@@ -203,6 +248,7 @@ var bindFunction = function (router) {
     router.get('/get_number_of_items_in_cart', getNumberOfItemsInCart);
     router.post('/clear_cart', clearCart);
     router.get('/get_orders', getOrders);
+    router.post('/create_order', createOrder);
 };
 
 module.exports = {
