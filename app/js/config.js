@@ -1669,18 +1669,18 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('blog.article1', {
                 url: "/article1",
                 templateUrl: "views/guides/article1.html",
-                data: {pageTitle: 'Article 1'}
+                data: {pageTitle: 'FASTA/FASTQ format'}
             })
             .state('blog.article4', {
                 url: "/article4",
                 templateUrl: "views/guides/article4.html",
-                data: {pageTitle: 'Article 4'}
+                data: {pageTitle: 'Genomics 101: what is going on in the lab? '}
             })
 
             .state('blog.article5', {
                 url: "/article5",
                 templateUrl: "views/guides/article5.html",
-                data: {pageTitle: 'Article 5'}
+                data: {pageTitle: 'What is the reference genome?'}
             })
             ;
 
