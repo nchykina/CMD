@@ -3,14 +3,11 @@
         <ul side-navigation class="nav metismenu" id="side-menu">
             <li class="nav-header">
 
-                <div class="profile-element" uib-dropdown >
+                <div class="profile-element" uib-dropdown style="cursor:pointer">
                     <h1 class="text-navy" ui-sref="landing"><b>NGS</b></h1>
                     <h1 class="text-white text-center" ui-sref="landing"><b>Pipeline</b></h1>
 
-                </div>
-                <div class="logo-element">
-
-                </div>
+                </div>             
             </li>
             <li ng-class="{active: $state.includes('pipelines')}">
                 <a href=""><i class="fa fa-table"></i> <span class="nav-label">Perform data analysis</span><span class="fa arrow"></span></a>
