@@ -615,11 +615,6 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/account/user_profile.html",
                 data: {pageTitle: 'User profile'}
             })
-             .state('user.test_outlook', {
-                url: "/test_outlook",
-                templateUrl: "views/account/greeting_message_outlook.html",
-                data: {pageTitle: 'Greeting test'}
-            })
             .state('user.subscriptions', {
                 url: "/subscriptions",
                 controller: 'stripeController',
@@ -627,7 +622,6 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/account/user_subscriptions.html",
                 data: {pageTitle: 'Manage my subscriptions'}
             })
-
             .state('forms.file_upload', {
                 url: "/file_upload",
                 templateUrl: "views/form_file_upload.html",
