@@ -43,128 +43,143 @@
                         </div>
                     </div>
                     <p>
-                        So how is the human genome different? The simplifying assumption that the bioinformaticians
-                        make here is that the human genome is the DNA of a haploid cell, so it comprises only one chromosome
-                        per pair. In addition to that, it includes both chrX and chrY (so technically, it's a male),
-                        as well as the mitochondrial DNA (chrM).</p>
+                        So how is the reference human genome different from the DNA sequence? The key simplifying assumption that 
+                        the bioinformaticians make here is that <b>the reference genome is haploid</b>, so it 
+                        comprises only one chromosome per pair. In addition to 22 chromosomes, it includes both chrX and chrY 
+                        (so technically, it's a male), mitochondrial DNA (chrM) and unaligned/unplaced sequences (will be
+                        discussed later).</p>
                     <p>
-                        You can easily see the problem that arises here. Say, the reference person (suppose there has 
-                        been one, although there actually hasn't, as will be explained later) had heterozygosity on a particular
-                        allele with A on one chromosome and T on another. Then, we've made the reference genome haploid 
+                        You can easily see the problem that arises here. Say, the reference sequence had heterozygosity on a particular
+                        allele with A on one chromosome and T on another. Then, we have made the reference genome haploid 
                         and included only A-s in it. Afterwards, we take the reads from someone with the same heterozygosity
                         on the same allele, and - voila - half of the reads show that there is an SNP on that allele,
                         which is of course incorrect.
                     </p>
-                    <h3>Human Genome Project</h3>
-                    <div class="row">
-                        <div class='col-lg-8'>
-                            <p>
-                                The Human Genome Project was started in 1990 with the goal of sequencing and identifying all three 
-                                billion chemical units in the human genetic instruction set
-                                
-                                HGP-Read and HGP-Write; synthesizing the human genome (announced only recently, in June 2016).
-                                a 'rough draft' of the genome was finished in 2000
-                                This first available rough draft assembly of the genome was completed by the Genome Bioinformatics 
-                                Group at the University of California, Santa Cruz, primarily led by then graduate student Jim Kent
 
-                                In May 2006, another milestone was passed on the way to completion of the project, when the 
-                                sequence of the last chromosome was published in Nature.
-
-                                The project did not aim to sequence all the DNA found in human cells. It sequenced only "euchromatic"
-                                regions of the genome, which make up about 90% of the genome. The other regions, called "heterochromatic"
-                                are found in centromeres and telomeres, and were not sequenced under the project.
-
-                                The Human Genome Project was declared complete in April 2003. An initial rough draft of the human
-                                genome was available in June 2000 and by February 2001 a working draft had been completed and 
-                                published followed by the final sequencing mapping of the human genome on April 14, 2003. 
-                            </p>
-                        </div>
-                        <div class="col-lg-4">
-                            <h4>Image 2. Euchromatin</h4>
-                            <img src='img/guides/img8.png' width="100%" > 
-                        </div>
-                    </div>
                     <h3>Sampling</h3>
                     <p>
                         Another good question is how the scientists came up with the sample of people to be sequenced
-                        for the reference genome. GRCh37 was assembled from a sample of 13 anonymous volunteers from 
-                        Buffalo, New York.
-
-                        Averaging across N people and across alleles, we get 2N samples.
-                        <b class="text-navy">Haplotype</b> is a set of SNPs that are statistically associated (in other 
-                        words, that often occur together).
-                        used by bioinformaticians in realignment process is assumed to be
-                        haploid. This makes the alignment process quite complicated and perplexed, as 
-                        if an allele is heterozygous, it's unclear whether there is a mutation on that spot or not.
-                        Minor alleles and highly variable loci
-                        This haplotype has never existed in reality.
-                        Dominant vs recessive alleles.
-                        Population-wide studies
-
-                        The genome published by the HGP does not represent the sequence of every individual's genome. 
-                        It is the combined mosaic of a small number of anonymous donors, all of European origin. The 
-                        HGP genome is a scaffold for future work in identifying differences among individuals. 
-                        Subsequent projects sequenced the genomes of multiple distinct ethnic groups, though as of 
-                        today there is still only one "reference genome."
+                        for the reference genome. The exact answer depends on the version of genome that is used,
+                        but in general the samples have been pretty small and unrepresentative. For instance, the 
+                        widely used reference genome version GRCh37 has been assembled from a very small sample
+                        of only 13 anonymous volunteers from Buffalo, New York!
                     </p>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h4>Image 2. Variants map from 1000 Genomes</h4>
+                            <img src='img/guides/img9.png' width="100%" > 
+                        </div>
+                        <div class="col-lg-8">
+                            <p>
+                                But why couldn't the scientists take a more diverse set of people for construction of the
+                                reference (at least, of different races, from different countries etc.) and take an average
+                                across this set of data to get a "reference human being"? Wouldn't it be more correct? 
+                                Actually, it wouldn't. All people on Earth belong to certain clusters called 
+                                <b class="text-navy">haplogroups</b>, and people within every such cluster have
+                                similar <b class="text-navy">haplotypes</b>. Haplotype is a combinations of nucleotide variants,
+                                or SNPs, that are likely to be inherited together. Map of common macro variations from the
+                                1000 Genomes project is provided on the image on the left.
+                            </p>
+                        </div>
+                    </div>
 
-                    In May 2016, scientists considered extending the HGP to include creating a synthetic human genome.[5] 
-                    In June 2016, scientists formally announced HGP-Write, a plan to synthesize the human genome
-                    <h3>Versions of the human genome</h3>
                     <p>
-                        Human genome project
+                        So, suppose we take a very diverse set of people representative of all the races and geographic
+                        areas and construct our reference genome by averaging up across the genomes of these people.
+                        What we will most likely get as a result is just a mess, as such a combination of SNPs may
+                        be contradictory and will never be inherited together (for instance, we can get an 
+                        African American with blue eyes and blonde hair). So, when constructing a reference genome,
+                        it makes more sense to stay at least within the same haplotype. Also, when studying
+                        some diseases or traits that are specific for one of the haplotypes, it makes perfect sense to
+                        take as a reference the genome of people of that particular haplotype. In any case, <b>the
+                            generic version of the reference human genome is highly skewed and based on an extremely small
+                            sample</b>. But unfortunately we can hardly do a better one, so a good judgment should be 
+                        made is every particular case based on the goal of the research and input data used.
+                    </p>
+                    <h3>Bureaucracy and the lack of a single standard</h3>
 
+                    <p>
+                        Many institutions and companies have over time published their own versions of the reference 
+                        genomes. These versions differ from each other in naming conventions, as well as the data included,
+                        so we should understand at least at the high level, how are these versions different and which
+                        one should we use. </p>
+                    <h4>1. Human Genome Project</h4>
+                    <p>
+                        The Human Genome Project (HGP) was launched in 1990 with the goal of sequencing and identifying all
+                        three billion nucleotide pairs in the human genetic code. It was declared complete on April 14, 2003,
+                        when the final sequencing mapping was published. Most of the government-sponsored sequencing was performed 
+                        in twenty universities and research centers in the US, the UK, Japan, France, Germany, and China.
+                        HGP, as any other project done afterwards, didn't sequence the genome of a particular individual.
+                        Instead, an HGP genome is the combined mosaic of a small number of anonymous donors, all of European 
+                        origin.
+                    </p>                   
+                    <p>                        
+                        It is interesting that a parallel private project was conducted outside of government by the Celera 
+                        Genomics. This project was formally launched in 1998 by Craig Venter who was a scientist at the NIH in
+                        the early 1990s. Celera's funding was around USD 300 mln, and it planned to commercialize its efforts
+                        by seeking patent protection on the discovered genes. However, in March 2000, Bill Clinton announced
+                        that genes can't be patented and should be made freely available to scientific community. As a result
+                        of this announcement, Celera's stock price plummeted and biotechnology sector lost USD 50 bn in 
+                        market capitalization within two days.
+                    </p>
+                    <h4>2. Genome Reference Consortium and GRCh37 genome</h4>  
+                    <p>
+                        As HGP has been completed, it became clear that its results needed further research and improvement.
+                        This research is the core focus of Genome Reference Consortium (GRC), whose primary members 
+                        are NCBI, Wellcome Trust Sanger Institute and European Bioinformatics Institute.
+                        In March 2009 GRC made the first major release of the human genome called <b class="text-navy">
+                            GRCh37 </b>. 
+                    </p>  
+                    <p>
+                        The human genome in GRCh37 release comprises <i>24 chromosomal sequences</i> (chromosomes 1 to 22, X
+                        and Y) and <i>mitochondrial DNA sequence</i>. In addition to that, it included several <i>unlocalized
+                            sequences</i> (those that are attributed to a particular chromosome, but their location on it is
+                        unknown), <i>unplaced sequences</i> (those that couldn't have been aligned to a particular 
+                        chromosome) and <i>alternative loci</i> (sequences that contain alternative representations
+                        of specific human genome regions).
+                    </p>
+                    <p>
+                        In December 2013 a new version of the GRC reference genome (<b class="text-navy">GRCh38</b>)
+                        was submitted to GenBank. The new features in it include 261 alternative loci (most of which
+                        are located on highly variable areas in chr6 and chr 19), centromere representation, revised
+                        version of chrM and a number of sequencing errors fixes. GRC constantly issues further minor
+                        and major updates to its reference genome, as long as new information is being discovered.
+                    </p>
+                    <h4>3. UCSC hg19</h4> 
+                    <p>
+                        Shortly after GRCh37 has been released, UCSC (University of California, Santa Cruz) released
+                        its own build of the reference genome called hg19, that is currently widely used. The key
+                        difference in this build is the mitochondrial DNA sequence, which is taken from the previous,
+                        GRCh36 genome version. Also, UCSC uses slightly different naming scheme for the 
+                        chromosomes and unplaced/unlocalized sequences.
+                    </p>
+                    <p>
+                        Afterwards, Ion Torrent (one of the key producers of sequencing devices) has also issued its 
+                        own version of UCSC's hg19 reference genome, with the only difference being that chrM is used
+                        from GRCh37, not GRCh36 build.
+                    </p>
+                    <h4>4. HapMap and 1000 genomes</h4> 
+                    <p>
+                        1000 Genomes project took quite a different approach. It was launched in January 2008 and was aimed
+                        at sequencing the genomes of 1000 anonymous participants from different ethnic groups.
+                        
+                    </p>
+                    <p>
+                        1000 Genomes naming conventions are followed in dbSNP!
                         (In 2002 the National Institutes of Health started a $138 million project called the HapMap 
                         to catalog the common variants in European, East Asian and African genomes.)
-
-                        Apart from the technical problems and issues described above, there is a lot of 
-                        institutional ones. Several major institutions have assembled their versions of the 
-                        reference genomes, and claim that their version should be used as a golden standard.
-                        There are actually several versions of human reference genome that are slightly different
-                        from each other. These versions have been assembled by different institutes and groups
-                        of scientists, and therefore vary in annotations and content. Also, the human genome is 
-                        constantly updated, as new information about it being discovered.</p>
-                    <p>
-                        The first reference genome has been assembled during Human Genome Project (HGP), and the cost
-                        of this process was around XXX USD mln. 
-                        
-                        The genome was broken into smaller pieces; approximately 150,000 base pairs in length.[36] These 
-                        pieces were then ligated into a type of vector known as "bacterial artificial chromosomes", or 
-                        BACs, which are derived from bacterial chromosomes which have been genetically engineered. 
-                        The vectors containing the genes can be inserted into bacteria where they are copied by the 
-                        bacterial DNA replication machinery. Each of these pieces was then sequenced separately as 
-                        a small "shotgun" project and then assembled. The larger, 150,000 base pairs go together to 
-                        create chromosomes. This is known as the "hierarchical shotgun" approach, because the genome
-                        is first broken into relatively large chunks, which are then mapped to chromosomes before 
-                        being selected for sequencing.
-                        
-                        In February 2009 GRC (Genome Reference Consortium) released the version of the genome called
-                        GRCh37. Afterwards, GRC planned to release GRCh38 sometime in 2013 and currently plans to issue
-                        a new version.
-                        The GRCh37 release comprises the following parts:
                     </p>
-                    <ul>
-                        <li>24 chromosomal sequences (chr1 to chr22, X and Y)</li>
-                        <li>Mitochondrial sequence</li>
-                        <li>Several unlocalized sequences (those that are attributed to a particular chromosome, 
-                            but their location on it is unknown</li>
-                        <li>Several unplaced sequences (those that can't be aligned to a particular chromosome</li>
-                        <li>Alternative loci (sequences that contain alternative representations of 
-                            specific human genome regions</li>
-                    </ul>
-                    <p>    
-                        Actually, the person with hg19 genome never existed. 
 
-                    </p>
+                    <h3>Versions of the human genome</h3>             
 
                     <p>
-                        haploid means 
+                        Another issue is the <b class="text-navy">alternative loci</b> on the human genome that are 
+                        highly variable
                     </p>
+
 
                     <h3>UCSC and hg19</h3>
                     <p>
-                        UCSC is University of California, Santa Cruz.
-                        After GRCh37 was released, UCSC issued its own version of it and called in hg19.
                         This version is essentially the same as GRCh37, but the sequences in it are named
                         under a certain naming convention (for example, chrUn_gl000221 represents an unplaced
                         sequence). More important point is that hg19 contains a different version of chrM
@@ -177,9 +192,6 @@
                         of alternate loci (which is sometimes undesirable for read mapping), hg19 has gained popularity 
                         due to its exposure via the UCSC genome browser, and is often the convention used by vendors 
                         when reporting exome enrichment kit coordinates.
-
-                        Как соотносятся NCBI и UCSC?
-                        Genbank
 
                     </p>
 
@@ -296,9 +308,15 @@
                     MHC region (major histocompatibility complex)
 
                     //a кто собирал референтный геном для собак и кошек?
-                    
-                    
+
+
                     Craig Venter and Celera Genomics
+
+                    <h3>What's next?</h3>
+                    HGP-Read and HGP-Write; synthesizing the human genome (announced only recently, in June 2016).
+                    In May 2016, scientists considered extending the HGP to include creating a synthetic human genome.[5] 
+                    In June 2016, scientists formally announced HGP-Write, a plan to synthesize the human genome
+
                     <hr>
                 </div>
             </div>
