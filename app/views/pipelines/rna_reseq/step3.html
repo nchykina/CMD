@@ -1,0 +1,53 @@
+<fieldset>
+
+    <div class="row">
+
+
+        <div class="col-lg-6">
+            <h2>Download processed .vcf and .bam files: </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="ibox-content">
+                <h3>VCF file created successfully</h3>
+                <button type="submit" class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Download VCF file</button>
+
+                <p> This file contains information about SNPs and InDels</p>
+
+                <p></p>
+                <h3>BAM file created successfully</h3>
+                <button type="submit" class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Download BAM file</button>
+
+                <p> This file contains information about your reads aligned to the genome</p>
+                
+                                <p></p>
+                <h3>BAM file created successfully</h3>
+                <button type="submit" class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Download CSV/XLS file</button>
+
+                <p> This file contains annotated information about the SNPs in realigned genome</p>
+
+
+                <input id="acceptTerms" name="acceptTerms" type="checkbox" ng-model="formData.terms" class="required"> 
+                <label for="acceptTerms">Please send the links to the files to my email address.</label>
+
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="ibox-content">
+                <h3>So what's next?</h3>
+                <p> In order to make sense of the data, you can take a look at its graphical representation. </p> 
+                <p>Please go to any of the websites listed below to download the viewer for your files. </p>           
+
+            </div>
+        </div>
+    </div>
+
+</fieldset>
+<fieldset class="m-t-md">
+    <a ui-sref="pipelines.rna_reseq_new.step1({job: newc.job})" class="btn btn-default">Upload other dataset</a>
+    <button type="submit" class="btn btn-primary">Save the pipeline output</button>
+</fieldset>

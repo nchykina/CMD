@@ -18,7 +18,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>BWA: aligning paired reads to the reference genome</h2>
+                                    <h2>Tophat: aligning RNA-Seq data to the reference genome</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-primary dim"><i class="fa fa-check"></i></button>
@@ -44,7 +44,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>SAMTools: converting to .bam format, sorting and indexing</h2>
+                                    <h2>Cufflinks: perform transcriptome reconstruction</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-success dim"><i class="fa fa-check"></i></button>
@@ -70,7 +70,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>SAMTools: performing mpileup</h2>
+                                    <h2>Cuffdiff: compare gene expression</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
@@ -93,7 +93,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>BCFTools: creating a vcf file</h2>
+                                    <h2>Annovar: perform functional annotation of differentially expressed genes</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
@@ -143,8 +143,8 @@
         </div>
     </div>
 
-    <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn btn-default">Cancel</a>
-    <a ui-sref="pipelines.dna_reseq_new.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
+    <a ui-sref="pipelines.rna_reseq_new.step1({job: newc.job})" class="btn btn-default">Cancel</a>
+    <a ui-sref="pipelines.rna_reseq_new.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
 
 
 
