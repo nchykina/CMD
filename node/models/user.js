@@ -19,11 +19,12 @@ module.exports = function (sequelize, DataTypes) {
                 },
         company: DataTypes.STRING,
         password: DataTypes.STRING,
-        temp_password: DataTypes.STRING
+        temp_password: DataTypes.STRING,
+        stripe_customer_id: DataTypes.STRING
     }, {
         classMethods: {
             associate: function (models) {
-                User.belongsToMany(models.Role, {through: models.UserRole, foreignKey: 'user_id', as: 'roles'});
+                User.belongsToMany(models.Role, {through: models.UserRole, foreignKey: 'user_id'});
                 User.belongsToMany(models.Product, {through: models.UserCart, foreignKey: 'user_id', as: 'cart'});
                 User.hasMany(models.Order, {as: 'orders'});
             }

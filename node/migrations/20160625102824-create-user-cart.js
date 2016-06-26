@@ -1,20 +1,16 @@
 'use strict';
 module.exports = {
   up: function(queryInterface, Sequelize) {
-    return queryInterface.createTable('UserCarts', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
+    return queryInterface.createTable('UserCarts', {      
       user_id: {
         type: Sequelize.INTEGER,
-        references: {model: 'Users', key: 'id' }        
+        references: {model: 'Users', key: 'id' },
+        primaryKey: true,
       },
       product_id: {
         type: Sequelize.INTEGER,
-        references: {model: 'Products', key: 'id' }
+        references: {model: 'Products', key: 'id' },
+        primaryKey: true,
       },
       created_at: {
         allowNull: false,

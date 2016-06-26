@@ -18,7 +18,7 @@ var bindFunction = function(router){
     //mailbox.bind(router);
     job.bind(router);
     ecommerce.bind(router);
-    paypalInvoices.bind(router);
+    //paypalInvoices.bind(router);
     ipnListener.bind(router);
     mailServer.bind(router);
     stripeInvoices.bind(router);

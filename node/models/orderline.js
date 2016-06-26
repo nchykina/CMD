@@ -1,13 +1,12 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var OrderLine = sequelize.define('OrderLine', {
-    payment_type: DataTypes.STRING,
-    status: DataTypes.STRING
+    amount: DataTypes.FLOAT,    
   }, {
     classMethods: {
       associate: function(models) {
         OrderLine.belongsTo(models.Order);
-        OrderLine.belongsTo(models.Product);
+        OrderLine.belongsTo(models.Product, {as: 'product'});
       }
     },    
     underscored: true

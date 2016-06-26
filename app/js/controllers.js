@@ -3930,179 +3930,182 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
  *
  */
 
-function ecommerceCtrl($scope, $http, $state) {
+function ecommerceCtrl($scope, ecommService, $state) {
     var em = this;
-
-    em.order = {};
-
-    em.itemsInCart = {};
+    
+    em.cart = null;
     em.totalForCart = {};
     em.numberOfItemsInCart = {};
 
-    em.productList = {};
-    em.orders = {};
-    
-    this.updateCart = function() {        
-        
+    em.productList = null;
+    em.orders = null; 
+
+    em.dataLoaded = false;
+    em.cartAmount = 0;
+    em.cartCount = 0;
+
+    ecommService.getProductList()
+            .then(function (res) {
+                em.productList = res;
+                loadProgress();
+            });
+
+    ecommService.getCart()
+            .then(function (res) {
+                em.cart = res;
+                loadProgress();
+            });
+            
+    ecommService.getOrders()
+            .then(function (res) {
+                em.orders = res;                
+            });
+
+    var loadProgress = function () {
+        if ((em.productList != null) && (em.cart != null)) {
+            updateCart();
+            em.dataLoaded = true;
+        }
     }
 
-    this.init = function () {
-        em.getProductList();
-        em.getItemsInCart();
-        em.getTotalForCart();
-        em.getNumberOfItemsInCart();
-        em.getOrders();
-    };
+    var isInCart = function (productId) {
+        for (var v in em.cart) {
+            if ((em.cart[v]) && (em.cart[v].id === productId)) {
+                return true;
+            }
+        }
 
+        return false;
+    }
 
-    this.getProductList = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_product_list'
-        })
-                .success(function (data) {
-                    console.log(data.products);
-                    em.productList = data.products;
-                });
-    };
+    var updateCart = function () {
+        updateInCart();
+        em.cartAmount = getTotalForCart();
+        em.cartCount = getNumberOfItemsInCart();
+    }
+
+    var updateInCart = function () {
+        for (var p in em.productList) {
+            em.productList[p].in_cart = isInCart(em.productList[p].id);
+        }
+    }
 
     this.addToCart = function (productId) {
-
-        $http({
-            method: 'POST',
-            url: 'api/add_to_cart',
-            data: {'productId': productId}
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.getProductList();
-                    }
+        ecommService.addToCart(productId)
+                .then(function (ok) {
+                    updateCart();
+                })
+                .catch(function (err) {
+                    //error handler
                 });
-    };
+    }
 
-    this.getItemsInCart = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_items_in_cart'
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.itemsInCart = data.itemsInCart;
-                    }
+    this.removeFromCart = function (productId) {
+        ecommService.removeFromCart(productId)
+                .then(function (ok) {
+                    updateCart();
+                })
+                .catch(function (err) {
+                    //error handler
                 });
-    };
-
-    this.removeItemFromCart = function (productId) {
-
-        $http({
-            method: 'POST',
-            url: 'api/remove_item_from_cart',
-            data: {'productId': productId}
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.getProductList();
-                        em.getTotalForCart();
-                        em.getNumberOfItemsInCart();
-                        em.getItemsInCart();
-                    }
-                });
-    };
-
-    this.getTotalForCart = function () {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_total_for_cart'
-        })
-                .success(function (data) {
-                    em.totalForCart = data.total;
-                });
-    };
-
-    this.getNumberOfItemsInCart = function () {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_number_of_items_in_cart'
-        })
-                .success(function (data) {
-                    em.numberOfItemsInCart = data.total;
-                });
-    };
+    }
 
     this.clearCart = function () {
-
-        $http({
-            method: 'POST',
-            url: 'api/clear_cart'
-        })
-                .success(function (data) {
-                    em.init();
+        ecommService.clearCart()
+                .then(function (ok) {
+                    updateCart();
+                })
+                .catch(function (err) {
+                    //error handler
                 });
+    }
+
+    var getTotalForCart = function () {
+        var total = 0;
+
+        for (var v in em.cart) {
+            total += em.cart[v].price;
+        }
+
+        return total;
     };
 
-
-    this.createInvoice = function (paymentType) {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_token'
-        })
-                .success(function (data) {
-                    console.log("TOKEN RECEIVED");
-
-                    $http({
-                        method: 'POST',
-                        url: 'api/create_invoice'
-                    })
-                            .success(function (data) {
-                                console.log("INVOICE CREATED");
-                                $http({
-                                    method: 'POST',
-                                    url: 'api/send_invoice',
-                                    data: {'invoiceId': data.invoiceId,
-                                        'invoiceNumber': data.invoiceNumber,
-                                        'paymentType': paymentType
-                                    }
-                                })
-                                        .success(function (data) {
-                                            console.log("INVOICE SENT");
-                                            $state.go('commerce.orders');
-                                        });
-                            });
-                });
+    var getNumberOfItemsInCart = function () {
+        return em.cart.length;
     };
 
+    /* this.clearCart = function () {
+     
+     $http({
+     method: 'POST',
+     url: 'api/clear_cart'
+     })
+     .success(function (data) {
+     em.init();
+     });
+     }; */
 
-    this.getOrders = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_orders'
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.orders = data.orders;
-                    }
-                });
-    };
 
-    this.checkIfSubscribed = function (productId) { // TBD
-        $http({
-            method: 'GET',
-            url: 'api/check_if_subscribed',
-            params: {'productId': productId}
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        //update data in productList?
-                        console.log("SUBSCRIBED");
-                        em.init();
-                    } else {
-                        console.log("NOT SUBSCRIBED");
-                    }
-                });
-    };
+    /* this.createInvoice = function (paymentType) {
+     
+     $http({
+     method: 'GET',
+     url: 'api/get_token'
+     })
+     .success(function (data) {
+     console.log("TOKEN RECEIVED");
+     
+     $http({
+     method: 'POST',
+     url: 'api/create_invoice'
+     })
+     .success(function (data) {
+     console.log("INVOICE CREATED");
+     $http({
+     method: 'POST',
+     url: 'api/send_invoice',
+     data: {'invoiceId': data.invoiceId,
+     'invoiceNumber': data.invoiceNumber,
+     'paymentType': paymentType
+     }
+     })
+     .success(function (data) {
+     console.log("INVOICE SENT");
+     $state.go('commerce.orders');
+     });
+     });
+     });
+     }; 
+     
+     
+     this.getOrders = function () {
+     $http({
+     method: 'GET',
+     url: 'api/get_orders'
+     })
+     .success(function (data) {
+     if (data.success) {
+     em.orders = data.orders;
+     }
+     });
+     };
+     
+     this.checkIfSubscribed = function (productId) { // TBD
+     $http({
+     method: 'GET',
+     url: 'api/check_if_subscribed',
+     params: {'productId': productId}
+     })
+     .success(function (data) {
+     if (data.success) {
+     //update data in productList?
+     console.log("SUBSCRIBED");
+     em.init();
+     } else {
+     console.log("NOT SUBSCRIBED");
+     }
+     });
+     }; */
 
 
 }
@@ -4126,7 +4129,7 @@ function mailServerCtrl($scope, $http, $state) {
 }
 
 
-function stripeCtrl($scope, $http, $state) {
+function stripeCtrl($scope, $http, $state, ecommService) {
 
     var tm = this;
 
@@ -4249,22 +4252,17 @@ function stripeCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         console.log("PURCHASE CONFIRMATION SENT");
-                        $http({
-                            method: 'POST',
-                            url: 'api/create_order'
-                        })
-                                .success(function (data) {
-                                    if (data.success) {
-                                        console.log("ORDER CREATED");
-                                        $state.go("commerce.orders");
 
-                                    } else {
-                                        console.log("ORDER NOT CREATED");
-                                    }
+                        ecommService.addOrder('card')
+                                .then(function (res) {
+                                    console.log("ORDER CREATED");                                    
+                                    $state.go("commerce.orders");
+                                })
+                                .catch(function (err) {
+                                    console.error("sendPurchaseConfirmation: " + err);
                                 });
-
                     } else {
-                        console.log("PURCHASE CONFIRMATION NOT SENT");
+                        console.error("PURCHASE CONFIRMATION NOT SENT");
                     }
                 });
     };
@@ -4317,11 +4315,11 @@ angular
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
-        .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl])
+        .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
-        .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
+        .controller('stripeController', ['$scope', '$http', '$state', 'ecommService', stripeCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 

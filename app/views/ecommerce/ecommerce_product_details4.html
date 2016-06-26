@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
+<div class="row wrapper border-bottom white-bg page-heading"">
     <div class="col-lg-10">
         <h2>Purchase extra options > Custom pipelines</h2>
         <ol class="breadcrumb">
@@ -17,7 +17,7 @@
         </ol>
     </div>
 </div>
-<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row" ng-if="em.dataLoaded == true" ng-repeat="prd in em.productList | filter: { product_category: 'Custom pipelines' }">
 
     <div class="row">
         <div class="col-lg-12">
@@ -28,35 +28,35 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                <img alt="product1" src="{{em.productList[6].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
+                                <img alt="product1" src="{{prd.img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                {{em.productList[6].productName}}
+                                {{prd.product_name}}
                             </h2>
                             <small>Launch a fully customized pipeline via our website</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">${{em.productList[6].price}} <small class="text-muted">per pipeline</small> </h2>
+                                <h2 class="product-main-price">${{prd.price}} <small class="text-muted">per pipeline</small> </h2>
                             </div>
                             <hr>
 
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                {{em.productList[6].description_short}}
+                                {{prd.description_short}}
                                 <br>
                                 <br>
-                                {{em.productList[6].description_long}}
+                                {{prd.description_long}}
                             </div>
                             <hr>
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button ng-if="!em.productList[6].inCart" ng-click="em.addToCart(6)" 
+                                    <button ng-if="!prd.in_cart" ng-click="em.addToCart(prd.id)" 
                                             class="btn btn-primary btn-sm">                                 
                                         <i class="fa fa-cart-plus"></i> Add to cart</button>
-                                    <button ng-if="em.productList[6].inCart" ng-click="em.removeItemFromCart(6)" 
+                                    <button ng-if="prd.in_cart" ng-click="em.removeFromCart(prd.id)" 
                                             class="btn btn-danger btn-sm">                                 
                                         <i class="fa fa-cart-plus"></i> Remove from cart</button>
                                     <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>

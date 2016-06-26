@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Order.belongsTo(models.User);
-        Order.hasMany(models.OrderLine);
+        Order.hasMany(models.OrderLine,{as: "lines"});
       }
     },    
     underscored: true
