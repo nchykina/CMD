@@ -1,9 +1,8 @@
-/* var Message = require('../models/message');
-
-
+var models = require('../models');
+/* 
 var createMessage = function (req, res) {
     if (req.user) {
-        var newMessage = new Message({
+        var newMessage = models.Message.create({
             from: req.user.name,
             to: req.body.to,
             subject: req.body.subject,
