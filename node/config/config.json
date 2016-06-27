@@ -57,6 +57,35 @@
         }
     },
     
+    "sergey-work-dev": {
+        "username": "ngspipeline",
+        "password": "qwerty",
+        "database": "ngspipeline_dev",
+        "host": "192.168.137.3",
+        "dialect": "postgres",
+        "redis_host": "192.168.137.3",
+        "storage_root": "C:\\node_files",
+        "passport_secret": "myJWMsecret",
+        
+        "session_secret": "I love nuts!",
+        "session_sid": "ngs.work.sid",
+        
+        "smtpConfig": {
+            "direct": false,
+            "host": "mail.ngspipeline.com",
+            "port": 25,
+            "auth": {
+                "user": "support",
+                "pass": "Lapalapa1"
+            }
+        },
+        
+        "singularity": {
+            "api_url": "http://192.168.137.5:7099/singularity",
+            "my_url": "http://192.168.137.1:3000"
+        }
+    },
+    
     "test": {
         "username": "root",
         "password": null,

@@ -14,7 +14,8 @@ module.exports = function(sequelize, DataTypes) {
           Message.belongsTo(models.User,{as: 'to'});
           Message.belongsTo(models.User,{as: 'owner'});
       }
-    }
+    },    
+    underscored: true
   });
   return Message;
 };
