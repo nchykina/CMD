@@ -801,14 +801,19 @@ function flotChartCtrl() {
 
     var pieData2 = [
         {
-            label: "Used",
+            label: "Input files",
             data: 21,
             color: "#1ab394"
         },
         {
+            label: "Output files",
+            data: 15,
+            color: "#79d2c0"
+        },
+        {
             label: "Available",
             data: 3,
-            color: "#79d2c0"
+            color: "#d3d3d3"
         }
     ];
 

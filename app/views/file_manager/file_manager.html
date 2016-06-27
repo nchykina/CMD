@@ -1,0 +1,210 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>File manager</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a>Manage files</a>
+            </li>
+            <li class="active">
+                <strong>File manager</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="flotChartCtrl as charts">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>My storage for input data 
+                        <small> (the files below can be later selected in any pipeline)</small>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                            <tr>
+
+                                <th >File name</th>
+                                <th >File size</th>
+
+                                <th >Upload date</th>                                
+                                <th class="text-right"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>File1.fasta</td>
+                                <td>1 GB</td>
+                                <td>21 June 2016</td>
+                                <td class="text-right">
+                                    <div class="input-group pull-right">
+                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>          
+                            <tr>
+                                <td>File2.fasta</td>
+                                <td>1 GB</td>
+
+                                <td>21 June 2016</td>
+                                <td class="text-right">
+                                    <div class="input-group pull-right">
+                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>  
+                            <tr>
+                                <td>File3.fasta</td>
+                                <td>1 GB</td>
+
+                                <td>21 June 2016</td>
+                                <td class="text-right">
+                                    <div class="input-group pull-right">
+                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>  
+                            <tr>
+                                <td>File4.fasta</td>
+                                <td>1 GB</td>
+
+                                <td>21 June 2016</td>
+                                <td class="text-right">
+                                    <div class="input-group pull-right">
+                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>  
+                            <tr>
+                                <td>File5.fasta</td>
+                                <td>1 GB</td>
+
+                                <td>21 June 2016</td>
+                                <td class="text-right">
+                                    <div class="input-group pull-right">
+                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>  
+                        </tbody>
+                        <tfoot>                          
+                        </tfoot>
+                    </table>
+                    <div class="ibox float-e-margins border-bottom border-left-right">
+                        <div class="ibox-title gray-bg">
+                            <h5>Drop file in the box below to upload it</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="ngs_dropzone">
+                                <form action="#">
+                                    <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)" ng-model="newc.file2">
+                                        <div ng-if="((!newc.job.filesIn[1]) && (!newc.files[1].uploading))" class="dz-message m-t-lg m-b-lg text-center">
+
+                                            <h1>Drop file here</h1>                                            
+                                        </div>
+                                        <div ng-if="((!newc.job.filesIn[1]) && (newc.files[1].uploading))" class="text-center">                                          
+
+                                            <h1>Uploading file...</h1>
+                                            <div class="progress-striped active progress">
+                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[1].progress < 100 ? newc.files[1].progress : 100) + '%'}">                                                
+                                                </div>                
+                                            </div>
+                                            {{newc.files[1].current| filesize:2}} / {{newc.files[1].total| filesize:2}} ({{newc.files[1].progress}})%
+                                        </div>
+
+                                        <div ng-if="(newc.job.filesIn[1])">                                            
+                                            <p>File size: {{newc.job.filesIn[1].filesize| filesize:0}}</p>
+                                            <p>Uploaded: {{newc.job.filesIn[1].upload_ended| date:'medium'}}</p>
+                                        </div>
+                                    </div>
+                                </form>                                           
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>File details: <b class="text-navy">File1.fasta</b></h5>
+
+
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <button class="btn-primary btn btn-sm pull-right">Generate FASTQC report</button>
+                    </div>
+                    <div class="row">
+                        <div class="ibox float-e-margins">
+
+                            <table class="footable table table-striped toggle-arrow-tiny">
+                                <thead>
+                                    <tr>
+
+                                        <th >Used in pipeline</th>
+                                        <th >Job ID</th>
+                                        <th >Date</th>                                
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>DNA realignment: homo sapiens</td>
+                                        <td>1234</td>
+                                        <td>July 20, 2016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DNA realignment: homo sapiens</td>
+                                        <td>1235</td>
+                                        <td>July 20, 2016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DNA realignment: homo sapiens</td>
+                                        <td>1236</td>
+                                        <td>July 20, 2016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DNA realignment: homo sapiens</td>
+                                        <td>1237</td>
+                                        <td>July 20, 2016</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>File storage usage</h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="flot-chart">
+                        <div flot class="flot-chart-content" dataset="charts.flotPieData" options="charts.flotPieOptions"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+

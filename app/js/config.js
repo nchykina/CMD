@@ -235,8 +235,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 //params: { job: {} },
                 data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
             })
-            
-            
+
+
             .state('pipelines.rna_reseq_home', {
                 url: "/rna_resequencing/home",
                 controller: 'rnaReseqHomeController',
@@ -287,9 +287,9 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 //params: { job: {} },
                 data: {pageTitle: 'RNA resequencing pipeline: Step 3'}
             })
-            
-            
-            
+
+
+
             .state('charts', {
                 abstract: true,
                 url: "/charts",
@@ -729,7 +729,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('storage.files', {
                 url: "/form_files",
-                templateUrl: "views/form_files.html",
+                templateUrl: "views/file_manager/form_files.html",
                 data: {pageTitle: 'Manage my files'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -741,11 +741,26 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     }
                 }
             })
+            .state('storage.manager', {
+                url: "/file_manager",
+                templateUrl: "views/file_manager/file_manager.html",
+                data: {pageTitle: 'File manager'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                serie: true,
+                                name: 'angular-flot',
+                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
+                          
+                            }
+                        ]);
+                    }
+                }
+            })
             .state('storage.stats', {
                 url: "/form_stats",
-                controller: 'mailServerController',
-                controllerAs: 'vm',
-                templateUrl: "views/form_stats.html",
+                templateUrl: "views/file_manager/form_stats.html",
                 data: {pageTitle: 'Statistics'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
