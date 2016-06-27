@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Manage files</h2>
+        <h2>Completed jobs</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
@@ -34,8 +34,7 @@
                                     Action <span class="caret"></span>
                                 </button>
                                 <ul role="menu" uib-dropdown-menu="">
-                                    <li><a href="">Delete selected pipeline run</a></li>
-                                    <li><a href="">Relaunch selected pipeline run</a></li>
+                                    <li><a href="">Delete job and all its output files</a></li>
                                 </ul>
                             </div>   
                         </div>
@@ -74,18 +73,16 @@
                                         <table class="table table-striped">
                                             <tbody>
                                                 <tr>
-                                                    <td>File1_with_long_name_R1.fasta
-                                                        </td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td><strike> File1_with_long_name_R1.fasta</strike>
+                                                    </td>
+                                                    <td>
+                                                        
                                                     </td></tr>
                                                 <tr><td>File1_with_long_name_R2.fasta </td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -97,27 +94,30 @@
                                             <tbody>
                                                 <tr><td>
                                                         <p>File1_with_long_name_R1.bam </p></td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                                        </div>
                                                     </td>
                                                 </tr>                                     
                                                 <tr>
                                                     <td> File1_with_long_name.vcf </td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         Annotated table.xls</td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -134,11 +134,11 @@
                                         <table class="table table-striped">
                                             <tbody>
                                                 <tr>
-                                                    <td>Sample data 1</td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-info btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>Sample data: brown mouse</td>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                        </div>
                                                     </td></tr>
                                             </tbody>
                                         </table>
@@ -149,27 +149,30 @@
                                             <tbody>
                                                 <tr><td>
                                                         File1_with_long_name.bam </td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                                        </div>
                                                     </td>
                                                 </tr>                                     
                                                 <tr>
                                                     <td> File1_with_long_name.vcf </td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         Annotated table.xls</td>
-                                                    <td align='right'>
-                                                        <button type="button" class="btn btn-primary btn-xs">
-                                                            Download 
-                                                        </button>
+                                                    <td>
+                                                        <div class="input-group pull-right">
+                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
