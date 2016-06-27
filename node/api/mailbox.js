@@ -5,9 +5,9 @@ var createMessage = function (req, res) {
 
         return models.sequelize.transaction(function (t) {
 
-            return models.User.findOne({where: {name: req.body.to}}, {transaction: t})
+            return models.User.findOne({where: {name: req.body.to}, transaction: t})
                     .then(function (userTo) {
-                        if(!userTo){
+                        if (!userTo) {
                             throw new Error('target user not found');
                         }
 
@@ -39,7 +39,7 @@ var createMessage = function (req, res) {
                 })
                 .catch(function (err) {
                     console.error('createMessage: ' + err);
-                    res.status(500).json({success: false, msg: 'Submission error'});
+                    res.status(500).json({success: false, msg: err});
                 });
     } else {
         res.status(500).json({success: false, msg: 'No user logged in'});
@@ -52,8 +52,11 @@ var saveAsDraft = function (req, res) {
 
         return models.sequelize.transaction(function (t) {
 
-            models.User.findOne({name: req.body.to}, {transaction: t})
+            models.User.findOne({where: {name: req.body.to}, transaction: t})
                     .then(function (userTo) {
+                        if (!userTo) {
+                            throw new Error('target user not found');
+                        }
 
                         return models.Message.create({
                             from_id: req.user.id,
@@ -71,7 +74,7 @@ var saveAsDraft = function (req, res) {
                 })
                 .catch(function (err) {
                     console.error('saveAsDraft: ' + err);
-                    res.status(500).json({success: false, msg: ''});
+                    res.status(500).json({success: false, msg: err});
                 });
 
 
@@ -90,40 +93,45 @@ var getMessages = function (req, res) {
 
     if (req.user) {
         var userId = req.user.id;
-        models.Message.find({
+        models.Message.findAll({
             $or: [
                 {'type': 'inbox', 'to_id': userId},
                 {'type': 'draft', 'from_id': userId},
                 {'type': 'sent', 'from_id': userId},
                 {'type': 'trash', 'owner_id': userId}
-            ]}).then(function (messages) {
+            ]})
+                .then(function (messages) {
 
-            for (var key in messages) {
-                if (messages[key].type === 'inbox') {
-                    messagesForInbox.push(messages[key]);
-                }
-                if (messages[key].type === 'draft') {
-                    messagesForDrafts.push(messages[key]);
-                }
-                if (messages[key].type === 'sent') {
-                    messagesForSent.push(messages[key]);
-                }
-                if (messages[key].type === 'trash') {
-                    messagesForTrash.push(messages[key]);
-                }
-            }
+                    if (!messages) {
+                        throw new Error('no messages');
+                    }
 
-            res.status(200).json({success: true, msg: "List of messages acquired",
-                messagesForInbox: messagesForInbox,
-                messagesForDrafts: messagesForDrafts,
-                messagesForSent: messagesForSent,
-                messagesForTrash: messagesForTrash,
-                inbox: messagesForInbox.length,
-                draft: messagesForDrafts.length,
-                sent: messagesForSent.length,
-                trash: messagesForTrash.length
-            });
-        })
+                    for (var key in messages) {
+                        if (messages[key].type === 'inbox') {
+                            messagesForInbox.push(messages[key]);
+                        }
+                        if (messages[key].type === 'draft') {
+                            messagesForDrafts.push(messages[key]);
+                        }
+                        if (messages[key].type === 'sent') {
+                            messagesForSent.push(messages[key]);
+                        }
+                        if (messages[key].type === 'trash') {
+                            messagesForTrash.push(messages[key]);
+                        }
+                    }
+
+                    res.status(200).json({success: true, msg: "List of messages acquired",
+                        messagesForInbox: messagesForInbox,
+                        messagesForDrafts: messagesForDrafts,
+                        messagesForSent: messagesForSent,
+                        messagesForTrash: messagesForTrash,
+                        inbox: messagesForInbox.length,
+                        draft: messagesForDrafts.length,
+                        sent: messagesForSent.length,
+                        trash: messagesForTrash.length
+                    });
+                })
                 .catch(function (err) {
                     return res.status(404).json({success: false, msg: "No messages found for this user"});
 
@@ -137,11 +145,14 @@ var getMessageDetails = function (req, res) {
     if (req.user) {
 
         return models.sequelize.transaction(function (t) {
-            models.Message.findById({'id': req.query.message_id}, {transaction: t})
+            return models.Message.findOne({where: {'id': req.query.message_id}, transaction: t})
                     .then(function (message) {
+                        if (!message) {
+                            throw new Error('message not found');
+                        }
 
                         message.read = true;
-                        return message.save();
+                        return message.save({transaction: t});
 
                     });
         })
@@ -149,8 +160,9 @@ var getMessageDetails = function (req, res) {
                     return res.status(200).json({success: true, message: message});
                 })
                 .catch(function (err) {
-                    return res.json({success: false, msg: 'Error'});
-                })
+                    console.error('getMessageDetails: '+err);
+                    return res.json({success: false, msg: err});
+                });
     } else {
         res.json({success: false, msg: 'No user logged in'});
     }
@@ -168,18 +180,18 @@ var moveToTrash = function (req, res) {
             for (var key in messages) {
                 if (req.body.ids.hasOwnProperty(key)) {
                     messageId = req.body.ids[key];
-                    console.log(messageId);
-                    //console.log(message.selected);
-                    promises.push(models.Message.findOne({'id': messageId}, {transaction: t})
+
+                    promises.push(models.Message.findOne({where: {'id': messageId}, transaction: t})
                             .then(function (message) {
+                                if (!message) {
+                                    throw new Error('message not found');
+                                }
                                 message.type = 'trash';
                                 message.movedToTrashFrom = movedToTrashFrom;
                                 message.owner = req.user.name;
                                 return message.save({transaction: t});
 
                             }));
-
-
                 }
             }
 
@@ -190,7 +202,7 @@ var moveToTrash = function (req, res) {
                 })
                 .catch(function (err) {
                     console.error('moveToTrash: ' + err);
-                    res.status(500).json({success: false, msg: 'Internal error'});
+                    res.status(500).json({success: false, msg: err});
                 });
     } else {
         res.status(500).json({success: false, msg: 'No user logged in'});
@@ -247,8 +259,11 @@ var markAsRead = function (req, res) { // TBD
                 if (req.body.hasOwnProperty(key)) {
                     messageId = req.body[key];
 
-                    promises.push(models.Message.findOne({'id': messageId}, {transaction: t})
+                    promises.push(models.Message.findOne({where: {'id': messageId}, transaction: t})
                             .then(function (message) {
+                                if (!message) {
+                                    throw new Error('message not found');
+                                }
 
                                 if (message.read == true) {
                                     message.read = false;
@@ -270,7 +285,7 @@ var markAsRead = function (req, res) { // TBD
                 })
                 .catch(function (err) {
                     console.error('markAsRead: ' + err);
-                    res.status(500).json({success: false, msg: 'Internal error'});
+                    res.status(500).json({success: false, msg: err});
                 });
 
 
@@ -295,8 +310,11 @@ var moveBackFromTrash = function (req, res) {
                     messageId = req.body[key];
 
                     //console.log(message.selected);
-                    promises.push(models.Message.findOne({'id': messageId}, {transaction: t})
+                    promises.push(models.Message.findOne({where: {'id': messageId}, transaction: t})
                             .then(function (message) {
+                                if (!message) {
+                                    throw new Error('message not found');
+                                }
 
                                 message.type = message.movedToTrashFrom;
                                 return message.save({transaction: t});
@@ -304,6 +322,8 @@ var moveBackFromTrash = function (req, res) {
 
                 }
             }
+            
+            return models.Sequelize.Promise.all(promises);
 
         })
                 .then(function (succ) {
