@@ -1,47 +1,148 @@
 <fieldset>
 
+
     <div class="row">
 
 
         <div class="col-lg-6">
-            <h2>Download processed .vcf and .bam files: </h2>
+            <h2>Download your output files: </h2>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
 
             <div class="ibox-content">
-                <h3>VCF file created successfully</h3>
-                <button type="submit" class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Download VCF file</button>
+                <table class="footable table table-stripped toggle-arrow-tiny">
+                    <thead>
+                        <tr>
 
-                <p> This file contains information about SNPs and InDels</p>
+                            <th >File type</th>
+                            <th >File name</th>
+                            <th >Description</th>
+                            <th class="text-right">File size</th>
+                            <th ></th>
 
-                <p></p>
-                <h3>BAM file created successfully</h3>
-                <button type="submit" class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Download BAM file</button>
-
-                <p> This file contains information about your reads aligned to the genome</p>
-                
-                                <p></p>
-                <h3>BAM file created successfully</h3>
-                <button type="submit" class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Download CSV/XLS file</button>
-
-                <p> This file contains annotated information about the SNPs in realigned genome</p>
-
-
-                <input id="acceptTerms" name="acceptTerms" type="checkbox" ng-model="formData.terms" class="required"> 
-                <label for="acceptTerms">Please send the links to the files to my email address.</label>
-
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>.BAM</td>
+                            <td>File1.bam</td>
+                            <td>Contains information about the reads aligned to the genome</td>
+                            <td class="text-right">2 GB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr>          
+                        <tr>
+                            <td>.FPKM</td>
+                            <td>File1_genes.fpkm_tracking</td>
+                            <td>Gene FPKMs</td>
+                            <td class="text-right">1 GB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td>.FPKM</td>
+                            <td>File1_isoforms.fpkm_tracking</td>
+                            <td>Isoforms FPKMs</td>
+                            <td class="text-right">1 GB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr> 
+                                                <tr>
+                            <td>.FPKM</td>
+                            <td>File1_cds.fpkm_tracking</td>
+                            <td>Coding sequence FPKMs</td>
+                            <td class="text-right">1 GB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td>.FPKM</td>
+                            <td>File1_tss_groups.fpkm_tracking</td>
+                            <td>Primary transcript FPKMs</td>
+                            <td class="text-right">1 GB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr> 
+                                                <tr>
+                            <td>.GTF</td>
+                            <td>skipped.gtf</td>
+                            <td>Skipped</td>
+                            <td class="text-right">1 GB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                                                <tr>
+                            <td>.GTF</td>
+                            <td>transcripts.gtf</td>
+                            <td>Cufflinks assembled isoforms</td>
+                            <td class="text-right">1 GB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>.CSV</td>
+                            <td>File1.csv</td>
+                            <td>Annotated information matched with SNP databases</td>
+                            <td class="text-right">100 MB</td>
+                            <td class="text-right">
+                                <div class="input-group pull-right">
+                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                </div>
+                            </td>
+                        </tr>   
+                    </tbody>
+                    <tfoot>                          
+                    </tfoot>
+                </table>
             </div>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="ibox-content">
                 <h3>So what's next?</h3>
                 <p> In order to make sense of the data, you can take a look at its graphical representation. </p> 
-                <p>Please go to any of the websites listed below to download the viewer for your files. </p>           
+                <p>Please go to any of the websites listed below to download the viewer for your files: </p>
 
+                <div class="row">
+                    <div class="col-lg-6">
+                        <button class="btn-default btn btn-xs"><a href="http://goldenhelix.com/"><img src="img/helix_logo.png" /></a></button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button class="btn-default btn btn-xs"><a href="https://www.broadinstitute.org/igv/"><img src="img/igv_logo.png" /></a></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p><strong>Golden Helix</strong></p>
+                    </div>
+                    <div class="col-lg-6">
+                        <p><strong>Broad Institute</strong></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

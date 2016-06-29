@@ -56,6 +56,7 @@
                                     <th>Date</th>
                                     <th>Pipeline</th>
                                     <th>Species</th>
+                                    <th>Job type</th>
                                     <th>Completed</th>
                                     <th>Input files</th>
                                     <th>Output files</th>
@@ -66,120 +67,119 @@
                                     <td><input icheck type="checkbox" ng-model="main.checkOne"></td>
                                     <td>Jul 14, 2013</td>
                                     <td>DNA resequencing</td>
-                                    <td>Homo sapiens hg19
-                                    </td>
+                                    <td>Homo sapiens</td>
+                                    <td>Custom data job</td>
                                     <td align='center'><a href=""><i class="fa fa-check text-navy"></i></a></td>
                                     <td>
                                         <table class="table table-striped">
                                             <tbody>
                                                 <tr>
                                                     <td><strike> File1_with_long_name_R1.fasta</strike>
-                                                    </td>
-                                                    <td>
-                                                        
-                                                    </td></tr>
-                                                <tr><td>File1_with_long_name_R2.fasta </td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
                                     </td>
-
                                     <td>
-                                        <table class="table table-striped">
-                                            <tbody>
-                                                <tr><td>
-                                                        <p>File1_with_long_name_R1.bam </p></td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>                                     
-                                                <tr>
-                                                    <td> File1_with_long_name.vcf </td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Annotated table.xls</td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+
+                                    </td></tr>
+                                <tr><td>File1_with_long_name_R2.fasta </td>
+                                    <td>
+                                        <div class="input-group pull-right">
+                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                        </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><input icheck type="checkbox" ng-model="main.unCheck1"></td>
-                                    <td>Jul 16, 2013</td>
-                                    <td>DNA resequencing </td>
-                                    <td>Mus musculus</td>
-                                    <td align='center'><a href=""><i class="fa fa-cogs text-navy"></i></a></td>
-                                    <td>
-                                        <table class="table table-striped">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Sample data: brown mouse</td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                        </div>
-                                                    </td></tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-
-                                    <td>
-                                        <table class="table table-striped">
-                                            <tbody>
-                                                <tr><td>
-                                                        File1_with_long_name.bam </td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>                                     
-                                                <tr>
-                                                    <td> File1_with_long_name.vcf </td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Annotated table.xls</td>
-                                                    <td>
-                                                        <div class="input-group pull-right">
-                                                            <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                                            <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>                              
                             </tbody>
+                        </table>
+                        </td>
+
+                        <td>
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr><td>
+                                            <p>File1_with_long_name_R1.bam </p></td>
+                                        <td>
+                                            <div class="input-group pull-right">
+                                                <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>                                     
+                                    <tr>
+                                        <td> File1_with_long_name.vcf </td>
+                                        <td>
+                                            <div class="input-group pull-right">
+                                                <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Annotated table.xls</td>
+                                        <td>
+                                            <div class="input-group pull-right">
+                                                <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td><input icheck type="checkbox" ng-model="main.unCheck1"></td>
+                            <td>Jul 16, 2013</td>
+                            <td>DNA resequencing </td>
+                            <td>Mus musculus</td>
+                            <td>Sample data job</td>
+
+                            <td align='center'><a href=""><i class="fa fa-cogs text-navy"></i></a></td>
+                            <td>
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td>Sample data: brown mouse</td>
+                                            <td>
+                                                <div class="input-group pull-right">
+                                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                </div>
+                                            </td></tr>
+                                    </tbody>
+                                </table>
+                            </td>
+
+                            <td>
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr><td>
+                                                File1_with_long_name.bam </td>
+                                            <td>
+                                                <div class="input-group pull-right">
+                                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>                                     
+                                        <tr>
+                                            <td> File1_with_long_name.vcf </td>
+                                            <td>
+                                                <div class="input-group pull-right">
+                                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Annotated table.xls</td>
+                                            <td>
+                                                <div class="input-group pull-right">
+                                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>                              
+                        </tbody>
                         </table>
                     </div>
 
