@@ -91,6 +91,63 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>What can we say about this person from the annotated VCF file? (examples)</h4>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped">
+                        <thead>
+                            <tr>
+
+                                <th ></th>
+                                <th >Characteristic</th>
+
+                                <th >Value</th>  
+                                <th >How do we know it?</th>
+                                <th class="pull-right"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Blood type (ABO system)</td>
+                                <td>A</td>
+                                <td>6 SNPs in ABO gene, chromosome 9</td>
+                                <td class="text-right">
+                                    <div class="input-group pull-right">
+                                        <button class="btn-primary btn btn-xs"><span>Learn more</span></button>
+                                    </div>
+                                </td>
+                            </tr> 
+                                                        <tr>
+                                <td>2</td>
+                                <td>Eye color</td>
+                                <td>Green</td>
+                                <td>10 SNPs in OCA2 and HERC2 genes, chromosome 15</td>
+                                <td class="text-right">
+                                    <div class="input-group pull-right">
+                                        <button class="btn-primary btn btn-xs"><span>Learn more</span></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                        <tfoot>                          
+                        </tfoot>
+                    </table>
+                   <button class="btn-success btn"><span>Do my own research!</span></button>
+
+                </div>
+            </div>  
+        </div>
+    </div>
+
 </fieldset>
 <fieldset class="m-t-md">
     <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn btn-default">Upload other dataset</a>
