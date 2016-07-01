@@ -1688,9 +1688,9 @@ function wizardCtrl($scope, $rootScope) {
     $scope.formData = {};
 
     // After process wizard
-    $scope.processForm = function () {
-        alert('Wizard completed');
-    };
+   // $scope.processForm = function () {
+     //   alert('Wizard completed');
+    //};
 
 }
 
@@ -3939,9 +3939,9 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
         });
     }
 
-    this.processForm = function () {
-        alert('Wizard completed');
-    };
+   // this.processForm = function () {
+     //   alert('Wizard completed');
+   // };
 
 }
 
