@@ -3614,7 +3614,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 console.log("MEANWHILE IN CURRENT MESSAGE ", vm.currentMessage._id);
 
                 //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
-                vm.currentMessage = {'_id': sessionStorage.messageId,
+                vm.currentMessage = {'id': sessionStorage.messageId,
                     'from': sessionStorage.messageFrom,
                     'to': sessionStorage.messageTo,
                     'subject': sessionStorage.messageSubject,
@@ -3698,9 +3698,9 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                     if (data.success) {
                         vm.currentMessage = data.message;
                         //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
-                        sessionStorage.messageId = data.message._id;
-                        sessionStorage.messageTo = data.message.to;
-                        sessionStorage.messageFrom = data.message.from;
+                        sessionStorage.messageId = data.message.id;
+                        sessionStorage.messageTo = data.message.to.name;
+                        sessionStorage.messageFrom = data.message.from.name;
                         sessionStorage.messageSubject = data.message.subject;
                         sessionStorage.messageSentTime = data.message.sentTime;
                         sessionStorage.messageContent = data.message.content;
@@ -3732,7 +3732,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = messages[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
             }
         }
 
@@ -3756,7 +3756,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
             }
         }
 
@@ -3769,7 +3769,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
-                            var res = $.inArray(el._id, req);
+                            var res = $.inArray(el.id, req);
                             vm.init();
                             return (res == -1);
                         }));
@@ -3785,7 +3785,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = vm.messagesForInbox[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
                 if (v.read === true) {
                     vm.messagesForInbox[i].read = false;
                 } else {
@@ -3816,7 +3816,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
             }
         }
 
@@ -3829,7 +3829,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
-                            var res = $.inArray(el._id, req);
+                            var res = $.inArray(el.id, req);
                             vm.init();
                             return (res == -1);
                         }));

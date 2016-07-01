@@ -47,8 +47,8 @@
                             <td class="check-mail">
                                 <input icheck type="checkbox" ng-model="x.selected" ng-click="x.selected = true">
                             </td>
-                            <td class="mail-ontact"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.to}}</a></td>
-                            <td class="mail-subject"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x._id)">{{x.subject}}</a></td>
+                            <td class="mail-ontact"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x.id)">{{x.to}}</a></td>
+                            <td class="mail-subject"><a ui-sref="mailbox.email_view" ng-click="vm.getMessageDetails(x.id)">{{x.subject}}</a></td>
                             <td class=""></td>
                             <td class="text-right mail-date">{{x.sentTime| date:'MMM d, yyyy'}}</td>
                         </tr>                        

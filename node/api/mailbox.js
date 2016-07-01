@@ -17,16 +17,16 @@ var createMessage = function (req, res) {
                             subject: req.body.subject,
                             content: req.body.content,
                             type: 'sent',
-                            sentTime: new Date()
+                            sent_time: new Date()
                         }, {transaction: t})
                                 .then(function (msg1) {
                                     return models.Message.create({
                                         from_id: req.user.id,
-                                        to: userTo.id,
+                                        to_id: userTo.id,
                                         subject: req.body.subject,
                                         content: req.body.content,
                                         type: 'inbox',
-                                        sentTime: new Date(),
+                                        sent_time: new Date(),
                                         read: false // for read/unread messages
                                     });
                                 });
@@ -52,7 +52,7 @@ var saveAsDraft = function (req, res) {
 
         return models.sequelize.transaction(function (t) {
 
-            models.User.findOne({where: {name: req.body.to}, transaction: t})
+            return models.User.findOne({where: {name: req.body.to}, transaction: t})
                     .then(function (userTo) {
                         if (!userTo) {
                             throw new Error('target user not found');
@@ -145,7 +145,12 @@ var getMessageDetails = function (req, res) {
     if (req.user) {
 
         return models.sequelize.transaction(function (t) {
-            return models.Message.findOne({where: {'id': req.query.message_id}, transaction: t})
+            return models.Message.findOne({where: {'id': req.query.message_id},
+                                           transaction: t,
+                                           include: [
+                                               {model: models.User, as: 'to'},
+                                               {model: models.User, as: 'from'}
+                                           ]})
                     .then(function (message) {
                         if (!message) {
                             throw new Error('message not found');
@@ -160,11 +165,11 @@ var getMessageDetails = function (req, res) {
                     return res.status(200).json({success: true, message: message});
                 })
                 .catch(function (err) {
-                    console.error('getMessageDetails: '+err);
-                    return res.json({success: false, msg: err});
+                    console.error('getMessageDetails: ' + err);
+                    return res.status(500).json({success: false, msg: err});
                 });
     } else {
-        res.json({success: false, msg: 'No user logged in'});
+        res.status(500).json({success: false, msg: 'No user logged in'});
     }
 };
 
@@ -187,7 +192,7 @@ var moveToTrash = function (req, res) {
                                     throw new Error('message not found');
                                 }
                                 message.type = 'trash';
-                                message.movedToTrashFrom = movedToTrashFrom;
+                                message.moved_to_trash_from = movedToTrashFrom;
                                 message.owner = req.user.name;
                                 return message.save({transaction: t});
 
@@ -214,31 +219,34 @@ var deleteMessage = function (req, res) {
 
         var messages = req.body;
 
-        for (var key in messages) {
-            if (req.body.hasOwnProperty(key)) {
-                messageId = req.body[key];
-                models.Message.remove({'id': messageId})
-                        .then(function (ok) {
-                            if (ok > 0) {
-                                return res.status(200).json({success: true, msg: 'Ok'});
-                            } else {
-                                return res.status(500).json({success: false, msg: 'Not found'});
-                            }
-                        }
-                        )
-                        .catch(function (err) {
+        return models.sequelize.transaction(function (t) {
 
-                            console.error('deleteMessage: ' + err);
+            var promises = [];
 
-                            return res.json({success: false, msg: 'Error'});
-
-
-                        });
-
+            for (var key in messages) {
+                if (req.body.hasOwnProperty(key)) {
+                    messageId = req.body[key];
+                    promises.push(models.Message.destroy({where: {'id': messageId}, transaction: t}));
+                }
             }
-        }
+
+            return models.Sequelize.Promise.all(promises);
+
+        })
+                .then(function (ok) {
+                    if (ok > 0) {
+                        return res.status(200).json({success: true, msg: 'Ok'});
+                    } else {
+                        return res.status(404).json({success: false, msg: 'Not found'});
+                    }
+                }
+                )
+                .catch(function (err) {
+                    console.error('deleteMessage: ' + err);
+                    return res.status(500).json({success: false, msg: 'Error'});
+                });
     } else {
-        res.json({success: false, msg: 'No user logged in'});
+        res.status(500).json({success: false, msg: 'No user logged in'});
     }
 
 };
@@ -316,13 +324,13 @@ var moveBackFromTrash = function (req, res) {
                                     throw new Error('message not found');
                                 }
 
-                                message.type = message.movedToTrashFrom;
+                                message.type = message.moved_to_trash_from;
                                 return message.save({transaction: t});
                             }));
 
                 }
             }
-            
+
             return models.Sequelize.Promise.all(promises);
 
         })
