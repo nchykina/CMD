@@ -9,20 +9,6 @@ var extend = require('node.extend'); //merge JavaScript objects
 
 var q = require('q'); //Q promise framework
 
-
-
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, req.upload_folder);
-    },
-    filename: function (req, file, cb) {
-        cb(null, req.upload_file);
-    }
-
-});
-
-var upload = multer({storage: storage}).single('data');
-
 var job_create = function (req, res) {
     if (!req.user) {
         res.json({success: false, msg: 'Unauthenticated'});
@@ -434,7 +420,7 @@ var bindFunction = function (router) {
     //router.put('/job/update/{id}', job_update);
     //router.delete('/job/delete/{id}', job_delete);
     router.put('/job/submit/:id', job_submit);
-    router.post('/job/submit_file/:id/:filenum', job_submit_file);
+    //router.post('/job/submit_file/:id/:filenum', job_submit_file);
     router.use('/job/hook', sing_hook);
     sing_bind();
 };

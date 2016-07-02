@@ -26,7 +26,7 @@ var ecommerceService = function ($http, $q) {
                 .success(function (response) {
                     //console.log(response.products);
                     //productList.length = 0;
-            
+
                     //for(var v in response.products){
                     //    productList.push(response.products[v]);
                     //}
@@ -39,10 +39,10 @@ var ecommerceService = function ($http, $q) {
                     productListLoaded = false;
                     defer.reject(data.msg);
                 });
-        
+
         return defer.promise;
     };
-    
+
     var loadOrders = function () {
         var defer = $q.defer();
 
@@ -53,7 +53,7 @@ var ecommerceService = function ($http, $q) {
                 .success(function (response) {
                     //console.log(response.products);
                     //productList.length = 0;
-            
+
                     //for(var v in response.products){
                     //    productList.push(response.products[v]);
                     //}
@@ -66,11 +66,11 @@ var ecommerceService = function ($http, $q) {
                     ordersLoaded = false;
                     defer.reject(data.msg);
                 });
-        
+
         return defer.promise;
     };
-    
-    this.addOrder = function(paymentType){
+
+    this.addOrder = function (paymentType) {
         var defer = $q.defer();
 
         $http({
@@ -85,25 +85,25 @@ var ecommerceService = function ($http, $q) {
                     console.log(orders);
                     defer.resolve(response.msg);
                 })
-                .error(function (data, status) {                
-                    console.error('addToCart: ' + status + ' - ' + data.msg);                   
+                .error(function (data, status) {
+                    console.error('addToCart: ' + status + ' - ' + data.msg);
                     defer.reject(data.msg);
                 });
-        
+
         return defer.promise;
     }
-    
-    var findProduct = function(productId){
-        for(var v in productList){
-            if(productList[v].id === productId){
+
+    var findProduct = function (productId) {
+        for (var v in productList) {
+            if (productList[v].id === productId) {
                 return productList[v];
             }
         }
-        
+
         return null;
     }
-    
-    this.addToCart = function(productId){
+
+    this.addToCart = function (productId) {
         var defer = $q.defer();
 
         $http({
@@ -116,59 +116,59 @@ var ecommerceService = function ($http, $q) {
                     cart.push(findProduct(productId));
                     defer.resolve(response.msg);
                 })
-                .error(function (data, status) {                
-                    console.error('addToCart: ' + status + ' - ' + data.msg);                   
+                .error(function (data, status) {
+                    console.error('addToCart: ' + status + ' - ' + data.msg);
                     defer.reject(data.msg);
                 });
-        
+
         return defer.promise;
     }
-    
-    this.clearCart = function(){
+
+    this.clearCart = function () {
         var defer = $q.defer();
 
         $http({
             method: 'DELETE',
-            url: 'api/cart',            
+            url: 'api/cart',
         })
                 .success(function (response) {
                     //console.log(response.products);
-                    cart.length = 0;                    
+                    cart.length = 0;
                     defer.resolve(response.msg);
                 })
-                .error(function (data, status) {                
-                    console.error('clearCart: ' + status + ' - ' + data);                   
+                .error(function (data, status) {
+                    console.error('clearCart: ' + status + ' - ' + data);
                     defer.reject(data);
                 });
-        
+
         return defer.promise;
     }
-    
-    this.removeFromCart = function(productId){
+
+    this.removeFromCart = function (productId) {
         var defer = $q.defer();
 
         $http({
             method: 'DELETE',
-            url: 'api/cart/'+productId,            
+            url: 'api/cart/' + productId,
         })
                 .success(function (response) {
                     //console.log(response.products);
-                    for(var v in cart){
-                        if(cart[v].id===productId){
-                            cart.splice(v,1);
+                    for (var v in cart) {
+                        if (cart[v].id === productId) {
+                            cart.splice(v, 1);
                             break;
                         }
-                    }            
-                    
+                    }
+
                     defer.resolve(response.msg);
                 })
-                .error(function (data, status) {                
-                    console.error('removeFromCart: ' + status + ' - ' + data);                   
+                .error(function (data, status) {
+                    console.error('removeFromCart: ' + status + ' - ' + data);
                     defer.reject(data);
                 });
-        
+
         return defer.promise;
-    }    
+    }
 
     var loadCart = function () {
         var defer = $q.defer();
@@ -184,53 +184,182 @@ var ecommerceService = function ($http, $q) {
                     defer.resolve(cart);
                 })
                 .error(function (data, status) {
-                    console.error('loadCart: ' + status + ' - ' + data);                          
+                    console.error('loadCart: ' + status + ' - ' + data);
                     defer.reject(data);
                 });
-                
+
         return defer.promise;
     };
 
     this.getProductList = function () {
         var defer = $q.defer();
-        
+
         if (!productListLoaded) {
-            return loadProductList();                    
-        }
-        else {
+            return loadProductList();
+        } else {
             defer.resolve(productList);
         }
-        
+
         return defer.promise;
     }
-    
+
     this.getOrders = function () {
         var defer = $q.defer();
-        
+
         if (!ordersLoaded) {
-            return loadOrders();                    
-        }
-        else {
+            return loadOrders();
+        } else {
             defer.resolve(orders);
         }
-        
+
         return defer.promise;
     }
 
     this.getCart = function () {
         var defer = $q.defer();
-        
+
         if (!cartLoaded) {
-            return loadCart();                    
-        }
-        else {
+            return loadCart();
+        } else {
             defer.resolve(cart);
         }
-        
+
         return defer.promise;
     }
 
 }
+
+var fileService = function ($http, $q, Upload) {
+    var self = this;
+
+    var files = [];
+
+    var filesLoaded = false;
+
+    var loadFiles = function () {
+        var defer = $q.defer();
+
+        $http({
+            method: 'GET',
+            url: 'api/file'
+        })
+                .success(function (response) {
+                    //console.log(response.products);
+                    //productList.length = 0;
+
+                    //for(var v in response.products){
+                    //    productList.push(response.products[v]);
+                    //}
+                    files = response.files;
+                    filesLoaded = true;
+                    defer.resolve(files);
+                })
+                .error(function (data, status) {
+                    console.error('loadFiles: ' + status + ' - ' + data.msg);
+                    filesLoaded = false;
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
+    };
+
+    this.addFile = function (file_client) {
+        var defer = $q.defer();        
+
+        $http({
+            method: 'POST',
+            url: 'api/file',
+            data: {'name': file_client.name}
+        })
+                .success(function (response) {
+                    //console.log(response.products);
+                    var file_idx = files.push(response.file) - 1;
+                    var srv_file = response.file;
+
+                    Upload.upload({
+                        url: 'api/file_content/' + srv_file.id,
+                        data: {data: file_client}
+                    }).then(function (resp) {
+                        var server_resp = resp.data;
+                        
+                            console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
+                            // = server_resp.file_entry;
+                            files[file_idx].uploading = false;
+                            files[file_idx].status = server_resp.file.status;
+                            files[file_idx].filesize = server_resp.file.filesize;
+                            files[file_idx].progress = 100;
+                            
+                            defer.resolve(files[file_idx]);                            
+                        }
+                    , function (resp) {
+                        files[file_idx].uploading = false;
+                        files[file_idx].status = 'failed';                        
+                        //files[file_idx].filesize = 0;
+                        console.error('Error status: ' + resp.status);
+                        defer.reject();
+                    }, function (evt) {
+                        var progress = {
+                            current: evt.loaded,
+                            total: evt.total,
+                            progress: Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
+                        };
+                        
+                        files[file_idx].current = evt.loaded;
+                        files[file_idx].total = evt.total;
+                        files[file_idx].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
+                        
+                        defer.notify(progress);
+                    });
+                })
+                .error(function (data, status) {
+                    console.error('addFile: ' + status + ' - ' + data.msg);
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
+
+    }
+    
+    this.deleteFile = function (fileid) {
+        var defer = $q.defer();        
+
+        $http({
+            method: 'DELETE',
+            url: 'api/file/'+fileid            
+        })
+                .success(function (response) {
+                    //console.log(response.products);
+                    for(var i in files){
+                        if(files[i].id===fileid){
+                            files.splice(i,1);
+                            return defer.resolve();
+                        }
+                    }
+                    
+                    return defer.reject('file not found in cached array');                    
+                })
+                .error(function (data, status) {
+                    console.error('deleteFile: ' + status + ' - ' + data.msg);
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
+
+    }
+    
+    this.getCart = function () {
+        var defer = $q.defer();
+
+        if (!filesLoaded) {
+            return loadFiles();
+        } else {
+            defer.resolve(files);
+        }
+
+        return defer.promise;
+    }
+}
+
 
 var jobService = function ($http, $q) {
     var vm = this;
@@ -267,4 +396,5 @@ angular
         .module('inspinia')
         .service('messageService', messageService)
         .service('jobService', ['$http', '$q', jobService])
+        .service('fileService', ['$http', '$q', 'Upload', fileService])
         .service('ecommService', ['$http', '$q', ecommerceService]);

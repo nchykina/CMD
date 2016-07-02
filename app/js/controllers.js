@@ -3856,6 +3856,31 @@ function dnaReseqHomeCtrl($http, $state, jobService) {
 
 }
 
+function fileCtrl(fileService){
+    var vm = this;
+    
+    vm.files = [];
+    
+    fileService.getFiles()
+            .then(function (res) {
+                vm.files = res;                
+            });
+    
+    this.upload = function (file) {
+        if (file == null) {
+            console.log('ima buggy shiet');
+            return;
+        }        
+        
+        fileService.addFile(file);
+    }
+    
+    this.deleteFile = function(fileid){
+        fileService.deleteFile(fileid);
+    }   
+    
+}
+
 function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService, filesizeFilter) {
     var vm = this;
 
@@ -3876,46 +3901,7 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
 
     vm.files = [{}, {}];
 
-    this.upload = function (filenum, file) {
-        if (file == null) {
-            console.log('ima buggy shiet');
-            return;
-        }
-
-        vm.job.filesIn[filenum] = null;
-
-        vm.files[filenum] = {};
-        vm.files[filenum].uploading = true;
-        vm.files[filenum].progress = 0;
-
-        if (vm.job.filesIn[filenum]) {
-            console.log("object is not null!");
-        }
-
-        Upload.upload({
-            url: 'api/job/submit_file/' + vm.job._id + '/' + filenum,
-            data: {data: file}
-        }).then(function (resp) {
-            var server_resp = resp.data;
-            if (server_resp.success) {
-                console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
-                vm.job.filesIn[filenum] = server_resp.file_entry;
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-            } else {
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-                console.log('Error uploading ' + resp.config.data.data.name + ': ' + server_resp.msg);
-            }
-        }, function (resp) {
-            vm.files[filenum].uploading = false;
-            console.log('Error status: ' + resp.status);
-        }, function (evt) {
-            vm.files[filenum].current = evt.loaded;
-            vm.files[filenum].total = evt.total;
-            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
-        });
-    }
+    
 
     this.processForm = function () {
         alert('Wizard completed');
@@ -4246,6 +4232,7 @@ angular
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', 'ecommService', stripeCtrl])
+        .controller('fileController', ['fileService', fileCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 

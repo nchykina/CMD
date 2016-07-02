@@ -5,6 +5,7 @@ var paypalInvoices = require('./paypal_invoices');
 var ipnListener = require('./ipn_listener');
 var mailServer = require('./mailserver');
 var stripeInvoices = require('./stripe_invoices');
+var file = require('./file');
 
 var job = require('./job');
 
@@ -18,6 +19,7 @@ var bindFunction = function(router){
     mailbox.bind(router);
     job.bind(router);
     ecommerce.bind(router);
+    file.bind(router);
     //paypalInvoices.bind(router);
     ipnListener.bind(router);
     mailServer.bind(router);
