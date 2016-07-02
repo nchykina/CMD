@@ -23,163 +23,6 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
 
     $stateProvider
 
-            .state('dashboards', {
-                abstract: true,
-                url: "/dashboards",
-                templateUrl: "views/common/content.html",
-            })
-            .state('dashboards.dashboard_1', {
-                url: "/dashboard_1",
-                templateUrl: "views/dashboard_1.html",
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                serie: true,
-                                name: 'angular-flot',
-                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                            },
-                            {
-                                name: 'angles',
-                                files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
-                            },
-                            {
-                                name: 'angular-peity',
-                                files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('dashboards.dashboard_2', {
-                url: "/dashboard_2",
-                templateUrl: "views/dashboard_2.html",
-                data: {pageTitle: 'Dashboard 2'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                serie: true,
-                                name: 'angular-flot',
-                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                            },
-                            {
-                                serie: true,
-                                files: ['js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js', 'js/plugins/jvectormap/jquery-jvectormap-2.0.2.css']
-                            },
-                            {
-                                serie: true,
-                                files: ['js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js']
-                            },
-                            {
-                                name: 'ui.checkbox',
-                                files: ['js/bootstrap/angular-bootstrap-checkbox.js']
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('dashboards.dashboard_3', {
-                url: "/dashboard_3",
-                templateUrl: "views/dashboard_3.html",
-                data: {pageTitle: 'Dashboard 3'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                name: 'angles',
-                                files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
-                            },
-                            {
-                                name: 'angular-peity',
-                                files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
-                            },
-                            {
-                                name: 'ui.checkbox',
-                                files: ['js/bootstrap/angular-bootstrap-checkbox.js']
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('dashboards_top', {
-                abstract: true,
-                url: "/dashboards_top",
-                templateUrl: "views/common/content_top_navigation.html",
-            })
-            .state('dashboards_top.dashboard_4', {
-                url: "/dashboard_4",
-                templateUrl: "views/dashboard_4.html",
-                data: {pageTitle: 'Dashboard 4'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                name: 'angles',
-                                files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
-                            },
-                            {
-                                name: 'angular-peity',
-                                files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
-                            },
-                            {
-                                serie: true,
-                                name: 'angular-flot',
-                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('dashboards.dashboard_4_1', {
-                url: "/dashboard_4_1",
-                templateUrl: "views/dashboard_4_1.html",
-                data: {pageTitle: 'Dashboard 4'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                name: 'angles',
-                                files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
-                            },
-                            {
-                                name: 'angular-peity',
-                                files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
-                            },
-                            {
-                                serie: true,
-                                name: 'angular-flot',
-                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('dashboards.dashboard_5', {
-                url: "/dashboard_5",
-                templateUrl: "views/dashboard_5.html",
-                data: {pageTitle: 'Dashboard 5'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                serie: true,
-                                name: 'angular-flot',
-                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                            },
-                            {
-                                files: ['js/plugins/sparkline/jquery.sparkline.min.js']
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('layouts', {
-                url: "/layouts",
-                templateUrl: "views/layouts.html",
-                data: {pageTitle: 'Layouts'},
-            })
-
             .state('pipelines', {
                 abstract: true,
                 url: "/pipelines",
@@ -235,6 +78,61 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 //params: { job: {} },
                 data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
             })
+
+
+            .state('pipelines.rna_reseq_home', {
+                url: "/rna_resequencing/home",
+                controller: 'rnaReseqHomeController',
+                controllerAs: 'homec',
+                templateUrl: "views/pipelines/rna_reseq/home.html",
+                data: {pageTitle: 'RNA resequencing'}
+            })
+            .state('pipelines.rna_reseq_new', {
+                url: "/rna_resequencing/new",
+                templateUrl: "views/pipelines/rna_reseq/new.html",
+                //templateUrl: "views/debug/parent_state.html",
+                controller: 'rnaReseqNewController',
+                controllerAs: 'newc',
+                params: {job: {}},
+                data: {pageTitle: 'RNA resequencing'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/steps/jquery.steps.css']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('pipelines.rna_reseq_new.step1', {
+                url: '/step1',
+                templateUrl: "views/pipelines/rna_reseq/step1.html",
+                //templateUrl: "views/debug/normal_state.html",
+                controller: 'rnaReseqNewController',
+                controllerAs: 'newc',
+                //params: { job: {} },
+                data: {pageTitle: 'RNA resequencing pipeline: Step 1'}
+            })
+            .state('pipelines.rna_reseq_new.step2', {
+                url: '/step2',
+                templateUrl: "views/pipelines/rna_reseq/step2.html",
+                controller: 'rnaReseqNewController',
+                controllerAs: 'newc',
+                //params: { job: {} },
+                data: {pageTitle: 'RNA resequencing pipeline: Step 2'}
+            })
+            .state('pipelines.rna_reseq_new.step3', {
+                url: '/step3',
+                templateUrl: "views/pipelines/rna_reseq/step3.html",
+                controller: 'rnaReseqNewController',
+                controllerAs: 'newc',
+                //params: { job: {} },
+                data: {pageTitle: 'RNA resequencing pipeline: Step 3'}
+            })
+
+
+
             .state('charts', {
                 abstract: true,
                 url: "/charts",
@@ -674,7 +572,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             })
             .state('storage.files', {
                 url: "/form_files",
-                templateUrl: "views/form_files.html",
+                templateUrl: "views/file_manager/form_files.html",
                 data: {pageTitle: 'Manage my files'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -686,11 +584,26 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     }
                 }
             })
+            .state('storage.manager', {
+                url: "/file_manager",
+                templateUrl: "views/file_manager/file_manager.html",
+                data: {pageTitle: 'File manager'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                serie: true,
+                                name: 'angular-flot',
+                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
+                          
+                            }
+                        ]);
+                    }
+                }
+            })
             .state('storage.stats', {
                 url: "/form_stats",
-                controller: 'mailServerController',
-                controllerAs: 'vm',
-                templateUrl: "views/form_stats.html",
+                templateUrl: "views/file_manager/form_stats.html",
                 data: {pageTitle: 'Statistics'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {

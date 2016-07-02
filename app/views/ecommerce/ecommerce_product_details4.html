@@ -38,7 +38,7 @@
                             </h2>
                             <small>Launch a fully customized pipeline via our website</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">${{prd.price}} <small class="text-muted">per pipeline</small> </h2>
+                                <h2 class="product-main-price">Available upon request </h2>
                             </div>
                             <hr>
 
@@ -51,22 +51,43 @@
                                 {{prd.description_long}}
                             </div>
                             <hr>
-                            <div class="form-group">
-                                <div class="btn-group">
-                                    <button ng-if="!prd.in_cart" ng-click="em.addToCart(prd.id)" 
-                                            class="btn btn-primary btn-sm">                                 
-                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
-                                    <button ng-if="prd.in_cart" ng-click="em.removeFromCart(prd.id)" 
-                                            class="btn btn-danger btn-sm">                                 
-                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
-                                    <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Project name:</label>
+
+                                        <div class="col-sm-10"><input type="text" class="form-control" 
+                                                                      placeholder="Please enter your pipeline project name"></div>
+
+                                    </div>
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group"><label class="col-sm-2 control-label">Description:</label>
+
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control message-input-mail" name="message" 
+                                                      placeholder="Please describe your project in brief" ></textarea>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="btn-group">
-                                    <button ui-sref="commerce.cart" class="btn btn-info btn-sm"><i class="fa fa-calculator"></i> Proceed to checkout</button>
-                                </div> 
-                            </div>                          
+                            <hr>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="btn-group">
+                                            <button
+                                                    class="btn btn-primary btn-sm">                                 
+                                                <i class="fa fa-cart-plus"></i> Submit a request for proposal</button>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -76,6 +97,6 @@
             </div>
 
         </div>
-    </div>
+</div>
 
 </div>

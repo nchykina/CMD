@@ -801,14 +801,19 @@ function flotChartCtrl() {
 
     var pieData2 = [
         {
-            label: "Used",
+            label: "Input files",
             data: 21,
             color: "#1ab394"
         },
         {
+            label: "Output files",
+            data: 15,
+            color: "#79d2c0"
+        },
+        {
             label: "Available",
             data: 3,
-            color: "#79d2c0"
+            color: "#d3d3d3"
         }
     ];
 
@@ -1683,9 +1688,9 @@ function wizardCtrl($scope, $rootScope) {
     $scope.formData = {};
 
     // After process wizard
-    $scope.processForm = function () {
-        alert('Wizard completed');
-    };
+   // $scope.processForm = function () {
+     //   alert('Wizard completed');
+    //};
 
 }
 
@@ -3852,7 +3857,24 @@ function dnaReseqHomeCtrl($http, $state, jobService) {
                         function (err) {
                             alert(err);
                         });
-    }
+    };
+
+}
+
+function rnaReseqHomeCtrl($http, $state, jobService) {
+    var vm = this;
+
+    //vm.job = jobService.newJob;
+
+    this.createJob = function (species) {
+        jobService.createOrUpdateJob('rna_reseq', {seq_species: species})
+                .then(function (job) {
+                    $state.go('pipelines.rna_reseq_new.step1', {job: job});
+                },
+                        function (err) {
+                            alert(err);
+                        });
+    };
 
 }
 
@@ -3895,6 +3917,74 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
     if (!vm.job) {
         console.log('no job object passed to wizard. going back');
         $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
+    }
+
+    vm.species = vm.job.seq_species;
+
+    vm.files = [{}, {}];
+
+    this.upload = function (filenum, file) {
+        if (file == null) {
+            console.log('ima buggy shiet');
+            return;
+        }
+
+        vm.job.filesIn[filenum] = null;
+
+        vm.files[filenum] = {};
+        vm.files[filenum].uploading = true;
+        vm.files[filenum].progress = 0;
+
+        if (vm.job.filesIn[filenum]) {
+            console.log("object is not null!");
+        }
+
+        Upload.upload({
+            url: 'api/job/submit_file/' + vm.job._id + '/' + filenum,
+            data: {data: file}
+        }).then(function (resp) {
+            var server_resp = resp.data;
+            if (server_resp.success) {
+                console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
+                vm.job.filesIn[filenum] = server_resp.file_entry;
+                vm.files[filenum].uploading = false;
+                vm.file1 = {};
+            } else {
+                vm.files[filenum].uploading = false;
+                vm.file1 = {};
+                console.log('Error uploading ' + resp.config.data.data.name + ': ' + server_resp.msg);
+            }
+        }, function (resp) {
+            vm.files[filenum].uploading = false;
+            console.log('Error status: ' + resp.status);
+        }, function (evt) {
+            vm.files[filenum].current = evt.loaded;
+            vm.files[filenum].total = evt.total;
+            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
+        });
+    }
+
+   // this.processForm = function () {
+     //   alert('Wizard completed');
+   // };
+
+}
+
+
+function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService, filesizeFilter) {
+    var vm = this;
+
+    vm.job = $stateParams.job;
+
+    //if some nasty shiet happened along the road - do some protective actions. shouldn't happen under normal circumstances
+    /*if ((!jobService.newJob) || (jobService.newJob._id !== vm.jobid)) {
+     console.error("Nasty shiet happened");
+     //jobService.newJob = jobService.getJob(vm.jobid);
+     }*/
+
+    if (!vm.job) {
+        console.log('no job object passed to wizard. going back');
+        $state.go('pipelines.rna_reseq_home'); //no job passed to wizard
     }
 
     vm.species = vm.job.seq_species;
@@ -4230,7 +4320,11 @@ angular
         .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
         .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
+        .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
+        .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
+        .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl])
+        .controller('rnaReseqHomeController', ['$http', '$state', 'jobService', rnaReseqHomeCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', 'ecommService', stripeCtrl])
         .controller('fileController', ['fileService', fileCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);

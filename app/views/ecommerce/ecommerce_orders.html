@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>My purchases</h2>
+        <h2>My orders</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
@@ -9,7 +9,7 @@
                 <a>Upgrade account</a>
             </li>
             <li class="active">
-                <strong>My purchases</strong>
+                <strong>My orders</strong>
             </li>
         </ol>
     </div>
@@ -23,6 +23,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
+                <div class="ibox-title">
+                    <h4><strong>My subscriptions</strong></h4>
+                </div>
                 <div class="ibox-content">
 
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
@@ -30,11 +33,11 @@
                             <tr>
 
                                 <th>Order ID</th>
-                                <th data-hide="phone">Products</th>
-                                <th data-hide="phone">Purchase date</th>
-                                <th data-hide="phone">Total</th>                                
-                                <th data-hide="phone">Payment type</th>
-                                <th data-hide="phone">Status</th>
+                                <th >Products</th>
+                                <th >Purchase date</th>
+                                <th >Total</th>                                
+                                <th >Payment type</th>
+                                <th >Status</th>
                                 <th class="text-right">Action</th>
 
                             </tr>
@@ -89,5 +92,79 @@
         </div>
     </div>
 
+    
+    
+        <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4><strong>My custom projects</strong></h4>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                            <tr>
+
+                                <th>Order ID</th>
+                                <th >Project name</th>
+                                <th >Purchase date</th>
+                                <th >Cost</th>                                
+                                <th >Payment type</th>
+                                <th >Status</th>
+                                <th class="text-right">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in em.orders">
+                                <td>
+                                    {{x.orderId}}
+                                </td>
+                                <td>
+                                    <table><tbody>
+                                            <tr ng-repeat="y in x.products">
+                                                <td>
+                                                    {{y.productCategory}}: {{y.productName}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                    {{x.orderDate| date:'MMM d, yyyy'}}
+                                </td>
+                                <td>
+                                    {{x.totalAmount}} USD
+                                </td>
+                                <td>
+                                    {{x.paymentType}}
+                                </td>
+                                <td>
+                                    <span ng-if="x.status == 'Confirmed'" class="label label-primary">{{x.status}}</span>
+                                    <span ng-if="x.status == 'Pending'" class="label label-warning">{{x.status}}</span>
+                                    <span ng-if="x.status == 'Cancelled'" class="label label-danger">{{x.status}}</span>
+                                </td>
+                                <td class="text-right">
+                                    <div class="btn-group">
+                                        <button class="btn-default btn btn-xs">View invoice</button>
+                                    </div>
+                                </td>
+                            </tr>                                                                       
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
 </div>
