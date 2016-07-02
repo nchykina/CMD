@@ -60,7 +60,7 @@ var file_list = function (req, res) {
 
     models.File.findAll({where: {owner_id: req.user.id}})
             .then(function (files) {                
-                return res.status(200).json({success: true, msg: 'Files found', file: files});                
+                return res.status(200).json({success: true, msg: 'Files found', files: files});                
             })
             .catch(function (err) {
                 console.error('file_list: ' + err);

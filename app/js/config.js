@@ -587,6 +587,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('storage.manager', {
                 url: "/file_manager",
                 templateUrl: "views/file_manager/file_manager.html",
+                controller: 'fileController',
+                controllerAs: 'vm',
                 data: {pageTitle: 'File manager'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {

@@ -118,10 +118,15 @@ var job_create_or_update = function (req, res) {
 
     models.Job.findOne(queryparams)
             .then(function (job) {
-                res.json({success: true, msg: 'Returning orphaned job. Abandoning your jobs is bad for society. And hurts your karma too', job: job});
+                if (job) {
+                    res.status(200).json({success: true, msg: 'Returning orphaned job. Abandoning your jobs is bad for society. And hurts your karma too', job: job});
+                } else {
+                    job_create(req, res);
+                }
             })
             .catch(function (err) {
-                job_create(req, res);
+                console.error('job_create_or_update: ' + err);
+                res.status(500).json({success: true, msg: 'Database error'});
             });
 }
 

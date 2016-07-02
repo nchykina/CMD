@@ -32,74 +32,43 @@
                         <thead>
                             <tr>
 
-                                <th >File name</th>
-                                <th >File size</th>
+                                <th>File name</th>
+                                <th>File size</th>
 
-                                <th >Upload date</th>                                
+                                <th>Upload date</th>  
+                                <th></th>
                                 <th class="text-right"></th>
+
+
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>File1.fasta</td>
-                                <td>1 GB</td>
-                                <td>21 June 2016</td>
+                            <tr ng-repeat="x in vm.files">
+                                <td>{{x.name}}</td>
+                                <td>{{x.filesize | filesize: 0}}</td>
+                                <!--<td>{{x.finished_at}}</td>-->
+                                <td>
+                                    <div ng-if="x.status === 'uploading'" class="progress-striped active progress">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: x.progress + '%'}" ></div>                                                    
+                                    </div>
+                                    
+                                    <div ng-if="x.status === 'failed'" class="progress-striped progress">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" ng-style="{width: x.progress + '%'}" ></div>
+                                    </div>
+                                    
+                                    <div ng-if="x.status === 'ok'" class="progress-striped progress">
+                                        <div class="progress-bar progress-bar-navy-light" role="progressbar" ng-style="{width: '100%'}" ></div>
+                                    </div>
+                                </td>
                                 <td class="text-right">
                                     <div class="input-group pull-right">
                                         <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
+                                        <button class="btn-danger btn btn-xs" ng-click="vm.deleteFile(x.id)"><i class="fa fa-times"></i></button>
                                     </div>
                                 </td>
-                            </tr>          
-                            <tr>
-                                <td>File2.fasta</td>
-                                <td>1 GB</td>
+                            </tr>      
 
-                                <td>21 June 2016</td>
-                                <td class="text-right">
-                                    <div class="input-group pull-right">
-                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                    </div>
-                                </td>
-                            </tr>  
-                            <tr>
-                                <td>File3.fasta</td>
-                                <td>1 GB</td>
-
-                                <td>21 June 2016</td>
-                                <td class="text-right">
-                                    <div class="input-group pull-right">
-                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                    </div>
-                                </td>
-                            </tr>  
-                            <tr>
-                                <td>File4.fasta</td>
-                                <td>1 GB</td>
-
-                                <td>21 June 2016</td>
-                                <td class="text-right">
-                                    <div class="input-group pull-right">
-                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                    </div>
-                                </td>
-                            </tr>  
-                            <tr>
-                                <td>File5.fasta</td>
-                                <td>1 GB</td>
-
-                                <td>21 June 2016</td>
-                                <td class="text-right">
-                                    <div class="input-group pull-right">
-                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                        <button class="btn-danger btn btn-xs"><i class="fa fa-times"></i></button>
-                                    </div>
-                                </td>
-                            </tr>  
                         </tbody>
                         <tfoot>                          
                         </tfoot>
@@ -111,25 +80,8 @@
                         <div class="ibox-content">
                             <div class="ngs_dropzone">
                                 <form action="#">
-                                    <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)" ng-model="newc.file2">
-                                        <div ng-if="((!newc.job.filesIn[1]) && (!newc.files[1].uploading))" class="dz-message m-t-lg m-b-lg text-center">
-
-                                            <h1>Drop file here</h1>                                            
-                                        </div>
-                                        <div ng-if="((!newc.job.filesIn[1]) && (newc.files[1].uploading))" class="text-center">                                          
-
-                                            <h1>Uploading file...</h1>
-                                            <div class="progress-striped active progress">
-                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[1].progress < 100 ? newc.files[1].progress : 100) + '%'}">                                                
-                                                </div>                
-                                            </div>
-                                            {{newc.files[1].current| filesize:2}} / {{newc.files[1].total| filesize:2}} ({{newc.files[1].progress}})%
-                                        </div>
-
-                                        <div ng-if="(newc.job.filesIn[1])">                                            
-                                            <p>File size: {{newc.job.filesIn[1].filesize| filesize:0}}</p>
-                                            <p>Uploaded: {{newc.job.filesIn[1].upload_ended| date:'medium'}}</p>
-                                        </div>
+                                    <div class="ngs_dz_noborder" ngf-drop="vm.upload($file)" ngf-select="vm.upload($file)">
+                                        <h1>Drop file here</h1>                                                                                                                            
                                     </div>
                                 </form>                                           
                             </div>

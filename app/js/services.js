@@ -264,7 +264,9 @@ var fileService = function ($http, $q, Upload) {
     };
 
     this.addFile = function (file_client) {
-        var defer = $q.defer();        
+        var defer = $q.defer(); 
+        
+        console.log(file_client);
 
         $http({
             method: 'POST',
@@ -274,6 +276,7 @@ var fileService = function ($http, $q, Upload) {
                 .success(function (response) {
                     //console.log(response.products);
                     var file_idx = files.push(response.file) - 1;
+                    files[file_idx].filesize = file_client.size;
                     var srv_file = response.file;
 
                     Upload.upload({
@@ -283,16 +286,14 @@ var fileService = function ($http, $q, Upload) {
                         var server_resp = resp.data;
                         
                             console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
-                            // = server_resp.file_entry;
-                            files[file_idx].uploading = false;
+                            // = server_resp.file_entry;                            
                             files[file_idx].status = server_resp.file.status;
                             files[file_idx].filesize = server_resp.file.filesize;
                             files[file_idx].progress = 100;
                             
                             defer.resolve(files[file_idx]);                            
                         }
-                    , function (resp) {
-                        files[file_idx].uploading = false;
+                    , function (resp) {                        
                         files[file_idx].status = 'failed';                        
                         //files[file_idx].filesize = 0;
                         console.error('Error status: ' + resp.status);
@@ -304,6 +305,7 @@ var fileService = function ($http, $q, Upload) {
                             progress: Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
                         };
                         
+                        files[file_idx].status = 'uploading';
                         files[file_idx].current = evt.loaded;
                         files[file_idx].total = evt.total;
                         files[file_idx].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
@@ -347,7 +349,7 @@ var fileService = function ($http, $q, Upload) {
 
     }
     
-    this.getCart = function () {
+    this.getFiles = function () {
         var defer = $q.defer();
 
         if (!filesLoaded) {
