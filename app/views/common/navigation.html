@@ -4,7 +4,7 @@
             <li class="nav-header" style="padding: 10px 20px;">
                 <div class="profile-element" uib-dropdown style="cursor:pointer">
                     <img ui-sref="landing" src="img/logo9.png" style="width: 100%;height: 100%;">
-                    
+
                 </div>             
             </li>
             <li ng-class="{active: $state.includes('pipelines')}">
@@ -29,6 +29,14 @@
                     <li ui-sref-active="active"><a ui-sref="commerce.products_grid">Purchase extra options</a></li>
                     <li ui-sref-active="active"><a ui-sref="commerce.cart">Shopping cart</a></li>
                     <li ui-sref-active="active"><a ui-sref="commerce.orders">My orders</a></li>
+
+                </ul>
+            </li>
+            <li ng-class="{active: $state.includes('custom')}">
+                <a href="#"><i class="fa fa-flask"></i> <span class="nav-label">Custom projects</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('custom')}">
+                    <li ui-sref-active="active"><a ui-sref="custom.order_form">Order a custom project</a></li>
+                    <li ui-sref-active="active"><a ui-sref="custom.orders">My custom projects</a></li>
 
                 </ul>
             </li>

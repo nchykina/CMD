@@ -595,7 +595,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                                 serie: true,
                                 name: 'angular-flot',
                                 files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                          
+
                             }
                         ]);
                     }
@@ -1277,6 +1277,54 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 }
             })
 
+//custom projects
+
+            .state('custom', {
+                abstract: true,
+                url: "/custom_projects",
+                templateUrl: "views/common/content.html",
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                            },
+                            {
+                                name: 'ui.footable',
+                                files: ['js/plugins/footable/angular-footable.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('custom.order_form', {
+                url: "/order_form",
+                templateUrl: "views/custom_projects/order_form.html",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
+                data: {pageTitle: 'Order a custom project'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/slick/slick.css', 'css/plugins/slick/slick-theme.css', 'js/plugins/slick/slick.min.js']
+                            },
+                            {
+                                name: 'slick',
+                                files: ['js/plugins/slick/angular-slick.min.js']
+                            }
+                        ]);
+                    }
+                }
+            })
+            .state('custom.orders', {
+                url: "/orders",
+                controller: 'ecommerceController',
+                controllerAs: 'em',
+                templateUrl: "views/custom_projects/orders.html",
+                data: {pageTitle: 'My custom projects'}
+            })
+
 
             //ecommerce
 
@@ -1414,26 +1462,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     }
                 }
             })
-            .state('commerce.product_details4', {
-                url: "/product_details4",
-                templateUrl: "views/ecommerce/ecommerce_product_details4.html",
-                controller: 'ecommerceController',
-                controllerAs: 'em',
-                data: {pageTitle: 'Purchase extra options > Custom pipelines'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                files: ['css/plugins/slick/slick.css', 'css/plugins/slick/slick-theme.css', 'js/plugins/slick/slick.min.js']
-                            },
-                            {
-                                name: 'slick',
-                                files: ['js/plugins/slick/angular-slick.min.js']
-                            }
-                        ]);
-                    }
-                }
-            })
+
             .state('commerce.payments', {
                 url: "/payments",
                 controller: 'ecommerceController',
