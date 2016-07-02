@@ -73,10 +73,10 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <button class="btn-default btn btn-xs"><a href="http://goldenhelix.com/"><img src="img/helix_logo.png" /></a></button>
+                        <button class="btn-default btn btn-xs"><a target="_blank" href="http://goldenhelix.com/"><img src="img/helix_logo.png" /></a></button>
                     </div>
                     <div class="col-lg-6">
-                        <button class="btn-default btn btn-xs"><a href="https://www.broadinstitute.org/igv/"><img src="img/igv_logo.png" /></a></button>
+                        <button class="btn-default btn btn-xs"><a target="_blank" href="https://www.broadinstitute.org/igv/"><img src="img/igv_logo.png" /></a></button>
                     </div>
                 </div>
                 <div class="row">
@@ -141,7 +141,7 @@
                                                         ABO blood type is determined by a single gene (ABO) located on the chromosome 9.
                                                         It's amazing that this gene has extremely high linkage disequilibrium, so we can 
                                                         determine the blood type with sufficient precision by only 4 SNPs <i>(please note that
-                                                        the rules below should be applied in turn, one by one)</i>.</p>
+                                                            the rules below should be applied in turn, one by one)</i>.</p>
 
                                                     <table class="footable table table-stripped">
                                                         <thead>
@@ -208,18 +208,17 @@
 
                                                     <p>Of course, if we consider rare mutations, the process becomes a lot more complex,
                                                         as ABO gene is actually more than 18,000 nucleotides long. But the simple method
-                                                        shown above works in 99% of cases for such prevalent subgroups as A101, A201, B101,
+                                                        shown above works in 95% of cases for such prevalent subgroups as A101, A201, B101,
                                                         O001, O002 and O003. For rare cases, specialized databases (such as BGMUT) have detailed information
                                                         on all variants and mutations that have been observed so far.
                                                     </p>
 
                                                     <h4>References:</h4>
                                                     <ul>
-                                                        <li>1. <a href="pdfs/1.pdf">Forensic ABO blood grouping by 4 SNPs analyses using an ABI PRISMR 3100 genetic analyzer (2006)</a></li>
-                                                        <li>2. <a href="http://www.ncbi.nlm.nih.gov/projects/gv/mhc/xslcgi.cgi?cmd=bgmut/home">BGMUT website</a></li>
-                                                        <li>3. <a href="pdfs/2.pdf">Demonstration of SNP Genotyping Using a Single Nucleotide Extension Method and the 3500 Series Genetic Analyzer</a></li>
-                                                        <li>4. <a href="https://en.wikipedia.org/wiki/ABO_blood_group_system">Wikipedia article about ABO blood type system</a></li>
-
+                                                        <li>1. <a target="_blank" href="/pdfs/1.pdf">Forensic ABO blood grouping by 4 SNPs analyses using an ABI PRISMR 3100 genetic analyzer (2006)</a></li>
+                                                        <li>2. <a target="_blank" href="http://www.ncbi.nlm.nih.gov/projects/gv/mhc/xslcgi.cgi?cmd=bgmut/home">BGMUT website</a></li>
+                                                        <li>3. <a target="_blank" href="pdfs/2.pdf">Demonstration of SNP Genotyping Using a Single Nucleotide Extension Method and the 3500 Series Genetic Analyzer</a></li>
+                                                        <li>4. <a target="_blank" href="https://en.wikipedia.org/wiki/ABO_blood_group_system">Wikipedia article about ABO blood type system</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -229,13 +228,111 @@
                             </tr> 
                             <tr>
                                 <td>2</td>
-                                <td>Eye color</td>
-                                <td>Green</td>
-                                <td>10 SNPs in OCA2 and HERC2 genes, chromosome 15</td>
+                                <td>Hair type and structure</td>
+                                <td>Thin, most probably straight hair</td>
+                                <td>5 SNPs located on chr1, chr2 and chr6</td>
                                 <td class="text-right">
                                     <div class="input-group pull-right">
-                                        <button class="btn-primary btn btn-xs"><span>Learn more</span></button>
+                                        <button class="btn-primary btn btn-xs"
+                                                data-toggle="modal" data-target="#myModal2"><span>Learn more</span></button>
                                     </div>
+
+                                    <div class="modal inmodal fade" id="myModal2" tabindex="-1" role="dialog"  aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                    <h4 class="modal-title">Hair type and structure</h4>
+                                                    <small class="font-bold">Can be determined by 5 SNPs, polygenic feature</small>
+                                                </div>
+                                                <div class="modal-body text-left">
+                                                    <p>Hair morphology is a polygenic characteristic that is highly correlated with
+                                                    other phenotypic features such as skin and eye color, frecklings, hair color etc.
+                                                        Many of the SNPs determining the hair curliness and structure are located in the
+                                                        epidermal differentiation complex, which comprises a number of genes that are of 
+                                                        crucial importance for maturation of human epidermis.
+                                                    </p>
+
+                                                    <table class="footable table table-stripped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th >rsID <br/> (dbSNP)</th>
+                                                                <th >Gene</th>
+                                                                <th >Exon</th>
+                                                                <th >Position on chromosome</th>
+                                                                <th >Reference</th>  
+                                                                <th >Comments</th>
+                                                                <th >Sequenced sample</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr><td colspan="7"><strong>Hair thickness</strong></td></tr>
+                                                            <tr>
+                                                                <td>rs3827760</td>
+                                                                <td>EDAR</td>
+                                                                <td>12</td>
+                                                                <td>chr2:109 513 601</td>
+                                                                <td>A</td>
+                                                                <td>G-homozygotes have thick hair, while A-homozygotes and heterozygotes
+                                                                    have thinner hair</td>
+                                                                <td>AA</td>
+                                                            </tr>
+
+                                                            <tr><td colspan="7"><strong>Hair curliness</strong></td></tr>
+                                                            <tr>
+                                                                <td>rs17646946</td>
+                                                                <td colspan="2">near TCHH</td>
+                                                                
+                                                                <td>chr1:152 062 767</td>
+                                                                <td>G</td>
+                                                                <td>G-homozygotes are more likely to have curlier hair</td>
+                                                                <td>GG</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>rs499697</td>
+                                                                <td colspan="2">near LCE3E</td>
+                                                                
+                                                                <td>chr1:152 493 154</td>
+                                                                <td>G</td>
+                                                                <td>G is associated with curlier hair
+                                                                </td>
+                                                                <td>AA</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>rs7349332</td>
+                                                                <td colspan="2">intron of WNT10A</td>
+                                                                
+                                                                <td>chr2:219 756 383</td>
+                                                                <td>T</td>
+                                                                <td>C-homozygotes are somewhat more likely to have straight
+                                                                    hair
+                                                                </td>
+                                                                <td>CC</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>rs1556547</td>
+                                                                <td colspan="2">near OFCC1</td>
+                                                                
+                                                                <td>chr6:10 270 377</td>
+                                                                <td>G</td>
+                                                                <td>A-homozygotes are associated with straighter hair
+                                                                </td>
+                                                                <td>AA</td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                    <h4>References:</h4>
+                                                    <ul>
+                                                        <li>1. <a target="_blank" href="https://books.google.ru/books?id=SGfSBQAAQBAJ">Forensic DNA Applications: An Interdisciplinary Perspective</a></li>
+                                                        <li>2. <a target="_blank" href="/pdfs/3.pdf">Web-Based, Participant-Driven Studies Yield Novel Genetic Associations for Common Traits (Erickson et. al)</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </td>
                             </tr>
 
