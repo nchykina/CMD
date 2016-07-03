@@ -57,6 +57,35 @@
         }
     },
     
+    "qa-nas-debian": {
+        "username": "ngspipeline",
+        "password": "qwerty",
+        "database": "ngspipeline_dev",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "redis_host": "localhost",
+        "storage_root": "/ngs",
+        "passport_secret": "myJWMsecret",
+        
+        "session_secret": "I love nuts!",
+        "session_sid": "ngs-qa.sid",
+        
+        "smtpConfig": {
+            "direct": false,
+            "host": "mail.ngspipeline.com",
+            "port": 25,
+            "auth": {
+                "user": "support",
+                "pass": "Lapalapa1"
+            }
+        },
+        
+        "singularity": {
+            "api_url": "http://192.168.4.5:7099/singularity",
+            "my_url": "http://192.168.1.7:3000"
+        }
+    },
+    
     "sergey-work-dev": {
         "username": "ngspipeline",
         "password": "qwerty",
