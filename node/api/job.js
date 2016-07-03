@@ -503,8 +503,8 @@ var sing_hook = function (req, res) {
         var i1 = taskid.indexOf('_');
         var i2 = taskid.indexOf('_', i1 + 1);
 
-        var jobid = taskid.substring(0, i1);
-        var stepid = taskid.substring(i1 + 1, i2);
+        var jobid = parseInt(taskid.substring(0, i1));
+        var stepid = parseInt(taskid.substring(i1 + 1, i2));
 
         console.log('TASK ' + taskid);
         console.log('status change to ' + state);
@@ -520,6 +520,10 @@ var sing_hook = function (req, res) {
                             }
                         ],
                         order: ['steps', 'order']}).then(function (job) {
+                        
+                        if(!job){
+                            throw new Error('job not found');
+                        }
                 var cstate = job.steps[stepid].status;
 
                 var step = job.steps[stepid];
@@ -579,7 +583,7 @@ var sing_hook = function (req, res) {
 
                     if (job.steps.length > stepid + 1) {
                         if (step.status === 'failed') {
-                            job.status = 'failed';
+                            job.status = 'failed';                            
                             prm = job.save({transaction: t});
                         } else if (step.status === 'finished') {
                             prm = job_submit_step(job, stepid + 1, t);
