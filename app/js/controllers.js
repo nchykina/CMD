@@ -3920,6 +3920,8 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
     }
 
     vm.species = vm.job.seq_species;
+    
+    console.log(vm.species);
 
     vm.files = [{}, {}];
 

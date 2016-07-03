@@ -174,7 +174,7 @@ var file_create = function (req, res) {
                     {owner_id: req.user.id, name: req.body.name, status: 'new'}, {transaction: t})
                     .then(function (file) {
                         if (file) {
-                            file.phys_path = config.storage_root + path.sep + req.user.id + path.sep + file.id;
+                            file.phys_path = config.storage_root + path.sep + 'users' + path.sep + req.user.id + path.sep + file.id;
                             return file.save({transaction: t});
                         } else {
                             throw new Error(file);

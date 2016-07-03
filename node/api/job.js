@@ -3,6 +3,10 @@ var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../config/config.json')[env];
 var models = require('../models');
 
+var mkdirp = require('mkdirp'); //ensure dir exists
+var path = require('path');
+var fs = require('fs');
+
 var request = require('request');
 
 var extend = require('node.extend'); //merge JavaScript objects 
@@ -11,33 +15,33 @@ var q = require('q'); //Q promise framework
 
 var job_create = function (req, res) {
     if (!req.user) {
-        res.json({success: false, msg: 'Unauthenticated'});
+        res.status(403).json({success: false, msg: 'Unauthenticated'});
         return;
     }
 
     if (!req.body.jobtype) {
-        res.json({success: false, msg: 'Not job type specified'});
+        res.status(404).json({success: false, msg: 'Not job type specified'});
         return;
     }
 
     if (req.body.jobparams) {
         if (req.body.jobparams['jobtype']) {
-            res.json({success: false, msg: 'Do not even try to'});
+            res.status(404).json({success: false, msg: 'Do not even try to'});
             return;
         }
 
         if (req.body.jobparams['owner']) {
-            res.json({success: false, msg: 'Nasty parameters will not pass'});
+            res.status(404).json({success: false, msg: 'Nasty parameters will not pass'});
             return;
         }
 
         if (req.body.jobparams['status']) {
-            res.json({success: false, msg: 'Nope'});
+            res.status(404).json({success: false, msg: 'Nope'});
             return;
         }
 
         if (req.body.jobparams['date_created']) {
-            res.json({success: false, msg: 'Nope'});
+            res.status(404).json({success: false, msg: 'Nope'});
             return;
         }
     }
@@ -46,7 +50,7 @@ var job_create = function (req, res) {
         jobtype: req.body.jobtype,
         date_created: Date.now(),
         status: 'new',
-        owner: req.user.id,
+        owner_id: req.user.id,
         steps: []
     };
 
@@ -56,19 +60,19 @@ var job_create = function (req, res) {
         job_dna_reseq_create_steps(jobObj);
     }
 
-    var newJob = models.Job.create(
+    models.Job.create(
             jobObj,
             {
                 include:
                         [{model: models.Step,
                                 as: 'steps'}]
             })
-            .then(function () {
-                res.json({success: true, msg: 'Successfuly created new job', job: newJob});
+            .then(function (job) {
+                res.status(200).json({success: true, msg: 'Successfuly created new job', job: job});
             })
             .catch(function (err) {
                 console.error('job_create: ' + err);
-                res.json({success: false, msg: 'Failed to create job'});
+                res.status(500).json({success: false, msg: 'Failed to create job'});
             });
 }
 
@@ -134,13 +138,13 @@ var job_update = function (job) {
     return job.save();
 }
 
-var job_submit_step = function (job, stepnum) {
+var job_submit_step = function (job, stepnum, t) {
     var step = job.steps[stepnum];
     var defer = q.defer();
 
-    var job_path = config.storage_root + path.sep + job._id;
+    var job_path = job.work_dir;
 
-    var sing_id = job._id + '_' + stepnum + '_' + Date.now();
+    var sing_id = job.id + '_' + stepnum + '_' + Date.now();
 
     //create a request
     request.post({
@@ -216,12 +220,15 @@ var job_submit_step = function (job, stepnum) {
                             err1 = true;
                         }
 
-                        if (err1) {
-                            return defer.reject({msg: 'Failed to submit job'});
-                        }
                         //TODO: fire socket.IO update
-                        job_update(job).then(function () {
-                            return defer.resolve({msg: 'Successfuly submitted new job', job: job});
+                        return job.save({transaction: t}).then(function () {
+                            return step.save({transaction: t}).then(function () {
+                                if (err1) {
+                                    return defer.resolve({msg: 'Failed to submit job', err: true});
+                                } else {
+                                    return defer.resolve({msg: 'Successfuly submitted new job', err: false});
+                                }
+                            })
                         })
                                 .catch(function () {
                                     return defer.reject({msg: 'Failed to save job submission status'});
@@ -256,22 +263,104 @@ var job_get = function (req, res) {
             });
 }
 
+function copy_file(source, target) {
+    var defer = q.defer();
+
+    var rd = fs.createReadStream(source);
+    rd.on("error", function (err) {
+        q.reject(err);
+    });
+    var wr = fs.createWriteStream(target);
+    wr.on("error", function (err) {
+        q.reject(err);
+    });
+    wr.on("close", function (ex) {
+        q.resolve();
+    });
+    rd.pipe(wr);
+
+    return defer.promise;
+}
+
 var job_submit = function (req, res, next) {
     if (!req.params.id) {
         res.json({success: false, msg: 'No jobid specified'});
     } else {
 
-        models.Job.findById(req.params.id, {
-            include: [
-                {model: models.Step,
-                    as: 'steps'}
-            ]})
-                .then(function (job) {
-                    job_really_submit(job, req, res, next);
-                }
-                )
+        models.sequelize.transaction(function (t) {
+            return models.Job.findById(req.params.id, {
+                include: [
+                    {model: models.Step,
+                        as: 'steps'},
+                    {model: models.File,
+                        as: 'files'}
+                ], transaction: t})
+                    .then(function (job) {
+
+                        var defer = q.defer();
+
+                        job.work_folder = config.storage_root + path.sep + 'jobs' + path.sep + job.id;
+
+                        mkdirp(job.work_folder, function (err) {
+                            if (err) {
+                                job.status = 'failed';
+                                return job.save({transaction: t})
+                                        .then(function (file) {
+                                            res.status(500).json({success: false, msg: 'Failed to create storage'});
+                                            defer.resolve(file);                                            
+                                        })
+                                        .catch(function (err) {
+                                            defer.reject(err);
+                                        });
+                            } else {
+                                /* TODO: rewrite this ugly hardcode to use one class for every jobtype */
+                                if (job.jobtype === 'dna_reseq') {
+                                    if (job.files.length !== 2) {
+                                        job.status = 'failed';
+                                        console.error('job_submit: wrong number of arguments');
+                                        return job.save({transaction: t})
+                                                .then(function (file) {                                                    
+                                                    res.status(500).json({success: false, msg: 'This job needs 2 input files'});
+                                                    defer.resolve(file);
+                                                })
+                                                .catch(function (err) {
+                                                    defer.reject(err);
+                                                });
+                                    }
+
+                                    q.allSettled(
+                                            [copy_file(job.files[0].phys_path, job.work_dir + path.sep + '1.fastq'),
+                                                copy_file(job.files[1].phys_path, job.work_dir + path.sep + '2.fastq')])
+                                            .then(function (copy_res) {
+                                                job_really_submit(job, req, res, next, defer, t);
+                                            })
+                                            .catch(function (err) {
+                                                job.status = 'failed';
+                                                return job.save({transaction: t})
+                                                        .then(function (file) {
+                                                            defer.resolve(file);
+                                                            res.status(500).json({success: false, msg: 'Failed to prepare job for execution'});
+                                                        })
+                                                        .catch(function (err) {
+                                                            defer.reject(err);
+                                                        });
+                                            })
+                                } else {                                    
+                                    defer.reject('unknown jobtype');
+                                }
+                            }
+
+                        });
+                        
+                        return defer.promise;
+                    });
+
+
+        }
+        )
                 .catch(function (err) {
-                    return res.json({success: false, msg: 'Lookup failed'});
+                    res.status(500).json({success: false, msg: 'Internal error'});
+                    console.error('job_submit: ' + err);
                 }
 
                 );
@@ -281,13 +370,21 @@ var job_submit = function (req, res, next) {
 /* Really do Singularity/Mesos magic here
  * Warning: this function does not call next() thus leaving the request in queue until result got from Singularity
  */
-var job_really_submit = function (job, req, res, next) {
-    job_submit_step(job, 0).then(
+var job_really_submit = function (job, req, res, next, defer, t) {
+    job_submit_step(job, 0, t).then(
             function (ret) {
-                res.json({success: true, msg: ret.msg, job: ret.job});
+                if(!ret.err) {
+                    res.status(200).json({success: true, msg: ret.msg, job: ret.job});
+                }
+                else {
+                    res.status(500).json({success: false, msg: ret.msg});
+                }
+                
+                defer.resolve();
             }
     ).catch(function (ret) {
-        res.json({success: false, msg: ret.msg});
+        res.status(500).json({success: false, msg: ret.msg});
+        defer.reject(ret.msg);
     });
 }
 

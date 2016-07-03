@@ -379,7 +379,7 @@ var jobService = function ($http, $q) {
 
         })
                 .success(function (response) {
-                    //console.log(response);
+                    console.log(response);
                     if (response.success) {
                         deferred.resolve(response.job);
                     } else {
@@ -387,6 +387,7 @@ var jobService = function ($http, $q) {
                     }
                 })
                 .error(function (msg, code) {
+                    console.error(code+' - '+msg);
                     deferred.reject(msg);
                 });
 
