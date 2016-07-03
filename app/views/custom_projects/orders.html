@@ -1,15 +1,15 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
     <div class="col-lg-10">
-        <h2>My orders</h2>
+        <h2>My custom projects</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
             </li>
             <li>
-                <a>Upgrade account</a>
+                <a>Custom projects</a>
             </li>
             <li class="active">
-                <strong>My orders</strong>
+                <strong>My custom projects</strong>
             </li>
         </ol>
     </div>
@@ -17,14 +17,12 @@
 
     </div>
 </div>
-
-<div class="wrapper wrapper-content animated fadeInRight ecommerce">
-
-    <div class="row">
+    
+        <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h4><strong>My subscriptions</strong></h4>
+                    <h4><strong>My custom projects</strong></h4>
                 </div>
                 <div class="ibox-content">
 
@@ -33,9 +31,9 @@
                             <tr>
 
                                 <th>Order ID</th>
-                                <th >Products</th>
+                                <th >Project name</th>
                                 <th >Purchase date</th>
-                                <th >Total</th>                                
+                                <th >Cost</th>                                
                                 <th >Payment type</th>
                                 <th >Status</th>
                                 <th class="text-right">Action</th>
@@ -45,26 +43,26 @@
                         <tbody>
                             <tr ng-repeat="x in em.orders">
                                 <td>
-                                    {{x.id}}
+                                    {{x.orderId}}
                                 </td>
                                 <td>
                                     <table><tbody>
-                                            <tr ng-repeat="y in x.lines">
+                                            <tr ng-repeat="y in x.products">
                                                 <td>
-                                                    {{y.product.product_category}}: {{y.product.product_name}}
+                                                    {{y.productCategory}}: {{y.productName}}
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </td>
                                 <td>
-                                    {{x.created_at| date:'MMM d, yyyy'}}
+                                    {{x.orderDate| date:'MMM d, yyyy'}}
                                 </td>
                                 <td>
-                                    {{x.amount}} USD
+                                    {{x.totalAmount}} USD
                                 </td>
                                 <td>
-                                    {{x.payment_type}}
+                                    {{x.paymentType}}
                                 </td>
                                 <td>
                                     <span ng-if="x.status == 'Confirmed'" class="label label-primary">{{x.status}}</span>
@@ -91,4 +89,6 @@
             </div>
         </div>
     </div>
+    
+
 </div>

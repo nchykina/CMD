@@ -22,23 +22,23 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title">
-                    <h5>Get your dataset ready for analysis in 3 easy steps</h5>
-
-                    <div ibox-tools></div>
-                </div>
+                <div class='ibox-title'><h2>Get your data ready for analysis in 3 easy steps:</h2></div>
                 <div class="ibox-content wizard">
 
                     <div class="steps clearfix">
                         <ul>
                             <li ui-sref-active="current">
-                                <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn-default"><span>1</span> Upload data</a>
+
+                                <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn-default">
+                                    <strong>1. Upload data </strong>
+                               
+                                </a>
                             </li>
                             <li ui-sref-active="current">
-                                <a ui-sref="pipelines.dna_reseq_new.step2({job: newc.job})" class="btn-default"><span>2</span> Data processing</a>
+                                <a ui-sref="pipelines.dna_reseq_new.step2({job: newc.job})" class="btn-default"><strong>2. Data processing </strong></a>
                             </li>
                             <li ui-sref-active="current">
-                                <a ui-sref="pipelines.dna_reseq_new.step3({job: newc.job})" class="btn-default"><span>3</span> Get your output files</a>
+                                <a ui-sref="pipelines.dna_reseq_new.step3({job: newc.job})" class="btn-default"><strong>3. Get your output files </strong></a>
                             </li>
                         </ul>
                     </div>
@@ -55,6 +55,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>

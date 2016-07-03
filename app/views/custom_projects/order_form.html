@@ -1,23 +1,20 @@
-<div class="row wrapper border-bottom white-bg page-heading"">
+<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
     <div class="col-lg-10">
-        <h2>Purchase extra options > Custom pipelines</h2>
+        <h2>Submit a request for custom pipeline</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
             </li>
             <li>
-                <a>Upgrade account</a>
-            </li>
-            <li>
-                <a ui-sref="commerce.products_grid">Purchase extra options</a>
+                <a>Custom projects</a>
             </li>
             <li class="active">
-                <strong>Custom pipelines</strong>
+                <strong>Submit a request for custom pipeline</strong>
             </li>
         </ol>
     </div>
 </div>
-<div class="row" ng-if="em.dataLoaded == true" ng-repeat="prd in em.productList | filter: { product_category: 'Custom pipelines' }">
+<div class="wrapper wrapper-content animated fadeInRight">
 
     <div class="row">
         <div class="col-lg-12">
@@ -28,27 +25,27 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                <img alt="product1" src="{{prd.img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
+                                <img alt="product1" src="{{em.productList[6].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                {{prd.product_name}}
+                                {{em.productList[6].productName}}
                             </h2>
                             <small>Launch a fully customized pipeline via our website</small>
                             <div class="m-t-md">
-                                <h2 class="product-main-price">Available upon request </h2>
+                                <h2 class="product-main-price">Price available upon request </h2>
                             </div>
                             <hr>
 
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                {{prd.description_short}}
+                                {{em.productList[6].description_short}}
                                 <br>
                                 <br>
-                                {{prd.description_long}}
+                                {{em.productList[6].description_long}}
                             </div>
                             <hr>
                             <div class="row">
