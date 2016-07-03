@@ -60,31 +60,107 @@ var job_create = function (req, res) {
         job_dna_reseq_create_steps(jobObj);
     }
 
-    models.Job.create(
-            jobObj,
-            {
-                include:
-                        [{model: models.Step,
-                                as: 'steps'}]
-            })
+    models.sequelize.transaction(function (t) {
+        return models.Job.create(
+                jobObj,
+                {
+                    include:
+                            [
+                                {
+                                    model: models.Step,
+                                    as: 'steps'
+                                },
+                                {
+                                    model: models.File,
+                                    as: 'files',
+                                    through: {
+                                        attributes: ['filenum', 'filetype']
+                                    }
+                                }
+                            ],
+                    transaction: t
+                })
+                .then(function (job) {
+                    job.work_dir = config.storage_root + path.sep + 'jobs' + path.sep + job.id;
+                    return job.save({transaction: t})
+                            .then(function (job) {
+
+                                if (req.body.jobfiles) {
+                                    var promises = models.Sequelize.Promise.map(req.body.jobfiles, function (jobfile) {
+                                        return models.File.findOne({where: {id: jobfile.fileid}, transaction: t})
+                                                .then(function (file) {
+                                                    if (!file) {
+                                                        throw new Error('unknown fileid ' + jobfile.fileid + ' passed. Rolling back');
+                                                    }
+
+                                                    return job.addFile(file, {filenum: jobfile.filenum, filetype: 'input', transaction: t});
+                                                });
+                                    });
+
+                                    return models.Sequelize.Promise.all(promises)
+                                            .then(function (all_res) {
+                                                return models.Job.findOne({
+                                                    where: {id: job.id},
+                                                    include: [
+                                                        {
+                                                            model: models.File,
+                                                            as: 'files',
+                                                            through: {
+                                                                attributes: ['filenum', 'filetype']
+                                                            }
+                                                        },
+                                                        {
+                                                            model: models.Step,
+                                                            as: 'steps'
+                                                        }],
+                                                    transaction: t
+                                                })
+                                                        .then(function (job_ret) {
+                                                            job_ret.files.sort(function (a, b) {
+                                                                return a.JobFile.filenum - b.JobFile.filenum;
+                                                            });
+
+                                                            return job_ret;
+                                                        });
+                                            });
+
+                                } else {
+                                    job.files = [];
+
+                                    return job;
+                                }
+                            });
+                });
+
+    })
             .then(function (job) {
                 res.status(200).json({success: true, msg: 'Successfuly created new job', job: job});
             })
             .catch(function (err) {
                 console.error('job_create: ' + err);
-                res.status(500).json({success: false, msg: 'Failed to create job'});
+                res.status(500).json({success: false, msg: 'Failed to create job: ' + err});
             });
+
 }
 
 var job_dna_reseq_create_steps = function (job) {
-    job.steps[0] = {
-        command: 'sleep 120',
-        arguments: ['120'],
-        cpu: 1,
-        memory: 1024,
-        status: 'new',
-        singularity_deploy_id: ''
-    }
+    job.steps = [{
+            command: 'sleep',
+            arguments: '120',
+            cpu: 1,
+            memory: 1024,
+            status: 'new',
+            order: 1
+        },
+        {
+            command: 'sleep',
+            arguments: '120',
+            cpu: 1,
+            memory: 1024,
+            status: 'new',
+            order: 2
+        }
+    ];
 }
 
 var job_create_or_update = function (req, res) {
@@ -134,10 +210,6 @@ var job_create_or_update = function (req, res) {
             });
 }
 
-var job_update = function (job) {
-    return job.save();
-}
-
 var job_submit_step = function (job, stepnum, t) {
     var step = job.steps[stepnum];
     var defer = q.defer();
@@ -167,7 +239,7 @@ var job_submit_step = function (job, stepnum, t) {
                 deploy: {
                     requestId: sing_id,
                     command: step.command,
-                    arguments: step.arguments,
+                    arguments: [step.arguments],
                     id: sing_id,
                     containerInfo: {
                         type: "DOCKER",
@@ -199,13 +271,9 @@ var job_submit_step = function (job, stepnum, t) {
                         var err1;
 
                         if (!error && response.statusCode >= 200 && response.statusCode < 300) {
-                            console.log('successfully posted job to singularity');
-                            console.log(step);
-                            if (response.activeDeploy) {
-                                step.singularity_deploy_id = response.activeDeploy.id;
-                            } else if (response.pendingDeploy) {
-                                step.singularity_deploy_id = response.pendingDeploy.id;
-                            }
+                            //console.log('successfully posted job to singularity');
+                            //console.log(step);
+                            step.taskid = sing_id;
 
                             step.status = 'submitted';
                             job.status = 'submitted';
@@ -252,34 +320,40 @@ var job_get = function (req, res) {
         return;
     }
 
+    models.Job.findOne({
+        where: {id: req.params.id},
+        include: [
+            {
+                model: models.File,
+                as: 'files',
+                through: {
+                    attributes: ['filenum', 'filetype']
+                }
+            },
+            {
+                model: models.Step,
+                as: 'steps'
+            }],
+        order: ['files', 'filenum', 'ASC']
 
-
-    models.Job.findById(req.params.id)
+    })
             .then(function (job) {
                 return res.json({success: true, job: job});
             })
             .catch(function (err) {
-                return res.json({success: true, msg: 'Lookup failed'});
+                return res.status(500).json({success: true, msg: 'Database failed'});
             });
 }
 
 function copy_file(source, target) {
-    var defer = q.defer();
-
-    var rd = fs.createReadStream(source);
-    rd.on("error", function (err) {
-        q.reject(err);
+    return new Promise(function (resolve, reject) {
+        var rd = fs.createReadStream(source);
+        rd.on('error', reject);
+        var wr = fs.createWriteStream(target);
+        wr.on('error', reject);
+        wr.on('finish', resolve);
+        rd.pipe(wr);
     });
-    var wr = fs.createWriteStream(target);
-    wr.on("error", function (err) {
-        q.reject(err);
-    });
-    wr.on("close", function (ex) {
-        q.resolve();
-    });
-    rd.pipe(wr);
-
-    return defer.promise;
 }
 
 var job_submit = function (req, res, next) {
@@ -299,15 +373,13 @@ var job_submit = function (req, res, next) {
 
                         var defer = q.defer();
 
-                        job.work_folder = config.storage_root + path.sep + 'jobs' + path.sep + job.id;
-
-                        mkdirp(job.work_folder, function (err) {
+                        mkdirp(job.work_dir, function (err) {
                             if (err) {
                                 job.status = 'failed';
                                 return job.save({transaction: t})
                                         .then(function (file) {
                                             res.status(500).json({success: false, msg: 'Failed to create storage'});
-                                            defer.resolve(file);                                            
+                                            defer.resolve(file);
                                         })
                                         .catch(function (err) {
                                             defer.reject(err);
@@ -319,7 +391,7 @@ var job_submit = function (req, res, next) {
                                         job.status = 'failed';
                                         console.error('job_submit: wrong number of arguments');
                                         return job.save({transaction: t})
-                                                .then(function (file) {                                                    
+                                                .then(function (file) {
                                                     res.status(500).json({success: false, msg: 'This job needs 2 input files'});
                                                     defer.resolve(file);
                                                 })
@@ -328,7 +400,7 @@ var job_submit = function (req, res, next) {
                                                 });
                                     }
 
-                                    q.allSettled(
+                                    q.all(
                                             [copy_file(job.files[0].phys_path, job.work_dir + path.sep + '1.fastq'),
                                                 copy_file(job.files[1].phys_path, job.work_dir + path.sep + '2.fastq')])
                                             .then(function (copy_res) {
@@ -345,17 +417,15 @@ var job_submit = function (req, res, next) {
                                                             defer.reject(err);
                                                         });
                                             })
-                                } else {                                    
+                                } else {
                                     defer.reject('unknown jobtype');
                                 }
                             }
 
                         });
-                        
+
                         return defer.promise;
                     });
-
-
         }
         )
                 .catch(function (err) {
@@ -373,13 +443,12 @@ var job_submit = function (req, res, next) {
 var job_really_submit = function (job, req, res, next, defer, t) {
     job_submit_step(job, 0, t).then(
             function (ret) {
-                if(!ret.err) {
+                if (!ret.err) {
                     res.status(200).json({success: true, msg: ret.msg, job: ret.job});
-                }
-                else {
+                } else {
                     res.status(500).json({success: false, msg: ret.msg});
                 }
-                
+
                 defer.resolve();
             }
     ).catch(function (ret) {
@@ -442,14 +511,18 @@ var sing_hook = function (req, res) {
 
         models.sequelize.transaction(function (t) {
             return models.Job.findById(jobid,
-                    {transaction: t,
+                    {
+                        transaction: t,
                         include: [
                             {
                                 model: models.Step,
                                 as: 'steps'
                             }
-                        ]}).then(function (job) {
+                        ],
+                        order: ['steps', 'order']}).then(function (job) {
                 var cstate = job.steps[stepid].status;
+
+                var step = job.steps[stepid];
 
                 if (state === 'TASK_LAUNCHED') {
                     switch (cstate) {
@@ -500,8 +573,37 @@ var sing_hook = function (req, res) {
                     }
                 }
 
-                return job.save();
+                return step.save({transaction: t}).then(function () {
 
+                    var prm;
+
+                    if (job.steps.length > stepid + 1) {
+                        if (step.status === 'failed') {
+                            job.status = 'failed';
+                            prm = job.save({transaction: t});
+                        } else if (step.status === 'finished') {
+                            prm = job_submit_step(job, stepid + 1, t);
+                        } else {
+                            var defer = q.defer();
+                            defer.resolve();
+                            prm = defer.promise;
+                        }
+                    } else {
+                        if (step.status === 'failed') {
+                            job.status = 'failed';
+                            prm = job.save({transaction: t});
+                        } else if (step.status === 'finished') {
+                            job.status = 'finished';
+                            prm = job.save({transaction: t});
+                        } else {
+                            var defer = q.defer();
+                            defer.resolve();
+                            prm = defer.promise;
+                        }
+                    }
+
+                    return prm;
+                });
             });
         })
                 .then(function (result) {

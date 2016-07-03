@@ -243,25 +243,25 @@
                                         </div>
                                         <div class="ibox-content" id="">                                
                                             <form action="#">
-                                                <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)" ng-model="newc.file1">
-                                                    <div ng-if="((!newc.job.filesIn[0]) && (!newc.files[0].uploading))" class="dz-message m-t-lg m-b-lg">                                            
+                                                <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)">
+                                                    <div ng-if="(!newc.job.files[0])" class="dz-message m-t-lg m-b-lg">                                            
 
                                                         <h1>Drop file here</h1>                                        
 
                                                     </div>
-                                                    <div ng-if="((!newc.job.filesIn[0]) && (newc.files[0].uploading))">                                          
+                                                    <div ng-if="((newc.job.files[0]) && (newc.job.files[0].status==='uploading'))">                                          
 
                                                         <h1>Uploading file...</h1>
                                                         <div class="progress-striped active progress">
-                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[0].progress < 100 ? newc.files[0].progress : 100) + '%'}">                                                
+                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[0].progress < 100 ? newc.job.files[0].progress : 100) + '%'}">                                                
                                                             </div>                
                                                         </div>
-                                                        {{newc.files[0].current| filesize:2}} / {{newc.files[0].total| filesize:2}} ({{newc.files[0].progress}})%
+                                                        {{newc.job.files[0].current| filesize:2}} / {{newc.job.files[0].total| filesize:2}} ({{newc.job.files[0].progress}})%
                                                     </div>
 
-                                                    <div ng-if="(newc.job.filesIn[0])">                                            
-                                                        <p>File size: {{newc.job.filesIn[0].filesize| filesize:0}}</p>
-                                                        <p>Uploaded: {{newc.job.filesIn[0].upload_ended| date:'medium'}}</p>
+                                                    <div ng-if="(newc.job.files[0])">                                            
+                                                        <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                        <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
                                                     </div>
                                                 </div>
                                             </form>                                

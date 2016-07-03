@@ -1,8 +1,8 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var JobFile = sequelize.define('JobFile', {
-    //file_id: DataTypes.INTEGER,
-    //job_id: DataTypes.INTEGER
+    filetype: DataTypes.STRING, //input/output
+    filenum: DataTypes.INTEGER //sequential file number
   }, {
     classMethods: {
       associate: function(models) {
