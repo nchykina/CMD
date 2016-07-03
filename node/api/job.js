@@ -473,9 +473,9 @@ var sing_bind = function () {
     },
             function (error, response, body) {
                 if (!error && response.statusCode >= 200 && response.statusCode < 300) {
-                    console.log('successfully hooked to singularity'); // Show the HTML for the Google homepage. 
-                    sing_hookid = response.body;
-                    console.log('hookid: ' + sing_hookid);
+                    //console.log('successfully hooked to singularity'); // Show the HTML for the Google homepage. 
+                    //sing_hookid = response.body;
+                    //console.log('hookid: ' + sing_hookid);
 
                     //process.on('')
                 } else {
@@ -506,12 +506,12 @@ var sing_hook = function (req, res) {
         var jobid = parseInt(taskid.substring(0, i1));
         var stepid = parseInt(taskid.substring(i1 + 1, i2));
 
-        console.log('TASK ' + taskid);
-        console.log('status change to ' + state);
-
+        console.log('TASK ' + taskid + ' status change to ' + state);
+        
         models.sequelize.transaction(function (t) {
-            return models.Job.findById(jobid,
+            return models.Job.findOne(
                     {
+                        where: {id: jobid },
                         transaction: t,
                         include: [
                             {
@@ -519,10 +519,11 @@ var sing_hook = function (req, res) {
                                 as: 'steps'
                             }
                         ],
-                        order: ['steps', 'order']}).then(function (job) {
+                        order: ['steps', 'order']})
+                            .then(function (job) {
                         
                         if(!job){
-                            throw new Error('job not found');
+                            return 'job not found, but its ok';
                         }
                 var cstate = job.steps[stepid].status;
 
@@ -534,7 +535,7 @@ var sing_hook = function (req, res) {
                             job.steps[stepid].status = 'started';
                             break;
                         default:
-                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
                             break;
                     }
                 }
@@ -546,7 +547,7 @@ var sing_hook = function (req, res) {
                             job.steps[stepid].status = 'running';
                             break;
                         default:
-                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
                             break;
                     }
                 }
@@ -559,7 +560,7 @@ var sing_hook = function (req, res) {
                             job.steps[stepid].status = 'finished';
                             break;
                         default:
-                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
                             break;
                     }
                 }
@@ -572,7 +573,7 @@ var sing_hook = function (req, res) {
                             job.steps[stepid].status = 'failed';
                             break;
                         default:
-                            console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
                             break;
                     }
                 }
