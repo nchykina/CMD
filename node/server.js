@@ -24,6 +24,8 @@ var connect = require('connect');
 var redis_connect = require('connect-redis');
 var cfg = require('./config/config');
 var logger = require('./logger');
+var spamBlocker = require('express-spam-referral-blocker');
+var spamList= require('./logs/referral_spam_list');
 
 
 var User = require('./models/user');
@@ -36,6 +38,9 @@ redis.sess_store = redis_connect(express_sess);
 var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: SESS_SECRET, key: 'ngs.sid'});
 
 app.use(require('morgan')({ "stream": logger.stream }));
+spamBlocker.addToReferrers(spamList);
+app.use(spamBlocker.send404);
+
 app.use(express_cp());
 app.use(sess_store);
 
