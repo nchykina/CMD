@@ -1,6 +1,6 @@
 'use strict';
 
-var q = require('Q');
+var q = require('q');
 var bcrypt = require('bcryptjs');
 
 module.exports = function (sequelize, DataTypes) {

@@ -2,7 +2,7 @@ var sequelize = require('../../config/pg');
 var Sequelize = require('sequelize');
 var Role = require('../../models/pg/role');
 var Product = require('../../models/pg/product');
-var q = require('Q');
+var q = require('q');
 var bcrypt = require('bcryptjs');
 
 var User = sequelize.define('user', {

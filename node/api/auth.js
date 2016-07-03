@@ -4,7 +4,7 @@ var passport = require('passport');
 
 require('../config/passport')(passport);
 
-var q = require('Q');
+var q = require('q');
 var bcrypt = require('bcryptjs');
 
 var login = function (req, res, next) {
