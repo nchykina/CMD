@@ -63,7 +63,7 @@
         "database": "ngspipeline_dev",
         "host": "127.0.0.1",
         "dialect": "postgres",
-        "redis_host": "localhost",
+        "redis_host": "192.168.1.7",
         "storage_root": "/ngs",
         "passport_secret": "myJWMsecret",
         
