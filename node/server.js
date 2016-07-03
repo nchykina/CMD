@@ -23,6 +23,7 @@ var cookie = require('cookie');
 var connect = require('connect');
 var redis_connect = require('connect-redis');
 var cfg = require('./config/config');
+var logger = require('./logger');
 
 
 var User = require('./models/user');
@@ -34,6 +35,7 @@ redis.sess_store = redis_connect(express_sess);
 
 var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: SESS_SECRET, key: 'ngs.sid'});
 
+app.use(require('morgan')({ "stream": logger.stream }));
 app.use(express_cp());
 app.use(sess_store);
 
