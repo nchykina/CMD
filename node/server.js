@@ -27,7 +27,6 @@ var logger = require('./logger');
 var spamBlocker = require('express-spam-referral-blocker');
 var spamList= require('./logs/referral_spam_list');
 
-
 var User = require('./models/user');
 
 var app = express();

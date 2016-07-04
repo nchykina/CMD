@@ -774,10 +774,10 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controller: 'loginController',
                 data: {pageTitle: 'Register', specialClass: 'gray-bg'}
             })
-            .state('lockscreen', {
-                url: "/lockscreen",
-                templateUrl: "views/lockscreen.html",
-                data: {pageTitle: 'Lockscreen', specialClass: 'gray-bg'}
+            .state('privacy_policy', {
+                url: "/privacy_policy",
+                templateUrl: "views/account/privacy_policy.html",
+                data: {pageTitle: 'Privacy policy', specialClass: 'gray-bg'}
             })
             .state('forgot_password', {
                 url: "/forgot_password",
