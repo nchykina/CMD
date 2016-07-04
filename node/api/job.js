@@ -163,14 +163,71 @@ var job_dna_reseq_create_steps = function (job) {
     ];
 }
 
-var job_create_or_update = function (req, res) {
+/*
+ * Set files
+ */
+
+var job_update = function (req, res) {
     if (!req.user) {
-        res.json({success: false, msg: 'Unauthenticated'});
+        res.status(403).json({success: false, msg: 'Unauthenticated'});
+        return;
+    }
+
+    if (!req.params.id) {
+        res.status(404).json({success: false, msg: 'Not job id specified'});
+        return;
+    }
+
+    if (!req.body.jobfile) {
+        res.status(500).json({success: false, msg: 'File update need to be specified'});
+        return;
+    }
+
+    var jobfile = req.body.jobfile;
+
+    models.sequelize.transaction(function (t) {
+        return models.Job.findOne({
+            where: {id: req.params.id, owner_id: req.user.id},
+            include: [
+                {
+                    model: models.File,
+                    as: 'files',
+                    through: {
+                        attributes: ['filenum', 'filetype']
+                    }
+                }]
+        })
+                .then(function (job) {
+                    for (var i in job.files) {
+                        if (job.files[i].JobFile.filenum === jobfile.filenum) {
+                            return job.removeFile(job.files[i], {transaction: t})
+                                    .then(function (newjob) {
+                                        return job.addFile(jobfile.fileid, {filenum: jobfile.filenum, filetype: 'input', transaction: t});
+                                    });
+                        }
+                    }
+
+                    //if not found
+                    return job.addFile(jobfile.fileid, {filenum: jobfile.filenum, filetype: 'input', transaction: t});
+                });
+    })
+            .then(function (tr_res) {
+                res.status(200).json({success: true, msg: 'ok'});
+            })
+            .catch(function (err) {
+                console.error('job_update: ' + err);
+                res.status(500).json({success: false, msg: 'Internal error'});
+            });
+}
+
+var job_select_or_create = function (req, res) {
+    if (!req.user) {
+        res.status(403).json({success: false, msg: 'Unauthenticated'});
         return;
     }
 
     if (!req.body.jobtype) {
-        res.json({success: false, msg: 'Not job type specified'});
+        res.status(404).json({success: false, msg: 'Not job type specified'});
         return;
     }
 
@@ -309,19 +366,14 @@ var job_submit_step = function (job, stepnum, t) {
     return defer.promise;
 }
 
-var job_get = function (req, res) {
+var job_list = function (req, res) {
     if (!req.user) {
-        res.json({success: false, msg: 'Unauthenticated'});
+        res.status(403).json({success: false, msg: 'Unauthenticated'});
         return;
     }
 
-    if (!req.params.id) {
-        res.json({success: false, msg: 'No jobid specified'});
-        return;
-    }
-
-    models.Job.findOne({
-        where: {id: req.params.id},
+    models.Job.findAll({
+        where: {owner_id: req.user.id},
         include: [
             {
                 model: models.File,
@@ -337,8 +389,44 @@ var job_get = function (req, res) {
         order: ['files', 'filenum', 'ASC']
 
     })
+            .then(function (jobs) {
+                return res.status(200).json({success: true, jobs: jobs});
+            })
+            .catch(function (err) {
+                return res.status(500).json({success: true, msg: 'Database failed'});
+            });
+}
+
+var job_get = function (req, res) {
+    if (!req.user) {
+        res.status(403).json({success: false, msg: 'Unauthenticated'});
+        return;
+    }
+
+    if (!req.params.id) {
+        res.status(404).json({success: false, msg: 'No jobid specified'});
+        return;
+    }
+
+    models.Job.findOne({
+        where: {id: req.params.id, owner_id: req.user.id},
+        include: [
+            {
+                model: models.File,
+                as: 'files',
+                through: {
+                    attributes: ['filenum', 'filetype']
+                }
+            },
+            {
+                model: models.Step,
+                as: 'steps'
+            }],
+        order: ['files', 'filenum']
+
+    })
             .then(function (job) {
-                return res.json({success: true, job: job});
+                return res.status(200).json({success: true, job: job});
             })
             .catch(function (err) {
                 return res.status(500).json({success: true, msg: 'Database failed'});
@@ -507,11 +595,11 @@ var sing_hook = function (req, res) {
         var stepid = parseInt(taskid.substring(i1 + 1, i2));
 
         console.log('TASK ' + taskid + ' status change to ' + state);
-        
+
         models.sequelize.transaction(function (t) {
             return models.Job.findOne(
                     {
-                        where: {id: jobid },
+                        where: {id: jobid},
                         transaction: t,
                         include: [
                             {
@@ -520,96 +608,96 @@ var sing_hook = function (req, res) {
                             }
                         ],
                         order: ['steps', 'order']})
-                            .then(function (job) {
-                        
-                        if(!job){
+                    .then(function (job) {
+
+                        if (!job) {
                             return 'job not found, but its ok';
                         }
-                var cstate = job.steps[stepid].status;
+                        var cstate = job.steps[stepid].status;
 
-                var step = job.steps[stepid];
+                        var step = job.steps[stepid];
 
-                if (state === 'TASK_LAUNCHED') {
-                    switch (cstate) {
-                        case 'submitted':
-                            job.steps[stepid].status = 'started';
-                            break;
-                        default:
-                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                            break;
-                    }
-                }
-
-                if (state === 'TASK_RUNNING') {
-                    switch (cstate) {
-                        case 'submitted':
-                        case 'started':
-                            job.steps[stepid].status = 'running';
-                            break;
-                        default:
-                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                            break;
-                    }
-                }
-
-                if (state === 'TASK_FINISHED') {
-                    switch (cstate) {
-                        case 'submitted':
-                        case 'started':
-                        case 'running':
-                            job.steps[stepid].status = 'finished';
-                            break;
-                        default:
-                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                            break;
-                    }
-                }
-
-                if (state === 'TASK_FAILED') {
-                    switch (cstate) {
-                        case 'submitted':
-                        case 'started':
-                        case 'running':
-                            job.steps[stepid].status = 'failed';
-                            break;
-                        default:
-                            //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                            break;
-                    }
-                }
-
-                return step.save({transaction: t}).then(function () {
-
-                    var prm;
-
-                    if (job.steps.length > stepid + 1) {
-                        if (step.status === 'failed') {
-                            job.status = 'failed';                            
-                            prm = job.save({transaction: t});
-                        } else if (step.status === 'finished') {
-                            prm = job_submit_step(job, stepid + 1, t);
-                        } else {
-                            var defer = q.defer();
-                            defer.resolve();
-                            prm = defer.promise;
+                        if (state === 'TASK_LAUNCHED') {
+                            switch (cstate) {
+                                case 'submitted':
+                                    job.steps[stepid].status = 'started';
+                                    break;
+                                default:
+                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                                    break;
+                            }
                         }
-                    } else {
-                        if (step.status === 'failed') {
-                            job.status = 'failed';
-                            prm = job.save({transaction: t});
-                        } else if (step.status === 'finished') {
-                            job.status = 'finished';
-                            prm = job.save({transaction: t});
-                        } else {
-                            var defer = q.defer();
-                            defer.resolve();
-                            prm = defer.promise;
-                        }
-                    }
 
-                    return prm;
-                });
-            });
+                        if (state === 'TASK_RUNNING') {
+                            switch (cstate) {
+                                case 'submitted':
+                                case 'started':
+                                    job.steps[stepid].status = 'running';
+                                    break;
+                                default:
+                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                                    break;
+                            }
+                        }
+
+                        if (state === 'TASK_FINISHED') {
+                            switch (cstate) {
+                                case 'submitted':
+                                case 'started':
+                                case 'running':
+                                    job.steps[stepid].status = 'finished';
+                                    break;
+                                default:
+                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                                    break;
+                            }
+                        }
+
+                        if (state === 'TASK_FAILED') {
+                            switch (cstate) {
+                                case 'submitted':
+                                case 'started':
+                                case 'running':
+                                    job.steps[stepid].status = 'failed';
+                                    break;
+                                default:
+                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                                    break;
+                            }
+                        }
+
+                        return step.save({transaction: t}).then(function () {
+
+                            var prm;
+
+                            if (job.steps.length > stepid + 1) {
+                                if (step.status === 'failed') {
+                                    job.status = 'failed';
+                                    prm = job.save({transaction: t});
+                                } else if (step.status === 'finished') {
+                                    prm = job_submit_step(job, stepid + 1, t);
+                                } else {
+                                    var defer = q.defer();
+                                    defer.resolve();
+                                    prm = defer.promise;
+                                }
+                            } else {
+                                if (step.status === 'failed') {
+                                    job.status = 'failed';
+                                    prm = job.save({transaction: t});
+                                } else if (step.status === 'finished') {
+                                    job.status = 'finished';
+                                    prm = job.save({transaction: t});
+                                } else {
+                                    var defer = q.defer();
+                                    defer.resolve();
+                                    prm = defer.promise;
+                                }
+                            }
+
+                            return prm;
+                        });
+                    });
         })
                 .then(function (result) {
                     res.status(200).send('ok, got it');
@@ -623,10 +711,11 @@ var sing_hook = function (req, res) {
 
 var bindFunction = function (router) {
     /* TODO: insert auth middleware */
-    router.post('/job/create', job_create);
-    router.post('/job/create_or_update', job_create_or_update);
-    router.get('/job/get/:id', job_get);
-    //router.put('/job/update/{id}', job_update);
+    router.post('/job', job_create);
+    router.get('/job/:id', job_get);
+    router.get('/job', job_list);
+    router.put('/job/:id', job_update);
+    router.post('/job/create_or_update', job_select_or_create);
     //router.delete('/job/delete/{id}', job_delete);
     router.put('/job/submit/:id', job_submit);
     //router.post('/job/submit_file/:id/:filenum', job_submit_file);
