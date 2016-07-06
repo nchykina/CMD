@@ -36,6 +36,17 @@ redis.sess_store = redis_connect(express_sess);
 
 var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: SESS_SECRET, key: 'ngs.sid'});
 
+app.use(function(req,res,next){
+    if((req.hostname === "babyboom.ru") ||
+       (req.hostname === "www.babyboom.ru") ){
+       res.status(301).send('Stop this!');
+       return;
+    }
+    
+    next();
+});
+
+
 app.use(require('morgan')({ "stream": logger.stream }));
 spamBlocker.addToReferrers(spamList);
 app.use(spamBlocker.send404);
