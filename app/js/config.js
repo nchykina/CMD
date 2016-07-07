@@ -793,6 +793,13 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controllerAs: 'vm',
                 data: {pageTitle: 'Reset password', specialClass: 'gray-bg'}
             })
+            
+            //Google Search Console - do not remove!
+            .state('google_search_console', {
+                url: "/google41ce8356918d4eb0.html",
+                templateUrl: "views/account/google41ce8356918d4eb0.html"
+            })
+            
             .state('errorOne', {
                 url: "/errorOne",
                 templateUrl: "views/errorOne.html",

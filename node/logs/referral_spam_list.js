@@ -15,7 +15,8 @@ var spamList = [
     'rusbase.com',
     'viprodi.ru',
     'wegetarian.ru',
-    'инфоспайс.рф'
+    'инфоспайс.рф',
+    'magru24.ru'
 ];
 
 module.exports = spamList;
