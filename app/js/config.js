@@ -777,7 +777,13 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('privacy_policy', {
                 url: "/privacy_policy",
                 templateUrl: "views/account/privacy_policy.html",
-                data: {pageTitle: 'Privacy policy', specialClass: 'gray-bg'}
+                data: {pageTitle: 'Privacy Policy', specialClass: 'gray-bg'}
+            })
+            
+            .state('terms_of_service', {
+                url: "/terms_of_service",
+                templateUrl: "views/account/terms_of_service.html",
+                data: {pageTitle: 'Terms of Service', specialClass: 'gray-bg'}
             })
             .state('forgot_password', {
                 url: "/forgot_password",
@@ -1489,50 +1495,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/ecommerce/stripe_form.html",
                 data: {pageTitle: 'Stripe form'}
             })
-
-
-            .state('gallery', {
-                abstract: true,
-                url: "/gallery",
-                templateUrl: "views/common/content.html"
-            })
-            .state('gallery.basic_gallery', {
-                url: "/basic_gallery",
-                templateUrl: "views/basic_gallery.html",
-                data: {pageTitle: 'Lightbox Gallery'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                files: ['js/plugins/blueimp/jquery.blueimp-gallery.min.js', 'css/plugins/blueimp/css/blueimp-gallery.min.css']
-                            }
-                        ]);
-                    }
-                }
-            })
-            .state('gallery.bootstrap_carousel', {
-                url: "/bootstrap_carousel",
-                templateUrl: "views/carousel.html",
-                data: {pageTitle: 'Bootstrap carousel'}
-            })
-            .state('gallery.slick_gallery', {
-                url: "/slick_gallery",
-                templateUrl: "views/slick.html",
-                data: {pageTitle: 'Slick carousel'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                files: ['css/plugins/slick/slick.css', 'css/plugins/slick/slick-theme.css', 'js/plugins/slick/slick.min.js']
-                            },
-                            {
-                                name: 'slick',
-                                files: ['js/plugins/slick/angular-slick.min.js']
-                            }
-                        ]);
-                    }
-                }
-            })
+           
             .state('css_animations', {
                 url: "/css_animations",
                 templateUrl: "views/css_animation.html",
