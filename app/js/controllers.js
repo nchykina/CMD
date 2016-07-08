@@ -1688,8 +1688,8 @@ function wizardCtrl($scope, $rootScope) {
     $scope.formData = {};
 
     // After process wizard
-   // $scope.processForm = function () {
-     //   alert('Wizard completed');
+    // $scope.processForm = function () {
+    //   alert('Wizard completed');
     //};
 
 }
@@ -3878,32 +3878,32 @@ function rnaReseqHomeCtrl($http, $state, jobService) {
 
 }
 
-function fileCtrl(fileService){
+function fileCtrl(fileService) {
     var vm = this;
-    
+
     vm.files = [];
-    
+
     fileService.getFiles()
             .then(function (res) {
-                vm.files = res;                
+                vm.files = res;
             });
-    
+
     this.upload = function (file) {
         if (file == null) {
             console.log('ima buggy shiet');
             return;
-        }        
-        
+        }
+
         fileService.addFile(file);
     }
-    
-    this.deleteFile = function(fileid){
+
+    this.deleteFile = function (fileid) {
         fileService.deleteFile(fileid);
-    }   
-    
+    }
+
 }
 
-function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService, filesizeFilter) {
+function dnaReseqNewCtrl($state, $stateParams, jobService) {
     var vm = this;
 
     vm.job = $stateParams.job;
@@ -3920,10 +3920,10 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
     }
 
     vm.species = vm.job.seq_species;
-    
+
     console.log(vm.species);
 
-    vm.files = [{}, {}];
+    //vm.files = [{}, {}];
 
     this.upload = function (filenum, file) {
         if (file == null) {
@@ -3931,44 +3931,22 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
             return;
         }
 
-        vm.job.filesIn[filenum] = null;
-
-        vm.files[filenum] = {};
-        vm.files[filenum].uploading = true;
-        vm.files[filenum].progress = 0;
-
-        if (vm.job.filesIn[filenum]) {
-            console.log("object is not null!");
-        }
-
-        Upload.upload({
-            url: 'api/job/submit_file/' + vm.job._id + '/' + filenum,
-            data: {data: file}
-        }).then(function (resp) {
-            var server_resp = resp.data;
-            if (server_resp.success) {
-                console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
-                vm.job.filesIn[filenum] = server_resp.file_entry;
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-            } else {
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-                console.log('Error uploading ' + resp.config.data.data.name + ': ' + server_resp.msg);
-            }
-        }, function (resp) {
-            vm.files[filenum].uploading = false;
-            console.log('Error status: ' + resp.status);
-        }, function (evt) {
-            vm.files[filenum].current = evt.loaded;
-            vm.files[filenum].total = evt.total;
-            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
-        });
+        jobService.addFile(vm.job, filenum, file);
     }
 
-   // this.processForm = function () {
-     //   alert('Wizard completed');
-   // };
+    this.submit = function () {
+        jobService.submitJob(vm.job)
+                .then(function (res) {
+                    $state.go('pipelines.dna_reseq_new.step2', {job: vm.job});
+                })
+                .catch(function (err) {
+                    alert(err);
+                })
+    }
+
+    // this.processForm = function () {
+    //   alert('Wizard completed');
+    // };
 
 }
 
@@ -3993,7 +3971,7 @@ function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
 
     vm.files = [{}, {}];
 
-    
+
 
     this.processForm = function () {
         alert('Wizard completed');
@@ -4010,13 +3988,13 @@ function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
 
 function ecommerceCtrl($scope, ecommService, $state) {
     var em = this;
-    
+
     em.cart = null;
     em.totalForCart = {};
     em.numberOfItemsInCart = {};
 
     em.productList = null;
-    em.orders = null; 
+    em.orders = null;
 
     em.dataLoaded = false;
     em.cartAmount = 0;
@@ -4033,10 +4011,10 @@ function ecommerceCtrl($scope, ecommService, $state) {
                 em.cart = res;
                 loadProgress();
             });
-            
+
     ecommService.getOrders()
             .then(function (res) {
-                em.orders = res;                
+                em.orders = res;
             });
 
     var loadProgress = function () {
@@ -4259,7 +4237,7 @@ function stripeCtrl($scope, $http, $state, ecommService) {
 
                         ecommService.addOrder('card')
                                 .then(function (res) {
-                                    console.log("ORDER CREATED");                                    
+                                    console.log("ORDER CREATED");
                                     $state.go("commerce.orders");
                                 })
                                 .catch(function (err) {
@@ -4321,7 +4299,7 @@ angular
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
         .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
-        .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
+        .controller('dnaReseqNewController', ['$state', '$stateParams', 'jobService', dnaReseqNewCtrl])
         .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])

@@ -264,8 +264,15 @@ var fileService = function ($http, $q, Upload) {
     };
 
     this.addFile = function (file_client) {
-        var defer = $q.defer(); 
-        
+        return self.createFile(file_client)
+                .then(function (file_srv) {
+                    return self.uploadFile(file_client, file_srv);
+                });
+    }
+
+    this.createFile = function (file_client) {
+        var defer = $q.defer();
+
         console.log(file_client);
 
         $http({
@@ -274,71 +281,74 @@ var fileService = function ($http, $q, Upload) {
             data: {'name': file_client.name}
         })
                 .success(function (response) {
-                    //console.log(response.products);
                     var file_idx = files.push(response.file) - 1;
                     files[file_idx].filesize = file_client.size;
-                    var srv_file = response.file;
-
-                    Upload.upload({
-                        url: 'api/file_content/' + srv_file.id,
-                        data: {data: file_client}
-                    }).then(function (resp) {
-                        var server_resp = resp.data;
-                        
-                            console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
-                            // = server_resp.file_entry;                            
-                            files[file_idx].status = server_resp.file.status;
-                            files[file_idx].filesize = server_resp.file.filesize;
-                            files[file_idx].progress = 100;
-                            
-                            defer.resolve(files[file_idx]);                            
-                        }
-                    , function (resp) {                        
-                        files[file_idx].status = 'failed';                        
-                        //files[file_idx].filesize = 0;
-                        console.error('Error status: ' + resp.status);
-                        defer.reject();
-                    }, function (evt) {
-                        var progress = {
-                            current: evt.loaded,
-                            total: evt.total,
-                            progress: Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
-                        };
-                        
-                        files[file_idx].status = 'uploading';
-                        files[file_idx].current = evt.loaded;
-                        files[file_idx].total = evt.total;
-                        files[file_idx].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
-                        
-                        defer.notify(progress);
-                    });
+                    defer.resolve(files[file_idx]);
                 })
                 .error(function (data, status) {
-                    console.error('addFile: ' + status + ' - ' + data.msg);
+                    console.error('createFile: ' + status + ' - ' + data.msg);
                     defer.reject(data.msg);
                 });
 
         return defer.promise;
-
     }
-    
+
+    this.uploadFile = function (file_client, file_srv) {
+        var defer = $q.defer();
+
+        Upload.upload({
+            url: 'api/file_content/' + file_srv.id,
+            data: {data: file_client}
+        }).then(function (resp) {
+            var server_resp = resp.data;
+
+            console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
+            // = server_resp.file_entry;                            
+            file_srv.status = server_resp.file.status;
+            file_srv.filesize = server_resp.file.filesize;
+            file_srv.progress = 100;
+            file_srv.finished_at = server_resp.file.finished_at;
+
+            defer.resolve(file_srv);
+        }
+        , function (resp) {
+            file_srv.status = 'failed';
+            //files[file_idx].filesize = 0;
+            console.error('Error status: ' + resp.status);
+            defer.reject();
+        }, function (evt) {
+            var progress = {
+                current: evt.loaded,
+                total: evt.total,
+                progress: Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
+            };
+
+            file_srv.status = 'uploading';
+            file_srv.current = evt.loaded;
+            file_srv.total = evt.total;
+            file_srv.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
+
+            defer.notify(progress);
+        });
+    }
+
     this.deleteFile = function (fileid) {
-        var defer = $q.defer();        
+        var defer = $q.defer();
 
         $http({
             method: 'DELETE',
-            url: 'api/file/'+fileid            
+            url: 'api/file/' + fileid
         })
                 .success(function (response) {
                     //console.log(response.products);
-                    for(var i in files){
-                        if(files[i].id===fileid){
-                            files.splice(i,1);
+                    for (var i in files) {
+                        if (files[i].id === fileid) {
+                            files.splice(i, 1);
                             return defer.resolve();
                         }
                     }
-                    
-                    return defer.reject('file not found in cached array');                    
+
+                    return defer.reject('file not found in cached array');
                 })
                 .error(function (data, status) {
                     console.error('deleteFile: ' + status + ' - ' + data.msg);
@@ -348,7 +358,7 @@ var fileService = function ($http, $q, Upload) {
         return defer.promise;
 
     }
-    
+
     this.getFiles = function () {
         var defer = $q.defer();
 
@@ -363,10 +373,110 @@ var fileService = function ($http, $q, Upload) {
 }
 
 
-var jobService = function ($http, $q) {
+var jobService = function ($http, $q, fileService) {
     var vm = this;
 
     vm.newJob = {};
+
+    var jobs = [];
+
+    var jobsLoaded = false;
+
+    var loadJobs = function () {
+        var defer = $q.defer();
+
+        $http({
+            method: 'GET',
+            url: 'api/job'
+        })
+                .success(function (response) {
+
+                    jobs = response.jobs;
+                    jobsLoaded = true;
+                    defer.resolve(jobs);
+                })
+                .error(function (data, status) {
+                    console.error('loadJobs: ' + status + ' - ' + data.msg);
+                    jobsLoaded = false;
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
+    };
+
+    this.setFile = function (job, filenum, file_srv) {
+        var defer = $q.defer();
+
+        $http({
+            method: 'PUT',
+            url: 'api/job/' + job.id,
+            data: {jobfile: {filenum: filenum, fileid: file_srv.id}}
+        })
+                .success(function (response) {
+                    job.files[filenum] = file_srv;
+                    
+                    defer.resolve();
+                })
+                .error(function (data, status) {
+                    console.error('setFile: ' + status + ' - ' + data.msg);
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
+    }
+
+    this.addFile = function (job, filenum, file_client) {
+        return fileService.createFile(file_client)
+                .then(function (file_srv) {
+                    return vm.setFile(job, filenum, file_srv)
+                            .then(function (res) {
+                                return fileService.uploadFile(file_client, file_srv);
+                            });
+                });
+    }
+
+    this.getJobs = function () {
+        var defer = $q.defer();
+
+        if (!jobsLoaded) {
+            return loadJobs();
+        } else {
+            defer.resolve(jobs);
+        }
+
+        return defer.promise;
+    }
+
+    this.submitJob = function (job) {
+        var defer = $q.defer();
+
+        if (!((job.files[0]) && (job.files[1]))) {
+            defer.reject('The job needs two input files');
+        } else {
+            $http({
+                method: 'PUT',
+                url: 'api/job/submit/' + job.id
+            })
+                    .success(function (response) {
+                        //console.log(response.products);
+                        //productList.length = 0;
+
+                        //for(var v in response.products){
+                        //    productList.push(response.products[v]);
+                        //}
+                        job.status = 'submitted';
+
+                        defer.resolve();
+                    })
+                    .error(function (data, status) {
+                        job.status = 'failed';
+                        console.error('submitJobs: ' + status + ' - ' + data.msg);
+                        defer.reject(data.msg);
+                    });
+        }
+
+        return defer.promise;
+    }
 
     this.createOrUpdateJob = function (jobtype, jobparams) {
         var deferred = $q.defer();
@@ -381,23 +491,153 @@ var jobService = function ($http, $q) {
                 .success(function (response) {
                     console.log(response);
                     if (response.success) {
+                        var ret_job = response.job;
+                        
+                        if(!ret_job.files){
+                            ret_job.files = [];
+                        }
+                        
                         deferred.resolve(response.job);
                     } else {
                         deferred.reject(response.msg);
                     }
                 })
                 .error(function (msg, code) {
-                    console.error(code+' - '+msg);
+                    console.error(code + ' - ' + msg);
                     deferred.reject(msg);
                 });
 
         return deferred.promise;
     }
+
+
 };
+
+var principalService = function ($q, $http, $timeout) {
+    var _identity = undefined,
+            _authenticated = false;
+
+    return {
+        isIdentityResolved: function () {
+            return angular.isDefined(_identity);
+        },
+        isAuthenticated: function () {
+            return _authenticated;
+        },
+        isInRole: function (role) {
+            if (!_authenticated || !_identity.roles)
+                return false;
+
+            return _identity.roles.indexOf(role) != -1;
+        },
+        isInAnyRole: function (roles) {
+            if (!_authenticated || !_identity.roles)
+                return false;
+
+            for (var i = 0; i < roles.length; i++) {
+                if (this.isInRole(roles[i]))
+                    return true;
+            }
+
+            return false;
+        },
+        authenticate: function (identity) {
+            _identity = identity;
+            _authenticated = identity != null;
+        },
+        identity: function (force) {
+            var deferred = $q.defer();
+
+            if (force === true)
+                _identity = undefined;
+
+            // check and see if we have retrieved the 
+            // identity data from the server. if we have, 
+            // reuse it by immediately resolving
+            if (angular.isDefined(_identity)) {
+                deferred.resolve(_identity);
+
+                return deferred.promise;
+            }
+
+            // otherwise, retrieve the identity data from the
+            // server, update the identity object, and then 
+            // resolve.
+            //           $http.get('/svc/account/identity', 
+            //                     { ignoreErrors: true })
+            //                .success(function(data) {
+            //                    _identity = data;
+            //                    _authenticated = true;
+            //                    deferred.resolve(_identity);
+            //                })
+            //                .error(function () {
+            //                    _identity = null;
+            //                    _authenticated = false;
+            //                    deferred.resolve(_identity);
+            //                });
+
+            // for the sake of the demo, fake the lookup
+            // by using a timeout to create a valid
+            // fake identity. in reality,  you'll want 
+            // something more like the $http request
+            // commented out above. in this example, we fake 
+            // looking up to find the user is
+            // not logged in
+            var self = this;
+            $timeout(function () {
+                self.authenticate(null);
+                deferred.resolve(_identity);
+            }, 1000);
+
+            return deferred.promise;
+        }
+    };
+}
+
+var authorizationService = function ($rootScope, $state, principal) {
+    return {
+        authorize: function () {
+            return principal.identity()
+                    .then(function () {
+                        var isAuthenticated = principal.isAuthenticated();
+
+                        if ($rootScope.toState.data.roles
+                                && $rootScope.toState
+                                .data.roles.length > 0
+                                && !principal.isInAnyRole(
+                                        $rootScope.toState.data.roles))
+                        {
+                            if (isAuthenticated) {
+                                // user is signed in but not
+                                // authorized for desired state
+                                $state.go('accessdenied');
+                            } else {
+                                // user is not authenticated. Stow
+                                // the state they wanted before you
+                                // send them to the sign-in state, so
+                                // you can return them when you're done
+                                $rootScope.returnToState
+                                        = $rootScope.toState;
+                                $rootScope.returnToStateParams
+                                        = $rootScope.toStateParams;
+
+                                // now, send them to the signin state
+                                // so they can log in
+                                $state.go('signin');
+                            }
+                        }
+                    });
+        }
+    };
+}
+
 
 angular
         .module('inspinia')
         .service('messageService', messageService)
-        .service('jobService', ['$http', '$q', jobService])
+        .service('jobService', ['$http', '$q' ,'fileService', jobService])
         .service('fileService', ['$http', '$q', 'Upload', fileService])
-        .service('ecommService', ['$http', '$q', ecommerceService]);
+        .service('ecommService', ['$http', '$q', ecommerceService])
+        .factory('principal', ['$q', '$http', '$timeout', principalService])
+        .factory('authorization', ['$rootScope', '$state', 'principal', authorizationService])
+  

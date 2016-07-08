@@ -613,6 +613,15 @@ var sing_hook = function (req, res) {
                         if (!job) {
                             return 'job not found, but its ok';
                         }
+                        
+                        if (!job.steps) {
+                            return 'job not found, but its ok';
+                        }
+                        
+                        if (!job.steps[stepid]) {
+                            return 'job not found, but its ok';
+                        }
+                        
                         var cstate = job.steps[stepid].status;
 
                         var step = job.steps[stepid];

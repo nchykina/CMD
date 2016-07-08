@@ -47,6 +47,16 @@ redis.sess_store = redis_connect(express_sess);
 
 var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: config.session_secret, key: config.session_sid});
 
+app.use(function(req,res,next){
+    if((req.hostname === "babyboom.ru") ||
+       (req.hostname === "www.babyboom.ru") ){
+       res.status(301).send('Stop this!');
+       return;
+    }
+    
+    next();
+});
+
 app.use(express_cp());
 app.use(sess_store);
 
