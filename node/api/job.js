@@ -253,7 +253,17 @@ var job_select_or_create = function (req, res) {
 
     extend(queryparams, req.body.jobparams);
 
-    models.Job.findOne(queryparams)
+    models.Job.findOne({
+            where: queryparams,
+            include: [
+                {
+                    model: models.File,
+                    as: 'files',
+                    through: {
+                        attributes: ['filenum', 'filetype']
+                    }
+                }]
+        })
             .then(function (job) {
                 if (job) {
                     res.status(200).json({success: true, msg: 'Returning orphaned job. Abandoning your jobs is bad for society. And hurts your karma too', job: job});

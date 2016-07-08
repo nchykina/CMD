@@ -376,7 +376,7 @@ var fileService = function ($http, $q, Upload) {
 var jobService = function ($http, $q, fileService) {
     var vm = this;
 
-    vm.newJob = {};
+    var newJobs = {};
 
     var jobs = [];
 
@@ -480,6 +480,8 @@ var jobService = function ($http, $q, fileService) {
 
     this.createOrUpdateJob = function (jobtype, jobparams) {
         var deferred = $q.defer();
+        
+        if(!newJobs[jobtype])
 
         /* TODO: proper species handling */
         $http({
