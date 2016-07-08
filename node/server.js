@@ -26,6 +26,7 @@ var cfg = require('./config/config');
 var logger = require('./logger');
 var spamBlocker = require('express-spam-referral-blocker');
 var spamList= require('./logs/referral_spam_list');
+var sitemap = require('./seo/sitemap');
 
 var User = require('./models/user');
 
@@ -44,6 +45,12 @@ app.use(function(req,res,next){
     }
     
     next();
+});
+
+
+app.get('/sitemap.xml', function(req, res) {
+  res.header('Content-Type', 'application/xml');
+  res.send(sitemap.toString());
 });
 
 
