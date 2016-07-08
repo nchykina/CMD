@@ -1532,7 +1532,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
 
             })
             .state('landing', {
-                url: "/landing",
+                url: "/",
                 templateUrl: "views/landing.html",
                 data: {pageTitle: 'Home', specialClass: 'landing-page'},
                 resolve: {
