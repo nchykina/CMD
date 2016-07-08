@@ -774,30 +774,30 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controller: 'loginController',
                 data: {pageTitle: 'Register', specialClass: 'gray-bg'}
             })
-            
-            
+
+
             .state('privacy_policy', {
                 url: "/privacy_policy",
                 templateUrl: "views/account/privacy_policy.html",
                 data: {pageTitle: 'Privacy Policy', specialClass: 'gray-bg'}
-            })            
+            })
             .state('terms_of_service', {
                 url: "/terms_of_service",
                 templateUrl: "views/account/terms_of_service.html",
                 data: {pageTitle: 'Terms of Service', specialClass: 'gray-bg'}
             })
-                        .state('general_terms_and_conditions', {
+            .state('general_terms_and_conditions', {
                 url: "/general_terms_and_conditions",
                 templateUrl: "views/account/general_terms_and_conditions.html",
                 data: {pageTitle: 'General Terms and Conditions', specialClass: 'gray-bg'}
             })
-                                    .state('price_schedule', {
+            .state('price_schedule', {
                 url: "/price_schedule",
                 templateUrl: "views/account/price_schedule.html",
                 data: {pageTitle: 'Price Schedule and Supplemental Terms', specialClass: 'gray-bg'}
             })
-            
-            
+
+
             .state('forgot_password', {
                 url: "/forgot_password",
                 templateUrl: "views/account/forgot_password.html",
@@ -812,13 +812,13 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controllerAs: 'vm',
                 data: {pageTitle: 'Reset password', specialClass: 'gray-bg'}
             })
-            
+
             //Google Search Console - do not remove!
             .state('google_search_console', {
                 url: "/google41ce8356918d4eb0.html",
                 templateUrl: "views/account/google41ce8356918d4eb0.html"
             })
-            
+
             .state('errorOne', {
                 url: "/errorOne",
                 templateUrl: "views/errorOne.html",
@@ -1508,7 +1508,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/ecommerce/stripe_form.html",
                 data: {pageTitle: 'Stripe form'}
             })
-           
+
             .state('css_animations', {
                 url: "/css_animations",
                 templateUrl: "views/css_animation.html",
@@ -1614,6 +1614,12 @@ angular
         .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider', config])
         .run(function ($rootScope, $state) {
             $rootScope.$state = $state;
+
+            //fix scrolling
+            $rootScope.$on('$stateChangeSuccess', function () {
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
+            });
+
 
             var debug = false;
 
