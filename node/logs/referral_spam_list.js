@@ -16,7 +16,8 @@ var spamList = [
     'viprodi.ru',
     'wegetarian.ru',
     'инфоспайс.рф',
-    'magru24.ru'
+    'magru24.ru',
+    'eu-cookie-law.blogspot.com'
 ];
 
 module.exports = spamList;
