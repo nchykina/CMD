@@ -1534,7 +1534,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('landing', {
                 url: "/",
                 templateUrl: "views/landing.html",
-                data: {pageTitle: 'Home', specialClass: 'landing-page'},
+                data: {pageTitle: 'Bioinformatics data processing made easy', specialClass: 'landing-page'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
