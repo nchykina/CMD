@@ -56,11 +56,11 @@ var file_list = function (req, res) {
     if (!req.user.id) {
         res.status(403).json({success: false, msg: 'Unauthorized'});
         return;
-    }    
+    }
 
     models.File.findAll({where: {owner_id: req.user.id}})
-            .then(function (files) {                
-                return res.status(200).json({success: true, msg: 'Files found', files: files});                
+            .then(function (files) {
+                return res.status(200).json({success: true, msg: 'Files found', files: files});
             })
             .catch(function (err) {
                 console.error('file_list: ' + err);
@@ -163,24 +163,42 @@ var file_delete = function (req, res) {
             });
 }
 
+var file_create_internal = function (options) {
+    return models.sequelize.transaction(function (t) {
+        return models.File.create(
+                {owner_id: options.owner_id, name: options.name, status: 'new'}, {transaction: t})
+                .then(function (file) {
+                    if (file) {
+                        if (options.folder) {
+                            file.phys_path = options.folder + path.sep + file.id;
+                        }
+                        else if (options.path) {
+                            file.phys_path = options.path;
+                        }
+                        else {
+                            throw new Error('not file path or folder given');
+                        }
+
+                        return file.save({transaction: t});
+                    } else {
+                        throw new Error(file);
+                    }
+                });
+    });
+}
+
 var file_create = function (req, res) {
     if (!req.body.name) {
         return res.status(404).json({success: false, msg: 'No filename given'});
     }
 
     if (req.user) {
-        models.sequelize.transaction(function (t) {
-            return models.File.create(
-                    {owner_id: req.user.id, name: req.body.name, status: 'new'}, {transaction: t})
-                    .then(function (file) {
-                        if (file) {
-                            file.phys_path = config.storage_root + path.sep + 'users' + path.sep + req.user.id + path.sep + file.id;
-                            return file.save({transaction: t});
-                        } else {
-                            throw new Error(file);
-                        }
-                    });
-        })
+        file_create_internal(
+                {
+                    owner_id: req.user.id,
+                    name: req.body.name,
+                    folder: config.storage_root + path.sep + 'users' + path.sep + req.user.id
+                })
                 .then(function (tr_res) {
                     return res.status(200).json({success: true, msg: 'File created', file: tr_res});
                 })
@@ -210,68 +228,68 @@ var file_submit = function (req, res) {
 
     var uploadErrHandler = function (err) {
 
-        models.sequelize.transaction(function (t) {                
-                    return models.File.findOne({where: {id: req.params.id, owner_id: req.user.id}, transaction: t, lock: t.LOCK.UPDATE})
-                            .then(function (file) {
-                                if (!file) {
-                                    res.status(404).json({success: false, msg: 'Not found'});
-                                    file.status = 'failed';
-                                    return file.save({transaction: t});                                           
-                                }
+        models.sequelize.transaction(function (t) {
+            return models.File.findOne({where: {id: req.params.id, owner_id: req.user.id}, transaction: t, lock: t.LOCK.UPDATE})
+                    .then(function (file) {
+                        if (!file) {
+                            res.status(404).json({success: false, msg: 'Not found'});
+                            file.status = 'failed';
+                            return file.save({transaction: t});
+                        }
 
-                                if (err) {
-                                    console.error('file_submit: ' + err);
-                                    res.status(500).json({success: false, msg: 'Error during upload'});
-                                    file.status = 'failed';
-                                    return file.save({transaction: t});
-                                }
-                                
-                                if (!req.file){
-                                    console.error('file_submit: no file submitted');
-                                    res.status(404).json({success: false, msg: 'No file submitted'});
-                                    file.status = 'failed';
-                                    return file.save({transaction: t});
-                                }
+                        if (err) {
+                            console.error('file_submit: ' + err);
+                            res.status(500).json({success: false, msg: 'Error during upload'});
+                            file.status = 'failed';
+                            return file.save({transaction: t});
+                        }
 
-                                file.finished_at = Date.now();
+                        if (!req.file) {
+                            console.error('file_submit: no file submitted');
+                            res.status(404).json({success: false, msg: 'No file submitted'});
+                            file.status = 'failed';
+                            return file.save({transaction: t});
+                        }
 
-                                var defer = q.defer();
+                        file.finished_at = Date.now();
 
-                                /* in fact it's bad to do I/O operation inside sequelize transaction
-                                 * might cause DB locking even though it's very unlikely:
-                                 * fs.stat() operation is likely to return close to immediately
-                                 */
+                        var defer = q.defer();
 
-                                fs.stat(file.phys_path, function (err, stats) {
-                                    if (err) {
-                                        console.error('file_submit: '+err);
-                                        res.status(500).json({success: false, msg: 'Internal error: fs.stat'});
-                                        file.status = 'failed';
-                                        return file.save({transaction: t})
-                                                .then(function (file) {
-                                                    defer.resolve(file);                                                    
-                                                })
-                                                .catch(function (err) {
-                                                    defer.reject(err);                                                    
-                                                });
-                                    } else {
-                                        file.filesize = stats.size;
-                                        file.status = 'ok';
-                                        return file.save({transaction: t})
-                                                .then(function (file) {
-                                                    res.status(200).json({success: true, file: file});
-                                                    defer.resolve(file);                                                    
-                                                })
-                                                .catch(function (err) {
-                                                    defer.reject(err);                                                    
-                                                });
-                                    }
-                                });
+                        /* in fact it's bad to do I/O operation inside sequelize transaction
+                         * might cause DB locking even though it's very unlikely:
+                         * fs.stat() operation is likely to return close to immediately
+                         */
 
-                                return defer.promise;
+                        fs.stat(file.phys_path, function (err, stats) {
+                            if (err) {
+                                console.error('file_submit: ' + err);
+                                res.status(500).json({success: false, msg: 'Internal error: fs.stat'});
+                                file.status = 'failed';
+                                return file.save({transaction: t})
+                                        .then(function (file) {
+                                            defer.resolve(file);
+                                        })
+                                        .catch(function (err) {
+                                            defer.reject(err);
+                                        });
+                            } else {
+                                file.filesize = stats.size;
+                                file.status = 'ok';
+                                return file.save({transaction: t})
+                                        .then(function (file) {
+                                            res.status(200).json({success: true, file: file});
+                                            defer.resolve(file);
+                                        })
+                                        .catch(function (err) {
+                                            defer.reject(err);
+                                        });
+                            }
+                        });
 
-                            });
-                });
+                        return defer.promise;
+
+                    });
+        });
     }
 
 
@@ -313,11 +331,11 @@ var file_submit = function (req, res) {
                         } else {
                             file.started_at = Date.now();
                             file.status = 'uploading';
-                            
+
                             return file.save({transaction: t})
-                                .then(function (file) {                                    
+                                    .then(function (file) {
                                         defer.resolve(file);
-                                        upload(req, res, uploadErrHandler);                                        
+                                        upload(req, res, uploadErrHandler);
                                     })
                                     .catch(function (err) {
                                         defer.reject(err);
@@ -354,7 +372,8 @@ var bindFunction = function (router) {
 };
 
 module.exports = {
-    bind: bindFunction
+    bind: bindFunction,
+    file_create: file_create_internal
 };
 
 

@@ -3844,19 +3844,32 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
 
 }
 
-function dnaReseqHomeCtrl($http, $state, jobService) {
+function dnaReseqHomeCtrl($scope, $state, jobService) {
     var vm = this;
 
     //vm.job = jobService.newJob;
+    vm.jobs = [];
+
+    jobService.getJobs()
+            .then(function (res) {
+                vm.jobs = res;
+            });
+            
+    vm.jobfilter = ['ok'];
 
     this.createJob = function (species) {
-        jobService.createOrUpdateJob('dna_reseq', {seq_species: species})
+        jobService.createOrUpdateJob('dna_reseq', species)
                 .then(function (job) {
-                    $state.go('pipelines.dna_reseq_new.step1', {job: job});
+                    $state.go('pipelines.dna_reseq_job', {jobid: job.id});
                 },
                         function (err) {
                             alert(err);
                         });
+    };
+    
+    this.filterByStatus = function(job) {
+        //console.log('debug');
+        return (vm.jobfilter.indexOf(job.status) !== -1);
     };
 
 }
@@ -3869,7 +3882,7 @@ function rnaReseqHomeCtrl($http, $state, jobService) {
     this.createJob = function (species) {
         jobService.createOrUpdateJob('rna_reseq', {seq_species: species})
                 .then(function (job) {
-                    $state.go('pipelines.rna_reseq_new.step1', {job: job});
+                    $state.go('pipelines.rna_reseq_job', {job: job});
                 },
                         function (err) {
                             alert(err);
@@ -3903,10 +3916,10 @@ function fileCtrl(fileService) {
 
 }
 
-function dnaReseqNewCtrl($state, $stateParams, jobService) {
+function dnaReseqJobCtrl($state, $stateParams, jobService) {
     var vm = this;
 
-    vm.job = $stateParams.job;
+    vm.jobid = $stateParams.jobid;
 
     //if some nasty shiet happened along the road - do some protective actions. shouldn't happen under normal circumstances
     /*if ((!jobService.newJob) || (jobService.newJob._id !== vm.jobid)) {
@@ -3914,16 +3927,39 @@ function dnaReseqNewCtrl($state, $stateParams, jobService) {
      //jobService.newJob = jobService.getJob(vm.jobid);
      }*/
 
-    if (!vm.job) {
+    vm.job = {};
+    vm.selectedstate = 0;
+
+    if (!vm.jobid) {
         console.log('no job object passed to wizard. going back');
         $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
     }
-
-    vm.species = vm.job.seq_species;
-
-    console.log(vm.species);
-
-    //vm.files = [{}, {}];
+    else {
+        jobService.getJob(vm.jobid)
+                .then(function(res){
+                    vm.job=res;
+                    vm.species = vm.job.seq_species;
+                    
+                    vm.selectedstate = vm.realJobState();
+        })
+                .catch(function(err){
+                    $state.go('pipelines.dna_reseq_home'); //error, go back to wizard (of Oz)
+        })
+    }
+    
+    this.realJobState = function() {
+        switch(vm.job.status){
+                        case 'new': return 1;
+                        case 'submitted':
+                        case 'running':
+                        case 'failed':
+                           return 2;
+                        case 'ok':
+                            return 3;
+                        default:
+                            return 0;
+                    }
+    }
 
     this.upload = function (filenum, file) {
         if (file == null) {
@@ -3933,11 +3969,18 @@ function dnaReseqNewCtrl($state, $stateParams, jobService) {
 
         jobService.addFile(vm.job, filenum, file);
     }
+    
+    this.changeState = function(newState){
+        if(newState<=vm.realJobState()){
+            vm.selectedstate = newState;
+        }
+    }
 
     this.submit = function () {
         jobService.submitJob(vm.job)
                 .then(function (res) {
-                    $state.go('pipelines.dna_reseq_new.step2', {job: vm.job});
+                    vm.job.status = 'submitted';
+                    vm.selectedstate = vm.realJobState();
                 })
                 .catch(function (err) {
                     alert(err);
@@ -4299,11 +4342,11 @@ angular
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
         .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
-        .controller('dnaReseqNewController', ['$state', '$stateParams', 'jobService', dnaReseqNewCtrl])
+        .controller('dnaReseqJobController', ['$state', '$stateParams', 'jobService', dnaReseqJobCtrl])
         .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
-        .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl])
+        .controller('dnaReseqHomeController', ['$scope', '$state', 'jobService', dnaReseqHomeCtrl])
         .controller('rnaReseqHomeController', ['$http', '$state', 'jobService', rnaReseqHomeCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', 'ecommService', stripeCtrl])
         .controller('fileController', ['fileService', fileCtrl])

@@ -23,6 +23,7 @@
         },
         
         "singularity": {
+            "work_dir_format": "/ngs/jobs/%d",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://192.168.1.4:3000"
         }
@@ -41,6 +42,8 @@
         "session_secret": "I love nuts!",
         "session_sid": "ngs.sid",
         
+        "file_agent_url": "http://192.168.4.8:3001/file",
+        
         "smtpConfig": {
             "direct": false,
             "host": "mail.ngspipeline.com",
@@ -52,6 +55,7 @@
         },
         
         "singularity": {
+            "work_dir_format": "/ngs/jobs/%d",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://192.168.1.4:3000"
         }

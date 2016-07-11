@@ -376,7 +376,7 @@ var fileService = function ($http, $q, Upload) {
 var jobService = function ($http, $q, fileService) {
     var vm = this;
 
-    var newJobs = {};
+    var newJobs = {dna_reseq: {}, rna_reseq: {}};
 
     var jobs = [];
 
@@ -414,7 +414,7 @@ var jobService = function ($http, $q, fileService) {
         })
                 .success(function (response) {
                     job.files[filenum] = file_srv;
-                    
+
                     defer.resolve();
                 })
                 .error(function (data, status) {
@@ -447,6 +447,34 @@ var jobService = function ($http, $q, fileService) {
         return defer.promise;
     }
 
+    this.getJob = function (id) {
+        var defer = $q.defer();
+
+        for (var i in jobs) {
+            if (jobs[i].id === id) {
+                defer.resolve(id);
+                return defer.promise;
+            }
+        }
+
+        //if not found in cache
+        $http({
+            method: 'GET',
+            url: 'api/job/' + id
+        })
+                .success(function (response) {
+                    var job = response.job;
+                    jobs.push(job);
+                    defer.resolve(job);
+                })
+                .error(function (data, status) {
+                    console.error('getJob: ' + status);
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
+    };
+
     this.submitJob = function (job) {
         var defer = $q.defer();
 
@@ -478,34 +506,40 @@ var jobService = function ($http, $q, fileService) {
         return defer.promise;
     }
 
-    this.createOrUpdateJob = function (jobtype, jobparams) {
+    this.createOrUpdateJob = function (jobtype, species) {
         var deferred = $q.defer();
-        
-        if(!newJobs[jobtype])
+
+        for (var i in jobs) {
+            var j = jobs[i];
+            if ((j.jobtype === jobtype) && (j.seq_species === species) && (j.status === 'new')) {
+                deferred.resolve(j);
+                return deferred.promise;
+            }
+        }
 
         /* TODO: proper species handling */
         $http({
             method: 'POST',
             url: 'api/job/create_or_update',
-            data: {jobtype: jobtype, jobparams: jobparams}
+            data: {jobtype: jobtype, jobparams: {seq_species: species}}
 
         })
                 .success(function (response) {
                     console.log(response);
-                    if (response.success) {
-                        var ret_job = response.job;
-                        
-                        if(!ret_job.files){
-                            ret_job.files = [];
-                        }
-                        
-                        deferred.resolve(response.job);
-                    } else {
-                        deferred.reject(response.msg);
+
+                    var ret_job = response.job;
+
+                    if (!ret_job.files) {
+                        ret_job.files = [];
                     }
+
+                    jobs.push(ret_job);
+
+                    deferred.resolve(ret_job);
+
                 })
                 .error(function (msg, code) {
-                    console.error(code + ' - ' + msg);
+                    //console.error('code + ' - ' + msg);                    
                     deferred.reject(msg);
                 });
 
@@ -637,7 +671,7 @@ var authorizationService = function ($rootScope, $state, principal) {
 angular
         .module('inspinia')
         .service('messageService', messageService)
-        .service('jobService', ['$http', '$q' ,'fileService', jobService])
+        .service('jobService', ['$http', '$q', 'fileService', jobService])
         .service('fileService', ['$http', '$q', 'Upload', fileService])
         .service('ecommService', ['$http', '$q', ecommerceService])
         .factory('principal', ['$q', '$http', '$timeout', principalService])

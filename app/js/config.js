@@ -35,13 +35,12 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 templateUrl: "views/pipelines/dna_reseq/home.html",
                 data: {pageTitle: 'DNA resequencing'}
             })
-            .state('pipelines.dna_reseq_new', {
-                url: "/dna_resequencing/new",
-                templateUrl: "views/pipelines/dna_reseq/new.html",
+            .state('pipelines.dna_reseq_job', {
+                url: "/dna_resequencing/job/:jobid",
+                templateUrl: "views/pipelines/dna_reseq/job.html",
                 //templateUrl: "views/debug/parent_state.html",
-                controller: 'dnaReseqNewController',
-                controllerAs: 'newc',
-                params: {job: {}},
+                controller: 'dnaReseqJobController',
+                controllerAs: 'newc',                
                 data: {pageTitle: 'DNA resequencing'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -53,7 +52,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     }
                 }
             })
-            .state('pipelines.dna_reseq_new.step1', {
+            /* .state('pipelines.dna_reseq_new.step1', {
                 url: '/step1',
                 templateUrl: "views/pipelines/dna_reseq/step1.html",
                 //templateUrl: "views/debug/normal_state.html",
@@ -77,7 +76,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 controllerAs: 'newc',
                 //params: { job: {} },
                 data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
-            })
+            }) */
 
 
             .state('pipelines.rna_reseq_home', {

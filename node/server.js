@@ -65,7 +65,7 @@ app.use(function (req, res, next) {
     var sess = req.session;
     
     if(!sess){
-        next();
+        return next();
     }
     
     if(!sess.role) {

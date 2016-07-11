@@ -1,7 +1,13 @@
 //var cfg = require('../config/config');
 var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../config/config.json')[env];
+
+var file_api = require('./file');
+
 var models = require('../models');
+var util = require('util');
+
+var http = require('http');
 
 var mkdirp = require('mkdirp'); //ensure dir exists
 var path = require('path');
@@ -57,7 +63,8 @@ var job_create = function (req, res) {
     extend(jobObj, req.body.jobparams);
 
     if (jobObj.jobtype === 'dna_reseq') {
-        job_dna_reseq_create_steps(jobObj);
+        var job_obj = new dna_reseq_job(jobObj);
+        job_obj.create_steps();
     }
 
     models.sequelize.transaction(function (t) {
@@ -143,24 +150,108 @@ var job_create = function (req, res) {
 
 }
 
-var job_dna_reseq_create_steps = function (job) {
-    job.steps = [{
-            command: 'sleep',
-            arguments: '120',
-            cpu: 1,
-            memory: 1024,
-            status: 'new',
-            order: 1
-        },
-        {
-            command: 'sleep',
-            arguments: '120',
-            cpu: 1,
-            memory: 1024,
-            status: 'new',
-            order: 2
+var dna_reseq_job = function (job) {
+    var self = this;
+
+    self.job_model = job;
+
+    self.output_files = ['1_fastqc.html', '2_fastqc.html'];
+
+    this.upload_input = function () {
+        return q.all(
+                [
+                    copy_file(self.job_model.files[0].phys_path, self.job_model.id, '1.fastq'),
+                    copy_file(self.job_model.files[1].phys_path, self.job_model.id, '2.fastq')
+                ])
+    }
+
+    this.download_result = function () {
+        var defer = q.defer();
+
+        var download_promises = [];
+        
+        for (var i in self.output_files) {
+            var prm = q.defer();
+            var url = config.file_agent_url + '/' + self.job_model.id + '/' + self.output_files[i];
+            var file_path = self.job_model.work_dir + path.sep + self.output_files[i];
+            var file = fs.createWriteStream(file_path);
+            http.get(url, function (response) {
+                if (response.statusCode < 200 || response.statusCode > 299) { // (I don't know if the 3xx responses come here, if so you'll want to handle them appropriately
+                    prm.reject(response.statusCode);
+                } else {
+                    response.pipe(file);
+                    file.on('finish', function () {
+                        file.close(function () {
+                            prm.resolve({path: file_path, name: self.output_files[i]});
+                        });  // close() is async, call cb after close completes.
+                    });
+                    file.on('error', function (err) { // Handle errors
+                        //fs.unlink(file_path); // Delete the file async. (But we don't check the result)
+                        prm.reject(err);
+                    });
+                }
+            });
+
+            download_promises.push(prm.promise);
         }
-    ];
+
+        q.all(download_promises)
+                .then(function (files) {
+                    var inner_prm = [];
+
+                    for (var i in files) {
+                        inner_prm.push(
+                                file_api.file_create(
+                                        {
+                                            owner_id: self.job_model.owner_id,
+                                            name: files[i].name,
+                                            path: files[i].path
+                                        })
+                                .then(function (file) {
+                                    return self.job_model.addFile(file.id, {filenum: file.id, filetype: 'output'});
+                                })
+                                );
+                    }
+
+                    q.all(inner_prm)
+                            .then(function (res) {
+                                defer.resolve(res);
+                            })
+                            .catch(function (err) {
+                                console.error(err);
+                                defer.reject(err);
+                            });
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    defer.reject(err);
+                });
+
+
+        return defer.promise;
+    }
+
+    this.create_steps = function () {
+        self.job_model.steps = [{
+                command: '/ngs/fastqc /work/1.fastq /work/2.fastq',
+                cpu: 1,
+                memory: 1024,
+                status: 'new',
+                order: 1
+            },
+            {
+                command: 'ls -lha /work',
+                cpu: 1,
+                memory: 1024,
+                status: 'new',
+                order: 3
+            },
+        ];
+    }
+};
+
+var job_dna_reseq_create_steps = function (job) {
+
 }
 
 /*
@@ -231,7 +322,7 @@ var job_select_or_create = function (req, res) {
         return;
     }
 
-    var queryparams = {owner: req.user.id, jobtype: req.body.jobtype, status: 'new'};
+    var queryparams = {owner_id: req.user.id, jobtype: req.body.jobtype, status: 'new'};
 
     if (req.body.jobparams) {
         if (req.body.jobparams['jobtype']) {
@@ -239,7 +330,7 @@ var job_select_or_create = function (req, res) {
             return;
         }
 
-        if (req.body.jobparams['owner']) {
+        if (req.body.jobparams['owner_id']) {
             res.json({success: false, msg: 'Nasty parameters will not pass'});
             return;
         }
@@ -254,16 +345,16 @@ var job_select_or_create = function (req, res) {
     extend(queryparams, req.body.jobparams);
 
     models.Job.findOne({
-            where: queryparams,
-            include: [
-                {
-                    model: models.File,
-                    as: 'files',
-                    through: {
-                        attributes: ['filenum', 'filetype']
-                    }
-                }]
-        })
+        where: queryparams,
+        include: [
+            {
+                model: models.File,
+                as: 'files',
+                through: {
+                    attributes: ['filenum', 'filetype']
+                }
+            }]
+    })
             .then(function (job) {
                 if (job) {
                     res.status(200).json({success: true, msg: 'Returning orphaned job. Abandoning your jobs is bad for society. And hurts your karma too', job: job});
@@ -305,8 +396,8 @@ var job_submit_step = function (job, stepnum, t) {
             var req_deploy = {
                 deploy: {
                     requestId: sing_id,
-                    command: step.command,
-                    arguments: [step.arguments],
+                    command: '/bin/sh',
+                    arguments: ['-c', util.format('%s', step.command)],
                     id: sing_id,
                     containerInfo: {
                         type: "DOCKER",
@@ -315,7 +406,7 @@ var job_submit_step = function (job, stepnum, t) {
                         },
                         volumes: [
                             {
-                                hostPath: job_path,
+                                hostPath: util.format(config.singularity.work_dir_format, job.id),
                                 containerPath: '/work',
                                 mode: 'RW'
                             }
@@ -396,13 +487,14 @@ var job_list = function (req, res) {
                 model: models.Step,
                 as: 'steps'
             }],
-        order: ['files', 'filenum', 'ASC']
+        order: ['files', 'filenum']
 
     })
             .then(function (jobs) {
                 return res.status(200).json({success: true, jobs: jobs});
             })
             .catch(function (err) {
+                consoler.err('job_list: ' + err);
                 return res.status(500).json({success: true, msg: 'Database failed'});
             });
 }
@@ -443,15 +535,25 @@ var job_get = function (req, res) {
             });
 }
 
-function copy_file(source, target) {
-    return new Promise(function (resolve, reject) {
-        var rd = fs.createReadStream(source);
-        rd.on('error', reject);
-        var wr = fs.createWriteStream(target);
-        wr.on('error', reject);
-        wr.on('finish', resolve);
-        rd.pipe(wr);
+function copy_file(source, jobid, target) {
+    var defer = q.defer();
+
+    var url = config.file_agent_url;
+
+    var req = request.post(url, function (err, resp, body) {
+        if (err) {
+            defer.reject(err);
+        } else {
+            defer.resolve();
+        }
     });
+    var form = req.form();
+
+    form.append('filedata', fs.createReadStream(source));
+    form.append('filename', target);
+    form.append('jobid', jobid);
+
+    return defer.promise;
 }
 
 var job_submit = function (req, res, next) {
@@ -498,9 +600,9 @@ var job_submit = function (req, res, next) {
                                                 });
                                     }
 
-                                    q.all(
-                                            [copy_file(job.files[0].phys_path, job.work_dir + path.sep + '1.fastq'),
-                                                copy_file(job.files[1].phys_path, job.work_dir + path.sep + '2.fastq')])
+                                    var job_hardcode = new dna_reseq_job(job);
+
+                                    job_hardcode.upload_input()
                                             .then(function (copy_res) {
                                                 job_really_submit(job, req, res, next, defer, t);
                                             })
@@ -623,15 +725,15 @@ var sing_hook = function (req, res) {
                         if (!job) {
                             return 'job not found, but its ok';
                         }
-                        
+
                         if (!job.steps) {
                             return 'job not found, but its ok';
                         }
-                        
+
                         if (!job.steps[stepid]) {
                             return 'job not found, but its ok';
                         }
-                        
+
                         var cstate = job.steps[stepid].status;
 
                         var step = job.steps[stepid];
@@ -705,8 +807,21 @@ var sing_hook = function (req, res) {
                                     job.status = 'failed';
                                     prm = job.save({transaction: t});
                                 } else if (step.status === 'finished') {
-                                    job.status = 'finished';
-                                    prm = job.save({transaction: t});
+
+                                    /* download results before completing */
+                                    var job_obj = new dna_reseq_job(job);
+
+                                    prm = job_obj.download_result()
+                                            .then(function (res) {
+                                                console.log(res);
+                                                job.status = 'finished';
+                                                return job.save({transaction: t});
+                                            })
+                                            .catch(function (err) {
+                                                console.error('sing_hook (download result): ' + err);
+                                                job.status = 'failed';
+                                                return job.save({transaction: t});
+                                            })
                                 } else {
                                     var defer = q.defer();
                                     defer.resolve();
