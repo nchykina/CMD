@@ -130,10 +130,10 @@
                             </div>   
                         </div>
                         <div class="col-sm-4 m-b-xs">
-                            <div data-toggle="buttons" class="btn-group" ng-init="homec.jobfilter=['ok']">
+                            <div data-toggle="buttons" class="btn-group" ng-init="homec.jobfilter=['finished']">
                                 
-                                <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['submitted','running','ok','failed']" >  <input type="radio" value="1" />  All </label>
-                                <label class="btn btn-sm btn-white active" ng-click="homec.jobfilter=['ok']" > <input type="radio" value="2" /> Completed </label>
+                                <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['submitted','running','finished','failed']" >  <input type="radio" value="1" />  All </label>
+                                <label class="btn btn-sm btn-white active" ng-click="homec.jobfilter=['finished']" > <input type="radio" value="2" /> Completed </label>
                                 <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['submitted','running']"> <input type="radio" value="3" /> Running </label>
                                 <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['failed']"> <input type="radio" value="4" /> Failed </label>
                                 
@@ -165,7 +165,7 @@
                                         <span ng-switch-when="failed" class="label label-danger">{{x.status}}</span>
                                         <span ng-switch-when="submitted" class="label label-warning">{{x.status}}</span>
                                         <span ng-switch-when="running" class="label label-warning">{{x.status}}</span>
-                                        <span ng-switch-when="ok" class="label label-primary">{{x.status}}</span>
+                                        <span ng-switch-when="finished" class="label label-primary">{{x.status}}</span>
                                         <span ng-switch-default class="label label-plain">{{x.status}}</span>
                                     </td>
                                     <td>

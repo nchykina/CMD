@@ -164,7 +164,8 @@ var file_delete = function (req, res) {
 }
 
 var file_create_internal = function (options) {
-    return models.sequelize.transaction(function (t) {
+    
+    var really_create_file = function (t) {
         return models.File.create(
                 {owner_id: options.owner_id, name: options.name, status: 'new'}, {transaction: t})
                 .then(function (file) {
@@ -184,7 +185,14 @@ var file_create_internal = function (options) {
                         throw new Error(file);
                     }
                 });
-    });
+    };
+     
+    if(options.transaction){
+        return really_create_file(options.transaction);
+    }
+    else {
+        return models.sequelize.transaction(really_create_file);
+    }
 }
 
 var file_create = function (req, res) {

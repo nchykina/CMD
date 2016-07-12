@@ -3855,7 +3855,7 @@ function dnaReseqHomeCtrl($scope, $state, jobService) {
                 vm.jobs = res;
             });
             
-    vm.jobfilter = ['ok'];
+    vm.jobfilter = ['finished'];
 
     this.createJob = function (species) {
         jobService.createOrUpdateJob('dna_reseq', species)

@@ -165,58 +165,84 @@ var dna_reseq_job = function (job) {
                 ])
     }
 
-    this.download_result = function () {
+    this.download_result = function (options) {
         var defer = q.defer();
+
+        if (!options) {
+            options = {};
+        }
 
         var download_promises = [];
         
-        for (var i in self.output_files) {
+        var download_file = function(out_file) {
             var prm = q.defer();
-            var url = config.file_agent_url + '/' + self.job_model.id + '/' + self.output_files[i];
-            var file_path = self.job_model.work_dir + path.sep + self.output_files[i];
+            var url = config.file_agent_url + '/' + self.job_model.id + '/' + out_file;
+            var file_path = self.job_model.work_dir + path.sep + out_file;
             var file = fs.createWriteStream(file_path);
-            http.get(url, function (response) {
+            var req = http.get(url, function (response) {
                 if (response.statusCode < 200 || response.statusCode > 299) { // (I don't know if the 3xx responses come here, if so you'll want to handle them appropriately
                     prm.reject(response.statusCode);
                 } else {
                     response.pipe(file);
                     file.on('finish', function () {
                         file.close(function () {
-                            prm.resolve({path: file_path, name: self.output_files[i]});
+                            prm.resolve({path: file_path, name: out_file});
                         });  // close() is async, call cb after close completes.
                     });
+                    
                     file.on('error', function (err) { // Handle errors
                         //fs.unlink(file_path); // Delete the file async. (But we don't check the result)
                         prm.reject(err);
                     });
                 }
             });
+            
+            req.on('error', function(err) {
+                prm.reject(err);
+            });
+            
+            return prm.promise;
+        }
 
-            download_promises.push(prm.promise);
+        for (var i in self.output_files) {
+            download_promises.push(download_file(self.output_files[i]));
         }
 
         q.all(download_promises)
                 .then(function (files) {
                     var inner_prm = [];
+                    var t = null;
+                    var trn_prm = null;
 
-                    for (var i in files) {
-                        inner_prm.push(
-                                file_api.file_create(
-                                        {
-                                            owner_id: self.job_model.owner_id,
-                                            name: files[i].name,
-                                            path: files[i].path
-                                        })
-                                .then(function (file) {
-                                    return self.job_model.addFile(file.id, {filenum: file.id, filetype: 'output'});
-                                })
-                                );
+                    var save_files = function (t) {
+                        for (var i in files) {
+                            inner_prm.push(
+                                    file_api.file_create(
+                                            {
+                                                owner_id: self.job_model.owner_id,
+                                                name: files[i].name,
+                                                path: files[i].path,
+                                                transaction: t
+                                            })
+                                    .then(function (file) {
+                                        return self.job_model.addFile(file.id, {filenum: file.id, filetype: 'output', transaction: t});
+                                    })
+                                    );
+                        }
+
+                        return q.all(inner_prm);
+
                     }
 
-                    q.all(inner_prm)
-                            .then(function (res) {
-                                defer.resolve(res);
-                            })
+                    if (!options.transaction) {
+                        trn_prm = models.sequelize.transaction(save_files);
+                    } else {
+                        trn_prm = save_files(t);
+                    }
+
+                    trn_prm.then(function (res) {
+                        defer.resolve(res);
+                    })
                             .catch(function (err) {
                                 console.error(err);
                                 defer.reject(err);
@@ -226,7 +252,6 @@ var dna_reseq_job = function (job) {
                     console.error(err);
                     defer.reject(err);
                 });
-
 
         return defer.promise;
     }
@@ -240,11 +265,11 @@ var dna_reseq_job = function (job) {
                 order: 1
             },
             {
-                command: 'ls -lha /work',
-                cpu: 1,
-                memory: 1024,
+                command: '/ngs/bwa mem -t 2 /ngs_lib/human_g1k_v37/human_g1k_v37.fasta /work/1.fastq /work/2.fastq > /work/samfile.sam',
+                cpu: 2,
+                memory: 2048,
                 status: 'new',
-                order: 3
+                order: 2
             },
         ];
     }
@@ -388,7 +413,7 @@ var job_submit_step = function (job, stepnum, t) {
     }, function (error, response, body) {
 
         if (!(!error && response.statusCode >= 200 && response.statusCode < 300)) {
-            console.error('failed to create request: ' + response.body.message);
+            console.error('failed to create request: ' + response);
             return defer.reject({msg: 'Failed to create singularity request'});
         } else {
             //console.log(response.statusCode + " - " + response.body);
@@ -409,8 +434,14 @@ var job_submit_step = function (job, stepnum, t) {
                                 hostPath: util.format(config.singularity.work_dir_format, job.id),
                                 containerPath: '/work',
                                 mode: 'RW'
-                            }
-                        ]
+                            },                            
+                            {
+                                hostPath: config.singularity.ngs_lib_host,
+                                containerPath: '/ngs_lib',
+                                mode: 'RO'
+                            }                        
+                        ]                        
+                        
                     },
                     resources: {
                         cpus: step.cpu,
@@ -811,7 +842,7 @@ var sing_hook = function (req, res) {
                                     /* download results before completing */
                                     var job_obj = new dna_reseq_job(job);
 
-                                    prm = job_obj.download_result()
+                                    prm = job_obj.download_result({transaction: t})
                                             .then(function (res) {
                                                 console.log(res);
                                                 job.status = 'finished';

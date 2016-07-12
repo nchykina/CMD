@@ -24,6 +24,7 @@
         
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
+            "ngs_lib_host": "/ngs_lib",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://192.168.1.4:3000"
         }
@@ -56,6 +57,7 @@
         
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
+            "ngs_lib_host": "/ngs_lib",            
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://192.168.1.4:3000"
         }
@@ -85,6 +87,8 @@
         },
         
         "singularity": {
+            "work_dir_format": "/ngs/jobs/%d",
+            "ngs_lib_host": "/ngs_lib",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://192.168.1.7:3000"
         }
@@ -114,6 +118,8 @@
         },
         
         "singularity": {
+            "work_dir_format": "/ngs/jobs/%d",
+            "ngs_lib_host": "/ngs_lib",
             "api_url": "http://192.168.137.5:7099/singularity",
             "my_url": "http://192.168.137.1:3000"
         }
