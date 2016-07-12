@@ -359,10 +359,10 @@
                                         </div>
                                         <div class="ibox-content" id="">
                                             <form action="#">
-                                                <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)">
+                                                <div class="ngs_dz_noborder" ng-click="newc.chooseFile(0)">
                                                     <div ng-if="(!newc.job.files[0])" class="dz-message m-t-lg m-b-lg">
 
-                                                        <h1>Drop file here</h1>
+                                                        <h1>Click to choose file</h1>
 
                                                     </div>
                                                     <div ng-if="((newc.job.files[0]) && (newc.job.files[0].status === 'uploading'))">
@@ -393,10 +393,10 @@
                                         <div class="ibox-content" id="">
                                             <div class="ngs_dropzone">
                                                 <form action="#">
-                                                    <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)">
+                                                    <div class="ngs_dz_noborder" ng-click="newc.chooseFile(1)">
                                                         <div ng-if="(!newc.job.files[1])" class="dz-message m-t-lg m-b-lg">
 
-                                                            <h1>Drop file here</h1>
+                                                            <h1>Click to choose file</h1>
 
                                                         </div>
                                                         <div ng-if="((newc.job.files[1]) && (newc.job.files[1].status === 'uploading'))">
@@ -418,40 +418,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class='col-sm-4'>
-                                    <div class="ibox float-e-margins">
-                                        <div class="ibox-title">
-                                            <h5>Files from my file storage</h5>
-
-                                        </div>
-                                        <div class="ibox-content">
-                                            <div class='row'>
-                                                <div class='col-lg-12'>
-                                                    <table class="footable table table-stripped" ng-controller="fileController as filec">
-                                                        <thead>
-                                                            <tr>
-
-                                                                <th >File name</th>
-                                                                <th >File size</th>
-                                                                <th >Upload date</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr ng-repeat="x in filec.files">
-                                                                <td>{{x.name}}</td>
-                                                                <td>{{x.filesize| filesize: 0}}</td>
-                                                                <td>{{x.finished_at| date:'medium' }}</td>
-                                                            </tr>
-
-                                                        </tbody>
-
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>                                
 
 
                             </div>

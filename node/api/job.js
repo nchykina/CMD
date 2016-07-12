@@ -525,7 +525,7 @@ var job_list = function (req, res) {
                 return res.status(200).json({success: true, jobs: jobs});
             })
             .catch(function (err) {
-                consoler.err('job_list: ' + err);
+                console.error('job_list: ' + err);
                 return res.status(500).json({success: true, msg: 'Database failed'});
             });
 }

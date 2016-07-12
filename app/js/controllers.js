@@ -3916,7 +3916,7 @@ function fileCtrl(fileService) {
 
 }
 
-function dnaReseqJobCtrl($state, $stateParams, jobService) {
+function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModal) {
     var vm = this;
 
     vm.jobid = $stateParams.jobid;
@@ -3929,6 +3929,7 @@ function dnaReseqJobCtrl($state, $stateParams, jobService) {
 
     vm.job = {};
     vm.selectedstate = 0;
+    vm.activestate = 0;
 
     if (!vm.jobid) {
         console.log('no job object passed to wizard. going back');
@@ -3941,6 +3942,7 @@ function dnaReseqJobCtrl($state, $stateParams, jobService) {
                     vm.species = vm.job.seq_species;
                     
                     vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.realJobState();
         })
                 .catch(function(err){
                     $state.go('pipelines.dna_reseq_home'); //error, go back to wizard (of Oz)
@@ -3981,11 +3983,34 @@ function dnaReseqJobCtrl($state, $stateParams, jobService) {
                 .then(function (res) {
                     vm.job.status = 'submitted';
                     vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.selectedstate;
                 })
                 .catch(function (err) {
                     alert(err);
                 })
     }
+    
+    this.chooseFile = function (filenum) {
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/file_manager/modal.html',
+            controller: fileModalCtrl,
+            controllerAs: 'vm'
+        });
+        
+        modalInstance.result.then(function (file) {
+            fileService.getFile(file.id)
+                    .then(function(file_srv){
+                        jobService.setFile(vm.job,filenum,file_srv)
+                        .then(function(res){
+                            vm.job.files[filenum]=file;
+                        });
+            });
+        }, function () {
+            //if cancel was clicked
+            });
+        
+    };
 
     // this.processForm = function () {
     //   alert('Wizard completed');
@@ -4294,6 +4319,25 @@ function stripeCtrl($scope, $http, $state, ecommService) {
 
 }
 
+function fileModalCtrl(fileService, $uibModalInstance) {
+    var vm = this;
+
+    vm.files = [];
+
+    fileService.getFiles()
+            .then(function (res) {
+                vm.files = res;
+            });
+
+    this.ok = function (file) {
+        $uibModalInstance.close(file);
+    };
+
+    this.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
 /**
  *
  * Pass all functions into module
@@ -4342,14 +4386,15 @@ angular
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
         .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
-        .controller('dnaReseqJobController', ['$state', '$stateParams', 'jobService', dnaReseqJobCtrl])
+        .controller('dnaReseqJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnaReseqJobCtrl])
         .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
-        .controller('dnaReseqHomeController', ['$scope', '$state', 'jobService', dnaReseqHomeCtrl])
+        .controller('dnaReseqHomeController', ['$scope', '$state', 'jobService', 'fileService', dnaReseqHomeCtrl])
         .controller('rnaReseqHomeController', ['$http', '$state', 'jobService', rnaReseqHomeCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', 'ecommService', stripeCtrl])
         .controller('fileController', ['fileService', fileCtrl])
+        .controller('fileModalController', ['fileService', fileModalCtrl])
         .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 

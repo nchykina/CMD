@@ -370,6 +370,35 @@ var fileService = function ($http, $q, Upload) {
 
         return defer.promise;
     }
+    
+    this.getFile = function (fileid){
+        var defer = $q.defer();
+        
+        for(var i in files){
+            if(files[i].id===fileid){
+                defer.resolve(files[i]);
+                return defer.promise;
+            }
+        }
+        
+        $http({
+            method: 'GET',
+            url: 'api/file/' + fileid 
+        })
+                .success(function (response) {                   
+                    files.push(response.file);
+                    
+                    defer.resolve(response.file);
+                })
+                .error(function (data, status) {
+                    console.error('getFile: ' + status + ' - ' + data.msg);
+                    
+                    defer.reject(data.msg);
+                });
+
+        
+        return defer.promise;
+    }
 }
 
 
