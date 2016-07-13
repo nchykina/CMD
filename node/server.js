@@ -240,6 +240,6 @@ var ssl_options = {
 };
 
 https.createServer(ssl_options,app).listen(cfg.ssl_port, function() {
-  console.log('https listening on *:443');
+  console.log('https listening on *:'+cfg.ssl_port);
 });
 
