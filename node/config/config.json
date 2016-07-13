@@ -136,10 +136,10 @@
     },
     
     "production": {
-       "username": "ngspipeline",
+        "username": "ngspipeline",
         "password": "pr0dPwD",
         "database": "ngspipeline_prd",
-        "host": "127.0.0.1",
+        "host": "10.1.0.12",
         "dialect": "postgres",
         "redis_host": "localhost",
         "storage_root": "/ngs",
