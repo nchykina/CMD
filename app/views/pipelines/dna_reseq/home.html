@@ -141,7 +141,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table">
                             <thead>
                                 <tr>
 
@@ -169,7 +169,7 @@
                                         <span ng-switch-default class="label label-plain">{{x.status}}</span>
                                     </td>
                                     <td>
-                                        <table class="table table-striped">
+                                        <table>
                                             <tbody>
                                                 <tr ng-repeat="file in x.files | filter: { JobFile: { filetype:'input'}}">
                                                     <td>{{file.name}}
@@ -184,7 +184,7 @@
                         </td>
 
                         <td>
-                                        <table class="table table-striped">
+                                        <table>
                                             <tbody>
                                                 <tr ng-repeat="file in x.files | filter: { JobFile: { filetype:'output'}}">
                                                     <td>{{file.name}}

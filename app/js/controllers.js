@@ -3956,7 +3956,7 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
                         case 'running':
                         case 'failed':
                            return 2;
-                        case 'ok':
+                        case 'finished':
                             return 3;
                         default:
                             return 0;

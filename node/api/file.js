@@ -167,7 +167,10 @@ var file_create_internal = function (options) {
     
     var really_create_file = function (t) {
         return models.File.create(
-                {owner_id: options.owner_id, name: options.name, status: 'new'}, {transaction: t})
+                {
+                    owner_id: options.owner_id,
+                    name: options.name,
+                    status: 'new'}, {transaction: t})
                 .then(function (file) {
                     if (file) {
                         if (options.folder) {
@@ -178,6 +181,22 @@ var file_create_internal = function (options) {
                         }
                         else {
                             throw new Error('not file path or folder given');
+                        }
+                        
+                        if(options.start_time){
+                            file.started_at = options.start_time;                            
+                        }
+                        
+                        if(options.end_time){
+                            file.finished_at = options.end_time;                            
+                        }
+                        
+                        if(options.status){
+                            file.status = options.status;                            
+                        }
+                        
+                        if(options.filesize){
+                            file.filesize = options.filesize;                            
                         }
 
                         return file.save({transaction: t});

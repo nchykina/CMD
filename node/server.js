@@ -81,7 +81,7 @@ app.use(passport.session());
 
 var apiRouter = express.Router();
 var apis = require('./api/api_registry');
-apis(apiRouter);
+apis.http_bind(apiRouter);
 app.use('/api',apiRouter);
 //register API hooks
 //app.use('/api',)
@@ -125,31 +125,32 @@ io.use(function(socket, next) {
 
     handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
 
-    handshakeData.sessionID = express_cp.signedCookie(handshakeData.cookie[SESS_SID], SESS_SECRET);            
+    handshakeData.sessionID = express_cp.signedCookie(handshakeData.cookie[config.session_sid], config.session_secret);            
 
-    if (handshakeData.cookie[SESS_SID] === handshakeData.sessionID) {
+    if (handshakeData.cookie[config.session_sid] === handshakeData.sessionID) {
       console.log('Cookie is invalid.');
       return next(new Error('Cookie is invalid.'));
     }
     else {
       //ok. cookie is not forged, let's load the session
-      console.log(handshakeData.session);
+      //console.log("socket.io connected client: "+handshakeData.session.userid);
       
       /* if(!handshakeData.session.key){
           console.log('No session');
           return next(new Error('No session'));
       } */
             
-      if(!handshakeData.session.role){
+      /* if(!handshakeData.session.role){
           return next(new Error('Internal error: session role has to be always set'));
-      }
+      } */
       
-      if(handshakeData.session.role === 'anonymous'){
+      /* if(handshakeData.session.role === 'anonymous'){
           return next(new Error('Anonymous access not allowed'));
-      }
+      } */
       
-      if(!handshakeData.session.userid){
+      if(!handshakeData.session.passport.user){
           console.log('Malformed session: no userid');
+          console.log(handshakeData.session);
           return next(new Error('Malformed session: no userid'));
       }
     }
@@ -172,10 +173,15 @@ var socket_remember;
 
 io.on('connection', function(socket){
     var hs = socket.handshake;
-    console.log('a user connected: ' + socket.id);
+    console.log('a user connected: ' + socket.request.session.passport.user);
     //users[hs.session.username] = socket.id;
     //clients[socket.id] = socket;
     socket_remember = socket;
+    //console.log(socket);
+    
+    socket.emit('welcome',socket.request.session.passport.user);
+    
+    apis.io_bind(socket);
     
     socket.on('disconnect', function () {
     //delete clients[socket.id]; // remove the client from the array

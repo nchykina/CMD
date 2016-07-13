@@ -17,7 +17,7 @@ var login = function (req, res, next) {
                         ? req.logIn(user, function (err) {
                             return err
                                     ? next(err) :
-                                    res.json({success: true, msg: 'Successful authentication'});
+                                    next()
                         })
                         : res.json({success: false, msg: 'Authentication failed'});
                 ;
@@ -25,10 +25,26 @@ var login = function (req, res, next) {
     )(req, res, next);
 };
 
+var session_regenerate = function(req,res){
+    var temp = req.session.passport;
+    
+    /* req.session.regenerate(function(err){
+        //req.session.passport is now undefined
+        req.session.passport = temp;
+        req.session.save(function(err){
+            res.json({success: true, msg: 'Successful authentication'});
+        });
+    }); */
+    
+    //nvm, just do nothing for now: authenticate through lookup for session in redis
+    res.json({success: true, msg: 'Successful authentication'});
+}
+
 var logout = function (req, res) {
-    req.logout();
-    res.json({success: true, msg: 'Successful exit'});
-    ;
+    req.logOut();
+    /* req.session.destroy(function(err){
+        res.json({success: true, msg: 'Successful exit'});
+    }); */    
 };
 
 var encryptPassword = function (password) {
@@ -226,7 +242,7 @@ var logout = function (req, res) {
 
 
 var bindFunction = function (router) {
-    router.post('/login', login);
+    router.post('/login', login, session_regenerate);
     router.post('/register', register);
     router.post('/logout', logout);
     router.get('/session', authenticateMw, session_content);

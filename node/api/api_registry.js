@@ -11,7 +11,7 @@ var job = require('./job');
 
 var bodyParser  = require('body-parser');
 
-var bindFunction = function(router){
+var http_bind = function(router){
     router.use(bodyParser.urlencoded({ extended: false }));
     router.use(bodyParser.json());
     
@@ -26,4 +26,12 @@ var bindFunction = function(router){
     stripeInvoices.bind(router);
 };
 
-module.exports = bindFunction;
+/* called upon every successful socket.IO connection */
+var io_bind = function(socket){
+    job.io_bind(socket);
+}
+
+module.exports = {
+    http_bind: http_bind,
+    io_bind: io_bind,
+};

@@ -155,7 +155,7 @@ var dna_reseq_job = function (job) {
 
     self.job_model = job;
 
-    self.output_files = ['1_fastqc.html', '2_fastqc.html'];
+    self.output_files = ['1_fastqc.html', '2_fastqc.html', 'result.sam'];
 
     this.upload_input = function () {
         return q.all(
@@ -176,6 +176,7 @@ var dna_reseq_job = function (job) {
         
         var download_file = function(out_file) {
             var prm = q.defer();
+            var start_time = Date.now();
             var url = config.file_agent_url + '/' + self.job_model.id + '/' + out_file;
             var file_path = self.job_model.work_dir + path.sep + out_file;
             var file = fs.createWriteStream(file_path);
@@ -186,7 +187,8 @@ var dna_reseq_job = function (job) {
                     response.pipe(file);
                     file.on('finish', function () {
                         file.close(function () {
-                            prm.resolve({path: file_path, name: out_file});
+                            end_time = Date.now();
+                            prm.resolve({path: file_path, name: out_file, filesize: file.bytesWritten, start_time: start_time, end_time: end_time});
                         });  // close() is async, call cb after close completes.
                     });
                     
@@ -220,8 +222,12 @@ var dna_reseq_job = function (job) {
                                     file_api.file_create(
                                             {
                                                 owner_id: self.job_model.owner_id,
-                                                name: files[i].name,
+                                                name: util.format('job_%d_%s',self.job_model.id,files[i].name),
                                                 path: files[i].path,
+                                                start_time: files[i].start_time,
+                                                end_time: files[i].end_time,
+                                                filesize: files[i].filesize,
+                                                status: 'ok',
                                                 transaction: t
                                             })
                                     .then(function (file) {
@@ -265,7 +271,7 @@ var dna_reseq_job = function (job) {
                 order: 1
             },
             {
-                command: '/ngs/bwa mem -t 2 /ngs_lib/human_g1k_v37/human_g1k_v37.fasta /work/1.fastq /work/2.fastq > /work/samfile.sam',
+                command: '/ngs/bwa mem -t 2 /ngs_lib/chr1/chr1.fa /work/1.fastq /work/2.fastq > /work/result.sam',
                 cpu: 2,
                 memory: 2048,
                 status: 'new',
@@ -874,7 +880,7 @@ var sing_hook = function (req, res) {
     }
 }
 
-var bindFunction = function (router) {
+var http_bind_function = function (router) {
     /* TODO: insert auth middleware */
     router.post('/job', job_create);
     router.get('/job/:id', job_get);
@@ -888,6 +894,56 @@ var bindFunction = function (router) {
     sing_bind();
 };
 
+var io_bind_function = function(socket){
+    socket.on('subscribe_job_request', function(jobid){
+        console.log('subscribe request: '+jobid)
+       models.Job.findOne({
+        where: {id: jobid}})
+                .then(function(job){
+                    if(!job){
+                        return socket.emit('subscribe_job_response',{success: false, jobid: jobid, message: 'no job found'});                        
+                    }
+                    
+                    if(job.owner_id!==socket.request.session.passport.user){
+                        return socket.emit('subscribe_job_response',{success: false, jobid: jobid, message: 'access denied'});
+                    }
+                    
+                    socket.join(util.format('job_%d',jobid),function(err){
+                        if(err){
+                            return socket.emit('subscribe_job_response',{success: false, jobid: jobid, message: err});
+                        }
+                        else {
+                            return socket.emit('subscribe_job_response', {success: true, jobid: jobid});
+                        }                        
+                    });
+        })
+    });
+    
+    socket.on('unsubscribe_job_request', function(jobid){
+       models.Job.findOne({
+        where: {id: jobid}})
+                .then(function(job){
+                    if(!job){
+                        return socket.emit('unsubscribe_job_response',{success: false, jobid: jobid, message: 'no job found'});                        
+                    }
+                    
+                    if(job.owner_id!==socket.request.session.passport.user){
+                        return socket.emit('unsubscribe_job_response',{success: false, jobid: jobid, message: 'access denied'});
+                    }
+                    
+                    socket.leave(util.format('job_%d',jobid),function(err){
+                        if(err){
+                            return socket.emit('unsubscribe_job_response',{success: false, jobid: jobid, message: err});
+                        }
+                        else {
+                            return socket.emit('unsubscribe_job_response', {success: true, jobid: jobid});
+                        }                        
+                    });
+        })
+    });
+}
+
 module.exports = {
-    bind: bindFunction
+    bind: http_bind_function,
+    io_bind: io_bind_function
 };

@@ -370,39 +370,39 @@ var fileService = function ($http, $q, Upload) {
 
         return defer.promise;
     }
-    
-    this.getFile = function (fileid){
+
+    this.getFile = function (fileid) {
         var defer = $q.defer();
-        
-        for(var i in files){
-            if(files[i].id===fileid){
+
+        for (var i in files) {
+            if (files[i].id === fileid) {
                 defer.resolve(files[i]);
                 return defer.promise;
             }
         }
-        
+
         $http({
             method: 'GET',
-            url: 'api/file/' + fileid 
+            url: 'api/file/' + fileid
         })
-                .success(function (response) {                   
+                .success(function (response) {
                     files.push(response.file);
-                    
+
                     defer.resolve(response.file);
                 })
                 .error(function (data, status) {
                     console.error('getFile: ' + status + ' - ' + data.msg);
-                    
+
                     defer.reject(data.msg);
                 });
 
-        
+
         return defer.promise;
     }
 }
 
 
-var jobService = function ($http, $q, fileService) {
+var jobService = function ($http, $q, fileService,socket) {
     var vm = this;
 
     var newJobs = {dna_reseq: {}, rna_reseq: {}};
@@ -503,6 +503,22 @@ var jobService = function ($http, $q, fileService) {
 
         return defer.promise;
     };
+    
+    this.processJobUpdate = function(job){
+        var job_found = false;
+        
+        for(var i in jobs){
+            if(jobs[i].id===job.id){
+                jobs[i].status = job.status;
+                return;
+            }
+        }
+        
+        //further handling here
+        
+        throw new Error('job_update for unknown job');
+        
+    }
 
     this.submitJob = function (job) {
         var defer = $q.defer();
@@ -510,7 +526,24 @@ var jobService = function ($http, $q, fileService) {
         if (!((job.files[0]) && (job.files[1]))) {
             defer.reject('The job needs two input files');
         } else {
-            $http({
+            socket.on('subscribe_job_response',function(msg){
+                    console.log(msg);
+                    
+                    if(msg.jobid!==job.id){
+                        //skip messages to other handlers
+                        return;
+                    }
+                    
+                    socket.removeListener('subscribe_job_response',this);
+                    
+                    if(!msg.success){
+                        
+                        return defer.reject(msg.message);
+                    }
+                    
+                    socket.on('job_update', vm.processJobUpdate);
+                    
+                    $http({
                 method: 'PUT',
                 url: 'api/job/submit/' + job.id
             })
@@ -530,6 +563,13 @@ var jobService = function ($http, $q, fileService) {
                         console.error('submitJobs: ' + status + ' - ' + data.msg);
                         defer.reject(data.msg);
                     });
+                });
+            
+            socket.emit('subscribe_job_request',job.id,function(){
+                
+            })
+            
+            
         }
 
         return defer.promise;
@@ -696,13 +736,44 @@ var authorizationService = function ($rootScope, $state, principal) {
     };
 }
 
+var ioService = function ($rootScope) {
+    var socket = io.connect();
+  return {
+    on: function (eventName, callback) {
+      socket.on(eventName, function () {  
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    },
+    emit: function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      })
+    },
+    
+    removeListener: function (eventName, listener){
+        socket.removeListener(eventName, listener);
+    }
+  };
+}
+
+
 
 angular
         .module('inspinia')
         .service('messageService', messageService)
-        .service('jobService', ['$http', '$q', 'fileService', jobService])
+        .factory('socket',ioService)
+        .service('jobService', ['$http', '$q', 'fileService', 'socket', jobService])
         .service('fileService', ['$http', '$q', 'Upload', fileService])
         .service('ecommService', ['$http', '$q', ecommerceService])
         .factory('principal', ['$q', '$http', '$timeout', principalService])
         .factory('authorization', ['$rootScope', '$state', 'principal', authorizationService])
+        
   
