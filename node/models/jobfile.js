@@ -1,33 +1,16 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var JobFileSchema = new Schema({
-    name: {
-      type: String,
-      required: false
-    },
-    store_path: {
-      type: String,
-      required: true
-    },
-    filesize: {
-      type: Number,
-      required: false
-    },
-    upload_started: {
-      type: Date,
-      required: false
-    },
-    upload_ended: {
-      type: Date,
-      required: false
-    }
-});
-
-
-
-module.exports = {
-   model: mongoose.model('JobFile', JobFileSchema),
-   schema: JobFileSchema
+'use strict';
+module.exports = function(sequelize, DataTypes) {
+  var JobFile = sequelize.define('JobFile', {
+    filetype: DataTypes.STRING, //input/output
+    filenum: DataTypes.INTEGER //sequential file number
+  }, {
+    classMethods: {
+      associate: function(models) {
+        // associations can be defined here
+      }
+    },    
+    underscored: true
+  });
+  return JobFile;
 };
 

@@ -1,0 +1,51 @@
+<div class="modal-body">
+    <table>
+        <thead>
+            <tr>
+
+                <th>File name</th>
+                <th>File size</th>
+
+                <th>Date</th>  
+                <th></th>
+
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in vm.files">
+                <td><a href="#" ng-click="vm.ok(x)">{{x.name}}</a></td>
+                <td>{{x.filesize| filesize: 0}}</td>
+                <td>{{x.finished_at | date:'shortDate'}}</td>
+                <td>
+                    <div ng-if="x.status === 'uploading'" class="progress-striped active progress">
+                        <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: x.progress + '%'}" ></div>                                                    
+                    </div>
+
+                    <div ng-if="x.status === 'failed'" class="progress-striped progress">
+                        <div class="progress-bar progress-bar-danger" role="progressbar" ng-style="{width: x.progress + '%'}" ></div>
+                    </div>
+
+                    <div ng-if="x.status === 'ok'" class="progress-striped progress">
+                        <div class="progress-bar progress-bar-navy-light" role="progressbar" ng-style="{width: '100 % '}" ></div>
+                    </div>
+                </td>
+
+            </tr>      
+
+        </tbody>
+        <tfoot>                          
+        </tfoot>
+    </table>
+
+</div>
+
+<div class="modal-footer">
+
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+</div>
+
+
+

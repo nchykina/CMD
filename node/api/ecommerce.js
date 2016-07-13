@@ -1,244 +1,240 @@
-var Order = require('../models/order');
-var User = require('../models/user');
-var productList = require('../config/productList');
-var crypto = require('crypto');
+var models = require('../models');
 
-var getProductList = function (req, res) {
-
+var product_list = function (req, res) {
     if (req.user) {
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return res.json({success: false, msg: 'User not found'});
-            var resp = [];
-            for (var key in productList) {
-
-                var contains = false;
-
-                for (var key2 in user.cart) {
-                    if (user.cart[key2].productName === productList[key].productName) {
-                        contains = true;
-                        break;
-                    }
-                }
-                if (contains) {
-                    resp.push({'productName': productList[key].productName,
-                        'productCategory': productList[key].productCategory,
-                        'price': productList[key].price,
-                        'description_short': productList[key].description_short,
-                        'description_long': productList[key].description_long,
-                        'img_url': productList[key].img_url,
-                        'product_url': productList[key].product_url,
-                        'inCart': true
-                                //добавить здесь параметр про подписку?
-                    });
-                } else {
-                    resp.push({'productName': productList[key].productName,
-                        'productCategory': productList[key].productCategory,
-                        'price': productList[key].price,
-                        'description_short': productList[key].description_short,
-                        'description_long': productList[key].description_long,
-                        'img_url': productList[key].img_url,
-                        'product_url': productList[key].product_url,
-                        'inCart': false});
-                }
-
-            }
-            res.json({success: true, products: resp, msg: "Success"});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-var addToCart = function (req, res) {
-
-    if (req.user) {
-
-        var id = req.body.productId;
-
-        var item = {productName: productList[id].productName, productCategory: productList[id].productCategory,
-            price: productList[id].price, description_short: productList[id].description_short,
-            description_long: productList[id].description_long, img_url: productList[id].img_url,
-            product_url: productList[id].product_url,
-            addedDate: new Date(), productId: id};
-
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return res.json({success: false, msg: 'User not found'});
-            user.cart.push(item);
-            user.save(function (err) {
-                if (err) {
-                    return res.json({success: false, msg: 'User cart not saved'});
-                }
-                res.json({success: true, msg: 'Added to cart'});
-            });
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-var getItemsInCart = function (req, res) {
-    if (req.user) {
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return res.json({success: false, msg: 'Error'});
-            var items = user.cart;
-            res.json({success: true, msg: "Items in cart", itemsInCart: items});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-
-var removeItemFromCart = function (req, res) {
-    if (req.user) {
-        var productId = req.body.productId;
-        var productName = productList[productId].productName;
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return res.json({success: false, msg: 'User not found'});
-            var items = user.cart;
-            for (var key in items) {
-                if (items[key].productName == productName) {
-                    user.cart.splice(key, 1);
-                    user.save(function (err) {
-                        if (err) {
-                            return res.json({success: false, msg: 'Error'});
-                        }
-                        res.json({success: true, msg: 'Item deleted'});
-                    });
-                }
-            }
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-
-var getTotalForCart = function (req, res) {
-
-    if (req.user) {
-        var totalValue = 0;
-
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return res.json({success: false, msg: 'User not found'});
-            var items = user.cart;
-            for (var key in items) {
-                totalValue = totalValue + items[key].price;
-            }
-            res.json({total: totalValue});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-
-};
-
-var getNumberOfItemsInCart = function (req, res) {
-
-    if (req.user) {
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return res.json({success: false, msg: 'User not found'});
-            res.json({total: user.cart.length});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-
-};
-
-var clearCart = function (req, res) {
-    if (req.user) {
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return res.json({success: false, msg: 'User not found'});
-            user.cart = [];
-            user.save(function (err) {
-                if (err) {
-                    return res.json({success: false, msg: 'Error'});
-                }
-                res.json({success: true, msg: 'Cart cleared'});
-            });
-        }
-        );
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-
-var getOrders = function (req, res) {
-    if (req.user) {
-        Order.find({'userId': req.user._id}, function (err, orders) {
-            if (err)
-                return res.json({success: false, msg: 'Error'});
-            res.json({success: true, msg: "Orders", orders: orders});
-        });
-    } else {
-        res.json({success: false, msg: 'No user logged in'});
-    }
-};
-
-var createOrder = function (req, res) {
-    if (req.user) {
-        var paymentType = req.body.paymentType;
-        var itemsFromCart = req.user.cart;
-        var orderId = crypto.randomBytes(Math.ceil(6)).toString('hex').slice(0, 6); // рандомный IDшник по-хорошему уникальным не является...
-        var itemsInCart = req.user.cart;
-
-        var orderAmount = 0;
-        for (var key in itemsInCart) {
-            orderAmount = orderAmount + itemsInCart[key].price;
-        }
-
-        var newOrder = new Order({
-            userId: req.user._id,
-            paymentType: 'Card',
-            products: req.user.cart,
-            orderId: orderId,
-            orderDate: new Date(),
-            totalAmount: orderAmount,
-            status: 'Confirmed'
-        });
-        
-        //create an order
-        newOrder.save(function (err) {
-            if (err) {
-                return res.json({success: false, msg: 'Order not created'});
-            }
-            //after order is created, clear user cart
-            User.findOne({'_id': req.user._id}, function (err, user) {
-                if (err)
+        models.Product.findAll()
+                .then(function (products) {
+                    res.json({success: true, products: products, msg: "Success"});
+                })
+                .catch(function (err) {
+                    console.error("getProductList: " + err);
                     return res.json({success: false, msg: 'User not found'});
-                user.cart = [];
-                user.save(function (err) {
-                    if (err)
-                        return res.json({success: false, msg: 'Error'});
-                    res.json({success: true, msg: 'Cart cleared, order created'});
                 });
-            }
-            );
-        });
     } else {
         res.json({success: false, msg: 'No user logged in'});
+    }
+};
+
+var cart_add = function (req, res) {
+
+    if (req.user) {
+        var id = req.body.product_id;
+
+        models.User.findOne(
+                {where: {'id': req.user.id}
+                })
+                .then(function (user) {
+                    user.addCart(id).then(function (instance) {
+                        if (instance) {
+                            return res.status(200).json({success: true, msg: 'Added to cart'});
+                        } else {
+                            return res.status(500).json({success: false, msg: 'Items added: ' + instance});
+                        }
+                    })
+                            .catch(function (err) {
+                                console.error('cart_add: ' + err);
+                                return res.status(500).json({success: false, msg: 'User cart not saved'});
+                            });
+
+                })
+                .catch(function (err) {
+                    console.error('cart_add: ' + err);
+                    return res.status(500).json({success: false, msg: 'User not found'});
+                }
+                );
+    } else {
+        res.status(500).json({success: false, msg: 'No user logged in'});
+    }
+};
+
+var cart_list = function (req, res) {
+    if (req.user) {
+        models.User.findOne(
+                {
+                    where: {'id': req.user.id},
+                    include: [
+                        {
+                            model: models.Product,
+                            as: 'cart'
+                        }
+                    ]
+                })
+                .then(function (user) {
+                    res.status(200).json({success: true, msg: "Items in cart", cart: user.cart});
+                })
+                .catch(function (err)
+                {
+                    console.error('cart_list: ' + err);
+                    return res.status(500).json({success: false, msg: 'Error'});
+                }
+                );
+
+    } else {
+        res.status(500).json({success: false, msg: 'No user logged in'});
+    }
+};
+
+
+var cart_remove = function (req, res) {
+    if (req.user) {
+        var productId = req.params.product_id;
+
+        models.UserCart.destroy({where: {product_id: productId, user_id: req.user.id}})
+                .then(function (num) {
+                    if (num === 1) {
+                        res.status(200).json({success: true, msg: 'Item deleted'});
+                    } else {
+                        console.error('cart_remove: cannot find product:' + productId + " user:" + req.user.id);
+                        res.status(500).json({success: true, msg: 'Internal lookup error'});
+                    }
+                })
+                .catch(function (err) {
+                    console.error('cart_remove: ' + err);
+                    return res.status(500).json({success: false, msg: 'Internal error'});
+                });
+
+    } else {
+        res.status(500).json({success: false, msg: 'No user logged in'});
+    }
+};
+
+var cart_clear = function (req, res) {
+    if (req.user) {
+        models.User.findOne({'id': req.user.id})
+                .then(function (user) {
+                    user.setCart([])
+                            .then(function (num)
+                            {
+                                res.status(200).json({success: true, msg: 'Cart cleared'});
+                            })
+                            .catch(function (err) {
+                                console.error('cart_clear: ' + err);
+                                return res.status(500).json({success: false, msg: 'Error'});
+                            });
+                }
+                )
+                .catch(function (err) {
+                    console.error('cart_clear: ' + err);
+                    return res.status(500).json({success: false, msg: 'User not found'});
+                });
+    } else {
+        res.status(500).json({success: false, msg: 'No user logged in'});
+    }
+};
+
+var orders_list = function (req, res) {
+    if (req.user) {
+        models.User.findOne(
+                {where: {'id': req.user.id, },
+                    include: [
+                        {model: models.Order,
+                            as: 'orders',
+                            include:
+                                    [
+                                        {
+                                            model: models.OrderLine,
+                                            as: 'lines',
+                                            include: 
+                                                    [
+                                                {
+                                                    model: models.Product,
+                                                    as: 'product'
+                                                }                                                
+                                                    ]
+                                        }
+                                    ]}
+                    ]})
+                .then(function (user) {
+                    res.status(200).json({success: true, msg: "Orders", orders: user.orders});
+                })
+                .catch(function (err) {
+                    console.error('getOrders: ' + err);
+                    res.status(500).json({success: false, msg: "Database error"});
+                });
+    } else {
+        res.status(500).json({success: false, msg: 'No user logged in'});
+    }
+};
+
+/* TODO: wrap all the SQL into single transaction */
+var orders_create = function (req, res) {
+    if (req.user) {
+
+        models.User.findOne(
+                {where: {'id': req.user.id},
+                    include: [
+                        {
+                            model: models.Product,
+                            as: 'cart'
+                        }
+                    ]
+                })
+                .then(function (user) {
+                    var order_lines = [];
+
+                    for (var product in user.cart) {
+                        order_lines.push(
+                                {
+                                    product_id: user.cart[product].id,
+                                    amount: user.cart[product].price
+                                });
+                    }
+
+                    models.Order.create(
+                            {
+                                lines: order_lines,
+                                user_id: user.id,
+                                payment_type: req.body.payment_type,
+                                status: 'Pending'
+                            },
+                            {
+                                include: [models.User, 
+                                    {model: models.OrderLine, as: 'lines'   }]
+                            }
+                    )
+                            .then(function (order) {
+                                //populate product field in orderline. ORM can't do that kind of magic but we need it in Angular
+                                for(var ol in order.lines){
+                                    for(var pr in user.cart){
+                                        if(order.lines[ol].product_id===user.cart[pr].id){
+                                            order.lines[ol].product = JSON.parse(JSON.stringify(user.cart[pr]));
+                                        }
+                                    }
+                                }
+                                
+                                user.setCart([])
+                                        .then(function (ok2) {
+                                            return res.status(200).json({success: true, msg: 'Cart cleared, order created', order: order});
+                                        })
+                                        .catch(function (err) {
+                                            console.error("createOrder: " + err);
+                                            return res.status(500).json({success: false, msg: 'Order not created'});
+                                        })
+                            })
+                            .catch(function (err) {
+                                console.error("createOrder: " + err);
+                                return res.status(500).json({success: false, msg: 'Order not created'});
+                            });
+                })
+                .catch(function (err) {
+                    console.error("createOrder: " + err);
+                    return res.status(500).json({success: false, msg: 'Order not created'});
+                });
+    } else {
+        res.status(500).json({success: false, msg: 'No user logged in'});
     }
 };
 
 var bindFunction = function (router) {
-    router.get('/get_product_list', getProductList);
-    router.post('/add_to_cart', addToCart);
-    router.get('/get_items_in_cart', getItemsInCart);
-    router.post('/remove_item_from_cart', removeItemFromCart);
-    router.get('/get_total_for_cart', getTotalForCart);
-    router.get('/get_number_of_items_in_cart', getNumberOfItemsInCart);
-    router.post('/clear_cart', clearCart);
-    router.get('/get_orders', getOrders);
-    router.post('/create_order', createOrder);
+    router.get('/products', product_list);
+    router.post('/cart', cart_add);
+    router.get('/cart', cart_list);
+    router.delete('/cart/:product_id', cart_remove);
+    //router.get('/get_total_for_cart', getTotalForCart);
+    //router.get('/get_number_of_items_in_cart', getNumberOfItemsInCart);
+    router.delete('/cart', cart_clear);
+    router.get('/orders', orders_list);
+    router.post('/orders', orders_create);
 };
 
 module.exports = {

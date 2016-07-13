@@ -1688,8 +1688,8 @@ function wizardCtrl($scope, $rootScope) {
     $scope.formData = {};
 
     // After process wizard
-   // $scope.processForm = function () {
-     //   alert('Wizard completed');
+    // $scope.processForm = function () {
+    //   alert('Wizard completed');
     //};
 
 }
@@ -3619,7 +3619,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 console.log("MEANWHILE IN CURRENT MESSAGE ", vm.currentMessage._id);
 
                 //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
-                vm.currentMessage = {'_id': sessionStorage.messageId,
+                vm.currentMessage = {'id': sessionStorage.messageId,
                     'from': sessionStorage.messageFrom,
                     'to': sessionStorage.messageTo,
                     'subject': sessionStorage.messageSubject,
@@ -3703,9 +3703,9 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                     if (data.success) {
                         vm.currentMessage = data.message;
                         //осторожно, быдлокод! В сессии почему-то не сохраняется json целиком, разобраться
-                        sessionStorage.messageId = data.message._id;
-                        sessionStorage.messageTo = data.message.to;
-                        sessionStorage.messageFrom = data.message.from;
+                        sessionStorage.messageId = data.message.id;
+                        sessionStorage.messageTo = data.message.to.name;
+                        sessionStorage.messageFrom = data.message.from.name;
                         sessionStorage.messageSubject = data.message.subject;
                         sessionStorage.messageSentTime = data.message.sentTime;
                         sessionStorage.messageContent = data.message.content;
@@ -3737,7 +3737,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = messages[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
             }
         }
 
@@ -3761,7 +3761,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
             }
         }
 
@@ -3774,7 +3774,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
-                            var res = $.inArray(el._id, req);
+                            var res = $.inArray(el.id, req);
                             vm.init();
                             return (res == -1);
                         }));
@@ -3790,7 +3790,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = vm.messagesForInbox[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
                 if (v.read === true) {
                     vm.messagesForInbox[i].read = false;
                 } else {
@@ -3821,7 +3821,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
             var v = vm.messagesForTrash[i];
 
             if (v.selected === true) {
-                req.push(v._id);
+                req.push(v.id);
             }
         }
 
@@ -3834,7 +3834,7 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
                 .success(function (data) {
                     if (data.success) {
                         vm.messagesForTrash = $.grep(vm.messagesForTrash, (function (el) {
-                            var res = $.inArray(el._id, req);
+                            var res = $.inArray(el.id, req);
                             vm.init();
                             return (res == -1);
                         }));
@@ -3844,19 +3844,32 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
 
 }
 
-function dnaReseqHomeCtrl($http, $state, jobService) {
+function dnaReseqHomeCtrl($scope, $state, jobService) {
     var vm = this;
 
     //vm.job = jobService.newJob;
+    vm.jobs = [];
+
+    jobService.getJobs()
+            .then(function (res) {
+                vm.jobs = res;
+            });
+            
+    vm.jobfilter = ['finished'];
 
     this.createJob = function (species) {
-        jobService.createOrUpdateJob('dna_reseq', {seq_species: species})
+        jobService.createOrUpdateJob('dna_reseq', species)
                 .then(function (job) {
-                    $state.go('pipelines.dna_reseq_new.step1', {job: job});
+                    $state.go('pipelines.dna_reseq_job', {jobid: job.id});
                 },
                         function (err) {
                             alert(err);
                         });
+    };
+    
+    this.filterByStatus = function(job) {
+        //console.log('debug');
+        return (vm.jobfilter.indexOf(job.status) !== -1);
     };
 
 }
@@ -3869,7 +3882,7 @@ function rnaReseqHomeCtrl($http, $state, jobService) {
     this.createJob = function (species) {
         jobService.createOrUpdateJob('rna_reseq', {seq_species: species})
                 .then(function (job) {
-                    $state.go('pipelines.rna_reseq_new.step1', {job: job});
+                    $state.go('pipelines.rna_reseq_job', {job: job});
                 },
                         function (err) {
                             alert(err);
@@ -3878,10 +3891,35 @@ function rnaReseqHomeCtrl($http, $state, jobService) {
 
 }
 
-function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService, filesizeFilter) {
+function fileCtrl(fileService) {
     var vm = this;
 
-    vm.job = $stateParams.job;
+    vm.files = [];
+
+    fileService.getFiles()
+            .then(function (res) {
+                vm.files = res;
+            });
+
+    this.upload = function (file) {
+        if (file == null) {
+            console.log('ima buggy shiet');
+            return;
+        }
+
+        fileService.addFile(file);
+    }
+
+    this.deleteFile = function (fileid) {
+        fileService.deleteFile(fileid);
+    }
+
+}
+
+function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModal) {
+    var vm = this;
+
+    vm.jobid = $stateParams.jobid;
 
     //if some nasty shiet happened along the road - do some protective actions. shouldn't happen under normal circumstances
     /*if ((!jobService.newJob) || (jobService.newJob._id !== vm.jobid)) {
@@ -3889,14 +3927,45 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
      //jobService.newJob = jobService.getJob(vm.jobid);
      }*/
 
-    if (!vm.job) {
+    vm.job = {};
+    vm.selectedstate = 0;
+    vm.activestate = 0;
+
+    if (!vm.jobid) {
         console.log('no job object passed to wizard. going back');
         $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
     }
-
-    vm.species = vm.job.seq_species;
-
-    vm.files = [{}, {}];
+    else {
+        jobService.getJob(vm.jobid)
+                .then(function(res){
+                    vm.job=res;
+                    vm.species = vm.job.seq_species;
+                    
+                    vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.realJobState();
+        })
+                .catch(function(err){
+                    $state.go('pipelines.dna_reseq_home'); //error, go back to wizard (of Oz)
+        })
+    }
+    
+    this.setState = function(newState){
+        vm.selectedstate = newState;
+    } 
+    
+    this.realJobState = function() {
+        switch(vm.job.status){
+                        case 'new': return 1;
+                        case 'submitted':
+                        case 'running':
+                        case 'failed':
+                           return 2;
+                        case 'finished':
+                            return 3;
+                        default:
+                            return 0;
+                    }
+    }
 
     this.upload = function (filenum, file) {
         if (file == null) {
@@ -3904,44 +3973,52 @@ function dnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
             return;
         }
 
-        vm.job.filesIn[filenum] = null;
-
-        vm.files[filenum] = {};
-        vm.files[filenum].uploading = true;
-        vm.files[filenum].progress = 0;
-
-        if (vm.job.filesIn[filenum]) {
-            console.log("object is not null!");
+        jobService.addFile(vm.job, filenum, file);
+    }
+    
+    this.changeState = function(newState){
+        if(newState<=vm.realJobState()){
+            vm.selectedstate = newState;
         }
-
-        Upload.upload({
-            url: 'api/job/submit_file/' + vm.job._id + '/' + filenum,
-            data: {data: file}
-        }).then(function (resp) {
-            var server_resp = resp.data;
-            if (server_resp.success) {
-                console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
-                vm.job.filesIn[filenum] = server_resp.file_entry;
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-            } else {
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-                console.log('Error uploading ' + resp.config.data.data.name + ': ' + server_resp.msg);
-            }
-        }, function (resp) {
-            vm.files[filenum].uploading = false;
-            console.log('Error status: ' + resp.status);
-        }, function (evt) {
-            vm.files[filenum].current = evt.loaded;
-            vm.files[filenum].total = evt.total;
-            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
-        });
     }
 
-   // this.processForm = function () {
-     //   alert('Wizard completed');
-   // };
+    this.submit = function () {
+        jobService.submitJob(vm.job)
+                .then(function (res) {
+                    vm.job.status = 'submitted';
+                    vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.selectedstate;
+                })
+                .catch(function (err) {
+                    alert(err);
+                })
+    }
+    
+    this.chooseFile = function (filenum) {
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/file_manager/modal.html',
+            controller: fileModalCtrl,
+            controllerAs: 'vm'
+        });
+        
+        modalInstance.result.then(function (file) {
+            fileService.getFile(file.id)
+                    .then(function(file_srv){
+                        jobService.setFile(vm.job,filenum,file_srv)
+                        .then(function(res){
+                            vm.job.files[filenum]=file;
+                        });
+            });
+        }, function () {
+            //if cancel was clicked
+            });
+        
+    };
+
+    // this.processForm = function () {
+    //   alert('Wizard completed');
+    // };
 
 }
 
@@ -3966,46 +4043,7 @@ function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
 
     vm.files = [{}, {}];
 
-    this.upload = function (filenum, file) {
-        if (file == null) {
-            console.log('ima buggy shiet');
-            return;
-        }
 
-        vm.job.filesIn[filenum] = null;
-
-        vm.files[filenum] = {};
-        vm.files[filenum].uploading = true;
-        vm.files[filenum].progress = 0;
-
-        if (vm.job.filesIn[filenum]) {
-            console.log("object is not null!");
-        }
-
-        Upload.upload({
-            url: 'api/job/submit_file/' + vm.job._id + '/' + filenum,
-            data: {data: file}
-        }).then(function (resp) {
-            var server_resp = resp.data;
-            if (server_resp.success) {
-                console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
-                vm.job.filesIn[filenum] = server_resp.file_entry;
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-            } else {
-                vm.files[filenum].uploading = false;
-                vm.file1 = {};
-                console.log('Error uploading ' + resp.config.data.data.name + ': ' + server_resp.msg);
-            }
-        }, function (resp) {
-            vm.files[filenum].uploading = false;
-            console.log('Error status: ' + resp.status);
-        }, function (evt) {
-            vm.files[filenum].current = evt.loaded;
-            vm.files[filenum].total = evt.total;
-            vm.files[filenum].progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
-        });
-    }
 
     this.processForm = function () {
         alert('Wizard completed');
@@ -4020,176 +4058,109 @@ function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
  *
  */
 
-function ecommerceCtrl($scope, $http, $state) {
+function ecommerceCtrl($scope, ecommService, $state) {
     var em = this;
 
-    em.order = {};
-
-    em.itemsInCart = {};
+    em.cart = null;
     em.totalForCart = {};
     em.numberOfItemsInCart = {};
 
-    em.productList = {};
-    em.orders = {};
+    em.productList = null;
+    em.orders = null;
 
-    this.init = function () {
-        em.getProductList();
-        em.getItemsInCart();
-        em.getTotalForCart();
-        em.getNumberOfItemsInCart();
-        em.getOrders();
-    };
+    em.dataLoaded = false;
+    em.cartAmount = 0;
+    em.cartCount = 0;
 
+    ecommService.getProductList()
+            .then(function (res) {
+                em.productList = res;
+                loadProgress();
+            });
 
-    this.getProductList = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_product_list'
-        })
-                .success(function (data) {
-                    console.log(data.products);
-                    em.productList = data.products;
-                });
-    };
+    ecommService.getCart()
+            .then(function (res) {
+                em.cart = res;
+                loadProgress();
+            });
+
+    ecommService.getOrders()
+            .then(function (res) {
+                em.orders = res;
+            });
+
+    var loadProgress = function () {
+        if ((em.productList != null) && (em.cart != null)) {
+            updateCart();
+            em.dataLoaded = true;
+        }
+    }
+
+    var isInCart = function (productId) {
+        for (var v in em.cart) {
+            if ((em.cart[v]) && (em.cart[v].id === productId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    var updateCart = function () {
+        updateInCart();
+        em.cartAmount = getTotalForCart();
+        em.cartCount = getNumberOfItemsInCart();
+    }
+
+    var updateInCart = function () {
+        for (var p in em.productList) {
+            em.productList[p].in_cart = isInCart(em.productList[p].id);
+        }
+    }
 
     this.addToCart = function (productId) {
-
-        $http({
-            method: 'POST',
-            url: 'api/add_to_cart',
-            data: {'productId': productId}
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.getProductList();
-                    }
+        ecommService.addToCart(productId)
+                .then(function (ok) {
+                    updateCart();
+                })
+                .catch(function (err) {
+                    //error handler
                 });
-    };
+    }
 
-    this.getItemsInCart = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_items_in_cart'
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.itemsInCart = data.itemsInCart;
-                    }
+    this.removeFromCart = function (productId) {
+        ecommService.removeFromCart(productId)
+                .then(function (ok) {
+                    updateCart();
+                })
+                .catch(function (err) {
+                    //error handler
                 });
-    };
-
-    this.removeItemFromCart = function (productId) {
-
-        $http({
-            method: 'POST',
-            url: 'api/remove_item_from_cart',
-            data: {'productId': productId}
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.getProductList();
-                        em.getTotalForCart();
-                        em.getNumberOfItemsInCart();
-                        em.getItemsInCart();
-                    }
-                });
-    };
-
-    this.getTotalForCart = function () {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_total_for_cart'
-        })
-                .success(function (data) {
-                    em.totalForCart = data.total;
-                });
-    };
-
-    this.getNumberOfItemsInCart = function () {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_number_of_items_in_cart'
-        })
-                .success(function (data) {
-                    em.numberOfItemsInCart = data.total;
-                });
-    };
+    }
 
     this.clearCart = function () {
-
-        $http({
-            method: 'POST',
-            url: 'api/clear_cart'
-        })
-                .success(function (data) {
-                    em.init();
+        ecommService.clearCart()
+                .then(function (ok) {
+                    updateCart();
+                })
+                .catch(function (err) {
+                    //error handler
                 });
+    }
+
+    var getTotalForCart = function () {
+        var total = 0;
+
+        for (var v in em.cart) {
+            total += em.cart[v].price;
+        }
+
+        return total;
     };
 
-
-    this.createInvoice = function (paymentType) {
-
-        $http({
-            method: 'GET',
-            url: 'api/get_token'
-        })
-                .success(function (data) {
-                    console.log("TOKEN RECEIVED");
-
-                    $http({
-                        method: 'POST',
-                        url: 'api/create_invoice'
-                    })
-                            .success(function (data) {
-                                console.log("INVOICE CREATED");
-                                $http({
-                                    method: 'POST',
-                                    url: 'api/send_invoice',
-                                    data: {'invoiceId': data.invoiceId,
-                                        'invoiceNumber': data.invoiceNumber,
-                                        'paymentType': paymentType
-                                    }
-                                })
-                                        .success(function (data) {
-                                            console.log("INVOICE SENT");
-                                            $state.go('commerce.orders');
-                                        });
-                            });
-                });
+    var getNumberOfItemsInCart = function () {
+        return em.cart.length;
     };
-
-
-    this.getOrders = function () {
-        $http({
-            method: 'GET',
-            url: 'api/get_orders'
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        em.orders = data.orders;
-                    }
-                });
-    };
-
-    this.checkIfSubscribed = function (productId) { // TBD
-        $http({
-            method: 'GET',
-            url: 'api/check_if_subscribed',
-            params: {'productId': productId}
-        })
-                .success(function (data) {
-                    if (data.success) {
-                        //update data in productList?
-                        console.log("SUBSCRIBED");
-                        em.init();
-                    } else {
-                        console.log("NOT SUBSCRIBED");
-                    }
-                });
-    };
-
 
 }
 
@@ -4212,7 +4183,7 @@ function mailServerCtrl($scope, $http, $state) {
 }
 
 
-function stripeCtrl($scope, $http, $state) {
+function stripeCtrl($scope, $http, $state, ecommService) {
 
     var tm = this;
 
@@ -4335,26 +4306,40 @@ function stripeCtrl($scope, $http, $state) {
                 .success(function (data) {
                     if (data.success) {
                         console.log("PURCHASE CONFIRMATION SENT");
-                        $http({
-                            method: 'POST',
-                            url: 'api/create_order'
-                        })
-                                .success(function (data) {
-                                    if (data.success) {
-                                        console.log("ORDER CREATED");
-                                        $state.go("commerce.orders");
 
-                                    } else {
-                                        console.log("ORDER NOT CREATED");
-                                    }
+                        ecommService.addOrder('card')
+                                .then(function (res) {
+                                    console.log("ORDER CREATED");
+                                    $state.go("commerce.orders");
+                                })
+                                .catch(function (err) {
+                                    console.error("sendPurchaseConfirmation: " + err);
                                 });
-
                     } else {
-                        console.log("PURCHASE CONFIRMATION NOT SENT");
+                        console.error("PURCHASE CONFIRMATION NOT SENT");
                     }
                 });
     };
 
+}
+
+function fileModalCtrl(fileService, $uibModalInstance) {
+    var vm = this;
+
+    vm.files = [];
+
+    fileService.getFiles()
+            .then(function (res) {
+                vm.files = res;
+            });
+
+    this.ok = function (file) {
+        $uibModalInstance.close(file);
+    };
+
+    this.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 }
 
 /**
@@ -4403,13 +4388,17 @@ angular
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
-        .controller('ecommerceController', ['$scope', '$http', '$state', ecommerceCtrl])
+        .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
-        .controller('dnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', dnaReseqNewCtrl])
+        .controller('dnaReseqJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnaReseqJobCtrl])
         .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
-        .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl])
-        .controller('rnaReseqHomeController', ['$http', '$state', 'jobService', rnaReseqHomeCtrl]);
+        .controller('dnaReseqHomeController', ['$scope', '$state', 'jobService', 'fileService', dnaReseqHomeCtrl])
+        .controller('rnaReseqHomeController', ['$http', '$state', 'jobService', rnaReseqHomeCtrl])
+        .controller('stripeController', ['$scope', '$http', '$state', 'ecommService', stripeCtrl])
+        .controller('fileController', ['fileService', fileCtrl])
+        .controller('fileModalController', ['fileService', fileModalCtrl])
+        .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
 
 

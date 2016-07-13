@@ -1,4 +1,4 @@
-var paypalConfig = require('../config/paypal');
+/* var paypalConfig = require('../config/paypal');
 var request = require("request");
 var Invoice = require('../models/invoice');
 var User = require('../models/user');
@@ -137,4 +137,4 @@ var bindFunction = function (router) {
 
 module.exports = {
     bind: bindFunction
-};
+}; */

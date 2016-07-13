@@ -1,4 +1,4 @@
-    var productList = [{productName: 'De novo assembly', productCategory: 'Additional content', price: 10,
+/*    var productList = [{productName: 'De novo assembly', productCategory: 'Additional content', price: 10,
         description_short: 'De novo assembly pipeline differs quite a bit from the techniques of alignment \
         to a reference genome in terms of complexity and time requirements. In case of de novo assembly, \
         the reference sequence of nucleotides is unknown, so the process resembles putting together a puzzle\
@@ -84,4 +84,4 @@
         img_url: 'img/products/prod7.png', product_url: 'commerce.product_details4'}
     ];
 
-module.exports = productList;
+module.exports = productList; */

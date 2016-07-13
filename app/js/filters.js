@@ -9,4 +9,11 @@ angular.module('inspinia')
                 var i = Math.floor(Math.log(bytes) / Math.log(k));
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
             };
+        })
+        .filter('product_category', function () {
+            return function (products, category) {
+               return $.grep( products, function( p ) {
+                    return p.product_category === category;
+                });
+            };
         });

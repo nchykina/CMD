@@ -1,5 +1,5 @@
 <fieldset>
-    
+
 
     <div class="row">
         <div class="col-lg-12">
@@ -24,7 +24,7 @@
                                         <div class="panel-heading">
                                             <div ng-switch-when="homo">
                                                 <h4><strong>Homo sapiens</strong></h4>
-                                              
+
                                             </div>
                                             <div ng-switch-when="mus">
                                                 <h4><strong>Mus musculus</strong></h4>
@@ -34,7 +34,7 @@
                                             </div>
                                         </div>
                                         <div class="panel-body">
-                                            <div class="col-sm-4">                                    
+                                            <div class="col-sm-4">
                                                 <div class="text-center">
                                                     <div ng-switch-when="homo">
                                                         <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a13.jpg">
@@ -75,7 +75,7 @@
                                                         <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
                                                     </address>
                                                 </div>
-                                            </div>                                    
+                                            </div>
                                         </div>
                                         <div class="panel-footer white-bg">
                                             <div>
@@ -85,7 +85,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
                                     <div class="panel panel-info">
                                         <div class="panel-heading">
@@ -241,30 +241,30 @@
                                         <div class="ibox-title">
                                             <h5>Forward DNA strand</h5>
                                         </div>
-                                        <div class="ibox-content" id="">                                
+                                        <div class="ibox-content" id="">
                                             <form action="#">
-                                                <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)" ng-model="newc.file1">
-                                                    <div ng-if="((!newc.job.filesIn[0]) && (!newc.files[0].uploading))" class="dz-message m-t-lg m-b-lg">                                            
+                                                <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)">
+                                                    <div ng-if="(!newc.job.files[0])" class="dz-message m-t-lg m-b-lg">
 
-                                                        <h1>Drop file here</h1>                                        
+                                                        <h1>Drop file here</h1>
 
                                                     </div>
-                                                    <div ng-if="((!newc.job.filesIn[0]) && (newc.files[0].uploading))">                                          
+                                                    <div ng-if="((newc.job.files[0]) && (newc.job.files[0].status === 'uploading'))">
 
                                                         <h1>Uploading file...</h1>
                                                         <div class="progress-striped active progress">
-                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[0].progress < 100 ? newc.files[0].progress : 100) + '%'}">                                                
-                                                            </div>                
+                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[0].progress < 100 ? newc.job.files[0].progress : 100) + '%'}">
+                                                            </div>
                                                         </div>
-                                                        {{newc.files[0].current| filesize:2}} / {{newc.files[0].total| filesize:2}} ({{newc.files[0].progress}})%
+                                                        {{newc.job.files[0].current| filesize:2}} / {{newc.job.files[0].total| filesize:2}} ({{newc.job.files[0].progress}})%
                                                     </div>
 
-                                                    <div ng-if="(newc.job.filesIn[0])">                                            
-                                                        <p>File size: {{newc.job.filesIn[0].filesize| filesize:0}}</p>
-                                                        <p>Uploaded: {{newc.job.filesIn[0].upload_ended| date:'medium'}}</p>
+                                                    <div ng-if="(newc.job.files[0]) && (newc.job.files[0].status !== 'uploading')">                                                            
+                                                            <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                            <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
                                                     </div>
                                                 </div>
-                                            </form>                                
+                                            </form>
 
                                         </div>
                                     </div>
@@ -278,33 +278,35 @@
                                         <div class="ibox-content" id="">
                                             <div class="ngs_dropzone">
                                                 <form action="#">
-                                                    <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)" ng-model="newc.file2">
-                                                        <div ng-if="((!newc.job.filesIn[1]) && (!newc.files[1].uploading))" class="dz-message m-t-lg m-b-lg">                                            
-                                                            <h1>Drop file here</h1>                                            
+                                                    <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)">
+                                                        <div ng-if="(!newc.job.files[1])" class="dz-message m-t-lg m-b-lg">
+
+                                                            <h1>Drop file here</h1>
+
                                                         </div>
-                                                        <div ng-if="((!newc.job.filesIn[1]) && (newc.files[1].uploading))">                                          
+                                                        <div ng-if="((newc.job.files[1]) && (newc.job.files[1].status === 'uploading'))">
 
                                                             <h1>Uploading file...</h1>
                                                             <div class="progress-striped active progress">
-                                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[1].progress < 100 ? newc.files[1].progress : 100) + '%'}">                                                
-                                                                </div>                
+                                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[1].progress < 100 ? newc.job.files[1].progress : 100) + '%'}">
+                                                                </div>
                                                             </div>
-                                                            {{newc.files[1].current| filesize:2}} / {{newc.files[1].total| filesize:2}} ({{newc.files[1].progress}})%
+                                                            {{newc.job.files[1].current| filesize:2}} / {{newc.job.files[1].total| filesize:2}} ({{newc.job.files[1].progress}})%
                                                         </div>
 
-                                                        <div ng-if="(newc.job.filesIn[1])">                                            
-                                                            <p>File size: {{newc.job.filesIn[1].filesize| filesize:0}}</p>
-                                                            <p>Uploaded: {{newc.job.filesIn[1].upload_ended| date:'medium'}}</p>
+                                                        <div ng-if="(newc.job.files[1]) && (newc.job.files[1].status !== 'uploading')">                                                            
+                                                            <p>File size: {{newc.job.files[1].filesize| filesize:0}}</p>
+                                                            <p>Uploaded: {{newc.job.files[1].finished_at| date:'medium'}}</p>
                                                         </div>
                                                     </div>
-                                                </form>                                           
-                                            </div>                            
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>                   
+                                    </div>
                                 </div>
                                 <div class="col-sm-4 " ng-switch="newc.species">
                                     <p>
-                                        If you want to upload your own reads, you need to have 
+                                        If you want to upload your own reads, you need to have
                                         two separate .fasta files: reads from the forward strand and from the reverse strand.
                                         In this case, we can apply paired-ended alignment algorithm to your data.
                                     </p>
@@ -316,7 +318,7 @@
                                     </div>
                                     <div ng-switch-when="mus">
                                         <p>
-                                            The best place to get your sample reads is 
+                                            The best place to get your sample reads is
                                             <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project">
                                                 Mouse Genomes Project</a>. This website contains
                                             sample reads of 16 breeds of mice.
@@ -355,30 +357,30 @@
                                         <div class="ibox-title">
                                             <h5>Forward DNA strand</h5>
                                         </div>
-                                        <div class="ibox-content" id="">                                
+                                        <div class="ibox-content" id="">
                                             <form action="#">
-                                                <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)" ng-model="newc.file1">
-                                                    <div ng-if="((!newc.job.filesIn[0]) && (!newc.files[0].uploading))" class="dz-message m-t-lg m-b-lg">                                            
+                                                <div class="ngs_dz_noborder" ng-click="newc.chooseFile(0)">
+                                                    <div ng-if="(!newc.job.files[0])" class="dz-message m-t-lg m-b-lg">
 
-                                                        <h1>Drop file here</h1>                                        
+                                                        <h1>Click to choose file</h1>
 
                                                     </div>
-                                                    <div ng-if="((!newc.job.filesIn[0]) && (newc.files[0].uploading))">                                          
+                                                    <div ng-if="((newc.job.files[0]) && (newc.job.files[0].status === 'uploading'))">
 
                                                         <h1>Uploading file...</h1>
                                                         <div class="progress-striped active progress">
-                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[0].progress < 100 ? newc.files[0].progress : 100) + '%'}">                                                
-                                                            </div>                
+                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[0].progress < 100 ? newc.job.files[0].progress : 100) + '%'}">
+                                                            </div>
                                                         </div>
-                                                        {{newc.files[0].current| filesize:2}} / {{newc.files[0].total| filesize:2}} ({{newc.files[0].progress}})%
+                                                        {{newc.job.files[0].current| filesize:2}} / {{newc.job.files[0].total| filesize:2}} ({{newc.job.files[0].progress}})%
                                                     </div>
 
-                                                    <div ng-if="(newc.job.filesIn[0])">                                            
-                                                        <p>File size: {{newc.job.filesIn[0].filesize| filesize:0}}</p>
-                                                        <p>Uploaded: {{newc.job.filesIn[0].upload_ended| date:'medium'}}</p>
+                                                    <div ng-if="(newc.job.files[0])">
+                                                        <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                        <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
                                                     </div>
                                                 </div>
-                                            </form>                                
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -391,86 +393,32 @@
                                         <div class="ibox-content" id="">
                                             <div class="ngs_dropzone">
                                                 <form action="#">
-                                                    <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)" ng-model="newc.file2">
-                                                        <div ng-if="((!newc.job.filesIn[1]) && (!newc.files[1].uploading))" class="dz-message m-t-lg m-b-lg">                                            
-                                                            <h1>Drop file here</h1>                                            
+                                                    <div class="ngs_dz_noborder" ng-click="newc.chooseFile(1)">
+                                                        <div ng-if="(!newc.job.files[1])" class="dz-message m-t-lg m-b-lg">
+
+                                                            <h1>Click to choose file</h1>
+
                                                         </div>
-                                                        <div ng-if="((!newc.job.filesIn[1]) && (newc.files[1].uploading))">                                          
+                                                        <div ng-if="((newc.job.files[1]) && (newc.job.files[1].status === 'uploading'))">
 
                                                             <h1>Uploading file...</h1>
                                                             <div class="progress-striped active progress">
-                                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[1].progress < 100 ? newc.files[1].progress : 100) + '%'}">                                                
-                                                                </div>                
+                                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[1].progress < 100 ? newc.job.files[1].progress : 100) + '%'}">
+                                                                </div>
                                                             </div>
-                                                            {{newc.files[1].current| filesize:2}} / {{newc.files[1].total| filesize:2}} ({{newc.files[1].progress}})%
+                                                            {{newc.job.files[1].current| filesize:2}} / {{newc.job.files[1].total| filesize:2}} ({{newc.job.files[1].progress}})%
                                                         </div>
 
-                                                        <div ng-if="(newc.job.filesIn[1])">                                            
-                                                            <p>File size: {{newc.job.filesIn[1].filesize| filesize:0}}</p>
-                                                            <p>Uploaded: {{newc.job.filesIn[1].upload_ended| date:'medium'}}</p>
+                                                        <div ng-if="(newc.job.files[1])">
+                                                            <p>File size: {{newc.job.files[1].filesize| filesize:0}}</p>
+                                                            <p>Uploaded: {{newc.job.files[1].finished_at| date:'medium'}}</p>
                                                         </div>
                                                     </div>
-                                                </form>                                           
-                                            </div>                            
-                                        </div>
-                                    </div>                   
-                                </div>
-                                <div class='col-sm-4'>
-                                    <div class="ibox float-e-margins">
-                                        <div class="ibox-title">
-                                            <h5>Files from my file storage</h5>
-
-                                        </div>
-                                        <div class="ibox-content">
-                                            <div class='row'>
-                                                <div class='col-lg-12'>
-                                                <table class="footable table table-stripped">
-                                                    <thead>
-                                                        <tr>
-
-                                                            <th >File name</th>
-                                                            <th >File size</th>
-                                                            <th >Upload date</th>                                
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>File1.fasta</td>
-                                                            <td>1 GB</td>
-                                                            <td>21 June 2016</td>
-                                                        </tr>          
-                                                        <tr>
-                                                            <td>File2.fasta</td>
-                                                            <td>1 GB</td>
-
-                                                            <td>21 June 2016</td>
-                                                        </tr>  
-                                                        <tr>
-                                                            <td>File3.fasta</td>
-                                                            <td>1 GB</td>
-
-                                                            <td>21 June 2016</td>
-                                                        </tr>  
-                                                        <tr>
-                                                            <td>File4.fasta</td>
-                                                            <td>1 GB</td>
-
-                                                            <td>21 June 2016</td>
-                                                        </tr>  
-                                                        <tr>
-                                                            <td>File5.fasta</td>
-                                                            <td>1 GB</td>
-
-                                                            <td>21 June 2016</td>
-                                                        </tr>  
-                                                    </tbody>
-                                                    
-                                                </table>
-                                                </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>                                
 
 
                             </div>
@@ -491,5 +439,5 @@
 
 
 
-    <a ui-sref="pipelines.dna_reseq_new.step2({job: newc.job})" ng-click="newc.submitJob()" class="btn btn-primary">Align my reads to the genome</a>
+    <a ng-click="newc.submit()" class="btn btn-primary">Align my reads to the genome</a>
 </fieldset>

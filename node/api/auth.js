@@ -1,44 +1,11 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var config = require('../config/mongo');
-var User = require('../models/user');
-var jwt = require('jwt-simple');
+//var config = require('../config/mongo');
+var models = require('../models');
 var passport = require('passport');
-//var mailserver = require('./mailserver');
 
 require('../config/passport')(passport);
 
-/* var isAuthenticated = function(){
- return passport.authenticate('jwt', { session: false});
- }; */
-
-/* var login = function(req,res) {
- User.findOne({
- name: req.body.name
- }, function(err, user) {
- if (err) throw err;
- 
- if (!user) {
- res.send({success: false, msg: 'Authentication failed. User not found.'});
- } else {
- // check if password matches
- user.comparePassword(req.body.password, function (err, isMatch) {
- if (isMatch && !err) {
- // if user is found and password is right create a token
- var token = jwt.encode(user, config.passport_secret);
- // return the information including token as JSON
- res.json({success: true, token: 'JWT ' + token});
- } else {
- res.send({success: false, msg: 'Authentication failed. Wrong password.'});
- }
- });
- }
- });
- }; */
+var q = require('q');
+var bcrypt = require('bcryptjs');
 
 var login = function (req, res, next) {
     passport.authenticate('local-login',
@@ -50,7 +17,7 @@ var login = function (req, res, next) {
                         ? req.logIn(user, function (err) {
                             return err
                                     ? next(err) :
-                                    res.json({success: true, msg: 'Successful authentication'});
+                                    next()
                         })
                         : res.json({success: false, msg: 'Authentication failed'});
                 ;
@@ -58,62 +25,86 @@ var login = function (req, res, next) {
     )(req, res, next);
 };
 
+var session_regenerate = function(req,res){
+    var temp = req.session.passport;
+    
+    /* req.session.regenerate(function(err){
+        //req.session.passport is now undefined
+        req.session.passport = temp;
+        req.session.save(function(err){
+            res.json({success: true, msg: 'Successful authentication'});
+        });
+    }); */
+    
+    //nvm, just do nothing for now: authenticate through lookup for session in redis
+    res.json({success: true, msg: 'Successful authentication'});
+}
+
 var logout = function (req, res) {
-    req.logout();
-    res.json({success: true, msg: 'Successful exit'});
-    ;
+    req.logOut();
+    /* req.session.destroy(function(err){
+        res.json({success: true, msg: 'Successful exit'});
+    }); */    
 };
+
+var encryptPassword = function (password) {
+    var defer = q.defer();
+
+    bcrypt.genSalt(10, function (err, salt) {
+        if (err) {
+            return defer.reject(err);
+        }
+
+        bcrypt.hash(password, salt, function (err, hash) {
+            if (err) {
+                return defer.reject(err);
+            }
+
+            return defer.resolve(hash);
+        });
+    });
+
+    return defer.promise;
+}
 
 var register = function (req, res, next) {
     if (!req.body.name || !req.body.password) {
         res.json({success: false, msg: 'Please pass name and password.'});
     } else {
-        var newUser = new User({
-            name: req.body.name,
-            password: req.body.password,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-            roles: ['user'],
-        });
-        // save the user
-        newUser.save(function (err) {
-            if (err) {
-                return res.json({success: false, msg: 'Username already exists.'});
-            }
+        encryptPassword(req.body.password).then(function (hash) {
 
-            req.logIn(newUser, function (err) {
-                if (err) {
-                    return next(err);
-                } else {
-                    // mailserver.greetUser(req, res); нет, так нельзя
-                    res.json({success: true, msg: 'Successfuly created new user'});
-                }
+            models.User.create({
+                name: req.body.name,
+                password: hash,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                roles: [
+                    {name: 'user'}
+                ]
+            }, {
+                include: [models.Role]
+            }).then(function (user) {
+                req.logIn(user, function (err) {
+                    if (err) {
+                        return next(err);
+                    } else {
+                        // mailserver.greetUser(req, res); нет, так нельзя
+                        res.json({success: true, msg: 'Successfuly created new user'});
+                    }
+                });
+            }).catch(function (err) {
+                console.error('Error while creating user: ' + err);
+                return res.json({success: false, msg: 'Username already exists.'});
+
             });
-        });
+        })
+                .catch(function (err) {
+                    console.error('Could not encrypt password: ' + err);
+                    return res.json({success: false, msg: 'Internal error'});
+                });
     }
 };
-
-/* var memberinfo = function(req,res){
- console.log('Memberinfo called');
- var token = getToken(req.headers);
- if (token) {
- var decoded = jwt.decode(token, config.secret);
- User.findOne({
- name: decoded.name
- }, function(err, user) {
- if (err) throw err;
- 
- if (!user) {
- return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
- } else {
- res.json({success: true, msg: 'Welcome in the member area ' + user.name + '!'});
- }
- });
- } else {
- return res.status(403).send({success: false, msg: 'No token provided.'});
- }
- }; */
 
 var memberinfo = function (req, res) {
 
@@ -150,7 +141,7 @@ var saveProfileChanges = function (req, res) {
     if (req.user) {
         var userData = req.body;
 
-        User.findOne({'_id': req.user._id}, function (err, user) {
+        models.User.findOne({'id': req.user.id}, function (err, user) {
             if (err)
                 return console.error(err);
 
@@ -173,32 +164,37 @@ var saveProfileChanges = function (req, res) {
 //для апдейта пароля залогиненного пользователя в User Details
 var updatePassword = function (req, res) {
     if (req.user) {
-        var userId = req.user._id;
+        var userId = req.user.id;
         var oldPassword = req.body.oldPassword;
         var newPassword = req.body.newPassword;
 
         console.log("USER DATA IN NODE", userId, " ", oldPassword, " ", newPassword);
 
 
-        User.findOne({'_id': req.user._id}, function (err, user) {
-            if (err)
-                return console.error(err);
-            user.comparePassword(oldPassword, function (err, isMatch) {
+        models.User.findOne({'id': req.user.id}).then(function (user) {
+
+            user.comparePassword(oldPassword).then(function () {
                 //if correct old password is provided
-                if (isMatch && !err) {
-                    console.log("MATCH");
-                    user.password = newPassword;
-                    user.save(function (err) {
-                        if (err) {
-                            return res.json({success: false, msg: 'User data not updated'});
-                        }
-                        res.json({success: true, msg: 'Password data successfully updated'});
-                    });
-                } else {
-                    console.log("NO MATCH");
-                    res.send({success: false, msg: 'Old password is incorrect'});
+                console.log("MATCH");
+                user.setPassword(newPassword);
+                user.save().then(function () {
+                    res.json({success: true, msg: 'Password data successfully updated'});
+                    return;
+                }).catch(function (err) {
+                    console.error(err);
+                    return res.json({success: false, msg: 'User data not updated'});
                 }
+                );
+
+            }).catch(function (err) {
+                console.error("NO MATCH: " + err);
+                res.json({success: false, msg: 'Old password is incorrect'});
+                return;
             });
+        }).catch(function (err) {
+            console.error('User could not be selected: ' + err);
+            res.json({success: false, msg: 'User data not updated'});
+            return;
         });
     } else {
         res.json({success: false, msg: 'No user logged in'});
@@ -215,22 +211,27 @@ var updateForgottenPassword = function (req, res) {
 
     console.log("USER DATA IN NODE", userNameTemp, " ", tempPassword, " ", newPasswordTemp);
 
+    models.User.findOne({'name': userNameTemp}).then(function (user) {
+        if (user.tempPassword === tempPassword) {
+            user.setPassword(newPasswordTemp);
+            user.tempPassword = '';
 
-    User.findOne({'name': userNameTemp}, function (err, user) {
-        if (err)
-            return res.json({success: false, msg: 'User not found'});
-
-        if (user.tempPassword == tempPassword) {
-            user.password = newPasswordTemp;
-            user.save(function (err) {
-                if (err) {
-                    return res.json({success: false, msg: 'User data not updated'});
-                }
+            user.save().then(function () {
                 res.json({success: true, msg: 'Password data successfully updated'});
+                return;
+            }).catch(function (err) {
+                console.error(err);
+                return res.json({success: false, msg: 'User data not updated'});
+                return;
             });
         } else {
             res.json({success: false, msg: 'Temporary password data incorrect'});
+            return;
         }
+    }).catch(function (err) {
+        console.error(err);
+        res.json({success: false, msg: 'User not found'});
+        return;
     });
 };
 
@@ -241,7 +242,7 @@ var logout = function (req, res) {
 
 
 var bindFunction = function (router) {
-    router.post('/login', login);
+    router.post('/login', login, session_regenerate);
     router.post('/register', register);
     router.post('/logout', logout);
     router.get('/session', authenticateMw, session_content);

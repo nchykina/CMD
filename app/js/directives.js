@@ -284,7 +284,7 @@ function sparkline() {
 /**
  * icheck - Directive for custom checkbox icheck
  */
-function icheck($timeout) {
+/* function icheck($timeout) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -316,7 +316,7 @@ function icheck($timeout) {
             });
         }
     };
-}
+} */
 
 /**
  * ionRangeSlider - Directive for Ion Range Slider
@@ -594,7 +594,7 @@ angular
     .directive('minimalizaSidebar', minimalizaSidebar)
     .directive('vectorMap', vectorMap)
     .directive('sparkline', sparkline)
-    .directive('icheck', icheck)
+    //.directive('icheck', icheck)
     .directive('ionRangeSlider', ionRangeSlider)
     .directive('dropZone', dropZone)
     .directive('responsiveVideo', responsiveVideo)

@@ -1,0 +1,116 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Perform data analysis</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a>Perform data analysis</a>
+            </li>
+            <li class="active">
+                <strong>DNA resequencing</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <!-- <div class="container-fluid">
+                <h2>Get your data ready for analysis in 3 easy steps:</h2>
+            </div> -->                
+
+            <div class="container-fluid">
+
+
+                <ol class="timeline" style="margin-bottom: 10px">
+                    <li class="timeline__step done" ng-class="{done: newc.activestate >= 1}">
+                        <input class="timeline__step-radio" id="trigger1" name="trigger" type="radio">
+
+
+                        <span class="timeline__step-content">
+                            Select data</span>        
+
+
+                        <a ng-click="newc.setState(1)" href="#">
+                            <i class="timeline__step-marker">1</i>
+                        </a>
+                    </li>
+                    <li class="timeline__step" ng-class="{done: newc.activestate >= 2}">
+                        <input class="timeline__step-radio" id="trigger2" name="trigger" type="radio">
+
+
+                        <span class="timeline__step-title">
+                            Process</span>
+
+                        <a ng-click="newc.setState(2)" href="#">
+                            <i class="timeline__step-marker">2</i>
+                        </a>
+                    </li>
+                    <li class="timeline__step" ng-class="{done: newc.activestate >= 3}">
+                        <input class="timeline__step-radio" id="trigger3" name="trigger" type="radio">
+
+                        <!-- <label class="timeline__step-label" for="trigger3">
+                            <span class="timeline__step-content">
+                                15 May 2013</span>
+                        </label> -->
+
+                        <span class="timeline__step-title">
+                            Get output</span>
+
+                        <a ng-click="newc.setState(3)" href="#">
+                            <i class="timeline__step-marker">3</i>
+                        </a>
+                    </li>
+
+                </ol>
+
+
+
+                <!--<ul class="nav nav-pills nav-justified">
+                    <li ng-class="{active: newc.selectedstate===1}"><a href="#">Select data</a></li>
+                    <li ng-class="{active: newc.selectedstate===2}"><a href="#">Process</a></li>
+                    <li ng-class="{active: newc.selectedstate===3}"><a href="#">Get output</a></li>
+                </ul> -->
+
+                <!-- <div class="container">
+                    <div class="wizard small row ng-cloak" ng-cloak>
+                        <a ng-class="{ 'current': 'true' }">
+                            Select data
+                        </a>
+                    </div>
+
+                    <div class="wizard small row ng-cloak" ng-cloak>
+                        <a ng-class="{ 'current': 'false' }">
+                            Select data
+                        </a>
+                    </div>
+
+                    <div class="wizard small row ng-cloak" ng-cloak>
+                        <a ng-class="{ 'current': 'false' }">
+                            Select data
+                        </a>
+                    </div>
+
+                </div> -->
+
+
+
+
+
+            </div>
+
+            <div class="container-fluid" style="margin: 20px 0" ng-if="newc.selectedstate === 1" ng-include="'views/pipelines/dna_reseq/step1.html'"> </div>
+            <div class="container-fluid" style="margin: 20px 0" ng-if="newc.selectedstate === 2" ng-include="'views/pipelines/dna_reseq/step2.html'"> </div>
+            <div class="container-fluid" style="margin: 20px 0" ng-if="newc.selectedstate === 3" ng-include="'views/pipelines/dna_reseq/step3.html'"> </div>
+
+        </div>
+
+    </div>
+</div>

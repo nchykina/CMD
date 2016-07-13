@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
+<div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2>My orders</h2>
         <ol class="breadcrumb">
@@ -45,26 +45,26 @@
                         <tbody>
                             <tr ng-repeat="x in em.orders">
                                 <td>
-                                    {{x.orderId}}
+                                    {{x.id}}
                                 </td>
                                 <td>
                                     <table><tbody>
-                                            <tr ng-repeat="y in x.products">
+                                            <tr ng-repeat="y in x.lines">
                                                 <td>
-                                                    {{y.productCategory}}: {{y.productName}}
+                                                    {{y.product.product_category}}: {{y.product.product_name}}
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </td>
                                 <td>
-                                    {{x.orderDate| date:'MMM d, yyyy'}}
+                                    {{x.created_at| date:'MMM d, yyyy'}}
                                 </td>
                                 <td>
-                                    {{x.totalAmount}} USD
+                                    {{x.amount}} USD
                                 </td>
                                 <td>
-                                    {{x.paymentType}}
+                                    {{x.payment_type}}
                                 </td>
                                 <td>
                                     <span ng-if="x.status == 'Confirmed'" class="label label-primary">{{x.status}}</span>

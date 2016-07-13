@@ -12,10 +12,7 @@
     
 }; */
 
-var SESS_SECRET = 'I love nuts!'; //secret to encrypt cookie (weak forging prevention)
-var SESS_SID = 'ngs.sid'; //name of cookie
 
-var redis = require('./config/redis');
 var express = require('express');
 var express_cp = require('cookie-parser');
 var express_sess = require('express-session');
@@ -23,6 +20,8 @@ var cookie = require('cookie');
 var connect = require('connect');
 var redis_connect = require('connect-redis');
 var cfg = require('./config/config');
+
+var config = require('./config');
 var logger = require('./logger');
 var spamBlocker = require('express-spam-referral-blocker');
 var spamList= require('./logs/referral_spam_list');
@@ -33,9 +32,36 @@ var User = require('./models/user');
 var app = express();
 var http = require('http').Server(app);
 
+var SESS_REDIS_URL = 'redis://'+config.redis_host+':6379/0'; //session storage
+var SIO_REDIS_URL = 'redis://'+config.redis_host+':6379/1'; //socket.io storage
+
+/* Socket.IO Redis Custom storage
+ * 
+ * see https://github.com/socketio/socket.io-redis#custom-client-eg-with-authentication
+ */
+
+var redis_cli = require('redis');
+
+var redis = {
+  sess_cli: redis_cli.createClient(SESS_REDIS_URL),
+  sub_cli: redis_cli.createClient(SIO_REDIS_URL),
+  pub_cli: redis_cli.createClient(SIO_REDIS_URL, {return_buffers: true }),
+  sess_store: null  
+};
+
 redis.sess_store = redis_connect(express_sess);
 
-var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: SESS_SECRET, key: 'ngs.sid'});
+var sess_store = express_sess({store: new redis.sess_store({client: redis.sess_cli}), secret: config.session_secret, key: config.session_sid});
+
+app.use(function(req,res,next){
+    if((req.hostname === "babyboom.ru") ||
+       (req.hostname === "www.babyboom.ru") ){
+       res.status(301).send('Stop this!');
+       return;
+    }
+    
+    next();
+});
 
 app.use(function(req,res,next){
     if((req.hostname === "babyboom.ru") ||
@@ -66,7 +92,7 @@ app.use(function (req, res, next) {
     var sess = req.session;
     
     if(!sess){
-        next();
+        return next();
     }
     
     if(!sess.role) {
@@ -82,7 +108,7 @@ app.use(passport.session());
 
 var apiRouter = express.Router();
 var apis = require('./api/api_registry');
-apis(apiRouter);
+apis.http_bind(apiRouter);
 app.use('/api',apiRouter);
 //register API hooks
 //app.use('/api',)
@@ -90,7 +116,7 @@ app.use('/',express.static(__dirname + '/../app'));
 
 //var router = app.Router;
 app.all('/*', function(req, res, next) {
-  res.sendfile('index.html', { root: 'app' });
+  res.sendFile('index.html', { root: 'app' });
 });
 
 /*app.get('/', function (req, res) {
@@ -126,31 +152,32 @@ io.use(function(socket, next) {
 
     handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
 
-    handshakeData.sessionID = express_cp.signedCookie(handshakeData.cookie[SESS_SID], SESS_SECRET);            
+    handshakeData.sessionID = express_cp.signedCookie(handshakeData.cookie[config.session_sid], config.session_secret);            
 
-    if (handshakeData.cookie[SESS_SID] === handshakeData.sessionID) {
+    if (handshakeData.cookie[config.session_sid] === handshakeData.sessionID) {
       console.log('Cookie is invalid.');
       return next(new Error('Cookie is invalid.'));
     }
     else {
       //ok. cookie is not forged, let's load the session
-      console.log(handshakeData.session);
+      //console.log("socket.io connected client: "+handshakeData.session.userid);
       
       /* if(!handshakeData.session.key){
           console.log('No session');
           return next(new Error('No session'));
       } */
             
-      if(!handshakeData.session.role){
+      /* if(!handshakeData.session.role){
           return next(new Error('Internal error: session role has to be always set'));
-      }
+      } */
       
-      if(handshakeData.session.role === 'anonymous'){
+      /* if(handshakeData.session.role === 'anonymous'){
           return next(new Error('Anonymous access not allowed'));
-      }
+      } */
       
-      if(!handshakeData.session.userid){
+      if(!handshakeData.session.passport.user){
           console.log('Malformed session: no userid');
+          console.log(handshakeData.session);
           return next(new Error('Malformed session: no userid'));
       }
     }
@@ -173,10 +200,15 @@ var socket_remember;
 
 io.on('connection', function(socket){
     var hs = socket.handshake;
-    console.log('a user connected: ' + socket.id);
+    console.log('a user connected: ' + socket.request.session.passport.user);
     //users[hs.session.username] = socket.id;
     //clients[socket.id] = socket;
     socket_remember = socket;
+    //console.log(socket);
+    
+    socket.emit('welcome',socket.request.session.passport.user);
+    
+    apis.io_bind(socket);
     
     socket.on('disconnect', function () {
     //delete clients[socket.id]; // remove the client from the array
