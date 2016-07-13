@@ -144,6 +144,7 @@
         "redis_host": "localhost",
         "storage_root": "/ngs",
         "passport_secret": "myJWMsecret",
+        "ssl_port": 443,
         
         "session_secret": "I love nuts!",
         "session_sid": "ngs.prd.sid",
