@@ -19,6 +19,8 @@ var extend = require('node.extend'); //merge JavaScript objects
 
 var q = require('q'); //Q promise framework
 
+
+
 var job_create = function (req, res) {
     if (!req.user) {
         res.status(403).json({success: false, msg: 'Unauthenticated'});
@@ -406,6 +408,8 @@ var job_submit_step = function (job, stepnum, t) {
     var job_path = job.work_dir;
 
     var sing_id = job.id + '_' + stepnum + '_' + Date.now();
+    
+    
 
     //create a request
     request.post({
@@ -422,7 +426,8 @@ var job_submit_step = function (job, stepnum, t) {
             console.error('failed to create request: ' + response);
             return defer.reject({msg: 'Failed to create singularity request'});
         } else {
-            //console.log(response.statusCode + " - " + response.body);
+            
+            console.log(util.format('deploying job %d_%d',job.id,stepnum));
 
             var req_deploy = {
                 deploy: {

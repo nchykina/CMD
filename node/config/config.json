@@ -107,6 +107,8 @@
         "session_secret": "I love nuts!",
         "session_sid": "ngs.work.sid",
         
+        "file_agent_url": "http://192.168.4.8:3001/file",
+        
         "smtpConfig": {
             "direct": false,
             "host": "mail.ngspipeline.com",
@@ -120,8 +122,8 @@
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
             "ngs_lib_host": "/ngs_lib",
-            "api_url": "http://192.168.137.5:7099/singularity",
-            "my_url": "http://192.168.137.1:3000"
+            "api_url": "http://192.168.4.5:7099/singularity",
+            "my_url": "http://10.0.0.84:3000"
         }
     },
     
