@@ -3949,6 +3949,10 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
         })
     }
     
+    this.setState = function(newState){
+        vm.selectedstate = newState;
+    } 
+    
     this.realJobState = function() {
         switch(vm.job.status){
                         case 'new': return 1;
