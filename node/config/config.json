@@ -134,11 +134,37 @@
         "host": "127.0.0.1",
         "dialect": "mysql"
     },
+    
     "production": {
-        "username": "root",
-        "password": null,
-        "database": "database_production",
+       "username": "ngspipeline",
+        "password": "pr0dPwD",
+        "database": "ngspipeline_prd",
         "host": "127.0.0.1",
-        "dialect": "mysql"
+        "dialect": "postgres",
+        "redis_host": "localhost",
+        "storage_root": "/ngs",
+        "passport_secret": "myJWMsecret",
+        
+        "session_secret": "I love nuts!",
+        "session_sid": "ngs.prd.sid",
+        
+        "file_agent_url": "http://192.168.4.8:3001/file",
+        
+        "smtpConfig": {
+            "direct": false,
+            "host": "mail.ngspipeline.com",
+            "port": 25,
+            "auth": {
+                "user": "support",
+                "pass": "Lapalapa1"
+            }
+        },
+        
+        "singularity": {
+            "work_dir_format": "/ngs/jobs/%d",
+            "ngs_lib_host": "/ngs_lib",            
+            "api_url": "http://192.168.4.5:7099/singularity",
+            "my_url": "http://10.0.0.12:3000"
+        }    
     }
 }
