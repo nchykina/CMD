@@ -36,6 +36,9 @@
                         <a ui-sref="create_account" class="btn btn-lg btn-primary"> FREE TRIAL </a>
                         <a class="caption-link">Align your reads to a reference genome</a>
                     </p>
+                    <p>
+                        <a target="blank" href="pdfs/NGS_Pipeline.pdf" class="btn btn-sm btn-primary"> View our corporate presentation </a>
+                    </p>
                 </div>
                 <div class="carousel-image wow zoomIn">
                     <img src="img/landing/laptop.png" alt="laptop"/>
@@ -65,13 +68,14 @@
 
             <p> When you start learning new stuff,
                 it's important to grasp all the key concepts easily and intuitively.
-                Instead, the first thing you face as a newbie bioinformatician is a console window 
-                and 10 different tools you need to install on your computer. Plus, 
-                you need to know Linux, R, Python...</p>
+                Instead, the first thing you face as a newbie bioinformatician is a daunting stack of 
+                20 different software packages you need to install on your computer. Afterwards, it turns out that
+                you need to learn how to use Linux, how to compile C++ code, and how to write scripts in R and Python.</p>
             <h4>That is where NGS Pipeline makes a difference.</h4>
             <p>
-                We value your time and move you
-                straight to the most interesting part. You will get the desired results quickly,
+                We value your time and move you straight to the most interesting part, extracting  
+                the information you need out of your raw data.
+                With our automated pipelines, you will get the desired results quickly,
                 in a clear and visualized way.</p>
             <p><b>Enjoy a user-friendly introduction to bioinformatics, one of the most interesting disciplines 
                     in the world that you always wanted to know more about. </b></p>
@@ -89,15 +93,13 @@
         <div class="col-lg-6">
             <small>TECHNOLOGY</small>
             <h2>Use preconfigured cluster facilities out-of-box </h2>
-            <p> Bioinformatics is all about processing gigabytes of raw data, which usually can't be done
-                efficiently on a client device. For instance, a basic task such as
-                indexing a human genome and aligning the reads to it takes hours and hours on a typical Macbook Air.</p>
-            <h4>We run your pipelines in an HPC-cluster.</h4>
-            <p>  We empower you with an ability to do any operation in less than a couple of minutes.
-                We use enterprise-class parallel computing technology stack to make it work
-                (DC/OS, Apache Mesos, OpenStack). Each of your pipelines can be launched in a container 
-                with up to 60 vCPUs and 128 Gb RAM. For heavylifters, we also offer MPI and 
-                InfiniBand at request.
+            <p> Bioinformatics relies on processing gigabytes of raw data, which usually can't be done
+                efficiently on a typical client device. For instance,
+                indexing a human genome and aligning the reads to it may take a couple of hours on a typical Macbook Air.</p>
+            <h4>We run your pipelines in a scalable high-performance cluster.</h4>
+            <p>  We empower you with an ability to run any pipeline job quickly and efficiently.
+                To make in work, we use enterprise-class parallel computing technology stack
+                (such as DC/OS, Docker Containers and Apache Mesos).
             </p>
             <p><b>Speed up your data processing, and let us take care of the IT infrastructure for you. </b></p>
 
@@ -110,14 +112,14 @@
         <div class="col-lg-6">
             <small>STORAGE</small>
             <h2>Store all your datasets in a private cloud </h2>
-            <p>We provide up to 5 GB free storage for your input files. This doesn't include the 
-                bulky genome data files, which we keep stored in our shared
+            <p>We provide unlimited storage space for your input files upon request. This doesn't include the 
+                bulky reference genome data files and annotation databases, which we keep stored in our shared
                 repository and available for you at any time.</p>
             <h4>We also have a library of sample datasets with dozens of interesting cases.</h4>
             <p>
-                You can run the pipeline jobs on these sample datasets to see how the process works,
-                and of course the output from these jobs will not count towards your storage space.
-                Every dataset can be downloaded for free and later used in any bioinformatics software you want.
+                You can run the pipeline jobs on these sample datasets or upload your own data to your
+                file storage on our servers. After the pipeline job is completed, the output files
+                can be downloaded for free and to be further explored in any bioinformatics software you want.
             </p>            
         </div>
         <div class="col-lg-6 text-right wow fadeInRight">
@@ -136,16 +138,16 @@
                 We can also address your needs if you are a professional bioinformatician. 
                 Say, you have your own custom and tuned set of pipelines, but your hardware
                 is insufficient to run them fast enough. Or you don't want to dig into details 
-                of how to run your pipelines in a cluster environment.        
+                of how to parallelize your data processing within a cluster environment.        
             </p>
             <h4>We can implement your legacy pipelines in our system for you.</h4>
             <p>
-                Send us an email with either your script or even simply a description of the steps you
+                Send us a request with either your script or even simply a brief description of the steps you
                 take when processing you data. We will implement 
                 your pipeline in our system making it accessible for you in a single click
                 via your private account. </p>
             <p><b>Focus on your core area of expertise and let us take care about the rest</b></p>               
-            <a href="mailto:support@ngspipeline.com" class="btn btn-primary">Send us email to get started</a>
+            <a href="mailto:support@ngspipeline.com" class="btn btn-primary">Contact us</a>
 
         </div>
     </div>
@@ -206,6 +208,14 @@
             <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
                 <p><strong>&copy; 2016 NGS Pipeline</strong><br/></p>
             </div>
+        </div>
+        <div class="row center">
+            <p> Use of this website constitutes acceptance of 
+            <a ui-sref="privacy_policy" >Privacy Policy</a> 
+            and
+            <a ui-sref="terms_of_service" >Terms of Service</a>.
+            </p>
+            
         </div>
     </div>
 </section>

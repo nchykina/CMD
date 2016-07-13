@@ -22,6 +22,12 @@ var redis_connect = require('connect-redis');
 var cfg = require('./config/config');
 
 var config = require('./config');
+var logger = require('./logger');
+var spamBlocker = require('express-spam-referral-blocker');
+var spamList= require('./logs/referral_spam_list');
+var sitemap = require('./seo/sitemap');
+
+var User = require('./models/user');
 
 var app = express();
 var http = require('http').Server(app);
@@ -56,6 +62,27 @@ app.use(function(req,res,next){
     
     next();
 });
+
+app.use(function(req,res,next){
+    if((req.hostname === "babyboom.ru") ||
+       (req.hostname === "www.babyboom.ru") ){
+       res.status(301).send('Stop this!');
+       return;
+    }
+    
+    next();
+});
+
+
+app.get('/sitemap.xml', function(req, res) {
+  res.header('Content-Type', 'application/xml');
+  res.send(sitemap.toString());
+});
+
+
+app.use(require('morgan')({ "stream": logger.stream }));
+spamBlocker.addToReferrers(spamList);
+app.use(spamBlocker.send404);
 
 app.use(express_cp());
 app.use(sess_store);
