@@ -199,6 +199,26 @@
             "ngs_lib_host": "/ngs_lib",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://10.0.0.12:3000"
+        },
+        
+        "log": {
+            "console": {
+                "level": "error",
+                "handleExceptions": true,
+                "json": false,
+                "colorize": true
+            },
+            "file": {
+                "level": "info",
+                "filename": "/ngs/logs",
+                "handleExceptions": true,
+                "json": true,
+                "maxsize": 5242880,
+                "maxFiles": 5,
+                "colorize": false
+
+            }
+
         }
     }
 }
