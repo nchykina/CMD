@@ -19,7 +19,7 @@ var extend = require('node.extend'); //merge JavaScript objects
 
 var q = require('q'); //Q promise framework
 
-
+var io = require('../io').emitter;
 
 var job_create = function (req, res) {
     if (!req.user) {
@@ -646,6 +646,7 @@ var job_submit = function (req, res, next) {
 
                                     job_hardcode.upload_input()
                                             .then(function (copy_res) {
+                                                io.to("job_"+job.id).emit("job_file_submit","finished");
                                                 job_really_submit(job, req, res, next, defer, t);
                                             })
                                             .catch(function (err) {
@@ -686,6 +687,7 @@ var job_really_submit = function (job, req, res, next, defer, t) {
     job_submit_step(job, 0, t).then(
             function (ret) {
                 if (!ret.err) {
+                    io.to("job_"+job.id).emit("job_update",job);
                     res.status(200).json({success: true, msg: ret.msg, job: ret.job});
                 } else {
                     res.status(500).json({success: false, msg: ret.msg});
@@ -830,6 +832,8 @@ var sing_hook = function (req, res) {
                         }
 
                         return step.save({transaction: t}).then(function () {
+                            //TODO: this does not respect transactional logic. if transaction rolls back - the client will still think that step was updated
+                            io.to("job_"+job.id).emit("step_update",step);
 
                             var prm;
 
@@ -870,6 +874,8 @@ var sing_hook = function (req, res) {
                                     prm = defer.promise;
                                 }
                             }
+                            
+                            io.to("job_"+job.id).emit("job_update",job);
 
                             return prm;
                         });

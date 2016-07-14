@@ -519,6 +519,18 @@ var jobService = function ($http, $q, fileService,socket) {
         throw new Error('job_update for unknown job');
         
     }
+    
+    this.processStepUpdate = function(step){
+        
+        console.log('step_update: '+step);    
+        
+    }
+    
+    this.processFileUpload = function(step){
+        
+        console.log('file_submit: '+step);    
+        
+    }
 
     this.submitJob = function (job) {
         var defer = $q.defer();
@@ -542,6 +554,9 @@ var jobService = function ($http, $q, fileService,socket) {
                     }
                     
                     socket.on('job_update', vm.processJobUpdate);
+                    socket.on('step_update', vm.processStepUpdate);
+                    socket.on('job_file_submit', vm.processFileUpload);
+                    
                     
                     $http({
                 method: 'PUT',
