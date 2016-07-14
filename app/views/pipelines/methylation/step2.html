@@ -1,0 +1,149 @@
+<fieldset>
+
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h4>Please wait while your files are being processed</h4>
+            </div>
+            <div class="ibox-content" id="ibox-content">
+
+                <div id="vertical-timeline" class="vertical-container dark-timeline center-orientation">
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon navy-bg">
+                            <i class="fa fa-exchange"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <h2>Bismark: aligning paired reads to the adjusted reference genome</h2>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-primary dim"><i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
+                            <p> At the first step of the process the reads are aligned to the reference genome.
+                                The output of this process is a <b class="text-navy">.SAM</b> file containing information about the most likely
+                                position of every read on the genome and mapping quality.                                 
+                            </p>
+                            <a ui-sref="guides.article5" class="btn btn-sm btn-primary"> Read more about reference genome</a>
+                            <span class="vertical-date">
+                                Step 1 <br/>
+                                <small>Estimated time: 5 minutes</small>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon blue-bg">
+                            <i class="fa fa-sort-amount-asc"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <h2>Methpipe: finding hypo- and hypermethylation regions</h2>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-success dim"><i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
+                            <p>Binary format is a more concise and convenient way to represent the data.
+                                Therefore, the .SAM text format is converted to <b class="text-navy">.BAM</b>
+                                binary format and indexed to make iterating over it faster.</p>
+
+                            <a href="#" class="btn btn-sm btn-success"> Download .bam file <span class="fa fa-cloud-download"></span></a>
+                            <span class="vertical-date">
+                                Step 2 <br/>
+                                <small>Estimated time: 2 minutes</small>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon white-bg">
+                            <i class="fa fa-align-center"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <h2>Methpipe: performing differential methylation analysis</h2>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
+                                </div>
+                            </div>
+                            <p>In the <b class="text-navy">.MPILEUP</b> file, each line represents a genomic position, consisting of 
+                                chromosome name, coordinate, reference base, the number of reads 
+                                covering the site, read bases, base qualities and alignment mapping qualities. 
+                                Information on matches, mismatches and indels is encoded in the read base column. </p>
+                            <a href="#" class="btn btn-sm btn-info">Read more about mpileup</a>
+                            <span class="vertical-date"> Step 3 <br/><small>Estimated time: 5 minutes</small></span>
+                        </div>
+                    </div>
+
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon white-bg">
+                            <i class="fa fa-file-text-o"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <h2>BCFTools: creating a vcf file</h2>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
+                                </div>
+                            </div>
+                            <p><b class="text-navy">.VCF</b> is a text file format that contains data lines about every position in the genome where a variant is observed (SNP, Indel or CNV).</p>
+                            <a href="#" class="btn btn-sm btn-success"> Download .vcf file <span class="fa fa-cloud-download"></span></a>
+
+                            <span class="vertical-date">Step 4 <br/><small>Estimated time: 2 minutes</small></span>
+                        </div>
+                    </div>
+
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon white-bg">
+                            <i class="fa fa-table"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <h2>Annovar: annotating the data</h2>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
+                                </div>
+                            </div>
+                            <p>Annovar annotates the variants listed in the vcf file in accordance with the publicly 
+                                available databases (for instance, dbSNP). The output is generated as an .csv file that
+                                can be conveniently read by a scientist in Excel.
+                            </p>
+                            <a href="#" class="btn btn-sm btn-success"> Download .csv file <span class="fa fa-cloud-download"></span></a>
+
+                            <span class="vertical-date">Step 5 <br/><small>Estimated time: 1 minute</small></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-6">
+
+        </div>
+    </div>
+
+    <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn btn-default">Cancel</a>
+    <a ui-sref="pipelines.dna_reseq_new.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
+
+
+
+</fieldset>

@@ -38,7 +38,6 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('pipelines.dna_reseq_job', {
                 url: "/dna_resequencing/job/:jobid",
                 templateUrl: "views/pipelines/dna_reseq/job.html",
-                //templateUrl: "views/debug/parent_state.html",
                 controller: 'dnaReseqJobController',
                 controllerAs: 'newc',                
                 data: {pageTitle: 'DNA resequencing'},
@@ -52,32 +51,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     }
                 }
             })
-            /* .state('pipelines.dna_reseq_new.step1', {
-                url: '/step1',
-                templateUrl: "views/pipelines/dna_reseq/step1.html",
-                //templateUrl: "views/debug/normal_state.html",
-                controller: 'dnaReseqNewController',
-                controllerAs: 'newc',
-                //params: { job: {} },
-                data: {pageTitle: 'DNA resequencing pipeline: Step 1'}
-            })
-            .state('pipelines.dna_reseq_new.step2', {
-                url: '/step2',
-                templateUrl: "views/pipelines/dna_reseq/step2.html",
-                controller: 'dnaReseqNewController',
-                controllerAs: 'newc',
-                //params: { job: {} },
-                data: {pageTitle: 'DNA resequencing pipeline: Step 2'}
-            })
-            .state('pipelines.dna_reseq_new.step3', {
-                url: '/step3',
-                templateUrl: "views/pipelines/dna_reseq/step3.html",
-                controller: 'dnaReseqNewController',
-                controllerAs: 'newc',
-                //params: { job: {} },
-                data: {pageTitle: 'DNA resequencing pipeline: Step 3'}
-            }) */
-
+                        
 
             .state('pipelines.rna_reseq_home', {
                 url: "/rna_resequencing/home",
@@ -89,7 +63,6 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
             .state('pipelines.rna_reseq_new', {
                 url: "/rna_resequencing/new",
                 templateUrl: "views/pipelines/rna_reseq/new.html",
-                //templateUrl: "views/debug/parent_state.html",
                 controller: 'rnaReseqNewController',
                 controllerAs: 'newc',
                 params: {job: {}},
@@ -130,6 +103,54 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 data: {pageTitle: 'RNA resequencing pipeline: Step 3'}
             })
 
+
+            .state('pipelines.methylation_home', {
+                url: "/methylation/home",
+                controller: 'methylationHomeController',
+                controllerAs: 'homec',
+                templateUrl: "views/pipelines/methylation/home.html",
+                data: {pageTitle: 'Methylation and BS-Seq'}
+            })
+            .state('pipelines.methylation_job', {
+                url: "/methylation/job/:jobid",
+                templateUrl: "views/pipelines/methylation/job.html",
+                controller: 'methylationJobController',
+                controllerAs: 'newc',                
+                data: {pageTitle: 'Methylation and BS-Seq'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/steps/jquery.steps.css']
+                            }
+                        ]);
+                    }
+                }
+            })
+            
+             .state('pipelines.dna_denovo_home', {
+                url: "/dna_denovo/home",
+                controller: 'dnadenovoHomeController',
+                controllerAs: 'homec',
+                templateUrl: "views/pipelines/dna_denovo/home.html",
+                data: {pageTitle: 'DNA De Novo Assembly'}
+            })
+            .state('pipelines.dna_denovo_job', {
+                url: "/methylation/job/:jobid",
+                templateUrl: "views/pipelines/dna_denovo/job.html",
+                controller: 'dnadenovoJobController',
+                controllerAs: 'newc',                
+                data: {pageTitle: 'DNA De Novo Assembly'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/steps/jquery.steps.css']
+                            }
+                        ]);
+                    }
+                }
+            })
 
 
             .state('charts', {

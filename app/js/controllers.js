@@ -3844,6 +3844,9 @@ function mailboxCtrl($scope, $http, $state, $stateParams, messageService) {
 
 }
 
+
+// 1. DNA RESEQ
+
 function dnaReseqHomeCtrl($scope, $state, jobService) {
     var vm = this;
 
@@ -3854,7 +3857,7 @@ function dnaReseqHomeCtrl($scope, $state, jobService) {
             .then(function (res) {
                 vm.jobs = res;
             });
-            
+
     vm.jobfilter = ['finished'];
 
     this.createJob = function (species) {
@@ -3866,55 +3869,14 @@ function dnaReseqHomeCtrl($scope, $state, jobService) {
                             alert(err);
                         });
     };
-    
-    this.filterByStatus = function(job) {
+
+    this.filterByStatus = function (job) {
         //console.log('debug');
         return (vm.jobfilter.indexOf(job.status) !== -1);
     };
 
 }
 
-function rnaReseqHomeCtrl($http, $state, jobService) {
-    var vm = this;
-
-    //vm.job = jobService.newJob;
-
-    this.createJob = function (species) {
-        jobService.createOrUpdateJob('rna_reseq', {seq_species: species})
-                .then(function (job) {
-                    $state.go('pipelines.rna_reseq_job', {job: job});
-                },
-                        function (err) {
-                            alert(err);
-                        });
-    };
-
-}
-
-function fileCtrl(fileService) {
-    var vm = this;
-
-    vm.files = [];
-
-    fileService.getFiles()
-            .then(function (res) {
-                vm.files = res;
-            });
-
-    this.upload = function (file) {
-        if (file == null) {
-            console.log('ima buggy shiet');
-            return;
-        }
-
-        fileService.addFile(file);
-    }
-
-    this.deleteFile = function (fileid) {
-        fileService.deleteFile(fileid);
-    }
-
-}
 
 function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModal) {
     var vm = this;
@@ -3934,37 +3896,37 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
     if (!vm.jobid) {
         console.log('no job object passed to wizard. going back');
         $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
-    }
-    else {
+    } else {
         jobService.getJob(vm.jobid)
-                .then(function(res){
-                    vm.job=res;
+                .then(function (res) {
+                    vm.job = res;
                     vm.species = vm.job.seq_species;
-                    
+
                     vm.selectedstate = vm.realJobState();
                     vm.activestate = vm.realJobState();
-        })
-                .catch(function(err){
+                })
+                .catch(function (err) {
                     $state.go('pipelines.dna_reseq_home'); //error, go back to wizard (of Oz)
-        })
+                })
     }
-    
-    this.setState = function(newState){
+
+    this.setState = function (newState) {
         vm.selectedstate = newState;
-    } 
-    
-    this.realJobState = function() {
-        switch(vm.job.status){
-                        case 'new': return 1;
-                        case 'submitted':
-                        case 'running':
-                        case 'failed':
-                           return 2;
-                        case 'finished':
-                            return 3;
-                        default:
-                            return 0;
-                    }
+    }
+
+    this.realJobState = function () {
+        switch (vm.job.status) {
+            case 'new':
+                return 1;
+            case 'submitted':
+            case 'running':
+            case 'failed':
+                return 2;
+            case 'finished':
+                return 3;
+            default:
+                return 0;
+        }
     }
 
     this.upload = function (filenum, file) {
@@ -3975,9 +3937,9 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
 
         jobService.addFile(vm.job, filenum, file);
     }
-    
-    this.changeState = function(newState){
-        if(newState<=vm.realJobState()){
+
+    this.changeState = function (newState) {
+        if (newState <= vm.realJobState()) {
             vm.selectedstate = newState;
         }
     }
@@ -3993,7 +3955,7 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
                     alert(err);
                 })
     }
-    
+
     this.chooseFile = function (filenum) {
 
         var modalInstance = $uibModal.open({
@@ -4001,24 +3963,168 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
             controller: fileModalCtrl,
             controllerAs: 'vm'
         });
-        
+
         modalInstance.result.then(function (file) {
             fileService.getFile(file.id)
-                    .then(function(file_srv){
-                        jobService.setFile(vm.job,filenum,file_srv)
-                        .then(function(res){
-                            vm.job.files[filenum]=file;
-                        });
-            });
+                    .then(function (file_srv) {
+                        jobService.setFile(vm.job, filenum, file_srv)
+                                .then(function (res) {
+                                    vm.job.files[filenum] = file;
+                                });
+                    });
         }, function () {
             //if cancel was clicked
-            });
-        
+        });
+
     };
 
-    // this.processForm = function () {
-    //   alert('Wizard completed');
-    // };
+}
+
+
+// 2. METHYLATION
+
+function methylationHomeCtrl($scope, $state, jobService) {
+    var vm = this;
+
+    //vm.job = jobService.newJob;
+    vm.jobs = [];
+
+    jobService.getJobs()
+            .then(function (res) {
+                vm.jobs = res;
+            });
+
+    vm.jobfilter = ['finished'];
+
+    this.createJob = function (species) {
+        jobService.createOrUpdateJob('methylation', species)
+                .then(function (job) {
+                    $state.go('pipelines.methylation_job', {jobid: job.id});
+                },
+                        function (err) {
+                            alert(err);
+                        });
+    };
+
+    this.filterByStatus = function (job) {
+        //console.log('debug');
+        return (vm.jobfilter.indexOf(job.status) !== -1);
+    };
+
+}
+
+function methylationJobCtrl($state, $stateParams, jobService, fileService, $uibModal) {
+    var vm = this;
+
+    vm.jobid = $stateParams.jobid;
+
+    vm.job = {};
+    vm.selectedstate = 0;
+    vm.activestate = 0;
+
+    if (!vm.jobid) {
+        console.log('no job object passed to wizard. going back');
+        $state.go('pipelines.methylation_home'); //no job passed to wizard
+    } else {
+        jobService.getJob(vm.jobid)
+                .then(function (res) {
+                    vm.job = res;
+                    vm.species = vm.job.seq_species;
+
+                    vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.realJobState();
+                })
+                .catch(function (err) {
+                    $state.go('pipelines.methylation_home'); //error, go back to wizard (of Oz)
+                })
+    }
+
+    this.setState = function (newState) {
+        vm.selectedstate = newState;
+    }
+
+    this.realJobState = function () {
+        switch (vm.job.status) {
+            case 'new':
+                return 1;
+            case 'submitted':
+            case 'running':
+            case 'failed':
+                return 2;
+            case 'finished':
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
+    this.upload = function (filenum, file) {
+        if (file == null) {
+            console.log('ima buggy shiet');
+            return;
+        }
+
+        jobService.addFile(vm.job, filenum, file);
+    }
+
+    this.changeState = function (newState) {
+        if (newState <= vm.realJobState()) {
+            vm.selectedstate = newState;
+        }
+    }
+
+    this.submit = function () {
+        jobService.submitJob(vm.job)
+                .then(function (res) {
+                    vm.job.status = 'submitted';
+                    vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.selectedstate;
+                })
+                .catch(function (err) {
+                    alert(err);
+                })
+    }
+
+    this.chooseFile = function (filenum) {
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/file_manager/modal.html',
+            controller: fileModalCtrl,
+            controllerAs: 'vm'
+        });
+
+        modalInstance.result.then(function (file) {
+            fileService.getFile(file.id)
+                    .then(function (file_srv) {
+                        jobService.setFile(vm.job, filenum, file_srv)
+                                .then(function (res) {
+                                    vm.job.files[filenum] = file;
+                                });
+                    });
+        }, function () {
+            //if cancel was clicked
+        });
+
+    };
+
+}
+
+// 3. RNA RESEQ
+
+function rnaReseqHomeCtrl($http, $state, jobService) {
+    var vm = this;
+
+    //vm.job = jobService.newJob;
+
+    this.createJob = function (species) {
+        jobService.createOrUpdateJob('rna_reseq', {seq_species: species})
+                .then(function (job) {
+                    $state.go('pipelines.rna_reseq_job', {job: job});
+                },
+                        function (err) {
+                            alert(err);
+                        });
+    };
 
 }
 
@@ -4050,6 +4156,33 @@ function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
     };
 
 }
+
+
+function fileCtrl(fileService) {
+    var vm = this;
+
+    vm.files = [];
+
+    fileService.getFiles()
+            .then(function (res) {
+                vm.files = res;
+            });
+
+    this.upload = function (file) {
+        if (file == null) {
+            console.log('ima buggy shiet');
+            return;
+        }
+
+        fileService.addFile(file);
+    }
+
+    this.deleteFile = function (fileid) {
+        fileService.deleteFile(fileid);
+    }
+
+}
+
 
 
 /**
@@ -4387,18 +4520,26 @@ angular
         .controller('tourCtrl', tourCtrl)
         .controller('jstreeCtrl', jstreeCtrl)
         .controller('loginController', ['$scope', '$http', '$state', loginCtrl])
+
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
-        .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
-        .controller('dnaReseqJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnaReseqJobCtrl])
-        .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
+
+        .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])
-        .controller('dnaReseqHomeController', ['$scope', '$state', 'jobService', 'fileService', dnaReseqHomeCtrl])
-        .controller('rnaReseqHomeController', ['$http', '$state', 'jobService', rnaReseqHomeCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', 'ecommService', stripeCtrl])
+
         .controller('fileController', ['fileService', fileCtrl])
         .controller('fileModalController', ['fileService', fileModalCtrl])
-        .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl]);
+
+        .controller('dnaReseqHomeController', ['$http', '$state', 'jobService', dnaReseqHomeCtrl])
+        .controller('dnaReseqJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnaReseqJobCtrl])
+
+        .controller('rnaReseqHomeController', ['$http', '$state', 'jobService', rnaReseqHomeCtrl])
+        .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
+
+        .controller('methylationHomeController', ['$http', '$state', 'jobService', methylationHomeCtrl])
+        .controller('methylationJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', methylationJobCtrl])
+        ;
 
 
