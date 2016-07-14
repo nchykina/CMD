@@ -54,6 +54,40 @@
             "my_url": "http://192.168.1.4:3000"
         }
     },
+    
+    "nchykina-mac": {
+        "username": "ngspipeline",
+        "password": "qwerty",
+        "database": "ngspipeline_dev",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "redis_host": "localhost",
+        "storage_root": "/Users/nchykina/NetBeansProjects/_file_storage",
+        "passport_secret": "myJWMsecret",
+        
+        "session_secret": "I love nuts!",
+        "session_sid": "ngs.sid",
+        
+        "file_agent_url": "http://192.168.4.8:3001/file",
+        
+        "smtpConfig": {
+            "direct": false,
+            "host": "mail.ngspipeline.com",
+            "port": 25,
+            "auth": {
+                "user": "support",
+                "pass": "Lapalapa1"
+            }
+        },
+        
+        "singularity": {
+            "work_dir_format": "/ngs/jobs/%d",
+            "ngs_lib_host": "/ngs_lib",            
+            "api_url": "http://192.168.4.5:7099/singularity",
+            "my_url": "http://192.168.1.4:3000"
+        }
+    },
+    
     "qa-nas-debian": {
         "username": "ngspipeline",
         "password": "qwerty",
