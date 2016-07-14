@@ -8,10 +8,8 @@
         "redis_host": "localhost",
         "storage_root": "/jobfiles",
         "passport_secret": "myJWMsecret",
-        
         "session_secret": "I love nuts!",
         "session_sid": "ngs.sid",
-        
         "smtpConfig": {
             "direct": false,
             "host": "mail.ngspipeline.com",
@@ -21,7 +19,6 @@
                 "pass": "Lapalapa1"
             }
         },
-        
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
             "ngs_lib_host": "/ngs_lib",
@@ -29,7 +26,6 @@
             "my_url": "http://192.168.1.4:3000"
         }
     },
-    
     "sergey-home-dev": {
         "username": "ngspipeline",
         "password": "qwerty",
@@ -39,12 +35,9 @@
         "redis_host": "192.168.1.7",
         "storage_root": "C:\\node_files",
         "passport_secret": "myJWMsecret",
-        
         "session_secret": "I love nuts!",
         "session_sid": "ngs.sid",
-        
         "file_agent_url": "http://192.168.4.8:3001/file",
-        
         "smtpConfig": {
             "direct": false,
             "host": "mail.ngspipeline.com",
@@ -54,10 +47,9 @@
                 "pass": "Lapalapa1"
             }
         },
-        
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
-            "ngs_lib_host": "/ngs_lib",            
+            "ngs_lib_host": "/ngs_lib",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://192.168.1.4:3000"
         }
@@ -105,10 +97,8 @@
         "redis_host": "192.168.1.7",
         "storage_root": "/ngs",
         "passport_secret": "myJWMsecret",
-        
         "session_secret": "I love nuts!",
         "session_sid": "ngs-qa.sid",
-        
         "smtpConfig": {
             "direct": false,
             "host": "mail.ngspipeline.com",
@@ -118,7 +108,6 @@
                 "pass": "Lapalapa1"
             }
         },
-        
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
             "ngs_lib_host": "/ngs_lib",
@@ -126,8 +115,9 @@
             "my_url": "http://192.168.1.7:3000"
         }
     },
-    
     "sergey-work-dev": {
+        "ssl_port": 3001,
+        
         "username": "ngspipeline",
         "password": "qwerty",
         "database": "ngspipeline_dev",
@@ -136,12 +126,9 @@
         "redis_host": "192.168.137.3",
         "storage_root": "C:\\node_files",
         "passport_secret": "myJWMsecret",
-        
         "session_secret": "I love nuts!",
         "session_sid": "ngs.work.sid",
-        
         "file_agent_url": "http://192.168.4.8:3001/file",
-        
         "smtpConfig": {
             "direct": false,
             "host": "mail.ngspipeline.com",
@@ -151,15 +138,32 @@
                 "pass": "Lapalapa1"
             }
         },
-        
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
             "ngs_lib_host": "/ngs_lib",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://10.0.0.84:3000"
+        },
+        "log": {
+            "console": {
+                "level": "error",
+                "handleExceptions": true,
+                "json": false,
+                "colorize": true
+            },
+            "file": {
+                "level": "info",
+                "filename": "C:\\node_files\\logs\\info.log",
+                "handleExceptions": true,
+                "json": true,
+                "maxsize": 5242880,
+                "maxFiles": 5,
+                "colorize": false
+
+            }
+
         }
     },
-    
     "test": {
         "username": "root",
         "password": null,
@@ -167,8 +171,9 @@
         "host": "127.0.0.1",
         "dialect": "mysql"
     },
-    
     "production": {
+        "ssl_port": 443,
+        
         "username": "ngspipeline",
         "password": "pr0dPwD",
         "database": "ngspipeline_prd",
@@ -176,14 +181,10 @@
         "dialect": "postgres",
         "redis_host": "localhost",
         "storage_root": "/ngs",
-        "passport_secret": "myJWMsecret",
-        "ssl_port": 443,
-        
+        "passport_secret": "myJWMsecret",        
         "session_secret": "I love nuts!",
         "session_sid": "ngs.prd.sid",
-        
         "file_agent_url": "http://192.168.4.8:3001/file",
-        
         "smtpConfig": {
             "direct": false,
             "host": "mail.ngspipeline.com",
@@ -193,12 +194,11 @@
                 "pass": "Lapalapa1"
             }
         },
-        
         "singularity": {
             "work_dir_format": "/ngs/jobs/%d",
-            "ngs_lib_host": "/ngs_lib",            
+            "ngs_lib_host": "/ngs_lib",
             "api_url": "http://192.168.4.5:7099/singularity",
             "my_url": "http://10.0.0.12:3000"
-        }    
+        }
     }
 }
