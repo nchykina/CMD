@@ -136,7 +136,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 data: {pageTitle: 'DNA De Novo Assembly'}
             })
             .state('pipelines.dna_denovo_job', {
-                url: "/methylation/job/:jobid",
+                url: "/dna_denovo/job/:jobid",
                 templateUrl: "views/pipelines/dna_denovo/job.html",
                 controller: 'dnadenovoJobController',
                 controllerAs: 'newc',                
