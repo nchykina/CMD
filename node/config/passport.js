@@ -109,7 +109,7 @@ module.exports = function (passport) {
 
                 // find a user whose email is the same as the forms email
                 // we are checking to see if the user trying to login already exists
-                models.User.findOne({'name': name}).then(function (user) {
+                models.User.findOne({where: {'name': name}}).then(function (user) {
                     // if the user is found but the password is wrong            
                     user.comparePassword(password).then(function () {
                         return done(null, user);

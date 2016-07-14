@@ -174,11 +174,11 @@ io.use(function(socket, next) {
           return next(new Error('Anonymous access not allowed'));
       } */
       
-      if(!handshakeData.session.passport.user){
+      /* if(!handshakeData.session.passport.user){
           console.log('Malformed session: no userid');
           console.log(handshakeData.session);
           return next(new Error('Malformed session: no userid'));
-      }
+      } */
     }
 
   } else {
@@ -199,7 +199,10 @@ var socket_remember;
 
 io.on('connection', function(socket){
     var hs = socket.handshake;
-    console.log('a user connected: ' + socket.request.session.passport.user);
+    
+    var userid = socket.request.session.passport.user ? socket.request.session.passport.user : 'anonymous';
+    
+    console.log('a user connected: ' + userid);
     //users[hs.session.username] = socket.id;
     //clients[socket.id] = socket;
     socket_remember = socket;
