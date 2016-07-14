@@ -4158,6 +4158,135 @@ function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService
 }
 
 
+// 4. DNA De Novo
+
+function dnadenovoHomeCtrl($scope, $state, jobService) {
+    var vm = this;
+
+    //vm.job = jobService.newJob;
+    vm.jobs = [];
+
+    jobService.getJobs()
+            .then(function (res) {
+                vm.jobs = res;
+            });
+
+    vm.jobfilter = ['finished'];
+
+    this.createJob = function (species) {
+        jobService.createOrUpdateJob('dna_denovo', species)
+                .then(function (job) {
+                    $state.go('pipelines.dna_denovo_job', {jobid: job.id});
+                },
+                        function (err) {
+                            alert(err);
+                        });
+    };
+
+    this.filterByStatus = function (job) {
+        //console.log('debug');
+        return (vm.jobfilter.indexOf(job.status) !== -1);
+    };
+
+}
+
+function dnadenovoJobCtrl($state, $stateParams, jobService, fileService, $uibModal) {
+    var vm = this;
+
+    vm.jobid = $stateParams.jobid;
+
+    vm.job = {};
+    vm.selectedstate = 0;
+    vm.activestate = 0;
+
+    if (!vm.jobid) {
+        console.log('no job object passed to wizard. going back');
+        $state.go('pipelines.dna_denovo_home'); //no job passed to wizard
+    } else {
+        jobService.getJob(vm.jobid)
+                .then(function (res) {
+                    vm.job = res;
+                    vm.species = vm.job.seq_species;
+
+                    vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.realJobState();
+                })
+                .catch(function (err) {
+                    $state.go('pipelines.dna_denovo_home'); //error, go back to wizard (of Oz)
+                })
+    }
+
+    this.setState = function (newState) {
+        vm.selectedstate = newState;
+    }
+
+    this.realJobState = function () {
+        switch (vm.job.status) {
+            case 'new':
+                return 1;
+            case 'submitted':
+            case 'running':
+            case 'failed':
+                return 2;
+            case 'finished':
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
+    this.upload = function (filenum, file) {
+        if (file == null) {
+            console.log('ima buggy shiet');
+            return;
+        }
+
+        jobService.addFile(vm.job, filenum, file);
+    }
+
+    this.changeState = function (newState) {
+        if (newState <= vm.realJobState()) {
+            vm.selectedstate = newState;
+        }
+    }
+
+    this.submit = function () {
+        jobService.submitJob(vm.job)
+                .then(function (res) {
+                    vm.job.status = 'submitted';
+                    vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.selectedstate;
+                })
+                .catch(function (err) {
+                    alert(err);
+                })
+    }
+
+    this.chooseFile = function (filenum) {
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/file_manager/modal.html',
+            controller: fileModalCtrl,
+            controllerAs: 'vm'
+        });
+
+        modalInstance.result.then(function (file) {
+            fileService.getFile(file.id)
+                    .then(function (file_srv) {
+                        jobService.setFile(vm.job, filenum, file_srv)
+                                .then(function (res) {
+                                    vm.job.files[filenum] = file;
+                                });
+                    });
+        }, function () {
+            //if cancel was clicked
+        });
+
+    };
+
+}
+
+
 function fileCtrl(fileService) {
     var vm = this;
 
@@ -4540,6 +4669,12 @@ angular
 
         .controller('methylationHomeController', ['$http', '$state', 'jobService', methylationHomeCtrl])
         .controller('methylationJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', methylationJobCtrl])
-        ;
+    
+        
+        .controller('dnadenovoHomeController', ['$http', '$state', 'jobService', dnadenovoHomeCtrl])
+        .controller('dnadenovoJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnadenovoJobCtrl])
+      
+
+;
 
 
