@@ -23,7 +23,7 @@
                                     <div class="panel panel-warning">
                                         <div class="panel-heading">
                                             <div ng-switch-when="ecoli">
-                                                <h4><strong>Escherichia coli (E.Coli)</strong></h4>
+                                                <h4><strong>Escherichia coli (E.coli)</strong></h4>
 
                                             </div>
                                             <div ng-switch-when="fly">
@@ -53,7 +53,6 @@
                                             <div class="col-sm-8">
 
                                                 <div ng-switch-when="ecoli">
-                                                    <p><strong>Escherichia coli (E.Coli)</strong><br/>&nbsp;</p>
                                                     <address>
                                                         <i>Technical info:</i>
                                                         <ul>
@@ -64,7 +63,6 @@
                                                     </address>
                                                 </div>
                                                 <div ng-switch-when="fly">
-                                                    <p><strong>Drosophila melanogaster </strong><br/>&nbsp;</p>
                                                     <address>
                                                         <i>Technical info:</i>
                                                         <ul>
@@ -104,26 +102,43 @@
                                             <div class="col-sm-12">
 
                                                 <div ng-switch-when="ecoli">
-                                                    <p><strong>Escherichia coli (E.Coli)</strong><br/>&nbsp;</p>
-                                                    <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
+                                                    <p><strong>Some interesting facts about this species:</strong></p>
+                                                    <ul>
+                                                        <li>E. coli is the most widely studied prokaryotic model organism, 
+                                                            and an important species in the fields of biotechnology and microbiology.
+                                                            It has served as the host organism for the majority of work with recombinant DNA.
+                                                        </li>
+                                                        <li>E.coli has a circular DNA that is 4.6 million base pairs long. 
+                                                            Under favorable conditions, it takes only 20 minutes for E.coli to reproduce</li>
+                                                        <li>E.coli genome is remarkably diverse. While each individual genome of E.coli 
+                                                            contains between 4,000 and 5,500 genes, the total number of different genes 
+                                                            among all of the sequenced E. coli strains (the pangenome) exceeds 16,000.</li>
+                                                    </ul>
+                                                    <p><strong>Databases with data on E.coli genome: </strong></p>
+                                                    <ul>
+                                                        <li>EcoGene</li>
+                                                        <li>E.coli Genome Project</li>
+                                                    </ul>
                                                 </div>
                                                 <div ng-switch-when="fly">
-                                                    <p><strong>Drosophila melanogaster </strong><br/>&nbsp;</p>
-                                                    <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
+                                                    <p><strong>Some interesting facts about this species:</strong></p>
+                                                    <ul>
+                                                        <li>Fruit fly was among the first organisms used for genetic analysis, 
+                                                            and today it is one of the most widely used and genetically best-known 
+                                                            of all eukaryotic organisms. Its complete genome was sequenced and 
+                                                            first published in 2000.</li>
+                                                        <li>Fruit fly has only four pairs of chromosomes: three autosomes, 
+                                                            and one pair of sex chromosomes.</li>
+                                                        <li>About 75% of known human disease genes have a recognizable match 
+                                                            in the genome of fruit flies, and 50% of fly protein sequences 
+                                                            have mammalian homologs. Drosophila is often being used as a genetic model 
+                                                            for Parkinson's, Huntington's and Alzheimer's disease.</li>
+                                                    </ul>
+                                                    <p><strong>Databases with data on fruit fly genome: </strong></p>
+                                                    <ul>
+                                                        <li>FlyBase</li>
+                                                        <li>Berkeley Drosophila Genome Project (BDGP)</li>
+                                                    </ul>
                                                 </div>
                                                 <div ng-switch-when="yeast">
                                                     <p><strong>Some interesting facts about this species: </strong></p>
