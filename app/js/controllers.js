@@ -3854,7 +3854,7 @@ function dnaReseqHomeCtrl($scope, $state, jobService) {
             .then(function (res) {
                 vm.jobs = res;
             });
-            
+
     vm.jobfilter = ['finished'];
 
     this.createJob = function (species) {
@@ -3866,8 +3866,8 @@ function dnaReseqHomeCtrl($scope, $state, jobService) {
                             alert(err);
                         });
     };
-    
-    this.filterByStatus = function(job) {
+
+    this.filterByStatus = function (job) {
         //console.log('debug');
         return (vm.jobfilter.indexOf(job.status) !== -1);
     };
@@ -3916,7 +3916,7 @@ function fileCtrl(fileService) {
 
 }
 
-function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModal) {
+function dnaReseqJobCtrl($scope, $state, $stateParams, jobService, fileService, $uibModal) {
     var vm = this;
 
     vm.jobid = $stateParams.jobid;
@@ -3934,38 +3934,63 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
     if (!vm.jobid) {
         console.log('no job object passed to wizard. going back');
         $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
-    }
-    else {
+    } else {
         jobService.getJob(vm.jobid)
-                .then(function(res){
-                    vm.job=res;
+                .then(function (res) {
+                    vm.job = res;
                     vm.species = vm.job.seq_species;
-                    
+
                     vm.selectedstate = vm.realJobState();
                     vm.activestate = vm.realJobState();
-        })
-                .catch(function(err){
+
+                    //setInterval(function(){console.log(angular.toJson(vm.job,true))},30000);
+
+                    $scope.$watch(
+                            function watchJobStatus(scope) {
+                                // Return the "result" of the watch expression.
+                                return(vm.job);
+                            },
+                            function handleStatusChange(newValue, oldValue) {
+                                vm.activestate = vm.realJobState();
+
+                                if (newValue.status !== oldValue.status) {
+                                    vm.selectedstate = vm.activestate;
+                                }
+
+                                console.log("fn( vm.jobStatus ): " + oldValue.status + ' -> ' + newValue.status);
+                            },
+                            true
+                            );
+
+                    jobService.subscribeJob(vm.job);
+                })
+                .catch(function (err) {
                     $state.go('pipelines.dna_reseq_home'); //error, go back to wizard (of Oz)
-        })
+                })
+
+
     }
-    
-    this.setState = function(newState){
+
+    this.setState = function (newState) {
         vm.selectedstate = newState;
-    } 
-    
-    this.realJobState = function() {
-        switch(vm.job.status){
-                        case 'new': return 1;
-                        case 'submitted':
-                        case 'running':
-                        case 'failed':
-                           return 2;
-                        case 'finished':
-                            return 3;
-                        default:
-                            return 0;
-                    }
     }
+
+    this.realJobState = function () {
+        switch (vm.job.status) {
+            case 'new':
+                return 1;
+            case 'submitted':
+            case 'running':
+            case 'failed':
+                return 2;
+            case 'finished':
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
+
 
     this.upload = function (filenum, file) {
         if (file == null) {
@@ -3975,9 +4000,9 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
 
         jobService.addFile(vm.job, filenum, file);
     }
-    
-    this.changeState = function(newState){
-        if(newState<=vm.realJobState()){
+
+    this.changeState = function (newState) {
+        if (newState <= vm.realJobState()) {
             vm.selectedstate = newState;
         }
     }
@@ -3985,15 +4010,18 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
     this.submit = function () {
         jobService.submitJob(vm.job)
                 .then(function (res) {
-                    vm.job.status = 'submitted';
-                    vm.selectedstate = vm.realJobState();
-                    vm.activestate = vm.selectedstate;
+                    //vm.job.status = 'submitted';
+                    //vm.selectedstate = vm.realJobState();
+                    //vm.activestate = vm.selectedstate;
+
                 })
                 .catch(function (err) {
                     alert(err);
                 })
     }
-    
+
+
+
     this.chooseFile = function (filenum) {
 
         var modalInstance = $uibModal.open({
@@ -4001,19 +4029,19 @@ function dnaReseqJobCtrl($state, $stateParams, jobService, fileService, $uibModa
             controller: fileModalCtrl,
             controllerAs: 'vm'
         });
-        
+
         modalInstance.result.then(function (file) {
             fileService.getFile(file.id)
-                    .then(function(file_srv){
-                        jobService.setFile(vm.job,filenum,file_srv)
-                        .then(function(res){
-                            vm.job.files[filenum]=file;
-                        });
-            });
+                    .then(function (file_srv) {
+                        jobService.setFile(vm.job, filenum, file_srv)
+                                .then(function (res) {
+                                    vm.job.files[filenum] = file;
+                                });
+                    });
         }, function () {
             //if cancel was clicked
-            });
-        
+        });
+
     };
 
     // this.processForm = function () {
@@ -4390,7 +4418,7 @@ angular
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
         .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
-        .controller('dnaReseqJobController', ['$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnaReseqJobCtrl])
+        .controller('dnaReseqJobController', ['$scope', '$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnaReseqJobCtrl])
         .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
         .controller('stripeController', ['$scope', '$http', '$state', stripeCtrl])

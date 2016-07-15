@@ -24,9 +24,13 @@
 
             <!-- <div class="container-fluid">
                 <h2>Get your data ready for analysis in 3 easy steps:</h2>
-            </div> -->                
+            </div> -->       
+            
+            
 
             <div class="container-fluid">
+                
+                {{newc.job.status}}
 
 
                 <ol class="timeline" style="margin-bottom: 10px">
@@ -38,7 +42,7 @@
                             Select data</span>        
 
 
-                        <a ng-click="newc.setState(1)" href="#">
+                        <a ng-click="newc.setState()" href="#">
                             <i class="timeline__step-marker">1</i>
                         </a>
                     </li>
