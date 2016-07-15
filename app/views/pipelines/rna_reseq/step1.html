@@ -23,30 +23,29 @@
                                     <div class="panel panel-warning">
                                         <div class="panel-heading">
                                             <div ng-switch-when="expression">
-                                                <h4><strong>Bisulfite Sequencing</strong></h4>
+                                                <h4><strong>Analyze gene expression levels</strong></h4>
 
                                             </div>
                                             <div ng-switch-when="splicing">
-                                                <h4><strong>Mus musculus</strong></h4>
+                                                <h4><strong>Detect novel sequences in transcriptome</strong></h4>
                                             </div>
                                         </div>
                                         <div class="panel-body">
                                             <div class="col-sm-4">
                                                 <div class="text-center">
                                                     <div ng-switch-when="expression">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a29.jpg">
-                                                        <div class="m-t-xs font-bold">HG00277</div>
+                                                        <img alt="image" class="m-t-xs img-responsive" src="img/a24.png">
+                                                        <div class="m-t-xs font-bold">Expression profiling</div>
                                                     </div>
                                                     <div ng-switch-when="splicing">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a20.jpg">
-                                                        <div class="m-t-xs font-bold">BALB/C</div>
+                                                        <img alt="image" class="m-t-xs img-responsive" src="img/a23.png">
+                                                        <div class="m-t-xs font-bold">Splicing variants analysis</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-8">
 
                                                 <div ng-switch-when="expression">
-                                                    <p><strong>Brain cells</strong></p>
                                                     <address>
                                                         <i>Technical info:</i>
                                                         <ul>
@@ -57,8 +56,7 @@
                                                     </address>
                                                 </div>
                                                 <div ng-switch-when="splicing">
-                                                    <p><strong>Albino mouse </strong><br/>&nbsp;</p>
-                                                     <address>
+                                                    <address>
                                                         <i>Technical info:</i>
                                                         <ul>
                                                             <li>Platform: Illumina</li>
@@ -78,7 +76,28 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
+
+                                <div class="col-sm-8 m-b-xs" ng-switch="newc.species">
+                                    <div class="panel panel-warning">
+
+                                        <div class="panel-body">
+                                            <div class="col-sm-12">
+
+                                                <div ng-switch-when="expression">
+                                                    <p><strong>Content TBD</strong></p>
+                                                    
+                                                    
+                                                </div>
+                                                <div ng-switch-when="splicing">
+                                                    <p><strong>Content TBD</strong></p>                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>
@@ -121,8 +140,8 @@
                                                     </div>
 
                                                     <div ng-if="(newc.job.files[0]) && (newc.job.files[0].status !== 'uploading')">                                                            
-                                                            <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
-                                                            <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
+                                                        <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                        <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
                                                     </div>
                                                 </div>
                                             </form>
