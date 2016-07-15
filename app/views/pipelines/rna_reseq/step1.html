@@ -22,37 +22,30 @@
                                 <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
                                     <div class="panel panel-warning">
                                         <div class="panel-heading">
-                                            <div ng-switch-when="bsseq">
+                                            <div ng-switch-when="expression">
                                                 <h4><strong>Bisulfite Sequencing</strong></h4>
 
                                             </div>
-                                            <div ng-switch-when="mus">
+                                            <div ng-switch-when="splicing">
                                                 <h4><strong>Mus musculus</strong></h4>
-                                            </div>
-                                            <div ng-switch-when="canis">
-                                                <h4><strong>Canis familiaris</strong></h4>
                                             </div>
                                         </div>
                                         <div class="panel-body">
                                             <div class="col-sm-4">
                                                 <div class="text-center">
-                                                    <div ng-switch-when="bsseq">
+                                                    <div ng-switch-when="expression">
                                                         <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a29.jpg">
                                                         <div class="m-t-xs font-bold">HG00277</div>
                                                     </div>
-                                                    <div ng-switch-when="mus">
+                                                    <div ng-switch-when="splicing">
                                                         <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a20.jpg">
                                                         <div class="m-t-xs font-bold">BALB/C</div>
-                                                    </div>
-                                                    <div ng-switch-when="canis">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
-                                                        <div class="m-t-xs font-bold">GS1</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-8">
 
-                                                <div ng-switch-when="bsseq">
+                                                <div ng-switch-when="expression">
                                                     <p><strong>Brain cells</strong></p>
                                                     <address>
                                                         <i>Technical info:</i>
@@ -63,19 +56,8 @@
                                                         </ul>
                                                     </address>
                                                 </div>
-                                                <div ng-switch-when="mus">
+                                                <div ng-switch-when="splicing">
                                                     <p><strong>Albino mouse </strong><br/>&nbsp;</p>
-                                                     <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
-                                                </div>
-                                                <div ng-switch-when="canis">
-                                                    <p><strong>German shepherd</strong><br/>&nbsp;</p>
                                                      <address>
                                                         <i>Technical info:</i>
                                                         <ul>
@@ -96,159 +78,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">
-                                            <div ng-switch-when="bsseq">
-                                                <h4><strong>Bisulfite sequencing</strong></h4>
-                                            </div>
-                                            <div ng-switch-when="mus">
-                                                <h4><strong>Mus musculus</strong></h4>
-                                            </div>
-                                            <div ng-switch-when="canis">
-                                                <h4><strong>Canis familiaris</strong></h4>
-                                            </div>
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="col-sm-4">
-                                                <div class="text-center">
-                                                    <div ng-switch-when="bsseq">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a30.jpg">
-                                                        <div class="m-t-xs font-bold">HG00690</div>
-                                                    </div>
-                                                    <div ng-switch-when="mus">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a21.jpg">
-                                                        <div class="m-t-xs font-bold">C57BL/6</div>
-                                                    </div>
-                                                    <div ng-switch-when="canis">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a25.jpg">
-                                                        <div class="m-t-xs font-bold">TM1</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <div ng-switch-when="bsseq">
-                                                    <p><strong>Blood cells</strong></p>
-                                                    <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
-                                                </div>
-                                                <div ng-switch-when="mus">
-                                                    <p><strong>Black mouse</strong><br/>&nbsp;</p>
-                                                     <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
-                                                </div>
-                                                <div ng-switch-when="canis">
-                                                    <p><strong>Tibetan Mastiff</strong><br/>&nbsp;</p>
-                                                     <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
-                                                </div>
-                                            </div>
+                                
 
-                                        </div>
-                                        <div class="panel-footer white-bg">
-                                            <div>
-                                                <label><input icheck type="radio" name="sample" ng-model="newc.sample"
-                                                              value="sample2"></input>
-                                                    Choose this sample dataset</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
-                                    <div class="panel panel-primary">
-                                        <div class="panel-heading">
-                                            <div ng-switch-when="bsseq">
-                                                <h4><strong>Bisulfite sequencing</strong></h4>
-                                            </div>
-                                            <div ng-switch-when="mus">
-                                                <h4><strong>Mus musculus</strong></h4>
-                                            </div>
-                                            <div ng-switch-when="canis">
-                                                <h4><strong>Canis familiaris</strong></h4>
-                                            </div>
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="col-sm-4">
-                                                <div class="text-center" >
-                                                    <div ng-switch-when="bsseq">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a31.jpg">
-                                                        <div class="m-t-xs font-bold">HG01890</div>
-                                                    </div>
-                                                    <div ng-switch-when="mus">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a22.jpg">
-                                                        <div class="m-t-xs font-bold">DBA/2J</div>
-                                                    </div>
-                                                    <div ng-switch-when="canis">
-                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a26.jpg">
-                                                        <div class="m-t-xs font-bold">Basenji</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <div ng-switch-when="bsseq">
-                                                    <p><strong>ESC/iPSC cells</strong></p>
-                                                    <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center:</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
-                                                </div>
-                                                <div ng-switch-when="mus">
-                                                    <p><strong>Brown mouse</strong><br/>&nbsp;</p>
-                                                     <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
-                                                </div>
-                                                <div ng-switch-when="canis">
-                                                    <p><strong>Basenji</strong><br/>&nbsp;</p>
-                                                     <address>
-                                                        <i>Technical info:</i>
-                                                        <ul>
-                                                            <li>Platform: Illumina</li>
-                                                            <li>Sequencing center: BGI</li>
-                                                            <li>Coverage: WGS (low coverage)</li>
-                                                        </ul>
-                                                    </address>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="panel-footer white-bg">
-                                            <div>
-                                                <label><input icheck type="radio" name="sample" ng-model="newc.sample"
-                                                              value="sample3"></input>
-                                                    Choose this sample dataset</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -340,20 +171,6 @@
                                         two separate .fasta files: reads from the forward strand and from the reverse strand.
                                         In this case, we can apply paired-ended alignment algorithm to your data.
                                     </p>
-                                    <div ng-switch-when="bsseq">
-                                        <p>
-                                            The best place to get your sample reads is <a href="http://www.1000genomes.org/home">1000 Genomes website</a>. This website contains
-                                            sample reads of 1000 individuals of different ethnic origins.
-                                        </p>
-                                    </div>
-                                    <div ng-switch-when="mus">
-                                        <p>
-                                            The best place to get your sample reads is
-                                            <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project">
-                                                Mouse Genomes Project</a>. This website contains
-                                            sample reads of 16 breeds of mice.
-                                        </p>
-                                    </div>
                                     <p>
                                         <strong>We strongly advise you not to take datasets with the data on the whole genome
                                             but with low coverage. It's much better to run a more targeted research (on a single

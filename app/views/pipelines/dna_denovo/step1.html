@@ -65,7 +65,7 @@
                                                 </div>
                                                 <div ng-switch-when="fly">
                                                     <p><strong>Drosophila melanogaster </strong><br/>&nbsp;</p>
-                                                     <address>
+                                                    <address>
                                                         <i>Technical info:</i>
                                                         <ul>
                                                             <li>Platform: Illumina</li>
@@ -75,8 +75,7 @@
                                                     </address>
                                                 </div>
                                                 <div ng-switch-when="yeast">
-                                                    <p><strong>Saccharomyces cerevisiae</strong><br/>&nbsp;</p>
-                                                     <address>
+                                                    <address>
                                                         <i>Technical info:</i>
                                                         <ul>
                                                             <li>Platform: Illumina</li>
@@ -96,14 +95,64 @@
                                         </div>
                                     </div>
                                 </div>
-   
 
-                                
+
+                                <div class="col-sm-8 m-b-xs" ng-switch="newc.species">
+                                    <div class="panel panel-warning">
+
+                                        <div class="panel-body">
+                                            <div class="col-sm-12">
+
+                                                <div ng-switch-when="ecoli">
+                                                    <p><strong>Escherichia coli (E.Coli)</strong><br/>&nbsp;</p>
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="fly">
+                                                    <p><strong>Drosophila melanogaster </strong><br/>&nbsp;</p>
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="yeast">
+                                                    <p><strong>Some interesting facts about this species: </strong></p>
+                                                    <ul>
+                                                        <li>Yeast genome was the first eukaryotic genome to be completely sequenced. 
+                                                            The genome sequence was released to the public domain on April 24, 1996. </li>
+                                                        <li>Yeast reproduces by mitosis as diploid cells when nutrients are abundant. 
+                                                            However, when starved, these cells undergo meiosis to form haploid spores.</li>
+                                                        <li>Only about 5,800 of the 6,275 yeast genes are believed to be functional,
+                                                            and 31% of yeast genes have homologs in the human genome. </li>
+                                                    </ul>
+                                                    <p><strong>Databases with data on yeast genome: </strong></p>
+                                                    <ul>
+                                                        <li>Saccharomyces Genome Database</li>
+                                                        <li>Munich Information Center for Protein Sequences (MIPS)</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
-            
+
 
                 <!-- PANEL 2-->
                 <div class="panel panel-default">
@@ -141,8 +190,8 @@
                                                     </div>
 
                                                     <div ng-if="(newc.job.files[0]) && (newc.job.files[0].status !== 'uploading')">                                                            
-                                                            <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
-                                                            <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
+                                                        <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                        <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
                                                     </div>
                                                 </div>
                                             </form>
