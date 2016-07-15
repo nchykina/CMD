@@ -17,7 +17,8 @@ var spamList = [
     'wegetarian.ru',
     'инфоспайс.рф',
     'magru24.ru',
-    'eu-cookie-law.blogspot.com'
+    'eu-cookie-law.blogspot.com',
+    'bestchoice.cf'
 ];
 
 module.exports = spamList;

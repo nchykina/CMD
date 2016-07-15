@@ -1,12 +1,10 @@
 <fieldset>
-    <div class="row">
-        <div class="col-lg-6">
-            <h2>Your reads are being processed:</h2>  
-        </div>
-    </div>
 
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h4>Please wait while your files are being processed</h4>
+            </div>
             <div class="ibox-content" id="ibox-content">
 
                 <div id="vertical-timeline" class="vertical-container dark-timeline center-orientation">
@@ -18,7 +16,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>Tophat: aligning RNA-Seq data to the reference genome</h2>
+                                    <h2>Bismark: aligning paired reads to the adjusted reference genome</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-primary dim"><i class="fa fa-check"></i></button>
@@ -44,7 +42,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>Cufflinks: perform transcriptome reconstruction</h2>
+                                    <h2>Methpipe: finding hypo- and hypermethylation regions</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-success dim"><i class="fa fa-check"></i></button>
@@ -70,7 +68,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>Cuffdiff: compare gene expression</h2>
+                                    <h2>Methpipe: performing differential methylation analysis</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
@@ -93,7 +91,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>Annovar: perform functional annotation of differentially expressed genes</h2>
+                                    <h2>BCFTools: creating a vcf file</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
@@ -121,8 +119,8 @@
                                 </div>
                             </div>
                             <p>Annovar annotates the variants listed in the vcf file in accordance with the publicly 
-                            available databases (for instance, dbSNP). The output is generated as an .csv file that
-                            can be conveniently read by a scientist in Excel.
+                                available databases (for instance, dbSNP). The output is generated as an .csv file that
+                                can be conveniently read by a scientist in Excel.
                             </p>
                             <a href="#" class="btn btn-sm btn-success"> Download .csv file <span class="fa fa-cloud-download"></span></a>
 
@@ -143,8 +141,8 @@
         </div>
     </div>
 
-    <a ui-sref="pipelines.rna_reseq_new.step1({job: newc.job})" class="btn btn-default">Cancel</a>
-    <a ui-sref="pipelines.rna_reseq_new.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
+    <a ui-sref="pipelines.dna_reseq_new.step1({job: newc.job})" class="btn btn-default">Cancel</a>
+    <a ui-sref="pipelines.dna_reseq_new.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
 
 
 

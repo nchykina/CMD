@@ -191,31 +191,18 @@
                                         two separate .fasta files: reads from the forward strand and from the reverse strand.
                                         In this case, we can apply paired-ended alignment algorithm to your data.
                                     </p>
-                                    <div ng-switch-when="homo">
-                                        <p>
-                                            The best place to get your sample reads is <a href="http://www.1000genomes.org/home">1000 Genomes website</a>. This website contains
-                                            sample reads of 1000 individuals of different ethnic origins.
-                                        </p>
-                                    </div>
-                                    <div ng-switch-when="mus">
-                                        <p>
-                                            The best place to get your sample reads is
-                                            <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project">
-                                                Mouse Genomes Project</a>. This website contains
-                                            sample reads of 16 breeds of mice.
-                                        </p>
-                                    </div>
                                     <p>
-                                        <strong>We strongly advise you not to take datasets with the data on the whole genome
-                                            but with low coverage. It's much better to run a more targeted research (on a single
-                                            chromosome, or even on a particular set of genes, but to have a decent coverage
-                                            of <u>at least 20-30x</u>).</strong>
+                                        <strong>We strongly advise you to take datasets with good coverage.
+                                            So, for instance, your input file for de novo assembly should be around 1-2 GB
+                                            for E.Coli to produce sufficiently
+                                            good output. Also, please make sure that your reads are properly trimmed
+                                            (in case they are not, use Trimmomatic or any other similar software).
+                                        </strong>
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
 

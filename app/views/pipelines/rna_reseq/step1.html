@@ -1,310 +1,464 @@
 <fieldset>
-    <h2>Set up your data analysis pipeline: </h2>
+
 
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="form-group">
-                <div class="ibox-title gray-bg">
-                    <div><label> <input icheck type="radio" name="radioTest"
-                                        ng-model="newc.dataset_type" value="sample"> CHOOSE SAMPLE .FASTA DATASET</label></div>
-                </div>
-                <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
-                            <div class="panel panel-warning">
-                                <div class="panel-heading">
-                                    <div ng-switch-when="homo">
-                                        <h4><strong>Homo sapiens</strong></h4>
-                                    </div>
-                                    <div ng-switch-when="mus">
-                                        <h4><strong>Mus musculus</strong></h4>
-                                    </div>
-                                    <div ng-switch-when="canis">
-                                        <h4><strong>Canis familiaris</strong></h4>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="col-sm-4">                                    
-                                        <div class="text-center">
-                                            <div ng-switch-when="homo">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a13.jpg">
-                                                <div class="m-t-xs font-bold">HG00277</div>
-                                            </div>
-                                            <div ng-switch-when="mus">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a20.jpg">
-                                                <div class="m-t-xs font-bold">BALB/C</div>
-                                            </div>
-                                            <div ng-switch-when="canis">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
-                                                <div class="m-t-xs font-bold">Sample 1</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-8">
-
-                                        <div ng-switch-when="homo">
-                                            <p>Finnish male (FIN)<br/>&nbsp;</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                        <div ng-switch-when="mus">
-                                            <p>Albino mouse <br/>&nbsp;</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                        <div ng-switch-when="canis">
-                                            <p>Labrador retriever<br/>&nbsp;</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                    </div>                                    
-                                </div>
-                                <div class="panel-footer">
-                                    <div>
-                                        <label><input icheck type="radio" name="sample" ng-model="newc.sample"
-                                                      value="sample1"></input>
-                                            Choose this sample dataset</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
-                            <div class="panel panel-info">
-                                <div class="panel-heading">
-                                    <div ng-switch-when="homo">
-                                        <h4><strong>Homo sapiens</strong></h4>
-                                    </div>
-                                    <div ng-switch-when="mus">
-                                        <h4><strong>Mus musculus</strong></h4>
-                                    </div>
-                                    <div ng-switch-when="canis">
-                                        <h4><strong>Canis familiaris</strong></h4>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="col-sm-4">
-                                        <div class="text-center">
-                                            <div ng-switch-when="homo">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a12.jpg">
-                                                <div class="m-t-xs font-bold">HG00690</div>
-                                            </div>
-                                            <div ng-switch-when="mus">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a21.jpg">
-                                                <div class="m-t-xs font-bold">C57BL/6</div>
-                                            </div>
-                                            <div ng-switch-when="canis">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
-                                                <div class="m-t-xs font-bold">Sample 1</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div ng-switch-when="homo">
-                                            <p>Southern Han Chinese female (CHS)</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                        <div ng-switch-when="mus">
-                                            <p>Black mouse<br/>&nbsp;</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                        <div ng-switch-when="canis">
-                                            <p>Doberman pincher<br/>&nbsp;</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="panel-footer">
-                                    <div>
-                                        <label><input icheck type="radio" name="sample" ng-model="newc.sample"
-                                                      value="sample2"></input>
-                                            Choose this sample dataset</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <div ng-switch-when="homo">
-                                        <h4><strong>Homo sapiens</strong></h4>
-                                    </div>
-                                    <div ng-switch-when="mus">
-                                        <h4><strong>Mus musculus</strong></h4>
-                                    </div>
-                                    <div ng-switch-when="canis">
-                                        <h4><strong>Canis familiaris</strong></h4>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="col-sm-4">
-                                        <div class="text-center" >
-                                            <div ng-switch-when="homo">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a11.jpg">
-                                                <div class="m-t-xs font-bold">HG01888</div>
-                                            </div>
-                                            <div ng-switch-when="mus">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a22.jpg">
-                                                <div class="m-t-xs font-bold">DBA/2J</div>
-                                            </div>
-                                            <div ng-switch-when="canis">
-                                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
-                                                <div class="m-t-xs font-bold">Sample 1</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div ng-switch-when="homo">
-                                            <p>African-Caribbean male (ACB)</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                        <div ng-switch-when="mus">
-                                            <p>Brown mouse<br/>&nbsp;</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                        <div ng-switch-when="canis">
-                                            <p>Boxer<br/>&nbsp;</p>
-                                            <address>
-                                                <b>Examples of SNPs: </b> Gene XXXX (eye color)<br>
-                                            </address>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="panel-footer">
-                                    <div>
-                                        <label><input icheck type="radio" name="sample" ng-model="newc.sample"
-                                                      value="sample3"></input>
-                                            Choose this sample dataset</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <!-- PANEL 1-->
+            <div class="panel-group payments-method" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                Choose sample .FASTA dataset
+                            </a>
+                        </h4>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body gray-bg">
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="form-group">
 
-                <div class="ibox-title gray-bg">
-                    <div><label> <input icheck type="radio" name="radioTest"
-                                        ng-model="newc.dataset_type" value="upload"> UPLOAD A NEW DATASET </label>
-                    </div>
-                </div>
-                <div class="ibox-content gray-bg">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>File 1 with paired-ended reads</h5>
-
-                                    <div ibox-tools></div>
-                                </div>
-                                <div class="ibox-content" id="">                                
-                                    <form action="#">
-                                        <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)" ng-model="newc.file1">
-                                            <div ng-if="((!newc.job.filesIn[0]) && (!newc.files[0].uploading))" class="dz-message m-t-lg m-b-lg">                                            
-
-                                                <h1>Drop files here.</h1>                                        
+                            <div class="row">
+                                <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
+                                    <div class="panel panel-warning">
+                                        <div class="panel-heading">
+                                            <div ng-switch-when="bsseq">
+                                                <h4><strong>Bisulfite Sequencing</strong></h4>
 
                                             </div>
-                                            <div ng-if="((!newc.job.filesIn[0]) && (newc.files[0].uploading))">                                          
-
-                                                <h1>Uploading file...</h1>
-                                                <div class="progress-striped active progress">
-                                                    <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[0].progress < 100 ? newc.files[0].progress : 100) + '%'}">                                                
-                                                    </div>                
-                                                </div>
-                                                {{newc.files[0].current| filesize:2}} / {{newc.files[0].total| filesize:2}} ({{newc.files[0].progress}})%
+                                            <div ng-switch-when="mus">
+                                                <h4><strong>Mus musculus</strong></h4>
                                             </div>
-
-                                            <div ng-if="(newc.job.filesIn[0])">                                            
-                                                <p>File size: {{newc.job.filesIn[0].filesize| filesize:0}}</p>
-                                                <p>Uploaded: {{newc.job.filesIn[0].upload_ended| date:'medium'}}</p>
+                                            <div ng-switch-when="canis">
+                                                <h4><strong>Canis familiaris</strong></h4>
                                             </div>
                                         </div>
-                                    </form>                                
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>File 2 with paired-ended reads</h5>
-
-                                    <div ibox-tools></div>
-                                </div>
-                                <div class="ibox-content" id="">
-                                    <div class="ngs_dropzone">
-                                        <form action="#">
-                                            <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)" ng-model="newc.file2">
-                                                <div ng-if="((!newc.job.filesIn[1]) && (!newc.files[1].uploading))" class="dz-message m-t-lg m-b-lg">                                            
-                                                    <h1>Drop files here.</h1>                                            
-                                                </div>
-                                                <div ng-if="((!newc.job.filesIn[1]) && (newc.files[1].uploading))">                                          
-
-                                                    <h1>Uploading file...</h1>
-                                                    <div class="progress-striped active progress">
-                                                        <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.files[1].progress < 100 ? newc.files[1].progress : 100) + '%'}">                                                
-                                                        </div>                
+                                        <div class="panel-body">
+                                            <div class="col-sm-4">
+                                                <div class="text-center">
+                                                    <div ng-switch-when="bsseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a29.jpg">
+                                                        <div class="m-t-xs font-bold">HG00277</div>
                                                     </div>
-                                                    {{newc.files[1].current| filesize:2}} / {{newc.files[1].total| filesize:2}} ({{newc.files[1].progress}})%
-                                                </div>
-
-                                                <div ng-if="(newc.job.filesIn[1])">                                            
-                                                    <p>File size: {{newc.job.filesIn[1].filesize| filesize:0}}</p>
-                                                    <p>Uploaded: {{newc.job.filesIn[1].upload_ended| date:'medium'}}</p>
+                                                    <div ng-switch-when="mus">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a20.jpg">
+                                                        <div class="m-t-xs font-bold">BALB/C</div>
+                                                    </div>
+                                                    <div ng-switch-when="canis">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a10.jpg">
+                                                        <div class="m-t-xs font-bold">GS1</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </form>                                           
-                                    </div>                            
+                                            <div class="col-sm-8">
+
+                                                <div ng-switch-when="bsseq">
+                                                    <p><strong>Brain cells</strong></p>
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="mus">
+                                                    <p><strong>Albino mouse </strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="canis">
+                                                    <p><strong>German shepherd</strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-footer white-bg">
+                                            <div>
+                                                <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                              value="sample1"></input>
+                                                    Choose this sample dataset</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>                   
-                        </div>
-                        <div class="col-sm-4 " ng-switch="newc.species">
-                            <p>
-                                If you want to upload your own reads, you need to have 
-                                two separate .fasta files: reads from the forward strand and from the reverse strand.
-                                In this case, we can apply paired-ended alignment algorithm to your data.
-                            </p>
-                            <div ng-switch-when="homo">
-                                <p>
-                                    The best place to get your sample reads is <a href="http://www.1000genomes.org/home">1000 Genomes website</a>. This website contains
-                                    sample reads of 1000 individuals of different ethnic origins.
-                                </p>
+                                <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <div ng-switch-when="bsseq">
+                                                <h4><strong>Bisulfite sequencing</strong></h4>
+                                            </div>
+                                            <div ng-switch-when="mus">
+                                                <h4><strong>Mus musculus</strong></h4>
+                                            </div>
+                                            <div ng-switch-when="canis">
+                                                <h4><strong>Canis familiaris</strong></h4>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-sm-4">
+                                                <div class="text-center">
+                                                    <div ng-switch-when="bsseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a30.jpg">
+                                                        <div class="m-t-xs font-bold">HG00690</div>
+                                                    </div>
+                                                    <div ng-switch-when="mus">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a21.jpg">
+                                                        <div class="m-t-xs font-bold">C57BL/6</div>
+                                                    </div>
+                                                    <div ng-switch-when="canis">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a25.jpg">
+                                                        <div class="m-t-xs font-bold">TM1</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div ng-switch-when="bsseq">
+                                                    <p><strong>Blood cells</strong></p>
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="mus">
+                                                    <p><strong>Black mouse</strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="canis">
+                                                    <p><strong>Tibetan Mastiff</strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="panel-footer white-bg">
+                                            <div>
+                                                <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                              value="sample2"></input>
+                                                    Choose this sample dataset</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div ng-switch-when="bsseq">
+                                                <h4><strong>Bisulfite sequencing</strong></h4>
+                                            </div>
+                                            <div ng-switch-when="mus">
+                                                <h4><strong>Mus musculus</strong></h4>
+                                            </div>
+                                            <div ng-switch-when="canis">
+                                                <h4><strong>Canis familiaris</strong></h4>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-sm-4">
+                                                <div class="text-center" >
+                                                    <div ng-switch-when="bsseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a31.jpg">
+                                                        <div class="m-t-xs font-bold">HG01890</div>
+                                                    </div>
+                                                    <div ng-switch-when="mus">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a22.jpg">
+                                                        <div class="m-t-xs font-bold">DBA/2J</div>
+                                                    </div>
+                                                    <div ng-switch-when="canis">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a26.jpg">
+                                                        <div class="m-t-xs font-bold">Basenji</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div ng-switch-when="bsseq">
+                                                    <p><strong>ESC/iPSC cells</strong></p>
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center:</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="mus">
+                                                    <p><strong>Brown mouse</strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="canis">
+                                                    <p><strong>Basenji</strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-footer white-bg">
+                                            <div>
+                                                <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                              value="sample3"></input>
+                                                    Choose this sample dataset</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div ng-switch-when="mus">
-                                <p>
-                                    The best place to get your sample reads is 
-                                    <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project">
-                                        Mouse Genomes Project</a>. This website contains
-                                    sample reads of 16 breeds of mice.
-                                </p>
-                            </div>
                         </div>
-                        `</div>
+                    </div>
                 </div>
 
+                <!-- PANEL 2-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                Upload a new dataset
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body gray-bg">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Forward DNA strand</h5>
+                                        </div>
+                                        <div class="ibox-content" id="">
+                                            <form action="#">
+                                                <div class="ngs_dz_noborder" ngf-drop="newc.upload(0,$file)" ngf-select="newc.upload(0,$file)">
+                                                    <div ng-if="(!newc.job.files[0])" class="dz-message m-t-lg m-b-lg">
+
+                                                        <h1>Drop file here</h1>
+
+                                                    </div>
+                                                    <div ng-if="((newc.job.files[0]) && (newc.job.files[0].status === 'uploading'))">
+
+                                                        <h1>Uploading file...</h1>
+                                                        <div class="progress-striped active progress">
+                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[0].progress < 100 ? newc.job.files[0].progress : 100) + '%'}">
+                                                            </div>
+                                                        </div>
+                                                        {{newc.job.files[0].current| filesize:2}} / {{newc.job.files[0].total| filesize:2}} ({{newc.job.files[0].progress}})%
+                                                    </div>
+
+                                                    <div ng-if="(newc.job.files[0]) && (newc.job.files[0].status !== 'uploading')">                                                            
+                                                            <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                            <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Reverse DNA strand</h5>
+
+                                        </div>
+                                        <div class="ibox-content" id="">
+                                            <div class="ngs_dropzone">
+                                                <form action="#">
+                                                    <div class="ngs_dz_noborder" ngf-drop="newc.upload(1,$file)" ngf-select="newc.upload(1,$file)">
+                                                        <div ng-if="(!newc.job.files[1])" class="dz-message m-t-lg m-b-lg">
+
+                                                            <h1>Drop file here</h1>
+
+                                                        </div>
+                                                        <div ng-if="((newc.job.files[1]) && (newc.job.files[1].status === 'uploading'))">
+
+                                                            <h1>Uploading file...</h1>
+                                                            <div class="progress-striped active progress">
+                                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[1].progress < 100 ? newc.job.files[1].progress : 100) + '%'}">
+                                                                </div>
+                                                            </div>
+                                                            {{newc.job.files[1].current| filesize:2}} / {{newc.job.files[1].total| filesize:2}} ({{newc.job.files[1].progress}})%
+                                                        </div>
+
+                                                        <div ng-if="(newc.job.files[1]) && (newc.job.files[1].status !== 'uploading')">                                                            
+                                                            <p>File size: {{newc.job.files[1].filesize| filesize:0}}</p>
+                                                            <p>Uploaded: {{newc.job.files[1].finished_at| date:'medium'}}</p>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 " ng-switch="newc.species">
+                                    <p>
+                                        If you want to upload your own reads, you need to have
+                                        two separate .fasta files: reads from the forward strand and from the reverse strand.
+                                        In this case, we can apply paired-ended alignment algorithm to your data.
+                                    </p>
+                                    <div ng-switch-when="bsseq">
+                                        <p>
+                                            The best place to get your sample reads is <a href="http://www.1000genomes.org/home">1000 Genomes website</a>. This website contains
+                                            sample reads of 1000 individuals of different ethnic origins.
+                                        </p>
+                                    </div>
+                                    <div ng-switch-when="mus">
+                                        <p>
+                                            The best place to get your sample reads is
+                                            <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project">
+                                                Mouse Genomes Project</a>. This website contains
+                                            sample reads of 16 breeds of mice.
+                                        </p>
+                                    </div>
+                                    <p>
+                                        <strong>We strongly advise you not to take datasets with the data on the whole genome
+                                            but with low coverage. It's much better to run a more targeted research (on a single
+                                            chromosome, or even on a particular set of genes, but to have a decent coverage
+                                            of <u>at least 20-30x</u>).</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <!-- PANEL 3-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                Use data from my file storage
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body gray-bg">
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Forward DNA strand</h5>
+                                        </div>
+                                        <div class="ibox-content" id="">
+                                            <form action="#">
+                                                <div class="ngs_dz_noborder" ng-click="newc.chooseFile(0)">
+                                                    <div ng-if="(!newc.job.files[0])" class="dz-message m-t-lg m-b-lg">
+
+                                                        <h1>Click to choose file</h1>
+
+                                                    </div>
+                                                    <div ng-if="((newc.job.files[0]) && (newc.job.files[0].status === 'uploading'))">
+
+                                                        <h1>Uploading file...</h1>
+                                                        <div class="progress-striped active progress">
+                                                            <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[0].progress < 100 ? newc.job.files[0].progress : 100) + '%'}">
+                                                            </div>
+                                                        </div>
+                                                        {{newc.job.files[0].current| filesize:2}} / {{newc.job.files[0].total| filesize:2}} ({{newc.job.files[0].progress}})%
+                                                    </div>
+
+                                                    <div ng-if="(newc.job.files[0])">
+                                                        <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                        <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Reverse DNA strand</h5>
+
+                                        </div>
+                                        <div class="ibox-content" id="">
+                                            <div class="ngs_dropzone">
+                                                <form action="#">
+                                                    <div class="ngs_dz_noborder" ng-click="newc.chooseFile(1)">
+                                                        <div ng-if="(!newc.job.files[1])" class="dz-message m-t-lg m-b-lg">
+
+                                                            <h1>Click to choose file</h1>
+
+                                                        </div>
+                                                        <div ng-if="((newc.job.files[1]) && (newc.job.files[1].status === 'uploading'))">
+
+                                                            <h1>Uploading file...</h1>
+                                                            <div class="progress-striped active progress">
+                                                                <div class="progress-bar progress-bar-warning" role="progressbar" ng-style="{width: (newc.job.files[1].progress < 100 ? newc.job.files[1].progress : 100) + '%'}">
+                                                                </div>
+                                                            </div>
+                                                            {{newc.job.files[1].current| filesize:2}} / {{newc.job.files[1].total| filesize:2}} ({{newc.job.files[1].progress}})%
+                                                        </div>
+
+                                                        <div ng-if="(newc.job.files[1])">
+                                                            <p>File size: {{newc.job.files[1].filesize| filesize:0}}</p>
+                                                            <p>Uploaded: {{newc.job.files[1].finished_at| date:'medium'}}</p>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                
+
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
         </div>
@@ -313,5 +467,7 @@
 
 
 
-    <a ui-sref="pipelines.rna_reseq_new.step2({job: newc.job})" ng-click="newc.submitJob()" class="btn btn-primary">Align my reads to the genome</a>
+
+
+    <a ng-click="newc.submit()" class="btn btn-primary">Align my reads to the genome</a>
 </fieldset>
