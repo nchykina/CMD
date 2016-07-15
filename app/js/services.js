@@ -481,7 +481,7 @@ var jobService = function ($http, $q, fileService,socket) {
 
         for (var i in jobs) {
             if (jobs[i].id === id) {
-                defer.resolve(id);
+                defer.resolve(jobs[i]);
                 return defer.promise;
             }
         }
@@ -505,11 +505,11 @@ var jobService = function ($http, $q, fileService,socket) {
     };
     
     this.processJobUpdate = function(job){
-        var job_found = false;
-        
+                
         for(var i in jobs){
             if(jobs[i].id===job.id){
                 jobs[i].status = job.status;
+                console.log('job '+job.id+' status: '+job.status);
                 return;
             }
         }
@@ -517,6 +517,32 @@ var jobService = function ($http, $q, fileService,socket) {
         //further handling here
         
         throw new Error('job_update for unknown job');
+        
+    }
+    
+    this.processStepUpdate = function(msg){
+        for(var i in jobs){
+            if(jobs[i].id===msg.jobid){
+                jobs[i].steps[msg.stepnum].status = msg.step.status;
+                jobs[i].status = msg.jobstatus;
+                return;
+            }
+        }
+        
+        throw new Error('step_update: unknown '+msg.jobid+' '+msg.stepnum);    
+        
+    }
+    
+    this.processFileUpload = function(jobid){
+        
+        for(var i in jobs){
+            if(jobs[i].id===jobid){
+                console.log(jobid+': files submitted');
+                return;
+            }
+        }
+        
+        throw new Error('processFileUpload: unknown '+jobid);    
         
     }
 
@@ -542,6 +568,9 @@ var jobService = function ($http, $q, fileService,socket) {
                     }
                     
                     socket.on('job_update', vm.processJobUpdate);
+                    socket.on('step_update', vm.processStepUpdate);
+                    socket.on('job_file_submit', vm.processFileUpload);
+                    
                     
                     $http({
                 method: 'PUT',
@@ -769,7 +798,7 @@ var ioService = function ($rootScope) {
 angular
         .module('inspinia')
         .service('messageService', messageService)
-        .factory('socket',ioService)
+        .factory('socket',['$rootScope', ioService])
         .service('jobService', ['$http', '$q', 'fileService', 'socket', jobService])
         .service('fileService', ['$http', '$q', 'Upload', fileService])
         .service('ecommService', ['$http', '$q', ecommerceService])

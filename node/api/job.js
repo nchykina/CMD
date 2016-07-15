@@ -19,7 +19,7 @@ var extend = require('node.extend'); //merge JavaScript objects
 
 var q = require('q'); //Q promise framework
 
-
+var io = require('../io').emitter;
 
 var job_create = function (req, res) {
     if (!req.user) {
@@ -487,6 +487,8 @@ var job_submit_step = function (job, stepnum, t) {
 
                             err1 = true;
                         }
+                        
+                        io.to("job_"+job.id).emit("step_update",{jobid: job.id, stepnum: stepnum, step: step, jobstatus: job.status});
 
                         //TODO: fire socket.IO update
                         return job.save({transaction: t}).then(function () {
@@ -646,6 +648,7 @@ var job_submit = function (req, res, next) {
 
                                     job_hardcode.upload_input()
                                             .then(function (copy_res) {
+                                                //io.to("job_"+job.id).emit("job_file_submit","finished");
                                                 job_really_submit(job, req, res, next, defer, t);
                                             })
                                             .catch(function (err) {
@@ -686,6 +689,7 @@ var job_really_submit = function (job, req, res, next, defer, t) {
     job_submit_step(job, 0, t).then(
             function (ret) {
                 if (!ret.err) {
+                    //io.to("job_"+job.id).emit("job_update",job);
                     res.status(200).json({success: true, msg: ret.msg, job: ret.job});
                 } else {
                     res.status(500).json({success: false, msg: ret.msg});
@@ -748,7 +752,7 @@ var sing_hook = function (req, res) {
         var jobid = parseInt(taskid.substring(0, i1));
         var stepid = parseInt(taskid.substring(i1 + 1, i2));
 
-        console.log('TASK ' + taskid + ' status change to ' + state);
+        //console.log('TASK ' + taskid + ' status change to ' + state);
 
         models.sequelize.transaction(function (t) {
             return models.Job.findOne(
@@ -830,6 +834,8 @@ var sing_hook = function (req, res) {
                         }
 
                         return step.save({transaction: t}).then(function () {
+                            //TODO: this does not respect transactional logic. if transaction rolls back - the client will still think that step was updated
+                            io.to("job_"+job.id).emit("step_update",{jobid: job.id, stepnum: stepid, step: step, jobstatus: job.status});
 
                             var prm;
 
@@ -838,10 +844,13 @@ var sing_hook = function (req, res) {
                                     job.status = 'failed';
                                     prm = job.save({transaction: t});
                                 } else if (step.status === 'finished') {
-                                    prm = job_submit_step(job, stepid + 1, t);
+                                    prm = job_submit_step(job, stepid + 1, t)
+                                            .then(function(res){
+                                                return job;
+                                    });
                                 } else {
                                     var defer = q.defer();
-                                    defer.resolve();
+                                    defer.resolve(job);
                                     prm = defer.promise;
                                 }
                             } else {
@@ -866,16 +875,20 @@ var sing_hook = function (req, res) {
                                             })
                                 } else {
                                     var defer = q.defer();
-                                    defer.resolve();
+                                    defer.resolve(job);
                                     prm = defer.promise;
                                 }
                             }
+                            
+                            
 
                             return prm;
                         });
                     });
         })
                 .then(function (result) {
+                    //console.log("transaction result: ",result);
+                    io.to("job_"+result.id).emit("job_update",result);
                     res.status(200).send('ok, got it');
                 })
                 .catch(function (err) {
@@ -901,7 +914,7 @@ var http_bind_function = function (router) {
 
 var io_bind_function = function(socket){
     socket.on('subscribe_job_request', function(jobid){
-        console.log('subscribe request: '+jobid)
+        console.log('subscribe request: '+jobid);
        models.Job.findOne({
         where: {id: jobid}})
                 .then(function(job){
@@ -925,6 +938,7 @@ var io_bind_function = function(socket){
     });
     
     socket.on('unsubscribe_job_request', function(jobid){
+        console.log('unsubscribe request: '+jobid)
        models.Job.findOne({
         where: {id: jobid}})
                 .then(function(job){
