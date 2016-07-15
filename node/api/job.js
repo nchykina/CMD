@@ -765,7 +765,8 @@ var sing_hook = function (req, res) {
                                 as: 'steps'
                             }
                         ],
-                        order: ['steps', 'order']})
+                        order: ['steps', 'order'],
+                    })
                     .then(function (job) {
 
                         if (!job) {
@@ -783,8 +784,41 @@ var sing_hook = function (req, res) {
                         var cstate = job.steps[stepid].status;
 
                         var step = job.steps[stepid];
+                        
+                        if(state==='TASK_LAUNCHED'){
+                            if(cstate==='submitted'){
+                                job.steps[stepid].status = 'started';
+                            }
+                            else {
+                                throw new Error('wrong order');
+                            }
+                        }
+                        else if(state==='TASK_RUNNING'){
+                            if(cstate==='started'){
+                                job.steps[stepid].status = 'running';
+                            }
+                            else {
+                                throw new Error('wrong order');
+                            }
+                        }
+                        else if(state==='TASK_FINISHED'){
+                            if(cstate==='running'){
+                                job.steps[stepid].status = 'finished';
+                            }
+                            else {
+                                throw new Error('wrong order');
+                            }
+                        }
+                        else if(state==='TASK_FAILED'){
+                            if((cstate==='submitted')||(cstate==='running')){
+                                job.steps[stepid].status = 'failed';
+                            }
+                            else {
+                                throw new Error('wrong order');
+                            }
+                        }
 
-                        if (state === 'TASK_LAUNCHED') {
+                        /* if (state === 'TASK_LAUNCHED') {
                             switch (cstate) {
                                 case 'submitted':
                                     job.steps[stepid].status = 'started';
@@ -831,7 +865,7 @@ var sing_hook = function (req, res) {
                                     //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
                                     break;
                             }
-                        }
+                        } */
 
                         return step.save({transaction: t}).then(function () {
                             //TODO: this does not respect transactional logic. if transaction rolls back - the client will still think that step was updated
@@ -842,7 +876,7 @@ var sing_hook = function (req, res) {
                             if (job.steps.length > stepid + 1) {
                                 if (step.status === 'failed') {
                                     job.status = 'failed';
-                                    prm = job.save({transaction: t});
+                                    prm = job.save({transaction: t, lock: t.LOCK.UPDATE});
                                 } else if (step.status === 'finished') {
                                     prm = job_submit_step(job, stepid + 1, t)
                                             .then(function(res){
@@ -856,13 +890,13 @@ var sing_hook = function (req, res) {
                             } else {
                                 if (step.status === 'failed') {
                                     job.status = 'failed';
-                                    prm = job.save({transaction: t});
+                                    prm = job.save({transaction: t, lock: t.LOCK.UPDATE});
                                 } else if (step.status === 'finished') {
 
                                     /* download results before completing */
                                     var job_obj = new dna_reseq_job(job);
 
-                                    prm = job_obj.download_result({transaction: t})
+                                    prm = job_obj.download_result({transaction: t, lock: t.LOCK.UPDATE})
                                             .then(function (res) {
                                                 console.log(res);
                                                 job.status = 'finished';
@@ -871,7 +905,7 @@ var sing_hook = function (req, res) {
                                             .catch(function (err) {
                                                 console.error('sing_hook (download result): ' + err);
                                                 job.status = 'failed';
-                                                return job.save({transaction: t});
+                                                return job.save({transaction: t, lock: t.LOCK.UPDATE});
                                             })
                                 } else {
                                     var defer = q.defer();
@@ -892,7 +926,7 @@ var sing_hook = function (req, res) {
                     res.status(200).send('ok, got it');
                 })
                 .catch(function (err) {
-                    console.error("sing_hook: " + err);
+                    console.error("sing_hook("+jobid+"): " + err);
                     res.status(500).send('processing error');
                 });
     }
