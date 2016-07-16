@@ -18,7 +18,8 @@ var spamList = [
     'инфоспайс.рф',
     'magru24.ru',
     'eu-cookie-law.blogspot.com',
-    'bestchoice.cf'
+    'bestchoice.cf',
+    'pokemongooo.ml'
 ];
 
 module.exports = spamList;

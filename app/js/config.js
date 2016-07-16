@@ -39,7 +39,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/dna_resequencing/job/:jobid",
                 templateUrl: "views/pipelines/dna_reseq/job.html",
                 controller: 'dnaReseqJobController',
-                controllerAs: 'newc',                
+                controllerAs: 'newc',
                 data: {pageTitle: 'DNA resequencing'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -51,7 +51,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     }
                 }
             })
-                        
+
 
             .state('pipelines.rna_reseq_home', {
                 url: "/rna_resequencing/home",
@@ -64,7 +64,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/rna_resequencing/job/:jobid",
                 templateUrl: "views/pipelines/rna_reseq/job.html",
                 controller: 'rnaReseqJobController',
-                controllerAs: 'newc',                
+                controllerAs: 'newc',
                 data: {pageTitle: 'RNA resequencing'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -88,7 +88,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/methylation/job/:jobid",
                 templateUrl: "views/pipelines/methylation/job.html",
                 controller: 'methylationJobController',
-                controllerAs: 'newc',                
+                controllerAs: 'newc',
                 data: {pageTitle: 'Methylation and BS-Seq'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -100,8 +100,8 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     }
                 }
             })
-            
-             .state('pipelines.dna_denovo_home', {
+
+            .state('pipelines.dna_denovo_home', {
                 url: "/dna_denovo/home",
                 controller: 'dnadenovoHomeController',
                 controllerAs: 'homec',
@@ -112,7 +112,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                 url: "/dna_denovo/job/:jobid",
                 templateUrl: "views/pipelines/dna_denovo/job.html",
                 controller: 'dnadenovoJobController',
-                controllerAs: 'newc',                
+                controllerAs: 'newc',
                 data: {pageTitle: 'DNA De Novo Assembly'},
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
@@ -1333,10 +1333,71 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                             {
                                 name: 'slick',
                                 files: ['js/plugins/slick/angular-slick.min.js']
+                            },
+                            {
+                                files: ['js/plugins/moment/moment.min.js']
+                            },
+                            {
+                                name: 'ui.knob',
+                                files: ['js/plugins/jsKnob/jquery.knob.js', 'js/plugins/jsKnob/angular-knob.js']
+                            },
+                            {
+                                files: ['css/plugins/ionRangeSlider/ion.rangeSlider.css', 'css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css', 'js/plugins/ionRangeSlider/ion.rangeSlider.min.js']
+                            },
+                            {
+                                insertBefore: '#loadBefore',
+                                name: 'localytics.directives',
+                                files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                            },
+                            {
+                                name: 'nouislider',
+                                files: ['css/plugins/nouslider/jquery.nouislider.css', 'js/plugins/nouslider/jquery.nouislider.min.js', 'js/plugins/nouslider/angular-nouislider.js']
+                            },
+                            {
+                                name: 'datePicker',
+                                files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                            },
+                            {
+                                files: ['js/plugins/jasny/jasny-bootstrap.min.js']
+                            },
+                            {
+                                files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+                            },
+                            {
+                                name: 'ui.switchery',
+                                files: ['css/plugins/switchery/switchery.css', 'js/plugins/switchery/switchery.js', 'js/plugins/switchery/ng-switchery.js']
+                            },
+                            {
+                                name: 'colorpicker.module',
+                                files: ['css/plugins/colorpicker/colorpicker.css', 'js/plugins/colorpicker/bootstrap-colorpicker-module.js']
+                            },
+                            {
+                                name: 'ngImgCrop',
+                                files: ['js/plugins/ngImgCrop/ng-img-crop.js', 'css/plugins/ngImgCrop/ng-img-crop.css']
+                            },
+                            {
+                                serie: true,
+                                files: ['js/plugins/daterangepicker/daterangepicker.js', 'css/plugins/daterangepicker/daterangepicker-bs3.css']
+                            },
+                            {
+                                name: 'daterangepicker',
+                                files: ['js/plugins/daterangepicker/angular-daterangepicker.js']
+                            },
+                            {
+                                files: ['css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css']
+                            },
+                            {
+                                name: 'ui.select',
+                                files: ['js/plugins/ui-select/select.min.js', 'css/plugins/ui-select/select.min.css']
+                            },
+                            {
+                                files: ['css/plugins/touchspin/jquery.bootstrap-touchspin.min.css', 'js/plugins/touchspin/jquery.bootstrap-touchspin.min.js']
                             }
+
                         ]);
                     }
                 }
+
             })
             .state('custom.orders', {
                 url: "/orders",
