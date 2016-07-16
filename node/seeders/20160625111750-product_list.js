@@ -19,7 +19,6 @@ module.exports = {
                 created_at: new Date(),
                 updated_at: new Date()
             },
-            
             {
                 product_name: 'RNA realignment',
                 product_category: 'Additional content',
@@ -36,10 +35,7 @@ module.exports = {
                 product_url: 'commerce.product_details1',
                 created_at: new Date(),
                 updated_at: new Date()
-            },
-            
- 
-            
+           },
             {
                 product_name: 'Extra storage space',
                 product_category: 'Extra storage space',
@@ -57,7 +53,6 @@ module.exports = {
                 created_at: new Date(),
                 updated_at: new Date()
             },
-            
             {
                 product_name: 'Extra vCPUs',
                 product_category: 'Processing capacity',
@@ -75,7 +70,7 @@ module.exports = {
                 created_at: new Date(),
                 updated_at: new Date()
             }
-        ], {});        
+        ], {});
     },
     down: function (queryInterface, Sequelize) {
         /*
@@ -85,9 +80,12 @@ module.exports = {
          Example:
          return queryInterface.bulkDelete('Person', null, {});
          */
-        queryInterface.bulkDelete('UserCarts', null, {});
-        queryInterface.bulkDelete('Orders', null, {});
-        queryInterface.bulkDelete('Products', null, {});
-        
+
+        return queryInterface.bulkDelete('UserCarts', null, {}).then(function () {
+            return queryInterface.bulkDelete('Orders', null, {}).then(function () {
+                return queryInterface.bulkDelete('Products', null, {});
+            });
+        });
+
     }
 };
