@@ -1,4 +1,17 @@
 <fieldset>
+    
+    <script>
+                setInterval(function() {
+                    var elem = $( ".flashing" );
+        elem.addClass("animated");
+        elem.addClass("wobble")
+        
+        setTimeout(function(){
+            elem.removeClass("wobble");
+            elem.removeClass("animated");
+        },1500);
+      }, 3000 );                
+            </script>
 
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
@@ -9,7 +22,7 @@
 
                 <div id="vertical-timeline" class="vertical-container dark-timeline center-orientation">
                     <div class="vertical-timeline-block">
-                        <div class="vertical-timeline-icon navy-bg">
+                        <div class="vertical-timeline-icon navy-bg" ng-class="{flashing: newc.job.steps[0].status == 'running'}">
                             <i class="fa fa-exchange"></i>
                         </div>
 
@@ -35,7 +48,7 @@
                     </div>
 
                     <div class="vertical-timeline-block">
-                        <div class="vertical-timeline-icon blue-bg">
+                        <div class="vertical-timeline-icon blue-bg" ng-class="{flashing: newc.job.steps[1].status == 'running'}">
                             <i class="fa fa-sort-amount-asc"></i>
                         </div>
 

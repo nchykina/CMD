@@ -19,7 +19,10 @@ var extend = require('node.extend'); //merge JavaScript objects
 
 var q = require('q'); //Q promise framework
 
+var io = require('../io').emitter;
 
+var redis_cli = require('redis').createClient({host: config.redis.host, port: config.redis.port});
+var lock_cli = require('redislock');
 
 var job_create = function (req, res) {
     if (!req.user) {
@@ -157,7 +160,26 @@ var dna_reseq_job = function (job) {
 
     self.job_model = job;
 
-    self.output_files = ['1_fastqc.html', '2_fastqc.html', 'result.sam'];
+    self.output_files = [
+        {
+            filename: '1_fastqc.html',
+            filenum: 2,
+            filetype: 'FASTQC',
+            description: 'FASTQC report on input quality'
+        },
+        {
+            filename: '2_fastqc.html',
+            filenum: 3,
+            filetype: 'FASTQC',
+            description: 'FASTQC report on input quality'
+        },
+        {
+            filename: 'result.sam',
+            filenum: 4,
+            filetype: 'SAM',
+            description: 'Alignment result - SAM file'
+        },
+    ];
 
     this.upload_input = function () {
         return q.all(
@@ -175,12 +197,12 @@ var dna_reseq_job = function (job) {
         }
 
         var download_promises = [];
-        
-        var download_file = function(out_file) {
+
+        var download_file = function (out_file) {
             var prm = q.defer();
             var start_time = Date.now();
-            var url = config.file_agent_url + '/' + self.job_model.id + '/' + out_file;
-            var file_path = self.job_model.work_dir + path.sep + out_file;
+            var url = config.file_agent_url + '/' + self.job_model.id + '/' + out_file.filename;
+            var file_path = self.job_model.work_dir + path.sep + out_file.filename;
             var file = fs.createWriteStream(file_path);
             var req = http.get(url, function (response) {
                 if (response.statusCode < 200 || response.statusCode > 299) { // (I don't know if the 3xx responses come here, if so you'll want to handle them appropriately
@@ -190,21 +212,21 @@ var dna_reseq_job = function (job) {
                     file.on('finish', function () {
                         file.close(function () {
                             end_time = Date.now();
-                            prm.resolve({path: file_path, name: out_file, filesize: file.bytesWritten, start_time: start_time, end_time: end_time});
+                            prm.resolve({path: file_path, file: out_file, filesize: file.bytesWritten, start_time: start_time, end_time: end_time});
                         });  // close() is async, call cb after close completes.
                     });
-                    
+
                     file.on('error', function (err) { // Handle errors
                         //fs.unlink(file_path); // Delete the file async. (But we don't check the result)
                         prm.reject(err);
                     });
                 }
             });
-            
-            req.on('error', function(err) {
+
+            req.on('error', function (err) {
                 prm.reject(err);
             });
-            
+
             return prm.promise;
         }
 
@@ -224,7 +246,10 @@ var dna_reseq_job = function (job) {
                                     file_api.file_create(
                                             {
                                                 owner_id: self.job_model.owner_id,
-                                                name: util.format('job_%d_%s',self.job_model.id,files[i].name),
+                                                name: util.format('job_%d_%s', self.job_model.id, files[i].file.filename),
+                                                description: files[i].file.description,
+                                                filetype: files[i].file.filetype,
+                                                fileuse: 'output',
                                                 path: files[i].path,
                                                 start_time: files[i].start_time,
                                                 end_time: files[i].end_time,
@@ -285,6 +310,37 @@ var dna_reseq_job = function (job) {
 
 var job_dna_reseq_create_steps = function (job) {
 
+}
+
+var job_delete = function (req, res) {
+    if (!req.user) {
+        res.status(403).json({success: false, msg: 'Unauthenticated'});
+        return;
+    }
+
+    if (!req.params.id) {
+        res.status(404).json({success: false, msg: 'Not job id specified'});
+        return;
+    }
+
+     models.sequelize.transaction(function (t) {
+        return models.Job.findOne({
+            where: {id: req.params.id, owner_id: req.user.id}, transaction: t})
+                    .then(function(job){
+                        if(!job){
+                            throw new Error('not found');
+                        }
+                        
+                        return job.destroy({transaction: t});
+            })
+     })
+     .then(function (tr_res) {
+                res.status(200).json({success: true, msg: 'ok'});
+            })
+            .catch(function (err) {
+                console.error('job_delete: ' + err);
+                res.status(500).json({success: false, msg: 'Internal error'});
+            });
 }
 
 /*
@@ -408,8 +464,8 @@ var job_submit_step = function (job, stepnum, t) {
     var job_path = job.work_dir;
 
     var sing_id = job.id + '_' + stepnum + '_' + Date.now();
-    
-    
+
+
 
     //create a request
     request.post({
@@ -426,8 +482,8 @@ var job_submit_step = function (job, stepnum, t) {
             console.error('failed to create request: ' + response);
             return defer.reject({msg: 'Failed to create singularity request'});
         } else {
-            
-            console.log(util.format('deploying job %d_%d',job.id,stepnum));
+
+            console.log(util.format('deploying job %d_%d', job.id, stepnum));
 
             var req_deploy = {
                 deploy: {
@@ -445,14 +501,14 @@ var job_submit_step = function (job, stepnum, t) {
                                 hostPath: util.format(config.singularity.work_dir_format, job.id),
                                 containerPath: '/work',
                                 mode: 'RW'
-                            },                            
+                            },
                             {
                                 hostPath: config.singularity.ngs_lib_host,
                                 containerPath: '/ngs_lib',
                                 mode: 'RO'
-                            }                        
-                        ]                        
-                        
+                            }
+                        ]
+
                     },
                     resources: {
                         cpus: step.cpu,
@@ -487,6 +543,8 @@ var job_submit_step = function (job, stepnum, t) {
 
                             err1 = true;
                         }
+
+                        io.to("job_" + job.id).emit("step_update", {jobid: job.id, stepnum: stepnum, step: step, jobstatus: job.status});
 
                         //TODO: fire socket.IO update
                         return job.save({transaction: t}).then(function () {
@@ -646,6 +704,7 @@ var job_submit = function (req, res, next) {
 
                                     job_hardcode.upload_input()
                                             .then(function (copy_res) {
+                                                //io.to("job_"+job.id).emit("job_file_submit","finished");
                                                 job_really_submit(job, req, res, next, defer, t);
                                             })
                                             .catch(function (err) {
@@ -686,6 +745,7 @@ var job_really_submit = function (job, req, res, next, defer, t) {
     job_submit_step(job, 0, t).then(
             function (ret) {
                 if (!ret.err) {
+                    //io.to("job_"+job.id).emit("job_update",job);
                     res.status(200).json({success: true, msg: ret.msg, job: ret.job});
                 } else {
                     res.status(500).json({success: false, msg: ret.msg});
@@ -748,140 +808,193 @@ var sing_hook = function (req, res) {
         var jobid = parseInt(taskid.substring(0, i1));
         var stepid = parseInt(taskid.substring(i1 + 1, i2));
 
-        console.log('TASK ' + taskid + ' status change to ' + state);
+        //console.log('TASK ' + taskid + ' status change to ' + state);
+        var lockname = util.format("job:%d", jobid);
+        
+        //console.log('locking '+lockname);
 
-        models.sequelize.transaction(function (t) {
-            return models.Job.findOne(
-                    {
-                        where: {id: jobid},
-                        transaction: t,
-                        include: [
-                            {
-                                model: models.Step,
-                                as: 'steps'
-                            }
-                        ],
-                        order: ['steps', 'order']})
-                    .then(function (job) {
-
-                        if (!job) {
-                            return 'job not found, but its ok';
-                        }
-
-                        if (!job.steps) {
-                            return 'job not found, but its ok';
-                        }
-
-                        if (!job.steps[stepid]) {
-                            return 'job not found, but its ok';
-                        }
-
-                        var cstate = job.steps[stepid].status;
-
-                        var step = job.steps[stepid];
-
-                        if (state === 'TASK_LAUNCHED') {
-                            switch (cstate) {
-                                case 'submitted':
-                                    job.steps[stepid].status = 'started';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        if (state === 'TASK_RUNNING') {
-                            switch (cstate) {
-                                case 'submitted':
-                                case 'started':
-                                    job.steps[stepid].status = 'running';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        if (state === 'TASK_FINISHED') {
-                            switch (cstate) {
-                                case 'submitted':
-                                case 'started':
-                                case 'running':
-                                    job.steps[stepid].status = 'finished';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        if (state === 'TASK_FAILED') {
-                            switch (cstate) {
-                                case 'submitted':
-                                case 'started':
-                                case 'running':
-                                    job.steps[stepid].status = 'failed';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        return step.save({transaction: t}).then(function () {
-
-                            var prm;
-
-                            if (job.steps.length > stepid + 1) {
-                                if (step.status === 'failed') {
-                                    job.status = 'failed';
-                                    prm = job.save({transaction: t});
-                                } else if (step.status === 'finished') {
-                                    prm = job_submit_step(job, stepid + 1, t);
-                                } else {
-                                    var defer = q.defer();
-                                    defer.resolve();
-                                    prm = defer.promise;
-                                }
-                            } else {
-                                if (step.status === 'failed') {
-                                    job.status = 'failed';
-                                    prm = job.save({transaction: t});
-                                } else if (step.status === 'finished') {
-
-                                    /* download results before completing */
-                                    var job_obj = new dna_reseq_job(job);
-
-                                    prm = job_obj.download_result({transaction: t})
-                                            .then(function (res) {
-                                                console.log(res);
-                                                job.status = 'finished';
-                                                return job.save({transaction: t});
-                                            })
-                                            .catch(function (err) {
-                                                console.error('sing_hook (download result): ' + err);
-                                                job.status = 'failed';
-                                                return job.save({transaction: t});
-                                            })
-                                } else {
-                                    var defer = q.defer();
-                                    defer.resolve();
-                                    prm = defer.promise;
-                                }
-                            }
-
-                            return prm;
-                        });
-                    });
-        })
-                .then(function (result) {
-                    res.status(200).send('ok, got it');
-                })
-                .catch(function (err) {
-                    console.error("sing_hook: " + err);
-                    res.status(500).send('processing error');
+        var lock = lock_cli.createLock(redis_cli,
+                {
+                    timeout: 20000,
+                    retries: 10,
+                    delay: 100
                 });
+
+        lock.acquire(lockname).then(function () {
+
+            models.sequelize.transaction(function (t) {
+                return models.Job.findOne(
+                        {
+                            where: {id: jobid},
+                            transaction: t,
+                            include: [
+                                {
+                                    model: models.Step,
+                                    as: 'steps'
+                                }
+                            ],
+                            order: ['steps', 'order'],
+                        })
+                        .then(function (job) {
+
+                            if (!job) {
+                                return 'job not found, but its ok';
+                            }
+
+                            if (!job.steps) {
+                                return 'job not found, but its ok';
+                            }
+
+                            if (!job.steps[stepid]) {
+                                return 'job not found, but its ok';
+                            }
+
+                            var cstate = job.steps[stepid].status;
+
+                            var step = job.steps[stepid];
+
+                            if (state === 'TASK_LAUNCHED') {
+                                if (cstate === 'submitted') {
+                                    job.steps[stepid].status = 'started';
+                                } else {
+                                    throw new Error('wrong order');
+                                }
+                            } else if (state === 'TASK_RUNNING') {
+                                if (cstate === 'started') {
+                                    job.steps[stepid].status = 'running';
+                                } else {
+                                    throw new Error('wrong order');
+                                }
+                            } else if (state === 'TASK_FINISHED') {
+                                if (cstate === 'running') {
+                                    job.steps[stepid].status = 'finished';
+                                } else {
+                                    throw new Error('wrong order');
+                                }
+                            } else if (state === 'TASK_FAILED') {
+                                if ((cstate === 'submitted') || (cstate === 'running')) {
+                                    job.steps[stepid].status = 'failed';
+                                } else {
+                                    throw new Error('wrong order');
+                                }
+                            }
+
+                            /* if (state === 'TASK_LAUNCHED') {
+                             switch (cstate) {
+                             case 'submitted':
+                             job.steps[stepid].status = 'started';
+                             break;
+                             default:
+                             //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                             break;
+                             }
+                             }
+                             
+                             if (state === 'TASK_RUNNING') {
+                             switch (cstate) {
+                             case 'submitted':
+                             case 'started':
+                             job.steps[stepid].status = 'running';
+                             break;
+                             default:
+                             //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                             break;
+                             }
+                             }
+                             
+                             if (state === 'TASK_FINISHED') {
+                             switch (cstate) {
+                             case 'submitted':
+                             case 'started':
+                             case 'running':
+                             job.steps[stepid].status = 'finished';
+                             break;
+                             default:
+                             //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                             break;
+                             }
+                             }
+                             
+                             if (state === 'TASK_FAILED') {
+                             switch (cstate) {
+                             case 'submitted':
+                             case 'started':
+                             case 'running':
+                             job.steps[stepid].status = 'failed';
+                             break;
+                             default:
+                             //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
+                             break;
+                             }
+                             } */
+
+                            return step.save({transaction: t}).then(function () {
+                                //TODO: this does not respect transactional logic. if transaction rolls back - the client will still think that step was updated
+                                io.to("job_" + job.id).emit("step_update", {jobid: job.id, stepnum: stepid, step: step, jobstatus: job.status});
+
+                                var prm;
+
+                                if (job.steps.length > stepid + 1) {
+                                    if (step.status === 'failed') {
+                                        job.status = 'failed';
+                                        prm = job.save({transaction: t, lock: t.LOCK.UPDATE});
+                                    } else if (step.status === 'finished') {
+                                        prm = job_submit_step(job, stepid + 1, t)
+                                                .then(function (res) {
+                                                    return job;
+                                                });
+                                    } else {
+                                        var defer = q.defer();
+                                        defer.resolve(job);
+                                        prm = defer.promise;
+                                    }
+                                } else {
+                                    if (step.status === 'failed') {
+                                        job.status = 'failed';
+                                        prm = job.save({transaction: t, lock: t.LOCK.UPDATE});
+                                    } else if (step.status === 'finished') {
+
+                                        /* download results before completing */
+                                        var job_obj = new dna_reseq_job(job);
+
+                                        prm = job_obj.download_result({transaction: t, lock: t.LOCK.UPDATE})
+                                                .then(function (res) {
+                                                    //console.log(res);
+                                                    job.status = 'finished';
+                                                    return job.save({transaction: t});
+                                                })
+                                                .catch(function (err) {
+                                                    console.error('sing_hook (download result): ' + err);
+                                                    job.status = 'failed';
+                                                    return job.save({transaction: t, lock: t.LOCK.UPDATE});
+                                                })
+                                    } else {
+                                        var defer = q.defer();
+                                        defer.resolve(job);
+                                        prm = defer.promise;
+                                    }
+                                }
+
+
+
+                                return prm;
+                            });
+                        });
+            })
+                    .then(function (result) {
+                        //console.log("transaction result: ",result);
+                        io.to("job_" + result.id).emit("job_update", result);
+                        res.status(200).send('ok, got it');
+                        //console.log('unlocking '+lockname);
+                        return lock.release();
+                    })
+                    .catch(function (err) {
+                        console.error("sing_hook(" + jobid + "): " + err);
+                        res.status(500).send('processing error');
+                        //console.log('unlocking '+lockname);
+                        return lock.release();
+                    });
+        });
     }
 }
 
@@ -892,59 +1005,58 @@ var http_bind_function = function (router) {
     router.get('/job', job_list);
     router.put('/job/:id', job_update);
     router.post('/job/create_or_update', job_select_or_create);
-    //router.delete('/job/delete/{id}', job_delete);
+    router.delete('/job/:id', job_delete);
     router.put('/job/submit/:id', job_submit);
     //router.post('/job/submit_file/:id/:filenum', job_submit_file);
     router.use('/job/hook', sing_hook);
     sing_bind();
 };
 
-var io_bind_function = function(socket){
-    socket.on('subscribe_job_request', function(jobid){
-        console.log('subscribe request: '+jobid)
-       models.Job.findOne({
-        where: {id: jobid}})
-                .then(function(job){
-                    if(!job){
-                        return socket.emit('subscribe_job_response',{success: false, jobid: jobid, message: 'no job found'});                        
+var io_bind_function = function (socket) {
+    socket.on('subscribe_job_request', function (jobid) {
+        console.log('subscribe request: ' + jobid);
+        models.Job.findOne({
+            where: {id: jobid}})
+                .then(function (job) {
+                    if (!job) {
+                        return socket.emit('subscribe_job_response', {success: false, jobid: jobid, message: 'no job found'});
                     }
-                    
-                    if(job.owner_id!==socket.request.session.passport.user){
-                        return socket.emit('subscribe_job_response',{success: false, jobid: jobid, message: 'access denied'});
+
+                    if (job.owner_id !== socket.request.session.passport.user) {
+                        return socket.emit('subscribe_job_response', {success: false, jobid: jobid, message: 'access denied'});
                     }
-                    
-                    socket.join(util.format('job_%d',jobid),function(err){
-                        if(err){
-                            return socket.emit('subscribe_job_response',{success: false, jobid: jobid, message: err});
-                        }
-                        else {
+
+                    socket.join(util.format('job_%d', jobid), function (err) {
+                        if (err) {
+                            return socket.emit('subscribe_job_response', {success: false, jobid: jobid, message: err});
+                        } else {
                             return socket.emit('subscribe_job_response', {success: true, jobid: jobid});
-                        }                        
-                    });
-        })
-    });
-    
-    socket.on('unsubscribe_job_request', function(jobid){
-       models.Job.findOne({
-        where: {id: jobid}})
-                .then(function(job){
-                    if(!job){
-                        return socket.emit('unsubscribe_job_response',{success: false, jobid: jobid, message: 'no job found'});                        
-                    }
-                    
-                    if(job.owner_id!==socket.request.session.passport.user){
-                        return socket.emit('unsubscribe_job_response',{success: false, jobid: jobid, message: 'access denied'});
-                    }
-                    
-                    socket.leave(util.format('job_%d',jobid),function(err){
-                        if(err){
-                            return socket.emit('unsubscribe_job_response',{success: false, jobid: jobid, message: err});
                         }
-                        else {
-                            return socket.emit('unsubscribe_job_response', {success: true, jobid: jobid});
-                        }                        
                     });
-        })
+                })
+    });
+
+    socket.on('unsubscribe_job_request', function (jobid) {
+        console.log('unsubscribe request: ' + jobid)
+        models.Job.findOne({
+            where: {id: jobid}})
+                .then(function (job) {
+                    if (!job) {
+                        return socket.emit('unsubscribe_job_response', {success: false, jobid: jobid, message: 'no job found'});
+                    }
+
+                    if (job.owner_id !== socket.request.session.passport.user) {
+                        return socket.emit('unsubscribe_job_response', {success: false, jobid: jobid, message: 'access denied'});
+                    }
+
+                    socket.leave(util.format('job_%d', jobid), function (err) {
+                        if (err) {
+                            return socket.emit('unsubscribe_job_response', {success: false, jobid: jobid, message: err});
+                        } else {
+                            return socket.emit('unsubscribe_job_response', {success: true, jobid: jobid});
+                        }
+                    });
+                })
     });
 }
 
