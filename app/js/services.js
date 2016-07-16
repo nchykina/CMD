@@ -263,22 +263,25 @@ var fileService = function ($http, $q, Upload) {
         return defer.promise;
     };
 
-    this.addFile = function (file_client) {
-        return self.createFile(file_client)
+    this.addFile = function (file_client, filetype) {
+        return self.createFile(file_client, filetype)
                 .then(function (file_srv) {
                     return self.uploadFile(file_client, file_srv);
                 });
     }
 
-    this.createFile = function (file_client) {
+    this.createFile = function (file_client, filetype) {
         var defer = $q.defer();
 
-        console.log(file_client);
+        //console.log(file_client);
 
         $http({
             method: 'POST',
             url: 'api/file',
-            data: {'name': file_client.name}
+            data: {
+                'name': file_client.name,
+                'filetype': filetype
+            }
         })
                 .success(function (response) {
                     var file_idx = files.push(response.file) - 1;
@@ -302,7 +305,7 @@ var fileService = function ($http, $q, Upload) {
         }).then(function (resp) {
             var server_resp = resp.data;
 
-            console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
+            //console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
             // = server_resp.file_entry;                            
             file_srv.status = server_resp.file.status;
             file_srv.filesize = server_resp.file.filesize;
@@ -454,8 +457,8 @@ var jobService = function ($http, $q, fileService, socket) {
         return defer.promise;
     }
 
-    this.addFile = function (job, filenum, file_client) {
-        return fileService.createFile(file_client)
+    this.addFile = function (job, filenum, file_client, filetype) {
+        return fileService.createFile(file_client, filetype)
                 .then(function (file_srv) {
                     return vm.setFile(job, filenum, file_srv)
                             .then(function (res) {
@@ -516,7 +519,7 @@ var jobService = function ($http, $q, fileService, socket) {
         for (var i in jobs) {
             if (jobs[i].id == job.id) {
                 jobs[i].status = job.status;
-                console.log('job ' + job.id + ' status: ' + job.status);
+                //console.log('job ' + job.id + ' status: ' + job.status);
                 return;
             }
         }
@@ -544,7 +547,7 @@ var jobService = function ($http, $q, fileService, socket) {
 
         for (var i in jobs) {
             if (jobs[i].id == jobid) {
-                console.log(jobid + ': files submitted');
+                //console.log(jobid + ': files submitted');
                 return;
             }
         }
@@ -587,6 +590,32 @@ var jobService = function ($http, $q, fileService, socket) {
 
     this.unsubscribeJob = function (job) {
 
+    }
+
+    this.deleteJob = function (job) {
+        var defer = $q.defer();
+
+        $http({
+            method: 'DELETE',
+            url: 'api/job/' + job.id
+        })
+                .success(function (response) {
+                    for (var i in jobs) {
+                        if (jobs[i].id == job.id) {
+                            console.log("deleting element "+i);
+                            jobs.splice(i, 1);
+                            break;
+                        }
+                    }
+
+                    defer.resolve();
+                })
+                .error(function (data, status) {
+                    console.error('deleteJob: ' + status + ' - ' + data.msg);
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
     }
 
     this.submitJob = function (job) {

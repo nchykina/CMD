@@ -21,39 +21,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>.BAM</td>
-                            <td>File1.bam</td>
-                            <td>Contains information about the reads aligned to the genome</td>
-                            <td class="text-right">2 GB</td>
+                        <tr ng-repeat="x in newc.job.files | filter: { JobFile: { filetype:'output'}}">
+                            <td>{{x.filetype}}</td>
+                            <td>{{x.name}}</td>
+                            <td>{{x.description}}</td>
+                            <td class="text-right">{{x.filesize | filesize: 0}}</td>
                             <td class="text-right">
                                 <div class="input-group pull-right">
-                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
+                                    <a target="_self" download="{{x.name}}" href="/api/file_content/{{x.id}}" class="btn-success btn btn-xs"><i class="fa fa-download"></i></a>
                                 </div>
                             </td>
-                        </tr>          
-                        <tr>
-                            <td>.VCF</td>
-                            <td>File1.vcf</td>
-                            <td>Aggregate data on SNPs and InDels</td>
-                            <td class="text-right">1 GB</td>
-                            <td class="text-right">
-                                <div class="input-group pull-right">
-                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                </div>
-                            </td>
-                        </tr>  
-                        <tr>
-                            <td>.CSV</td>
-                            <td>File1.csv</td>
-                            <td>Annotated information matched with SNP databases</td>
-                            <td class="text-right">100 MB</td>
-                            <td class="text-right">
-                                <div class="input-group pull-right">
-                                    <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                </div>
-                            </td>
-                        </tr>   
+                        </tr>                                  
                     </tbody>
                     <tfoot>                          
                     </tfoot>

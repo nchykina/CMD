@@ -17,9 +17,10 @@ module.exports = function(sequelize, DataTypes) {
                 attributes: ['fileid', 'filenum']
             },
             foreignKey: 'job_id',
-            as: 'files'
+            as: 'files',
+            onDelete: 'cascade'
         });
-        Job.hasMany(models.Step, {as: 'steps'});
+        Job.hasMany(models.Step, {as: 'steps', onDelete: 'cascade' });
       }
     },    
     underscored: true

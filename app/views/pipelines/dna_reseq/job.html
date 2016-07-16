@@ -29,9 +29,6 @@
             
 
             <div class="container-fluid">
-                
-                {{newc.job.status}}
-
 
                 <ol class="timeline" style="margin-bottom: 10px">
                     <li class="timeline__step done" ng-class="{done: newc.activestate >= 1}">
@@ -42,7 +39,7 @@
                             Select data</span>        
 
 
-                        <a ng-click="newc.setState()" href="#">
+                        <a ng-click="newc.setState(1)" href="#">
                             <i class="timeline__step-marker">1</i>
                         </a>
                     </li>

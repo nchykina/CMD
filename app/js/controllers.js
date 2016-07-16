@@ -3857,6 +3857,16 @@ function dnaReseqHomeCtrl($scope, $state, jobService) {
 
     vm.jobfilter = ['finished'];
 
+    this.deleteJobs = function () {
+        var selectedJobs = vm.jobs.filter(function (job) {
+            return job.selected === true
+        });
+
+        for (var i in selectedJobs) {
+            jobService.deleteJob(selectedJobs[i]);
+        }
+    }
+
     this.createJob = function (species) {
         jobService.createOrUpdateJob('dna_reseq', species)
                 .then(function (job) {
@@ -3901,13 +3911,17 @@ function fileCtrl(fileService) {
                 vm.files = res;
             });
 
-    this.upload = function (file) {
+    this.upload = function (file, filetype) {
         if (file == null) {
             console.log('ima buggy shiet');
             return;
         }
 
-        fileService.addFile(file);
+        if (!filetype) {
+            filetype = 'unknown';
+        }
+
+        fileService.addFile(file, filetype);
     }
 
     this.deleteFile = function (fileid) {
@@ -3957,7 +3971,7 @@ function dnaReseqJobCtrl($scope, $state, $stateParams, jobService, fileService, 
                                     vm.selectedstate = vm.activestate;
                                 }
 
-                                console.log("fn( vm.jobStatus ): " + oldValue.status + ' -> ' + newValue.status);
+                                //console.log("fn( vm.jobStatus ): " + oldValue.status + ' -> ' + newValue.status);
                             },
                             true
                             );
@@ -3998,7 +4012,7 @@ function dnaReseqJobCtrl($scope, $state, $stateParams, jobService, fileService, 
             return;
         }
 
-        jobService.addFile(vm.job, filenum, file);
+        jobService.addFile(vm.job, filenum, file, 'fastq');
     }
 
     this.changeState = function (newState) {
