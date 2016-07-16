@@ -589,29 +589,19 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                             {
                                 serie: true,
                                 name: 'angular-flot',
-                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
+                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 
+                                    'js/plugins/flot/jquery.flot.tooltip.min.js',
+                                    'js/plugins/flot/jquery.flot.spline.js', 
+                                    'js/plugins/flot/jquery.flot.resize.js', 
+                                    'js/plugins/flot/jquery.flot.pie.js', 
+                                    'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js']
 
                             }
                         ]);
                     }
                 }
             })
-            .state('storage.stats', {
-                url: "/form_stats",
-                templateUrl: "views/file_manager/form_stats.html",
-                data: {pageTitle: 'Statistics'},
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            {
-                                serie: true,
-                                name: 'angular-flot',
-                                files: ['js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                            }
-                        ]);
-                    }
-                }
-            })
+            
             .state('app', {
                 abstract: true,
                 url: "/app",
@@ -1367,10 +1357,7 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                                 name: 'ui.switchery',
                                 files: ['css/plugins/switchery/switchery.css', 'js/plugins/switchery/switchery.js', 'js/plugins/switchery/ng-switchery.js']
                             },
-                            {
-                                name: 'colorpicker.module',
-                                files: ['css/plugins/colorpicker/colorpicker.css', 'js/plugins/colorpicker/bootstrap-colorpicker-module.js']
-                            },
+                            
                             {
                                 name: 'ngImgCrop',
                                 files: ['js/plugins/ngImgCrop/ng-img-crop.js', 'css/plugins/ngImgCrop/ng-img-crop.css']
@@ -1514,16 +1501,58 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
                             {
+                                serie: true,
+                                name: 'angular-flot',
+                                files: ['js/plugins/flot/jquery.flot.js',
+                                    'js/plugins/flot/jquery.flot.time.js',
+                                    'js/plugins/flot/jquery.flot.tooltip.min.js', 
+                                    'js/plugins/flot/jquery.flot.spline.js', 
+                                    'js/plugins/flot/jquery.flot.resize.js',
+                                    'js/plugins/flot/jquery.flot.pie.js', 
+                                    'js/plugins/flot/curvedLines.js', 
+                                    'js/plugins/flot/angular-flot.js']
+                            },
+                            {
                                 files: ['css/plugins/slick/slick.css', 'css/plugins/slick/slick-theme.css', 'js/plugins/slick/slick.min.js']
                             },
                             {
                                 name: 'slick',
                                 files: ['js/plugins/slick/angular-slick.min.js']
+                            },
+                            {
+                                files: ['css/plugins/ionRangeSlider/ion.rangeSlider.css', 'css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css', 'js/plugins/ionRangeSlider/ion.rangeSlider.min.js']
+                            }
+                            
+                        ]);
+                    }
+                }
+            })
+            
+            .state('storage.stats', {
+                url: "/form_stats",
+                templateUrl: "views/file_manager/form_stats.html",
+                data: {pageTitle: 'Statistics'},
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                serie: true,
+                                name: 'angular-flot',
+                                files: ['js/plugins/flot/jquery.flot.js', 
+                                    'js/plugins/flot/jquery.flot.time.js', 
+                                    'js/plugins/flot/jquery.flot.tooltip.min.js', 
+                                    'js/plugins/flot/jquery.flot.spline.js', 
+                                    'js/plugins/flot/jquery.flot.resize.js', 
+                                    'js/plugins/flot/jquery.flot.pie.js',
+                                    'js/plugins/flot/curvedLines.js', 
+                                    'js/plugins/flot/angular-flot.js']
                             }
                         ]);
                     }
                 }
             })
+            
+            
             .state('commerce.product_details3', {
                 url: "/product_details3",
                 templateUrl: "views/ecommerce/ecommerce_product_details3.html",

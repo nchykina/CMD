@@ -1677,6 +1677,15 @@ function ionSlider() {
         hideMinMax: true,
         hideFromTo: false
     };
+        this.ionSliderOptions6 = {
+        min: 0,
+        max: 1000,
+        type: 'single',
+        step: 10,
+        postfix: " GB",
+        prettify: false,
+        hasGrid: true
+    };
 }
 
 /**
