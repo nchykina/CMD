@@ -17,6 +17,8 @@
 
     </div>
 </div>
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
     
         <div class="row">
         <div class="col-lg-12">
@@ -26,47 +28,33 @@
                 </div>
                 <div class="ibox-content">
 
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                    <table class="table table-stripped">
                         <thead>
                             <tr>
 
-                                <th>Order ID</th>
-                                <th >Project name</th>
-                                <th >Purchase date</th>
-                                <th >Cost</th>                                
-                                <th >Payment type</th>
+                                <th >Project</th>
+                                <th >Description</th>
+                                <th >Date submitted</th>
                                 <th >Status</th>
                                 <th class="text-right">Action</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="x in em.orders">
+                            <tr ng-repeat="x in em.custom_projects">
+                                
                                 <td>
-                                    {{x.orderId}}
+                                    {{x.name}}
+                                </td>
+                                                                <td>
+                                    {{x.description}}
                                 </td>
                                 <td>
-                                    <table><tbody>
-                                            <tr ng-repeat="y in x.products">
-                                                <td>
-                                                    {{y.productCategory}}: {{y.productName}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    {{x.date_submitted| date:'MMM d, yyyy'}}
                                 </td>
                                 <td>
-                                    {{x.orderDate| date:'MMM d, yyyy'}}
-                                </td>
-                                <td>
-                                    {{x.totalAmount}} USD
-                                </td>
-                                <td>
-                                    {{x.paymentType}}
-                                </td>
-                                <td>
-                                    <span ng-if="x.status == 'Confirmed'" class="label label-primary">{{x.status}}</span>
-                                    <span ng-if="x.status == 'Pending'" class="label label-warning">{{x.status}}</span>
+                                    <span ng-if="x.status == 'Submitted'" class="label label-primary">{{x.status}}</span>
+                                    <span ng-if="x.status == 'Confirmed'" class="label label-success">{{x.status}}</span>
                                     <span ng-if="x.status == 'Cancelled'" class="label label-danger">{{x.status}}</span>
                                 </td>
                                 <td class="text-right">
