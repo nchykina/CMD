@@ -1,14 +1,20 @@
 //var cfg = require('../config/config');
 var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../config/config.json')[env];
+
 var file_api = require('./file');
+
 var models = require('../models');
 var util = require('util');
+
 var http = require('http');
+
 var mkdirp = require('mkdirp'); //ensure dir exists
 var path = require('path');
 var fs = require('fs');
+
 var request = require('request');
+
 var extend = require('node.extend'); //merge JavaScript objects 
 
 var q = require('q'); //Q promise framework
@@ -58,7 +64,9 @@ var job_create = function (req, res) {
         owner_id: req.user.id,
         steps: []
     };
+
     extend(jobObj, req.body.jobparams);
+
     if (jobObj.jobtype === 'dna_reseq') {
         var job_obj = new dna_reseq_job(jobObj);
         job_obj.create_steps();
@@ -100,6 +108,7 @@ var job_create = function (req, res) {
                                                     return job.addFile(file, {filenum: jobfile.filenum, filetype: 'input', transaction: t});
                                                 });
                                     });
+
                                     return models.Sequelize.Promise.all(promises)
                                             .then(function (all_res) {
                                                 return models.Job.findOne({
@@ -122,15 +131,19 @@ var job_create = function (req, res) {
                                                             job_ret.files.sort(function (a, b) {
                                                                 return a.JobFile.filenum - b.JobFile.filenum;
                                                             });
+
                                                             return job_ret;
                                                         });
                                             });
+
                                 } else {
                                     job.files = [];
+
                                     return job;
                                 }
                             });
                 });
+
     })
             .then(function (job) {
                 res.status(200).json({success: true, msg: 'Successfuly created new job', job: job});
@@ -139,10 +152,12 @@ var job_create = function (req, res) {
                 console.error('job_create: ' + err);
                 res.status(500).json({success: false, msg: 'Failed to create job: ' + err});
             });
+
 }
 
 var dna_reseq_job = function (job) {
     var self = this;
+
     self.job_model = job;
 
     self.output_files = [
@@ -176,6 +191,7 @@ var dna_reseq_job = function (job) {
 
     this.download_result = function (options) {
         var defer = q.defer();
+
         if (!options) {
             options = {};
         }
@@ -223,6 +239,7 @@ var dna_reseq_job = function (job) {
                     var inner_prm = [];
                     var t = null;
                     var trn_prm = null;
+
                     var save_files = function (t) {
                         for (var i in files) {
                             inner_prm.push(
@@ -247,6 +264,7 @@ var dna_reseq_job = function (job) {
                         }
 
                         return q.all(inner_prm);
+
                     }
 
                     if (!options.transaction) {
@@ -267,6 +285,7 @@ var dna_reseq_job = function (job) {
                     console.error(err);
                     defer.reject(err);
                 });
+
         return defer.promise;
     }
 
@@ -285,44 +304,10 @@ var dna_reseq_job = function (job) {
                 status: 'new',
                 order: 2
             },
-            {
-                command: '/ngs/samtools view -Shu /work/result.sam > /work/result2.bam',
-                cpu: 2,
-                memory: 2048,
-                status: 'new',
-                order: 3
-            },
-            {
-                command: '/ngs/samtools sort /work/result2.bam > /work/result3.bam',
-                cpu: 2,
-                memory: 2048,
-                status: 'new',
-                order: 4
-            },
-            {
-                command: '/ngs/samtools index /work/result3.bam > /work/result4.bam',
-                cpu: 2,
-                memory: 2048,
-                status: 'new',
-                order: 5
-            },
-            {
-                command: '/ngs/samtools mpileup -uD -f /ngs_lib/chr1/chr1.fa /work/result4.bam > /work/result5.mpileup',
-                cpu: 2,
-                memory: 2048,
-                status: 'new',
-                order: 6
-            },
-            {
-                command: '/ngs/bcftools view -vcg /work/result5.mpileup > /work/result6.vcf',
-                cpu: 2,
-                memory: 2048,
-                status: 'new',
-                order: 7
-            }
         ];
     }
 };
+
 var job_dna_reseq_create_steps = function (job) {
 
 }
@@ -379,6 +364,7 @@ var job_update = function (req, res) {
     }
 
     var jobfile = req.body.jobfile;
+
     models.sequelize.transaction(function (t) {
         return models.Job.findOne({
             where: {id: req.params.id, owner_id: req.user.id},
@@ -426,6 +412,7 @@ var job_select_or_create = function (req, res) {
     }
 
     var queryparams = {owner_id: req.user.id, jobtype: req.body.jobtype, status: 'new'};
+
     if (req.body.jobparams) {
         if (req.body.jobparams['jobtype']) {
             res.json({success: false, msg: 'Do not even try to'});
@@ -445,6 +432,7 @@ var job_select_or_create = function (req, res) {
 
 
     extend(queryparams, req.body.jobparams);
+
     models.Job.findOne({
         where: queryparams,
         include: [
@@ -472,7 +460,9 @@ var job_select_or_create = function (req, res) {
 var job_submit_step = function (job, stepnum, t) {
     var step = job.steps[stepnum];
     var defer = q.defer();
+
     var job_path = job.work_dir;
+
     var sing_id = job.id + '_' + stepnum + '_' + Date.now();
 
 
@@ -495,7 +485,6 @@ var job_submit_step = function (job, stepnum, t) {
 
             console.log(util.format('deploying job %d_%d', job.id, stepnum));
 
-            console.log(util.format('deploying job %d_%d', job.id, stepnum));
             var req_deploy = {
                 deploy: {
                     requestId: sing_id,
@@ -528,6 +517,7 @@ var job_submit_step = function (job, stepnum, t) {
                     }
                 }
             };
+
             request.post({
                 url: config.singularity.api_url + '/api/deploys',
                 body: req_deploy,
@@ -535,18 +525,22 @@ var job_submit_step = function (job, stepnum, t) {
             },
                     function (error, response, body) {
                         var err1;
+
                         if (!error && response.statusCode >= 200 && response.statusCode < 300) {
                             //console.log('successfully posted job to singularity');
                             //console.log(step);
                             step.taskid = sing_id;
+
                             step.status = 'submitted';
                             job.status = 'submitted';
+
                             err1 = false;
                         } else {
                             step.status = 'failed';
                             job.status = 'failed';
                             console.error('could not post to singularity');
                             console.error(response.body);
+
                             err1 = true;
                         }
 
@@ -565,9 +559,11 @@ var job_submit_step = function (job, stepnum, t) {
                                 .catch(function () {
                                     return defer.reject({msg: 'Failed to save job submission status'});
                                 });
+
                     });
         }
     });
+
     return defer.promise;
 }
 
@@ -641,7 +637,9 @@ var job_get = function (req, res) {
 
 function copy_file(source, jobid, target) {
     var defer = q.defer();
+
     var url = config.file_agent_url;
+
     var req = request.post(url, function (err, resp, body) {
         if (err) {
             defer.reject(err);
@@ -650,9 +648,11 @@ function copy_file(source, jobid, target) {
         }
     });
     var form = req.form();
+
     form.append('filedata', fs.createReadStream(source));
     form.append('filename', target);
     form.append('jobid', jobid);
+
     return defer.promise;
 }
 
@@ -672,6 +672,7 @@ var job_submit = function (req, res, next) {
                     .then(function (job) {
 
                         var defer = q.defer();
+
                         mkdirp(job.work_dir, function (err) {
                             if (err) {
                                 job.status = 'failed';
@@ -700,6 +701,7 @@ var job_submit = function (req, res, next) {
                                     }
 
                                     var job_hardcode = new dna_reseq_job(job);
+
                                     job_hardcode.upload_input()
                                             .then(function (copy_res) {
                                                 //io.to("job_"+job.id).emit("job_file_submit","finished");
@@ -722,6 +724,7 @@ var job_submit = function (req, res, next) {
                             }
 
                         });
+
                         return defer.promise;
                     });
         }
@@ -761,6 +764,7 @@ var job_really_submit = function (job, req, res, next, defer, t) {
  */
 var sing_bind = function () {
     var sing_hookid = '';
+
     request.post({
         url: config.singularity.api_url + '/api/webhooks',
         body: {
@@ -789,146 +793,31 @@ var sing_bind = function () {
  * 
  */
 var sing_hook = function (req, res) {
-//console.log('job update from singularity');
+    //console.log('job update from singularity');
     if (!req.body.task) {
-//console.log('deploy singularity junk - skipping, we only care about tasks');
+        //console.log('deploy singularity junk - skipping, we only care about tasks');
         res.status(200).send('ok, got it');
     } else {
-//console.log(req.body);        
+        //console.log(req.body);        
         var state = req.body.taskUpdate.taskState;
         var taskid = req.body.taskUpdate.taskId.deployId;
+
         var i1 = taskid.indexOf('_');
         var i2 = taskid.indexOf('_', i1 + 1);
+
         var jobid = parseInt(taskid.substring(0, i1));
         var stepid = parseInt(taskid.substring(i1 + 1, i2));
-        console.log('TASK ' + taskid + ' status change to ' + state);
-        models.sequelize.transaction(function (t) {
-            return models.Job.findOne(
-                    {
-                        where: {id: jobid},
-                        transaction: t,
-                        include: [
-                            {
-                                model: models.Step,
-                                as: 'steps'
-                            }
-                        ],
-                        order: ['steps', 'order']})
-                    .then(function (job) {
 
-                        if (!job) {
-                            return 'job not found, but its ok';
-                        }
+        //console.log('TASK ' + taskid + ' status change to ' + state);
+        var lockname = util.format("job:%d", jobid);
+        
+        //console.log('locking '+lockname);
 
-                        if (!job.steps) {
-                            return 'job not found, but its ok';
-                        }
-
-                        if (!job.steps[stepid]) {
-                            return 'job not found, but its ok';
-                        }
-
-                        var cstate = job.steps[stepid].status;
-                        var step = job.steps[stepid];
-                        if (state === 'TASK_LAUNCHED') {
-                            switch (cstate) {
-                                case 'submitted':
-                                    job.steps[stepid].status = 'started';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        if (state === 'TASK_RUNNING') {
-                            switch (cstate) {
-                                case 'submitted':
-                                case 'started':
-                                    job.steps[stepid].status = 'running';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        if (state === 'TASK_FINISHED') {
-                            switch (cstate) {
-                                case 'submitted':
-                                case 'started':
-                                case 'running':
-                                    job.steps[stepid].status = 'finished';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        if (state === 'TASK_FAILED') {
-                            switch (cstate) {
-                                case 'submitted':
-                                case 'started':
-                                case 'running':
-                                    job.steps[stepid].status = 'failed';
-                                    break;
-                                default:
-                                    //console.log('skipping wrong task status update order - current status: ' + cstate + ' new status: ' + state);
-                                    break;
-                            }
-                        }
-
-                        return step.save({transaction: t}).then(function () {
-
-                            var prm;
-                            if (job.steps.length > stepid + 1) {
-                                if (step.status === 'failed') {
-                                    job.status = 'failed';
-                                    prm = job.save({transaction: t});
-                                } else if (step.status === 'finished') {
-                                    prm = job_submit_step(job, stepid + 1, t);
-                                } else {
-                                    var defer = q.defer();
-                                    defer.resolve();
-                                    prm = defer.promise;
-                                }
-                            } else {
-                                if (step.status === 'failed') {
-                                    job.status = 'failed';
-                                    prm = job.save({transaction: t});
-                                } else if (step.status === 'finished') {
-
-                                    /* download results before completing */
-                                    var job_obj = new dna_reseq_job(job);
-                                    prm = job_obj.download_result({transaction: t})
-                                            .then(function (res) {
-                                                console.log(res);
-                                                job.status = 'finished';
-                                                return job.save({transaction: t});
-                                            })
-                                            .catch(function (err) {
-                                                console.error('sing_hook (download result): ' + err);
-                                                job.status = 'failed';
-                                                return job.save({transaction: t});
-                                            })
-                                } else {
-                                    var defer = q.defer();
-                                    defer.resolve();
-                                    prm = defer.promise;
-                                }
-                            }
-
-                            return prm;
-                        });
-                    });
-        })
-                .then(function (result) {
-                    res.status(200).send('ok, got it');
-                })
-                .catch(function (err) {
-                    console.error("sing_hook: " + err);
-                    res.status(500).send('processing error');
+        var lock = lock_cli.createLock(redis_cli,
+                {
+                    timeout: 20000,
+                    retries: 10,
+                    delay: 100
                 });
 
         lock.acquire(lockname).then(function () {
