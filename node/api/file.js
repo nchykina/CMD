@@ -27,12 +27,14 @@ var upload = multer({storage: storage}).single('data');
 var q = require('bluebird'); //TODO: potential bug cause - sequelize use BlueBird, not Q.
 
 var file_download = function (req, res) {
-    if (!req.user.id) {
+    //console.log('file_download: '+req);
+    
+    if ((!req.user)||(!req.user.id)) {
         res.status(403).json({success: false, msg: 'Unauthorized'});
         return;
     }
 
-    if (!req.params.id) {
+    if ((!req.params)||(!req.params.id)) {
         res.status(404).json({success: false, msg: 'No fileid specified'});
         return;
     }
@@ -198,6 +200,18 @@ var file_create_internal = function (options) {
                         if(options.filesize){
                             file.filesize = options.filesize;                            
                         }
+                        
+                        if(options.description){
+                            file.description = options.description;                            
+                        }
+                        
+                        if(options.filetype){
+                            file.filetype = options.filetype;                            
+                        }
+                        
+                        if(options.fileuse){
+                            file.fileuse = options.fileuse;                            
+                        }
 
                         return file.save({transaction: t});
                     } else {
@@ -224,6 +238,8 @@ var file_create = function (req, res) {
                 {
                     owner_id: req.user.id,
                     name: req.body.name,
+                    filetype: req.body.filetype,
+                    fileuse: 'input',
                     folder: config.storage_root + path.sep + 'users' + path.sep + req.user.id
                 })
                 .then(function (tr_res) {

@@ -28,16 +28,16 @@
                 </div>
                 <div class="ibox-content">
 
-                    <table class="footable table table-stripped toggle-arrow-tiny">
+                    <table class="table table-stripped">
                         <thead>
                             <tr>
 
                                 <th>File name</th>
                                 <th>File size</th>
 
-                                <th>Upload date</th>  
+                                <th>Upload status</th>  
+                                <th>Date</th>
                                 <th></th>
-                                <th class="text-right"></th>
 
 
 
@@ -45,7 +45,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="x in vm.files">
-                                <td>{{x.name}}</td>
+                                <td><a target="_self" download="{{x.name}}" href="/api/file_content/{{x.id}}">{{x.name}}</a></td>
                                 <td>{{x.filesize | filesize: 0}}</td>
                                 <!--<td>{{x.finished_at}}</td>-->
                                 <td>
@@ -61,11 +61,13 @@
                                         <div class="progress-bar progress-bar-navy-light" role="progressbar" ng-style="{width: '100%'}" ></div>
                                     </div>
                                 </td>
+                                
+                                <td>
+                                    {{x.finished_at | date:'shortDate'}}
+                                </td>
+                                
                                 <td class="text-right">
-                                    <div class="input-group pull-right">
-                                        <button class="btn-success btn btn-xs"><i class="fa fa-download"></i></button>
-                                        <button class="btn-danger btn btn-xs" ng-click="vm.deleteFile(x.id)"><i class="fa fa-times"></i></button>
-                                    </div>
+                                    <a ng-click="vm.deleteFile(x.id)" class="text-muted"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>      
 

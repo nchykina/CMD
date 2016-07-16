@@ -263,22 +263,25 @@ var fileService = function ($http, $q, Upload) {
         return defer.promise;
     };
 
-    this.addFile = function (file_client) {
-        return self.createFile(file_client)
+    this.addFile = function (file_client, filetype) {
+        return self.createFile(file_client, filetype)
                 .then(function (file_srv) {
                     return self.uploadFile(file_client, file_srv);
                 });
     }
 
-    this.createFile = function (file_client) {
+    this.createFile = function (file_client, filetype) {
         var defer = $q.defer();
 
-        console.log(file_client);
+        //console.log(file_client);
 
         $http({
             method: 'POST',
             url: 'api/file',
-            data: {'name': file_client.name}
+            data: {
+                'name': file_client.name,
+                'filetype': filetype
+            }
         })
                 .success(function (response) {
                     var file_idx = files.push(response.file) - 1;
@@ -302,7 +305,7 @@ var fileService = function ($http, $q, Upload) {
         }).then(function (resp) {
             var server_resp = resp.data;
 
-            console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
+            //console.log('Success ' + resp.config.data.data.name + ' uploaded. Response: ' + server_resp.msg);
             // = server_resp.file_entry;                            
             file_srv.status = server_resp.file.status;
             file_srv.filesize = server_resp.file.filesize;
@@ -342,7 +345,7 @@ var fileService = function ($http, $q, Upload) {
                 .success(function (response) {
                     //console.log(response.products);
                     for (var i in files) {
-                        if (files[i].id === fileid) {
+                        if (files[i].id == fileid) {
                             files.splice(i, 1);
                             return defer.resolve();
                         }
@@ -375,7 +378,7 @@ var fileService = function ($http, $q, Upload) {
         var defer = $q.defer();
 
         for (var i in files) {
-            if (files[i].id === fileid) {
+            if (files[i].id == fileid) {
                 defer.resolve(files[i]);
                 return defer.promise;
             }
@@ -402,7 +405,7 @@ var fileService = function ($http, $q, Upload) {
 }
 
 
-var jobService = function ($http, $q, fileService,socket) {
+var jobService = function ($http, $q, fileService, socket) {
     var vm = this;
 
     var newJobs = {dna_reseq: {}, rna_reseq: {}};
@@ -454,8 +457,8 @@ var jobService = function ($http, $q, fileService,socket) {
         return defer.promise;
     }
 
-    this.addFile = function (job, filenum, file_client) {
-        return fileService.createFile(file_client)
+    this.addFile = function (job, filenum, file_client, filetype) {
+        return fileService.createFile(file_client, filetype)
                 .then(function (file_srv) {
                     return vm.setFile(job, filenum, file_srv)
                             .then(function (res) {
@@ -479,12 +482,19 @@ var jobService = function ($http, $q, fileService,socket) {
     this.getJob = function (id) {
         var defer = $q.defer();
 
+        //console.log(angular.toJson(jobs,true));
+
         for (var i in jobs) {
-            if (jobs[i].id === id) {
-                defer.resolve(id);
+            //console.log('checking '+jobs[i].id);
+
+            if (jobs[i].id == id) {
+                defer.resolve(jobs[i]);
+                //console.log('returning cached job '+id);
                 return defer.promise;
             }
         }
+
+        //console.log('requesting uncached job '+id);
 
         //if not found in cache
         $http({
@@ -503,21 +513,109 @@ var jobService = function ($http, $q, fileService,socket) {
 
         return defer.promise;
     };
-    
-    this.processJobUpdate = function(job){
-        var job_found = false;
-        
-        for(var i in jobs){
-            if(jobs[i].id===job.id){
+
+    this.processJobUpdate = function (job) {
+
+        for (var i in jobs) {
+            if (jobs[i].id == job.id) {
                 jobs[i].status = job.status;
+                //console.log('job ' + job.id + ' status: ' + job.status);
                 return;
             }
         }
-        
+
         //further handling here
-        
+
         throw new Error('job_update for unknown job');
-        
+
+    }
+
+    this.processStepUpdate = function (msg) {
+        for (var i in jobs) {
+            if (jobs[i].id == msg.jobid) {
+                jobs[i].steps[msg.stepnum].status = msg.step.status;
+                jobs[i].status = msg.jobstatus;
+                return;
+            }
+        }
+
+        throw new Error('step_update: unknown ' + msg.jobid + ' ' + msg.stepnum);
+
+    }
+
+    this.processFileUpload = function (jobid) {
+
+        for (var i in jobs) {
+            if (jobs[i].id == jobid) {
+                //console.log(jobid + ': files submitted');
+                return;
+            }
+        }
+
+        throw new Error('processFileUpload: unknown ' + jobid);
+
+    }
+
+    this.subscribeJob = function (job) {
+        var defer = $q.defer();
+
+        socket.on('subscribe_job_response', function (msg) {
+            console.log(msg);
+
+            if (msg.jobid !== job.id) {
+                //skip messages to other handlers
+                return;
+            }
+
+            socket.removeListener('subscribe_job_response', this);
+
+            if (!msg.success) {
+
+                return defer.reject(msg.message);
+            }
+
+            socket.on('job_update', vm.processJobUpdate);
+            socket.on('step_update', vm.processStepUpdate);
+            socket.on('job_file_submit', vm.processFileUpload);
+
+            defer.resolve();
+        });
+
+        socket.emit('subscribe_job_request', job.id, function () {
+
+        });
+
+        return defer.promise;
+    }
+
+    this.unsubscribeJob = function (job) {
+
+    }
+
+    this.deleteJob = function (job) {
+        var defer = $q.defer();
+
+        $http({
+            method: 'DELETE',
+            url: 'api/job/' + job.id
+        })
+                .success(function (response) {
+                    for (var i in jobs) {
+                        if (jobs[i].id == job.id) {
+                            console.log("deleting element "+i);
+                            jobs.splice(i, 1);
+                            break;
+                        }
+                    }
+
+                    defer.resolve();
+                })
+                .error(function (data, status) {
+                    console.error('deleteJob: ' + status + ' - ' + data.msg);
+                    defer.reject(data.msg);
+                });
+
+        return defer.promise;
     }
 
     this.submitJob = function (job) {
@@ -526,50 +624,34 @@ var jobService = function ($http, $q, fileService,socket) {
         if (!((job.files[0]) && (job.files[1]))) {
             defer.reject('The job needs two input files');
         } else {
-            socket.on('subscribe_job_response',function(msg){
-                    console.log(msg);
-                    
-                    if(msg.jobid!==job.id){
-                        //skip messages to other handlers
-                        return;
-                    }
-                    
-                    socket.removeListener('subscribe_job_response',this);
-                    
-                    if(!msg.success){
-                        
-                        return defer.reject(msg.message);
-                    }
-                    
-                    socket.on('job_update', vm.processJobUpdate);
-                    
-                    $http({
-                method: 'PUT',
-                url: 'api/job/submit/' + job.id
-            })
-                    .success(function (response) {
-                        //console.log(response.products);
-                        //productList.length = 0;
+            vm.subscribeJob(job)
+                    .then(function () {
 
-                        //for(var v in response.products){
-                        //    productList.push(response.products[v]);
-                        //}
-                        job.status = 'submitted';
+                        $http({
+                            method: 'PUT',
+                            url: 'api/job/submit/' + job.id
+                        })
+                                .success(function (response) {
+                                    //console.log(response.products);
+                                    //productList.length = 0;
 
-                        defer.resolve();
+                                    //for(var v in response.products){
+                                    //    productList.push(response.products[v]);
+                                    //}
+                                    job.status = 'submitted';
+
+                                    defer.resolve();
+                                })
+                                .error(function (data, status) {
+                                    job.status = 'failed';
+                                    console.error('submitJobs: ' + status + ' - ' + data.msg);
+                                    defer.reject(data.msg);
+                                });
                     })
-                    .error(function (data, status) {
-                        job.status = 'failed';
-                        console.error('submitJobs: ' + status + ' - ' + data.msg);
-                        defer.reject(data.msg);
+                    .catch(function (err) {
+                        defer.reject(err);
                     });
-                });
-            
-            socket.emit('subscribe_job_request',job.id,function(){
-                
-            })
-            
-            
+
         }
 
         return defer.promise;
@@ -738,30 +820,29 @@ var authorizationService = function ($rootScope, $state, principal) {
 
 var ioService = function ($rootScope) {
     var socket = io.connect();
-  return {
-    on: function (eventName, callback) {
-      socket.on(eventName, function () {  
-        var args = arguments;
-        $rootScope.$apply(function () {
-          callback.apply(socket, args);
-        });
-      });
-    },
-    emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
-        var args = arguments;
-        $rootScope.$apply(function () {
-          if (callback) {
-            callback.apply(socket, args);
-          }
-        });
-      })
-    },
-    
-    removeListener: function (eventName, listener){
-        socket.removeListener(eventName, listener);
-    }
-  };
+    return {
+        on: function (eventName, callback) {
+            socket.on(eventName, function () {
+                var args = arguments;
+                $rootScope.$apply(function () {
+                    callback.apply(socket, args);
+                });
+            });
+        },
+        emit: function (eventName, data, callback) {
+            socket.emit(eventName, data, function () {
+                var args = arguments;
+                $rootScope.$apply(function () {
+                    if (callback) {
+                        callback.apply(socket, args);
+                    }
+                });
+            })
+        },
+        removeListener: function (eventName, listener) {
+            socket.removeListener(eventName, listener);
+        }
+    };
 }
 
 
@@ -769,11 +850,11 @@ var ioService = function ($rootScope) {
 angular
         .module('inspinia')
         .service('messageService', messageService)
-        .factory('socket',ioService)
+        .factory('socket', ['$rootScope', ioService])
         .service('jobService', ['$http', '$q', 'fileService', 'socket', jobService])
         .service('fileService', ['$http', '$q', 'Upload', fileService])
         .service('ecommService', ['$http', '$q', ecommerceService])
         .factory('principal', ['$q', '$http', '$timeout', principalService])
         .factory('authorization', ['$rootScope', '$state', 'principal', authorizationService])
-        
+
   

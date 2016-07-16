@@ -3869,6 +3869,16 @@ function dnaReseqHomeCtrl($scope, $state, jobService) {
 
     vm.jobfilter = ['finished'];
 
+    this.deleteJobs = function () {
+        var selectedJobs = vm.jobs.filter(function (job) {
+            return job.selected === true
+        });
+
+        for (var i in selectedJobs) {
+            jobService.deleteJob(selectedJobs[i]);
+        }
+    }
+
     this.createJob = function (species) {
         jobService.createOrUpdateJob('dna_reseq', species)
                 .then(function (job) {
@@ -4386,13 +4396,17 @@ function fileCtrl(fileService) {
                 vm.files = res;
             });
 
-    this.upload = function (file) {
+    this.upload = function (file, filetype) {
         if (file == null) {
             console.log('ima buggy shiet');
             return;
         }
 
-        fileService.addFile(file);
+        if (!filetype) {
+            filetype = 'unknown';
+        }
+
+        fileService.addFile(file, filetype);
     }
 
     this.deleteFile = function (fileid) {
@@ -4401,6 +4415,168 @@ function fileCtrl(fileService) {
 
 }
 
+function dnaReseqJobCtrl($scope, $state, $stateParams, jobService, fileService, $uibModal) {
+    var vm = this;
+
+    vm.jobid = $stateParams.jobid;
+
+    //if some nasty shiet happened along the road - do some protective actions. shouldn't happen under normal circumstances
+    /*if ((!jobService.newJob) || (jobService.newJob._id !== vm.jobid)) {
+     console.error("Nasty shiet happened");
+     //jobService.newJob = jobService.getJob(vm.jobid);
+     }*/
+
+    vm.job = {};
+    vm.selectedstate = 0;
+    vm.activestate = 0;
+
+    if (!vm.jobid) {
+        console.log('no job object passed to wizard. going back');
+        $state.go('pipelines.dna_reseq_home'); //no job passed to wizard
+    } else {
+        jobService.getJob(vm.jobid)
+                .then(function (res) {
+                    vm.job = res;
+                    vm.species = vm.job.seq_species;
+
+                    vm.selectedstate = vm.realJobState();
+                    vm.activestate = vm.realJobState();
+
+                    //setInterval(function(){console.log(angular.toJson(vm.job,true))},30000);
+
+                    $scope.$watch(
+                            function watchJobStatus(scope) {
+                                // Return the "result" of the watch expression.
+                                return(vm.job);
+                            },
+                            function handleStatusChange(newValue, oldValue) {
+                                vm.activestate = vm.realJobState();
+
+                                if (newValue.status !== oldValue.status) {
+                                    vm.selectedstate = vm.activestate;
+                                }
+
+                                //console.log("fn( vm.jobStatus ): " + oldValue.status + ' -> ' + newValue.status);
+                            },
+                            true
+                            );
+
+                    jobService.subscribeJob(vm.job);
+                })
+                .catch(function (err) {
+                    $state.go('pipelines.dna_reseq_home'); //error, go back to wizard (of Oz)
+                })
+
+
+    }
+
+    this.setState = function (newState) {
+        vm.selectedstate = newState;
+    }
+
+    this.realJobState = function () {
+        switch (vm.job.status) {
+            case 'new':
+                return 1;
+            case 'submitted':
+            case 'running':
+            case 'failed':
+                return 2;
+            case 'finished':
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
+
+
+    this.upload = function (filenum, file) {
+        if (file == null) {
+            console.log('ima buggy shiet');
+            return;
+        }
+
+        jobService.addFile(vm.job, filenum, file, 'fastq');
+    }
+
+    this.changeState = function (newState) {
+        if (newState <= vm.realJobState()) {
+            vm.selectedstate = newState;
+        }
+    }
+
+    this.submit = function () {
+        jobService.submitJob(vm.job)
+                .then(function (res) {
+                    //vm.job.status = 'submitted';
+                    //vm.selectedstate = vm.realJobState();
+                    //vm.activestate = vm.selectedstate;
+
+                })
+                .catch(function (err) {
+                    alert(err);
+                })
+    }
+
+
+
+    this.chooseFile = function (filenum) {
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/file_manager/modal.html',
+            controller: fileModalCtrl,
+            controllerAs: 'vm'
+        });
+
+        modalInstance.result.then(function (file) {
+            fileService.getFile(file.id)
+                    .then(function (file_srv) {
+                        jobService.setFile(vm.job, filenum, file_srv)
+                                .then(function (res) {
+                                    vm.job.files[filenum] = file;
+                                });
+                    });
+        }, function () {
+            //if cancel was clicked
+        });
+
+    };
+
+    // this.processForm = function () {
+    //   alert('Wizard completed');
+    // };
+
+}
+
+
+function rnaReseqNewCtrl($scope, $http, $state, $stateParams, Upload, jobService, filesizeFilter) {
+    var vm = this;
+
+    vm.job = $stateParams.job;
+
+    //if some nasty shiet happened along the road - do some protective actions. shouldn't happen under normal circumstances
+    /*if ((!jobService.newJob) || (jobService.newJob._id !== vm.jobid)) {
+     console.error("Nasty shiet happened");
+     //jobService.newJob = jobService.getJob(vm.jobid);
+     }*/
+
+    if (!vm.job) {
+        console.log('no job object passed to wizard. going back');
+        $state.go('pipelines.rna_reseq_home'); //no job passed to wizard
+    }
+
+    vm.species = vm.job.seq_species;
+
+    vm.files = [{}, {}];
+
+
+
+    this.processForm = function () {
+        alert('Wizard completed');
+    };
+
+}
 
 
 /**
@@ -4741,6 +4917,8 @@ angular
 
         .controller('mailboxController', ['$scope', '$http', '$state', '$stateParams', 'messageService', mailboxCtrl])
         //.controller('mailDetailsController', ['$scope', '$http', '$state', '$stateParams', mailDetailCtrl])
+        .controller('dnaReseqJobController', ['$scope', '$state', '$stateParams', 'jobService', 'fileService', '$uibModal', dnaReseqJobCtrl])
+        .controller('rnaReseqNewController', ['$scope', '$http', '$state', '$stateParams', 'Upload', 'jobService', 'filesizeFilter', rnaReseqNewCtrl])
         .controller('mailServerController', ['$scope', '$http', '$state', mailServerCtrl])
 
         .controller('ecommerceController', ['$scope', 'ecommService', '$state', ecommerceCtrl])
