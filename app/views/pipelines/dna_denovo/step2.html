@@ -16,7 +16,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>Trimmomatic: trimming the reads to delete adapters</h2>
+                                    <h2>BWA: aligning paired reads to the reference genome</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-primary dim"><i class="fa fa-check"></i></button>
@@ -42,7 +42,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>FASTQC: evaluating the quality of the reads before assembly</h2>
+                                    <h2>SAMTools: converting to .bam format, sorting and indexing</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-success dim"><i class="fa fa-check"></i></button>
@@ -59,33 +59,6 @@
                             </span>
                         </div>
                     </div>
-                    
-                    <div class="vertical-timeline-block">
-                        <div class="vertical-timeline-icon blue-bg">
-                            <i class="fa fa-sort-amount-asc"></i>
-                        </div>
-
-                        <div class="vertical-timeline-content">
-                            <div class="row">
-                                <div class="col-lg-10">
-                                    <h2>Velvet: assembling the reads into contigs</h2>
-                                </div>
-                                <div class="col-lg-2">
-                                    <button class="btn btn-success dim"><i class="fa fa-check"></i></button>
-                                </div>
-                            </div>
-                            <p>Binary format is a more concise and convenient way to represent the data.
-                                Therefore, the .SAM text format is converted to <b class="text-navy">.BAM</b>
-                                binary format and indexed to make iterating over it faster.</p>
-
-                            <a href="#" class="btn btn-sm btn-success"> Download .bam file <span class="fa fa-cloud-download"></span></a>
-                            <span class="vertical-date">
-                                Step 3 <br/>
-                                <small>Estimated time: 2 minutes</small>
-                            </span>
-                        </div>
-                    </div>
-
 
                     <div class="vertical-timeline-block">
                         <div class="vertical-timeline-icon white-bg">
@@ -95,7 +68,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>Khmer: collecting the assembly statistics</h2>
+                                    <h2>SAMTools: performing mpileup</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
@@ -106,7 +79,7 @@
                                 covering the site, read bases, base qualities and alignment mapping qualities. 
                                 Information on matches, mismatches and indels is encoded in the read base column. </p>
                             <a href="#" class="btn btn-sm btn-info">Read more about mpileup</a>
-                            <span class="vertical-date"> Step 4 <br/><small>Estimated time: 5 minutes</small></span>
+                            <span class="vertical-date"> Step 3 <br/><small>Estimated time: 5 minutes</small></span>
                         </div>
                     </div>
 
@@ -118,7 +91,7 @@
                         <div class="vertical-timeline-content">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <h2>Bowtie: comparing and evaluating assemblies</h2>
+                                    <h2>BCFTools: creating a vcf file</h2>
                                 </div>
                                 <div class="col-lg-2">
                                     <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
@@ -127,18 +100,49 @@
                             <p><b class="text-navy">.VCF</b> is a text file format that contains data lines about every position in the genome where a variant is observed (SNP, Indel or CNV).</p>
                             <a href="#" class="btn btn-sm btn-success"> Download .vcf file <span class="fa fa-cloud-download"></span></a>
 
-                            <span class="vertical-date">Step 5 <br/><small>Estimated time: 2 minutes</small></span>
+                            <span class="vertical-date">Step 4 <br/><small>Estimated time: 2 minutes</small></span>
                         </div>
                     </div>
 
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon white-bg">
+                            <i class="fa fa-table"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <h2>Annovar: annotating the data</h2>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-white dim"><i class="fa fa-spinner"></i></button>
+                                </div>
+                            </div>
+                            <p>Annovar annotates the variants listed in the vcf file in accordance with the publicly 
+                                available databases (for instance, dbSNP). The output is generated as an .csv file that
+                                can be conveniently read by a scientist in Excel.
+                            </p>
+                            <a href="#" class="btn btn-sm btn-success"> Download .csv file <span class="fa fa-cloud-download"></span></a>
+
+                            <span class="vertical-date">Step 5 <br/><small>Estimated time: 1 minute</small></span>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <a ui-sref="pipelines.rna_reseq.step1({job: newc.job})" class="btn btn-default">Cancel</a>
-    <a ui-sref="pipelines.rna_reseq.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
+
+
+    <div class="row">
+        <div class="col-lg-6">
+
+        </div>
+    </div>
+
+    <a ui-sref="pipelines.dna_denovo.step1({job: newc.job})" class="btn btn-default">Cancel</a>
+    <a ui-sref="pipelines.dna_denovo.step3({job: newc.job})" class="btn btn-primary">Get my output files</a>
 
 
 

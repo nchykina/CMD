@@ -9,7 +9,7 @@
                 <a>Perform data analysis</a>
             </li>
             <li class="active">
-                <strong>RNA realignment</strong>
+                <strong>Epigenomics</strong>
             </li>
         </ol>
     </div>
@@ -29,19 +29,19 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-4 m-b-xs"><a ng-click="homec.createJob('expression')">
+                        <div class="col-sm-4 m-b-xs"><a ng-click="homec.createJob('bsseq')">
                                 <div class="contact-box">
                                     <div class="col-sm-4">
                                         <div class="text-center">
-                                            <img alt="image" class="m-t-xs img-responsive" src="img/a24.png">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a27.jpg">
 
-                                            <div class="m-t-xs font-bold">Expression profiling</div>
+                                            <div class="m-t-xs font-bold">BS-Seq</div>
                                         </div>
                                     </div>
                                     <div class="col-sm-8">
-                                        <h3><strong>Analyze gene expression levels</strong></h3>
+                                        <h3><strong>Bisulfite Sequencing and Methylation</strong></h3>
 
-                                        <p>Version: GRCh38</p>
+                                        <p>Data: WGBS, RRBS</p>
                                         <address>
                                             <b>Genome: </b> 3.5 mln bases<br>
                                             <b>Chromosomes: </b> 23 pairs<br>
@@ -54,17 +54,17 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-sm-4 m-b-xs"><a ng-click="homec.createJob('splicing')">
+                        <div class="col-sm-4 m-b-xs"><a ng-click="homec.createJob('chipseq')">
                                 <div class="contact-box">
                                     <div class="col-sm-4">
                                         <div class="text-center">
-                                            <img alt="image" class="m-t-xs img-responsive" src="img/a23.png">
+                                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a28.jpg">
 
-                                            <div class="m-t-xs font-bold">Splicing variants analysis</div>
+                                            <div class="m-t-xs font-bold">CHIP-Seq</div>
                                         </div>
                                     </div>
                                     <div class="col-sm-8">
-                                        <h3><strong>Detect novel sequences in transcriptome</strong></h3>
+                                        <h3><strong>Chromatin immunoprecipitation</strong></h3>
 
                                         <p>Version: GRCh38</p>
                                         <address>
@@ -78,7 +78,6 @@
                                 </div>
                             </a>
                         </div>
-                        
                         
                     </div>
                 </div>
@@ -113,7 +112,8 @@
                                 <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['submitted','running','finished','failed']" >  <input type="radio" value="1" />  All </label>
                                 <label class="btn btn-sm btn-white active" ng-click="homec.jobfilter=['finished']" > <input type="radio" value="2" /> Completed </label>
                                 <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['submitted','running']"> <input type="radio" value="3" /> Running </label>
-                                <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['failed']"> <input type="radio" value="4" /> Failed </label>                                
+                                <label class="btn btn-sm btn-white" ng-click="homec.jobfilter=['failed']"> <input type="radio" value="4" /> Failed </label>
+                                
                             </div>                                                           
                         </div>
                     </div>
@@ -121,6 +121,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+
                                     <th></th>
                                     <th>Date</th>
                                     <th>Pipeline</th>

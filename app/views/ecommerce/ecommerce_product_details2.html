@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Purchase extra options > Extra upload/storage size</h2>
+        <h2>Purchase extra options > Extra storage space</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
@@ -12,138 +12,121 @@
                 <a ui-sref="commerce.products_grid">Purchase extra options</a>
             </li>
             <li class="active">
-                <strong>Extra upload/storage size</strong>
+                <strong>Extra storage space</strong>
             </li>
         </ol>
     </div>
 </div>
-<!--
 
-<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row" ng-if="em.dataLoaded == true" ng-repeat="prd in em.productList| filter: { product_category: 'Extra storage space' }">
+    <div class="col-lg-12">
 
-    <div class="row">
-        <div class="col-lg-12">
+        <div class="ibox product-detail">
+            <div class="ibox-content">
 
-            <div class="ibox product-detail">
-                <div class="ibox-content">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img alt="{{prd.product_name}}" src="{{prd.img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
+                    </div>
+                    <div class="col-md-6">
 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="image-imitation-small">
-                                <img alt="product1" src="{{em.productList[2].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h2 class="font-bold m-b-xs">
+                                    {{prd.product_name}}
+                                </h2>
+                                <small> This option is available upon monthly subscription </small>
+
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <span> Monthly price per 100 GB: </span>
+
+                                <h2 class="font-bold">$ {{prd.price}}</h2>
                             </div>
                         </div>
-                        <div class="col-md-7">
 
-                            <h2 class="font-bold m-b-xs">
-                                {{em.productList[2].productName}}
-                            </h2>
-                            <small>Upload larger files for processing for any of the pipelines</small>
-                            <div class="m-t-md">
-                                <h2 class="product-main-price">${{em.productList[2].price}} <small class="text-muted">per month</small> </h2>
-                            </div>
-                            <hr>
+                        <hr>
 
-                            <h4>Description</h4>
 
-                            <div class="small text-muted">
-                                {{em.productList[2].description_short}}
-                                <br>
-                                <br>
-                                {{em.productList[2].description_long}}   
-                            </div>
-                            <hr>
+                        <h4>Description</h4>
+
+                        <div class="small text-muted">
+                            {{prd.description_short}}
+                            <br>
+                            <br>
+                            {{prd.description_long}} 
+                        </div>
+
+                        <hr>
+                        <div class="row">
                             <div class="form-group">
-                                <div class="btn-group">
-                                    <button ng-if="!em.productList[2].inCart" ng-click="em.addToCart(2)" 
-                                            class="btn btn-primary btn-sm">                                 
-                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
-                                    <button ng-if="em.productList[2].inCart" ng-click="em.removeItemFromCart(2)" 
-                                            class="btn btn-danger btn-sm">                                 
-                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
-                                    <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
 
+                                <div class="col-sm-8" data-ng-controller="ionSlider as slider">
+                                   
+                                    <div ion-range-slider range-options="slider.ionSliderOptions6" ng-model="test"></div>
                                 </div>
+                               <!-- <div class="col-sm-3" ng-controller="touchspinCtrl">
+                                    <input id="demo2" type="text" touch-spin spin-options="spinOption2" ng-model="test">
+                                </div> -->
                             </div>
-                            <div class="form-group">
-                                <div class="btn-group">
-                                    <button ui-sref="commerce.cart" class="btn btn-info btn-sm"><i class="fa fa-calculator"></i> Proceed to checkout</button>
-                                </div> 
-                            </div>                            
                         </div>
+
+                        <hr/>
+
+                        <div class="form-group">
+                            <div class="btn-group">
+                                <button ng-if="!prd.in_cart" ng-click="em.addToCart(prd.id)" 
+                                        class="btn btn-primary btn-sm">                                 
+                                    <i class="fa fa-cart-plus"></i> Add to cart</button>
+                                <button ng-if="prd.in_cart" ng-click="em.removeFromCart(prd.id)" 
+                                        class="btn btn-danger btn-sm">                                 
+                                    <i class="fa fa-cart-plus"></i> Remove from cart</button>
+                                <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="btn-group">
+                                <button ui-sref="commerce.cart" class="btn btn-info btn-sm"><i class="fa fa-calculator"></i> Proceed to checkout</button>
+                            </div> 
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h5><strong>How much storage space do I need?</strong></h5>
+                                </div>
+
+                                <div class="panel-body" ng-controller="flotChartCtrl as charts">
+                                    <div ng-if="prd.product_name == 'Extra storage space'">
+
+                                        <div class="flot-chart">
+                                            <div flot class="flot-chart-content" dataset="charts.flotPieData" 
+                                                 options="charts.flotPieOptions"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </div>
-                <div class="ibox-footer">
-                </div>
+
             </div>
-
-        </div>
-    </div>
-
--->
-
-<div class="row" ng-if="em.dataLoaded == true" ng-repeat="prd in em.productList | filter: { product_category: 'Extra upload/storage size' }">
-        <div class="col-lg-12">
-
-            <div class="ibox product-detail">
-                <div class="ibox-content">
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="image-imitation-small">
-                                <img alt="{{prd.product_name}}" src="{{prd.img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-
-                            <h2 class="font-bold m-b-xs">
-                                {{prd.product_name}}
-                            </h2>
-                            <small>Store more data in your account</small>
-                            <div class="m-t-md">
-                                <h2 class="product-main-price">${{prd.price}} <small class="text-muted">per month</small> </h2>
-                            </div>
-                            <hr>
-
-                            <h4>Description</h4>
-
-                            <div class="small text-muted">
-                                {{prd.description_short}}
-                                <br>
-                                <br>
-                                {{prd.description_long}} 
-                            </div>
-                            <hr>
-
-                            <div class="form-group">
-                                <div class="btn-group">
-                                    <button ng-if="!prd.in_cart" ng-click="em.addToCart(prd.id)" 
-                                            class="btn btn-primary btn-sm">                                 
-                                        <i class="fa fa-cart-plus"></i> Add to cart</button>
-                                    <button ng-if="prd.in_cart" ng-click="em.removeFromCart(prd.id)" 
-                                            class="btn btn-danger btn-sm">                                 
-                                        <i class="fa fa-cart-plus"></i> Remove from cart</button>
-                                    <button class="btn btn-white btn-sm" ui-sref="mailbox.mail_compose"><i class="fa fa-envelope"></i> Ask a question </button>
-                                    
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="btn-group">
-                                    <button ui-sref="commerce.cart" class="btn btn-info btn-sm"><i class="fa fa-calculator"></i> Proceed to checkout</button>
-                                </div> 
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="ibox-footer">
-                </div>
+            <div class="ibox-footer">
             </div>
-
         </div>
+
     </div>
+</div>
 
 
 </div>

@@ -22,30 +22,32 @@
                                 <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
                                     <div class="panel panel-warning">
                                         <div class="panel-heading">
-                                            <div ng-switch-when="expression">
-                                                <h4><strong>Analyze gene expression levels</strong></h4>
+                                            <div ng-switch-when="bsseq">
+                                                <h4><strong>Bisulfite sequencing</strong></h4>
 
                                             </div>
-                                            <div ng-switch-when="splicing">
-                                                <h4><strong>Detect novel sequences in transcriptome</strong></h4>
+                                            <div ng-switch-when="chipseq">
+                                                <h4><strong>ChIP sequencing</strong></h4>
                                             </div>
+                                            
                                         </div>
                                         <div class="panel-body">
                                             <div class="col-sm-4">
                                                 <div class="text-center">
-                                                    <div ng-switch-when="expression">
-                                                        <img alt="image" class="m-t-xs img-responsive" src="img/a24.png">
-                                                        <div class="m-t-xs font-bold">Expression profiling</div>
+                                                    <div ng-switch-when="bsseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a29.jpg">
+                                                        <div class="m-t-xs font-bold">Brain</div>
                                                     </div>
-                                                    <div ng-switch-when="splicing">
-                                                        <img alt="image" class="m-t-xs img-responsive" src="img/a23.png">
-                                                        <div class="m-t-xs font-bold">Splicing variants analysis</div>
+                                                    <div ng-switch-when="chipseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a29.jpg">
+                                                        <div class="m-t-xs font-bold">Brain</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-8">
 
-                                                <div ng-switch-when="expression">
+                                                <div ng-switch-when="bsseq">
+                                                    <p><strong>Brain cells</strong></p>
                                                     <address>
                                                         <i>Technical info:</i>
                                                         <ul>
@@ -55,8 +57,9 @@
                                                         </ul>
                                                     </address>
                                                 </div>
-                                                <div ng-switch-when="splicing">
-                                                    <address>
+                                                <div ng-switch-when="chipseq">
+                                                    <p><strong>Brain cells </strong><br/>&nbsp;</p>
+                                                     <address>
                                                         <i>Technical info:</i>
                                                         <ul>
                                                             <li>Platform: Illumina</li>
@@ -76,29 +79,123 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="col-sm-8 m-b-xs" ng-switch="newc.species">
-                                    <div class="panel panel-warning">
-
+                                <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <div ng-switch-when="bsseq">
+                                                <h4><strong>Bisulfite sequencing</strong></h4>
+                                            </div>
+                                            <div ng-switch-when="chipseq">
+                                                <h4><strong>ChIP sequencing</strong></h4>
+                                            </div>
+                                        </div>
                                         <div class="panel-body">
-                                            <div class="col-sm-12">
-
-                                                <div ng-switch-when="expression">
-                                                    <p><strong>Content TBD</strong></p>
-                                                    
-                                                    
+                                            <div class="col-sm-4">
+                                                <div class="text-center">
+                                                    <div ng-switch-when="bsseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a30.jpg">
+                                                        <div class="m-t-xs font-bold">Blood</div>
+                                                    </div>
+                                                    <div ng-switch-when="chipseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a30.jpg">
+                                                        <div class="m-t-xs font-bold">Blood</div>
+                                                    </div>
                                                 </div>
-                                                <div ng-switch-when="splicing">
-                                                    <p><strong>Content TBD</strong></p>                                                    
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div ng-switch-when="bsseq">
+                                                    <p><strong>Blood cells</strong></p>
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="chipseq">
+                                                    <p><strong>Blood cells</strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="panel-footer white-bg">
+                                            <div>
+                                                <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                              value="sample2"></input>
+                                                    Choose this sample dataset</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div ng-switch-when="bsseq">
+                                                <h4><strong>Bisulfite sequencing</strong></h4>
+                                            </div>
+                                            <div ng-switch-when="chipseq">
+                                                <h4><strong>ChIP sequencing</strong></h4>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-sm-4">
+                                                <div class="text-center" >
+                                                    <div ng-switch-when="bsseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a31.jpg">
+                                                        <div class="m-t-xs font-bold">Stem cells</div>
+                                                    </div>
+                                                    <div ng-switch-when="chipseq">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a31.jpg">
+                                                        <div class="m-t-xs font-bold">Stem cells</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div ng-switch-when="bsseq">
+                                                    <p><strong>ESC/iPSC cells</strong></p>
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center:</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="chipseq">
+                                                    <p><strong>ESC/iPSC cells</strong><br/>&nbsp;</p>
+                                                     <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <div class="panel-footer white-bg">
+                                            <div>
+                                                <label><input icheck type="radio" name="sample" ng-model="newc.sample"
+                                                              value="sample3"></input>
+                                                    Choose this sample dataset</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -140,8 +237,8 @@
                                                     </div>
 
                                                     <div ng-if="(newc.job.files[0]) && (newc.job.files[0].status !== 'uploading')">                                                            
-                                                        <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
-                                                        <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
+                                                            <p>File size: {{newc.job.files[0].filesize| filesize:0}}</p>
+                                                            <p>Uploaded: {{newc.job.files[0].finished_at| date:'medium'}}</p>
                                                     </div>
                                                 </div>
                                             </form>
@@ -190,6 +287,20 @@
                                         two separate .fasta files: reads from the forward strand and from the reverse strand.
                                         In this case, we can apply paired-ended alignment algorithm to your data.
                                     </p>
+                                    <div ng-switch-when="bsseq">
+                                        <p>
+                                            The best place to get your sample reads is <a href="http://www.1000genomes.org/home">1000 Genomes website</a>. This website contains
+                                            sample reads of 1000 individuals of different ethnic origins.
+                                        </p>
+                                    </div>
+                                    <div ng-switch-when="mus">
+                                        <p>
+                                            The best place to get your sample reads is
+                                            <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project">
+                                                Mouse Genomes Project</a>. This website contains
+                                            sample reads of 16 breeds of mice.
+                                        </p>
+                                    </div>
                                     <p>
                                         <strong>We strongly advise you not to take datasets with the data on the whole genome
                                             but with low coverage. It's much better to run a more targeted research (on a single

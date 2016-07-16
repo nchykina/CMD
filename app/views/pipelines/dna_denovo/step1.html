@@ -22,30 +22,37 @@
                                 <div class="col-sm-4 m-b-xs" ng-switch="newc.species">
                                     <div class="panel panel-warning">
                                         <div class="panel-heading">
-                                            <div ng-switch-when="expression">
-                                                <h4><strong>Analyze gene expression levels</strong></h4>
+                                            <div ng-switch-when="ecoli">
+                                                <h4><strong>Escherichia coli (E.coli)</strong></h4>
 
                                             </div>
-                                            <div ng-switch-when="splicing">
-                                                <h4><strong>Detect novel sequences in transcriptome</strong></h4>
+                                            <div ng-switch-when="fly">
+                                                <h4><strong>Drosophila melanogaster</strong></h4>
+                                            </div>
+                                            <div ng-switch-when="yeast">
+                                                <h4><strong>Saccharomyces cerevisiae</strong></h4>
                                             </div>
                                         </div>
                                         <div class="panel-body">
                                             <div class="col-sm-4">
                                                 <div class="text-center">
-                                                    <div ng-switch-when="expression">
-                                                        <img alt="image" class="m-t-xs img-responsive" src="img/a24.png">
-                                                        <div class="m-t-xs font-bold">Expression profiling</div>
+                                                    <div ng-switch-when="ecoli">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a32.jpg">
+                                                        <div class="m-t-xs font-bold">Bacterium</div>
                                                     </div>
-                                                    <div ng-switch-when="splicing">
-                                                        <img alt="image" class="m-t-xs img-responsive" src="img/a23.png">
-                                                        <div class="m-t-xs font-bold">Splicing variants analysis</div>
+                                                    <div ng-switch-when="fly">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a33.jpg">
+                                                        <div class="m-t-xs font-bold">Fruit fly</div>
+                                                    </div>
+                                                    <div ng-switch-when="yeast">
+                                                        <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a34.jpg">
+                                                        <div class="m-t-xs font-bold">Yeast</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-8">
 
-                                                <div ng-switch-when="expression">
+                                                <div ng-switch-when="ecoli">
                                                     <address>
                                                         <i>Technical info:</i>
                                                         <ul>
@@ -55,7 +62,17 @@
                                                         </ul>
                                                     </address>
                                                 </div>
-                                                <div ng-switch-when="splicing">
+                                                <div ng-switch-when="fly">
+                                                    <address>
+                                                        <i>Technical info:</i>
+                                                        <ul>
+                                                            <li>Platform: Illumina</li>
+                                                            <li>Sequencing center: BGI</li>
+                                                            <li>Coverage: WGS (low coverage)</li>
+                                                        </ul>
+                                                    </address>
+                                                </div>
+                                                <div ng-switch-when="yeast">
                                                     <address>
                                                         <i>Technical info:</i>
                                                         <ul>
@@ -84,13 +101,60 @@
                                         <div class="panel-body">
                                             <div class="col-sm-12">
 
-                                                <div ng-switch-when="expression">
-                                                    <p><strong>Content TBD</strong></p>
-                                                    
-                                                    
+                                                <div ng-switch-when="ecoli">
+                                                    <p><strong>Some interesting facts about this species:</strong></p>
+                                                    <ul>
+                                                        <li>E.coli is the most widely studied prokaryotic model organism, 
+                                                            and an important species in the fields of biotechnology and microbiology.
+                                                            It has served as the host organism for the majority of work with recombinant DNA.
+                                                        </li>
+                                                        <li>E.coli has a circular DNA that is 4.6 million base pairs long. 
+                                                            Under favorable conditions, it takes only 20 minutes for E.coli to reproduce</li>
+                                                        <li>E.coli genome is remarkably diverse. While each individual genome of E.coli 
+                                                            contains between 4,000 and 5,500 genes, the total number of different genes 
+                                                            among all of the sequenced E. coli strains (the pangenome) exceeds 16,000.</li>
+                                                    </ul>
+                                                    <p><strong>Databases with data on E.coli genome: </strong></p>
+                                                    <ul>
+                                                        <li>EcoGene</li>
+                                                        <li>E.coli Genome Project</li>
+                                                    </ul>
                                                 </div>
-                                                <div ng-switch-when="splicing">
-                                                    <p><strong>Content TBD</strong></p>                                                    
+                                                <div ng-switch-when="fly">
+                                                    <p><strong>Some interesting facts about this species:</strong></p>
+                                                    <ul>
+                                                        <li>Fruit fly was among the first organisms used for genetic analysis, 
+                                                            and today it is one of the most widely used and genetically best-known 
+                                                            of all eukaryotic organisms. Its complete genome was sequenced and 
+                                                            first published in 2000.</li>
+                                                        <li>Fruit fly has only four pairs of chromosomes: three autosomes, 
+                                                            and one pair of sex chromosomes.</li>
+                                                        <li>About 75% of known human disease genes have a recognizable match 
+                                                            in the genome of fruit flies, and 50% of fly protein sequences 
+                                                            have mammalian homologs. Drosophila is often being used as a genetic model 
+                                                            for Parkinson's, Huntington's and Alzheimer's disease.</li>
+                                                    </ul>
+                                                    <p><strong>Databases with data on fruit fly genome: </strong></p>
+                                                    <ul>
+                                                        <li>FlyBase</li>
+                                                        <li>Berkeley Drosophila Genome Project (BDGP)</li>
+                                                    </ul>
+                                                </div>
+                                                <div ng-switch-when="yeast">
+                                                    <p><strong>Some interesting facts about this species: </strong></p>
+                                                    <ul>
+                                                        <li>Yeast genome was the first eukaryotic genome to be completely sequenced. 
+                                                            The genome sequence was released to the public domain on April 24, 1996. </li>
+                                                        <li>Yeast reproduces by mitosis as diploid cells when nutrients are abundant. 
+                                                            However, when starved, these cells undergo meiosis to form haploid spores.</li>
+                                                        <li>Only about 5,800 of the 6,275 yeast genes are believed to be functional,
+                                                            and 31% of yeast genes have homologs in the human genome. </li>
+                                                    </ul>
+                                                    <p><strong>Databases with data on yeast genome: </strong></p>
+                                                    <ul>
+                                                        <li>Saccharomyces Genome Database</li>
+                                                        <li>Munich Information Center for Protein Sequences (MIPS)</li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,6 +167,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <!-- PANEL 2-->
                 <div class="panel panel-default">
@@ -191,16 +256,17 @@
                                         In this case, we can apply paired-ended alignment algorithm to your data.
                                     </p>
                                     <p>
-                                        <strong>We strongly advise you not to take datasets with the data on the whole genome
-                                            but with low coverage. It's much better to run a more targeted research (on a single
-                                            chromosome, or even on a particular set of genes, but to have a decent coverage
-                                            of <u>at least 20-30x</u>).</strong>
+                                        <strong>We strongly advise you to take datasets with good coverage.
+                                            So, for instance, your input file for de novo assembly should be around 1-2 GB
+                                            for E.Coli to produce sufficiently
+                                            good output. Also, please make sure that your reads are properly trimmed
+                                            (in case they are not, use Trimmomatic or any other similar software).
+                                        </strong>
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
 

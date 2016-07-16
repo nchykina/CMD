@@ -1,6 +1,6 @@
-<div class="row wrapper border-bottom white-bg page-heading" ng-init="em.init()">
+<div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Submit a request for custom pipeline</h2>
+        <h2>Submit a request for a custom project</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
@@ -9,7 +9,7 @@
                 <a>Custom projects</a>
             </li>
             <li class="active">
-                <strong>Submit a request for custom pipeline</strong>
+                <strong>Submit a request for a custom project</strong>
             </li>
         </ol>
     </div>
@@ -25,34 +25,38 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="image-imitation-small">
-                                <img alt="product1" src="{{em.productList[6].img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
+                                <img src="img/products/prod7.png" style='height: 100%; width: 100%; object-fit: contain'>
                             </div>
                         </div>
                         <div class="col-md-7">
 
                             <h2 class="font-bold m-b-xs">
-                                {{em.productList[6].productName}}
+                                Order a custom project
                             </h2>
-                            <small>Launch a fully customized pipeline via our website</small>
-                            <div class="m-t-md">
-                                <h2 class="product-main-price">Price available upon request </h2>
-                            </div>
+                            <small>Launch a fully customized pipeline via our Web-portal</small>
+
                             <hr>
 
                             <h4>Description</h4>
 
                             <div class="small text-muted">
-                                {{em.productList[6].description_short}}
+                                We can migrate the functionality of any of your processing pipelines to our infrastructure. 
+                                You can use any software and datasets you like, and you do not need to configure 
+                                anything in your browser yourself to make this transition - we will do the job for you. 
                                 <br>
                                 <br>
-                                {{em.productList[6].description_long}}
+                                The process works the following way: you send us either your script or simply a  
+                                description of what your pipeline does and which software/utilities you use for this. 
+                                We will make it run on our infrastructure and optimize it for parallel processing. 
+                                As a result, you will have private access to your processing pipeline via a convenient
+                                Web-interface, plus our cluster-based facilities to run it efficiently. 
                             </div>
-                            <hr>
+                            <hr/>
                             <div class="row">
                                 <div class="col-lg-12">
 
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Project name:</label>
+                                        <label class="col-sm-2 control-label">Project: *</label>
 
                                         <div class="col-sm-10"><input type="text" class="form-control" 
                                                                       placeholder="Please enter your pipeline project name"></div>
@@ -60,6 +64,7 @@
                                     </div>
                                 </div>                                
                             </div>
+                            <hr/>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group"><label class="col-sm-2 control-label">Description:</label>
@@ -72,15 +77,57 @@
 
                                 </div>
                             </div>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group"><label class="col-sm-2 control-label">Required software:</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <select multiple chosen class="chosen-select" style="width:350px;" tabindex="4"
+                                                        >
+                                                    <option value="BWA">BWA</option>
+                                                    <option value="Bowtie">Bowtie</option>
+                                                    <option value="Bowtie2">Bowtie2</option>
+                                                    <option value="SamTools">SamTools</option>
+                                                    <option value="VCFTools">VCFTools</option>
+                                                    <option value="ANNOVAR">ANNOVAR</option>
+                                                    <option value="Tophat">Tophat</option>
+                                                    <option value="STAR">STAR</option>
+                                                    <option value="Cufflinks">Cufflinks</option>
+                                                    <option value="Velvet">Velvet</option>
+                                                    <option value="Oasis">Oasis</option>
+                                                    <option value="Trinity">Trinity</option>
+                                                    <option value="Picard">Picard</option>
+                                                    <option value="GATK">GATK</option>
+                                                    <option value="Trimmomatic">Trimmomatic</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>                                                                      
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"></label>
+
+                                        <div class="col-sm-10"><input type="text" class="form-control" 
+                                                                      placeholder="Please list any other software you use"></div>
+
+                                    </div>
+                                </div>                                
+                            </div>
                             <hr>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="btn-group">
                                             <button
-                                                    class="btn btn-primary btn-sm">                                 
-                                                <i class="fa fa-cart-plus"></i> Submit a request for proposal</button>
-                                            
+                                                class="btn btn-primary btn-sm">                                 
+                                                 Submit</button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -94,6 +141,6 @@
             </div>
 
         </div>
-</div>
+    </div>
 
 </div>
