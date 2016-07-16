@@ -1521,6 +1521,9 @@ function config($stateProvider, $locationProvider, $urlRouterProvider, $ocLazyLo
                             },
                             {
                                 files: ['css/plugins/ionRangeSlider/ion.rangeSlider.css', 'css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css', 'js/plugins/ionRangeSlider/ion.rangeSlider.min.js']
+                            },
+                            {
+                                files: ['css/plugins/touchspin/jquery.bootstrap-touchspin.min.css', 'js/plugins/touchspin/jquery.bootstrap-touchspin.min.js']
                             }
                             
                         ]);

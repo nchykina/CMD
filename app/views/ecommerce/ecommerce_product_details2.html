@@ -59,12 +59,15 @@
 
                         <hr>
                         <div class="row">
-                            <div class="form-group"><label class="col-sm-2 control-label">Quantity:</label>
+                            <div class="form-group">
 
                                 <div class="col-sm-8" data-ng-controller="ionSlider as slider">
                                    
-                                    <div ion-range-slider range-options="slider.ionSliderOptions6"></div>
+                                    <div ion-range-slider range-options="slider.ionSliderOptions6" ng-model="test"></div>
                                 </div>
+                               <!-- <div class="col-sm-3" ng-controller="touchspinCtrl">
+                                    <input id="demo2" type="text" touch-spin spin-options="spinOption2" ng-model="test">
+                                </div> -->
                             </div>
                         </div>
 
