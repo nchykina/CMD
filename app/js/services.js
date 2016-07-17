@@ -519,6 +519,10 @@ var jobService = function ($http, $q, fileService, socket) {
         for (var i in jobs) {
             if (jobs[i].id == job.id) {
                 jobs[i].status = job.status;
+                
+                if(job.files){
+                    jobs[i].files = job.files;
+                }
                 //console.log('job ' + job.id + ' status: ' + job.status);
                 return;
             }
