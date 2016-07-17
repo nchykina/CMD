@@ -178,7 +178,7 @@ var dna_reseq_job = function (job) {
             filenum: 4,
             filetype: 'SAM',
             description: 'Alignment result - SAM file'
-        },
+        }
     ];
 
     this.upload_input = function () {
@@ -204,28 +204,25 @@ var dna_reseq_job = function (job) {
             var url = config.file_agent_url + '/' + self.job_model.id + '/' + out_file.filename;
             var file_path = self.job_model.work_dir + path.sep + out_file.filename;
             var file = fs.createWriteStream(file_path);
-            var req = http.get(url, function (response) {
-                if (response.statusCode < 200 || response.statusCode > 299) { // (I don't know if the 3xx responses come here, if so you'll want to handle them appropriately
-                    prm.reject(response.statusCode);
-                } else {
-                    response.pipe(file);
+                        
+            var req = request.get(url)
+                    .on('error',function(err){
+                        prm.reject(err);
+                    })                       
+                    .pipe(file);
+            
                     file.on('finish', function () {
-                        file.close(function () {
+                        //file.close(function () {
                             end_time = Date.now();
                             prm.resolve({path: file_path, file: out_file, filesize: file.bytesWritten, start_time: start_time, end_time: end_time});
-                        });  // close() is async, call cb after close completes.
+                        //});  // close() is async, call cb after close completes.
                     });
 
                     file.on('error', function (err) { // Handle errors
                         //fs.unlink(file_path); // Delete the file async. (But we don't check the result)
+                        //console.error('url '+url+' error: '+err);
                         prm.reject(err);
-                    });
-                }
-            });
-
-            req.on('error', function (err) {
-                prm.reject(err);
-            });
+                    });              
 
             return prm.promise;
         }
@@ -304,6 +301,41 @@ var dna_reseq_job = function (job) {
                 status: 'new',
                 order: 2
             },
+            {
+                command: '/ngs/samtools view -Shu /work/result.sam > /work/result2.bam',
+                cpu: 2,
+                memory: 2048,
+                status: 'new',
+                order: 3
+            },
+            {
+                command: '/ngs/samtools sort /work/result2.bam > /work/result3.bam',
+                cpu: 2,
+                memory: 2048,
+                status: 'new',
+                order: 4
+            },
+            {
+                command: '/ngs/samtools index /work/result3.bam > /work/result4.bam',
+                cpu: 2,
+                memory: 2048,
+                status: 'new',
+                order: 5
+            },
+            {
+                command: '/ngs/samtools mpileup -uD -f /ngs_lib/chr1/chr1.fa /work/result4.bam > /work/result5.mpileup',
+                cpu: 2,
+                memory: 2048,
+                status: 'new',
+                order: 6
+            },
+            {
+                command: '/ngs/bcftools view -vcg /work/result5.mpileup > /work/result6.vcf',
+                cpu: 2,
+                memory: 2048,
+                status: 'new',
+                order: 7
+            }
         ];
     }
 };
@@ -479,7 +511,7 @@ var job_submit_step = function (job, stepnum, t) {
     }, function (error, response, body) {
 
         if (!(!error && response.statusCode >= 200 && response.statusCode < 300)) {
-            console.error('failed to create request: ' + response);
+            console.error('failed to create request: ' + error);
             return defer.reject({msg: 'Failed to create singularity request'});
         } else {
 
@@ -730,8 +762,9 @@ var job_submit = function (req, res, next) {
         }
         )
                 .catch(function (err) {
-                    res.status(500).json({success: false, msg: 'Internal error'});
                     console.error('job_submit: ' + err);
+                    res.status(500).json({success: false, msg: 'Internal error'});
+                    
                 }
 
                 );
