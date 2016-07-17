@@ -7,13 +7,15 @@ module.exports = {
                 product_name: 'De novo DNA assembly',
                 product_category: 'Additional content',
                 price: 40,
-                description_short: 'De novo DNA assembly pipeline differs quite a bit from the techniques of alignment \
-        to a reference genome in terms of complexity and time requirements. In case of de novo assembly, \
-        the reference sequence of nucleotides is unknown, so the process resembles putting together a puzzle\
-        without looking at the image on the top of the box.',
-                description_long: 'Bioinformatics package that is used for de novo DNA assembly include is Velvet. Common de novo \
-        assembly DNA techniques comprise De Brujin graphs, suffix trees\
-        and different modifications of greedy algorithm.',
+                description_short: 'Assembling a DNA de novo is a core skill for every bioinformatician, so this pipeline is an absolute must-have.\
+                With its samples, our guides and AMOS Hawkeye viewer, you will understand which factors drive \
+                the complexity of DNA assembly process and how does it work in detail.\
+                You will easily master the basic concepts of DNA assembly, such as contigs, k-value and De Brujin graphs.',
+                description_long: 'De novo DNA assembly pipeline creates a new reference sequence from your reads.\
+                The process resembles putting together a puzzle without looking at the image on the top of the box.\
+                Of course, you will be assembling DNA of well-studied organisms - such as bacteria, fruit fly and yeast.\
+                But just imagine how difficult it is to put together a totally new species!\
+                There is no "answer key", so no one knows what is correct and what is still missing.',
                 img_url: 'img/products/prod1.png',
                 product_url: 'commerce.product_details1',
                 created_at: new Date(),
@@ -23,31 +25,29 @@ module.exports = {
                 product_name: 'RNA realignment',
                 product_category: 'Additional content',
                 price: 40,
-                description_short: 'RNA-Seq technique is used to analyze the continuously changing  \
-                transcriptome data. The common problems faced are spliced junctions analysis, as well as \n\
-                differential gene expression. Due to the small size of the reads, de novo assembly might be difficult,\n\
-                 so RNA-Seq \
-                is usually done either on a reference genome or on species with shorter DNA.',
-                description_long: 'RNA-Seq is usually used to compare gene expression between conditions, such \
-                as drug treatment vs untreated. Bioinformatic tools used for RNA alignment is Tophat, an extensions \
-                on top of Bowtie, as well as specialized differential expression and splicing analysis tools.',
+                description_short: 'RNA-Seq data contains information about transcriptome of a cell.\
+                The most important application of this information is differential gene expression.\
+                Learn how bioinformaticians can use RNA-Seq data to compare treated vs. untreated condition\
+                and help doctors to make conclusions about efficiency of a drug.',
+                description_long: 'Please note, however, that analysis of transcriptome is a lot more \
+                difficult to grasp than genome analysis, as it involves splice junctions and dealing with the volatility\
+                of gene expression levels. Hence, we highly recommend purchasing this module only after you \
+                have mastered the knowledge from the DNA realignment pipeline at a sufficient level.',
                 img_url: 'img/products/prod2.png',
                 product_url: 'commerce.product_details1',
                 created_at: new Date(),
                 updated_at: new Date()
-           },
+            },
             {
                 product_name: 'Extra storage space',
                 product_category: 'Extra storage space',
                 price: 10,
-                description_short: 'Files with bioinformatics data are quite bulky, so you need \
-        a convenient place to store them. This upgrade provides additional 20G of storage space\
-        in addition to 5G of free storage space already available for you in our system. On average, \
-        it allows you to have approximately 10 pipeline job results stored in the system.',
-                description_long: 'From our experience, this is usually more than enough, as you \
-        actually store only input and output files and do not need HDD space for genome files\
-        (they are available for you on our server), as well as for files generated on\
-        intermediary steps of the pipeline (like .mpileup files, for instance).',
+                description_short: 'Files with bioinformatics data can be very large, so you need to have\
+                sufficient space to store them. This upgrade provides you with extra storage space\
+                in addition to the 20 GB already available for you in our system for free.',
+                description_long: 'Of course, you do not need any storage space for the standard genome\
+                files, as well as for temporary files (like, for instance, .mpileup) - we will store them at no extra\
+                cost in our cloud.',
                 img_url: 'img/products/prod4.png',
                 product_url: 'commerce.product_details2',
                 created_at: new Date(),
@@ -58,13 +58,12 @@ module.exports = {
                 product_category: 'Processing capacity',
                 price: 100,
                 description_short: 'A lot of bioinformatics software is multithreaded, so adding\
-        vCPUs can speed up the data processing significantly. By default your pipelines \
-        are launched on a shared virtual capacity, and by purchasing this upgrade option\
-        you can scale up to a guaranteed 8-vCPUs machine in a single click.',
-                description_long: 'Of course, not every processing algorithm can be parallelized, \
-        so there is no linear dependency between the number of vCPUs and execution speed. However, \
-        your pipelines execution speed will definitely increase, as most tools support \
-        multithreading.',
+                vCPUs can significantly speed up your data processing. By default your pipelines \
+                are launched in shared virtual space, while by purchasing this upgrade option\
+                you can scale up to a dedicated 8-vCPUs machine in a single click.',
+                description_long: 'Please note, however, that the bioinformatics algorithms used in the pipelines\
+                can be very complex and their performance may be determined by many different factors. We can not\
+                guarantee that your pipeline runtime will scale linearly with the number of vCPUs.',
                 img_url: 'img/products/prod5.png',
                 product_url: 'commerce.product_details3',
                 created_at: new Date(),

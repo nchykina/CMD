@@ -17,6 +17,8 @@
         </ol>
     </div>
 </div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
 <div class="row" ng-if="em.dataLoaded == true" ng-repeat="prd in em.productList| filter: { product_category: 'Additional content' }">
 
     <div class="row">
@@ -27,9 +29,54 @@
 
                     <div class="row">
                         <div class="col-md-3">
-                            
-                                <img alt="product1" src="{{prd.img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
-                            
+
+                            <img alt="product1" src="{{prd.img_url}}" style='height: 100%; width: 100%; object-fit: contain'>
+                            <div class="ibox">
+                                <div class="ibox-content" ng-if="prd.product_name == 'De novo DNA assembly'">
+                                    <h5>Knowledge area:</h5>
+                                    <h2 class="no-margins">Genomics</h2>
+                                    <br/>
+                                    <h5>New concepts learned:</h5>
+                                    <table class="table table-stripped small m-t-md">
+                                        <tbody>
+                                            <tr>
+                                                <td class="no-borders"><i class="fa fa-circle text-navy"></i></td>
+                                                <td class="no-borders">Contigs</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="no-borders"><i class="fa fa-circle text-navy"></i></td>
+                                                <td class="no-borders">k-value</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="no-borders"><i class="fa fa-circle text-navy"></i></td>
+                                                <td class="no-borders">De Brujin graphs</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="ibox-content" ng-if="prd.product_name == 'RNA realignment'">
+                                    <h5>Knowledge area:</h5>
+                                    <h2 class="no-margins">Transcriptomics</h2>
+                                    <br/>
+                                    <h5>New concepts learned:</h5>
+                                    <table class="table table-stripped small m-t-md">
+                                        <tbody>
+                                            <tr>
+                                                <td class="no-borders"><i class="fa fa-circle text-navy"></i></td>
+                                                <td class="no-borders">Splice junctions</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="no-borders"><i class="fa fa-circle text-navy"></i></td>
+                                                <td class="no-borders">FPKM and RPKM</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="no-borders"><i class="fa fa-circle text-navy"></i></td>
+                                                <td class="no-borders">Differential expression</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
 
@@ -151,12 +198,11 @@
                     </div>
 
                 </div>
-                <div class="ibox-footer">
-                </div>
+            
             </div>
 
         </div>
     </div>   
 
-
+</div>
 </div>
